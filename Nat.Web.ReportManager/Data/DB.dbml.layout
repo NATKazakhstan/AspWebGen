@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="DB">
+  <DataContextMoniker Name="/DBDataContext" />
+  <nestedChildShapes>
+    <classShape Id="398fcee6-c490-4d89-8daa-2e33a248ca0d" absoluteBounds="4.375, 1.875, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/DBDataContext/ReportSubscriptions_Param" />
+      <nestedChildShapes>
+        <elementListCompartment Id="3c6f847c-23db-4f27-9040-d61521484965" absoluteBounds="4.39, 2.335, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7924d850-113b-44a0-8867-37eab39312d0" absoluteBounds="1.75, 1.625, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/DBDataContext/ReportSubscription" />
+      <nestedChildShapes>
+        <elementListCompartment Id="148c67a7-c21b-4dca-9fe0-e8fd41c897f8" absoluteBounds="1.7650000000000001, 2.085, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(3.75 : 2.53929768880208); (4.375 : 2.53929768880208)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DBDataContext/ReportSubscription/ReportSubscription_ReportSubscriptions_Param" />
+      <nodes>
+        <classShapeMoniker Id="7924d850-113b-44a0-8867-37eab39312d0" />
+        <classShapeMoniker Id="398fcee6-c490-4d89-8daa-2e33a248ca0d" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

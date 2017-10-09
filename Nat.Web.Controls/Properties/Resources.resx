@@ -1,0 +1,978 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SAdd" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="SAddRecord" xml:space="preserve">
+    <value>Добавить запись</value>
+  </data>
+  <data name="SApplyFilter" xml:space="preserve">
+    <value>Применить фильтр</value>
+  </data>
+  <data name="SCancelText" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="SConfirmDeleteText" xml:space="preserve">
+    <value>Вы действительно хотите удалить?</value>
+  </data>
+  <data name="SDeleteText" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="SEditText" xml:space="preserve">
+    <value>Редактировать</value>
+  </data>
+  <data name="SEmptyDataText" xml:space="preserve">
+    <value>Нет данных</value>
+  </data>
+  <data name="SError" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="SInsertText" xml:space="preserve">
+    <value>Вставить</value>
+  </data>
+  <data name="SInvalidBindingInput" xml:space="preserve">
+    <value>Введены некорректные данные.</value>
+  </data>
+  <data name="SLoading" xml:space="preserve">
+    <value>Загрузка...</value>
+  </data>
+  <data name="SLogErrorMultipleUsers" xml:space="preserve">
+    <value>Невозможно сделать запись в журнал сообщений. Нескольким учётным карточкам соответствует одни SID - '{0}'.</value>
+  </data>
+  <data name="SNewText" xml:space="preserve">
+    <value>Новый</value>
+  </data>
+  <data name="SNotSpecified" xml:space="preserve">
+    <value>Не указано</value>
+  </data>
+  <data name="SPleaseWait" xml:space="preserve">
+    <value>Загрузка...</value>
+  </data>
+  <data name="SReport" xml:space="preserve">
+    <value>Отчеты</value>
+  </data>
+  <data name="SRowIsNotSelected" xml:space="preserve">
+    <value>Не выбрана строка</value>
+  </data>
+  <data name="SSelectedRowsDelete" xml:space="preserve">
+    <value>Удалить выбранные</value>
+  </data>
+  <data name="SSelectText" xml:space="preserve">
+    <value>Выбрать</value>
+  </data>
+  <data name="SUpdateText" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="SView" xml:space="preserve">
+    <value>Просмотр</value>
+  </data>
+  <data name="SViewNotAvailable" xml:space="preserve">
+    <value>Просмотр невозможен</value>
+  </data>
+  <data name="SReturnToJournal" xml:space="preserve">
+    <value>Вернуться к журналу</value>
+  </data>
+  <data name="SWordExport" xml:space="preserve">
+    <value>Экспорт в MS Word</value>
+  </data>
+  <data name="SErrorHeaderText" xml:space="preserve">
+    <value>Информационное сообщение</value>
+  </data>
+  <data name="SInformationText" xml:space="preserve">
+    <value>Информация</value>
+  </data>
+  <data name="SToJournal" xml:space="preserve">
+    <value>В журнал</value>
+  </data>
+  <data name="SBetween" xml:space="preserve">
+    <value>Между</value>
+  </data>
+  <data name="SContains" xml:space="preserve">
+    <value>Содержит</value>
+  </data>
+  <data name="SEndsWith" xml:space="preserve">
+    <value>Оканчивается на</value>
+  </data>
+  <data name="SEquals" xml:space="preserve">
+    <value>Равно</value>
+  </data>
+  <data name="SIsFilled" xml:space="preserve">
+    <value>Заполнено</value>
+  </data>
+  <data name="SIsNotFilled" xml:space="preserve">
+    <value>Не заполнено</value>
+  </data>
+  <data name="SLess" xml:space="preserve">
+    <value>Меньше</value>
+  </data>
+  <data name="SMore" xml:space="preserve">
+    <value>Больше</value>
+  </data>
+  <data name="SNo" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="SNotEquals" xml:space="preserve">
+    <value>Не равно</value>
+  </data>
+  <data name="SSelectCondition" xml:space="preserve">
+    <value>&amp;lt;Выбрать условие&amp;gt;</value>
+  </data>
+  <data name="SStartsWith" xml:space="preserve">
+    <value>Начинается с</value>
+  </data>
+  <data name="SYes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="SSave" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="SRequiredFieldMessage" xml:space="preserve">
+    <value>Необходимо заполнить поле '{0}'</value>
+  </data>
+  <data name="SInfoNotSaveInvalidated" xml:space="preserve">
+    <value>Строки, имеющие ошибки, сохранены не будут</value>
+  </data>
+  <data name="SQuestionNotSaveInvalidated" xml:space="preserve">
+    <value>Строки, имеющие ошибки, сохранены не будут. Продолжить?</value>
+  </data>
+  <data name="SSaveValidated" xml:space="preserve">
+    <value>Сохранить заполненное</value>
+  </data>
+  <data name="SCancelAdd" xml:space="preserve">
+    <value>Отмена добавления</value>
+  </data>
+  <data name="SViewJournal" xml:space="preserve">
+    <value>Перейти к журналу</value>
+  </data>
+  <data name="SInvalidFieldFormat" xml:space="preserve">
+    <value>Задан неверный формат поля: {0}</value>
+  </data>
+  <data name="ENotCorrectDefaultValue" xml:space="preserve">
+    <value>Произведено автоматическое заполнение поля '{0}' значением, которое не может быть сохранено.</value>
+  </data>
+  <data name="ENotCorrectValue" xml:space="preserve">
+    <value>Не верно выбрано значение в поле '{0}', которое не может быть сохранено, пожалуйста выберите повторно.</value>
+  </data>
+  <data name="SFieldHasError" xml:space="preserve">
+    <value>Выбранное значение в поле '{0}' имеет ошибку:</value>
+  </data>
+  <data name="SHideHistory" xml:space="preserve">
+    <value>Скрыть историю</value>
+  </data>
+  <data name="SShowHistory" xml:space="preserve">
+    <value>Показать историю</value>
+  </data>
+  <data name="ENotCorrectDefaultValueWithText" xml:space="preserve">
+    <value>Произведено автоматическое заполнение поля '{0}' значением '{1}', которое не может быть сохранено.</value>
+  </data>
+  <data name="ENotCorrectValueWithText" xml:space="preserve">
+    <value>Не верно выбрано значение '{1}' в поле '{0}', которое не может быть сохранено, пожалуйста выберите повторно.</value>
+  </data>
+  <data name="SFieldHasErrorWithText" xml:space="preserve">
+    <value>Выбранное значение '{1}' в поле '{0}' имеет ошибку:</value>
+  </data>
+  <data name="SMaxLength" xml:space="preserve">
+    <value>Превышена допустимая длина {0} символов</value>
+  </data>
+  <data name="SMaxLengthOfField" xml:space="preserve">
+    <value>Максимальная длина поля '{0}' {1} символов</value>
+  </data>
+  <data name="SNotCorrectNumber" xml:space="preserve">
+    <value>Не верно введено число</value>
+  </data>
+  <data name="SNotCorrectNumberOfField" xml:space="preserve">
+    <value>Не верно введено число поле '{0}'</value>
+  </data>
+  <data name="SServiceProcedure" xml:space="preserve">
+    <value>Проводятся технические работы.</value>
+  </data>
+  <data name="SServiceProcedure_EnabledMessage" xml:space="preserve">
+    <value>Технические работы, просим завершить текущие действия и выйти из системы. Обращение на новые страницы запрещено.</value>
+  </data>
+  <data name="SServiceProcedure_TimeBetweenRequest" xml:space="preserve">
+    <value>Если в течении времени ({0}) нет обращений, то считается, что завершена работа на странице.</value>
+  </data>
+  <data name="SServiceProcedure_TimeOfEndService" xml:space="preserve">
+    <value>Предполагаемое время завершения технических работ {0}.</value>
+  </data>
+  <data name="SServiceProcedure_TimeToEnableMessage" xml:space="preserve">
+    <value>С {0} планируется проводить технические работы.</value>
+  </data>
+  <data name="SServiceProcedure_TimeToShutDown" xml:space="preserve">
+    <value>В {0} работа с системой будет не возможна.</value>
+  </data>
+  <data name="EFieldMustBeMoreOfField" xml:space="preserve">
+    <value>Поле '{0}' должно быть больше поля '{1}'.</value>
+  </data>
+  <data name="EFieldMustBeMoreOrEqualsOfField" xml:space="preserve">
+    <value>Поле '{0}' должно быть больше или равно полю '{1}'.</value>
+  </data>
+  <data name="SChangeHieght" xml:space="preserve">
+    <value>Изменить высоту поля</value>
+  </data>
+  <data name="SChangeHieghtLess" xml:space="preserve">
+    <value>Уменьшить высоту поля</value>
+  </data>
+  <data name="SChangeHieghtMore" xml:space="preserve">
+    <value>Увеличить высоту поля</value>
+  </data>
+  <data name="ENoPermitToDeleteRecord" xml:space="preserve">
+    <value>Нет прав на удаление записи</value>
+  </data>
+  <data name="SRequiredReadOnlyFieldMessage" xml:space="preserve">
+    <value>Поле '{0}' должно быть заполнено.</value>
+  </data>
+  <data name="EMustBeMoreOfField" xml:space="preserve">
+    <value>Должно быть больше поля '{0}'.</value>
+  </data>
+  <data name="EMustBeMoreOrEqualsOfField" xml:space="preserve">
+    <value>Должно быть больше или равно полю '{0}'.</value>
+  </data>
+  <data name="EFieldMaxLength" xml:space="preserve">
+    <value>В поле '{0}' превышено максимальное количество символов: {0}</value>
+  </data>
+  <data name="EMaxLength" xml:space="preserve">
+    <value>Максимальное количество символов: {0}</value>
+  </data>
+  <data name="SNotExistRow" xml:space="preserve">
+    <value>&lt;Сохраненное значение недоступно&gt;</value>
+  </data>
+  <data name="SCountData" xml:space="preserve">
+    <value>Строк: {0}</value>
+  </data>
+  <data name="SCountPages" xml:space="preserve">
+    <value>Страницы: ({0})</value>
+  </data>
+  <data name="SRangeValidatorErrorMessage" xml:space="preserve">
+    <value>Содержит только целые числа от "{0}" до "{1}"</value>
+  </data>
+  <data name="SRangeValidatorErrorMessageInSummary" xml:space="preserve">
+    <value>Поле "{2}" может содержать только целые числа от "{0}" до "{1}"</value>
+  </data>
+  <data name="SContainsWords" xml:space="preserve">
+    <value>Содержит слова</value>
+  </data>
+  <data name="SServiceProcedure_Disabled" xml:space="preserve">
+    <value>Технические работы в текущий момент не проводятся.</value>
+  </data>
+  <data name="SClearFilter" xml:space="preserve">
+    <value>Очистить фильтр</value>
+  </data>
+  <data name="EFieldMustBeLessOfField" xml:space="preserve">
+    <value>Поле '{0}' должно быть меньше поля '{1}'.</value>
+  </data>
+  <data name="EFieldMustBeLessOrEqualsOfField" xml:space="preserve">
+    <value>Поле '{0}' должно быть меньше или равно полю '{1}'.</value>
+  </data>
+  <data name="EMustBeLessOfField" xml:space="preserve">
+    <value>Должно быть меньше поля '{0}'.</value>
+  </data>
+  <data name="EMustBeLessOrEqualsOfField" xml:space="preserve">
+    <value>Должно быть меньше или равно полю '{0}'.</value>
+  </data>
+  <data name="SEdit" xml:space="preserve">
+    <value>Редактирование</value>
+  </data>
+  <data name="SEditLook" xml:space="preserve">
+    <value>Просмотр/Редактирование</value>
+  </data>
+  <data name="SFilter" xml:space="preserve">
+    <value>Фильтр</value>
+  </data>
+  <data name="SJournal" xml:space="preserve">
+    <value>Журнал</value>
+  </data>
+  <data name="SLook" xml:space="preserve">
+    <value>Просмотр</value>
+  </data>
+  <data name="SMultipleSelect" xml:space="preserve">
+    <value>Выбор записей</value>
+  </data>
+  <data name="SNotSelectRecordOrNotExists" xml:space="preserve">
+    <value>Запись не выбрана или отсутствует.</value>
+  </data>
+  <data name="SSelect" xml:space="preserve">
+    <value>Выбор записи</value>
+  </data>
+  <data name="ENotExistsRowOrName" xml:space="preserve">
+    <value>Отсутствует запись или наименование записи</value>
+  </data>
+  <data name="SMoveDownWeight" xml:space="preserve">
+    <value>Уменьшить вес</value>
+  </data>
+  <data name="SMoveUpWeight" xml:space="preserve">
+    <value>Увеличить вес</value>
+  </data>
+  <data name="SNotCorrectNumberForWeight" xml:space="preserve">
+    <value>Не верно введено число.</value>
+  </data>
+  <data name="SCountChanges" xml:space="preserve">
+    <value>изменений {0}</value>
+  </data>
+  <data name="SShowAllFilters" xml:space="preserve">
+    <value>Показать весь список фильтров</value>
+  </data>
+  <data name="SShowMainGroupFilters" xml:space="preserve">
+    <value>Показывать только основной список фильтров</value>
+  </data>
+  <data name="SSaveWithoutHistory" xml:space="preserve">
+    <value>Сохранить запись без истории</value>
+  </data>
+  <data name="SToLeft" xml:space="preserve">
+    <value>Переместить влево</value>
+  </data>
+  <data name="SToRight" xml:space="preserve">
+    <value>Переместить вправо</value>
+  </data>
+  <data name="PressToCloseGroup" xml:space="preserve">
+    <value>Свернуть группу</value>
+  </data>
+  <data name="PressToOpenCloseGroup" xml:space="preserve">
+    <value>По нажатию разворачивается/сворачивается группа</value>
+  </data>
+  <data name="PressToOpenGroup" xml:space="preserve">
+    <value>Развернуть группу</value>
+  </data>
+  <data name="SMaxRecursionInHeader" xml:space="preserve">
+    <value>Максимальная вложенность в заголовке</value>
+  </data>
+  <data name="SStartHeaderFromLevel" xml:space="preserve">
+    <value>Строить заголовок начиная с</value>
+  </data>
+  <data name="SFilterHeader" xml:space="preserve">
+    <value>Фильтровать заголовок</value>
+  </data>
+  <data name="SAllHierarchy" xml:space="preserve">
+    <value>Показать верхний уровень заголовка</value>
+  </data>
+  <data name="SChangedData" xml:space="preserve">
+    <value>Изменения данных</value>
+  </data>
+  <data name="SClearText" xml:space="preserve">
+    <value>Очистить</value>
+  </data>
+  <data name="SSaveAndAddRecord" xml:space="preserve">
+    <value>Сохранить и добавить запись</value>
+  </data>
+  <data name="SAddGroupColumn" xml:space="preserve">
+    <value>Добавить группировку</value>
+  </data>
+  <data name="SDownGroup" xml:space="preserve">
+    <value>Опустить группу ниже</value>
+  </data>
+  <data name="SGroupOfJournal" xml:space="preserve">
+    <value>Группировка в журнале</value>
+  </data>
+  <data name="SRemoveAllGroups" xml:space="preserve">
+    <value>Убрать все группировки</value>
+  </data>
+  <data name="SRemoveGroupColumn" xml:space="preserve">
+    <value>Убрать группировку</value>
+  </data>
+  <data name="SUpGroup" xml:space="preserve">
+    <value>Поднять группу выше</value>
+  </data>
+  <data name="SHelp" xml:space="preserve">
+    <value>Справка</value>
+  </data>
+  <data name="SSCColsCountFixed" xml:space="preserve">
+    <value>Количество зафиксированных колонок</value>
+  </data>
+  <data name="SSCFixedHeader" xml:space="preserve">
+    <value>Зафиксировать заголовок</value>
+  </data>
+  <data name="SSCRowsCountFixed" xml:space="preserve">
+    <value>Количество зафиксированных строк</value>
+  </data>
+  <data name="SSCApplyFixedHeader" xml:space="preserve">
+    <value>Применить</value>
+  </data>
+  <data name="SSCParameters" xml:space="preserve">
+    <value>Панель заливки</value>
+  </data>
+  <data name="SExport" xml:space="preserve">
+    <value>Экспорт</value>
+  </data>
+  <data name="SDataFilters" xml:space="preserve">
+    <value>Фильтры данных</value>
+  </data>
+  <data name="SHeaderFilters" xml:space="preserve">
+    <value>Фильтры заголовка</value>
+  </data>
+  <data name="EUserDoesNotHaveExportPermitions" xml:space="preserve">
+    <value>Нет прав на экспорт журнала "{0}"</value>
+  </data>
+  <data name="EUserDoesNotHaveViewPermitions" xml:space="preserve">
+    <value>Нет прав на просмотр журнала "{0}"</value>
+  </data>
+  <data name="SAddFilter" xml:space="preserve">
+    <value>Добавить фильтр</value>
+  </data>
+  <data name="SRemoveFilter" xml:space="preserve">
+    <value>Удалить фильтр</value>
+  </data>
+  <data name="SViewSettings" xml:space="preserve">
+    <value>Настройка представления</value>
+  </data>
+  <data name="SViewSettings_Visible" xml:space="preserve">
+    <value>Видимость колонки в журнале</value>
+  </data>
+  <data name="SRequiredFilters" xml:space="preserve">
+    <value>Требуется указать обязательные фильтры. Для этого необходимо зайти в фильтры и заполнить те, у которых есть символ "*" в названии</value>
+  </data>
+  <data name="SSubscription" xml:space="preserve">
+    <value>Подписка</value>
+  </data>
+  <data name="SLoadViewSettings" xml:space="preserve">
+    <value>Применить сохраненные настройки</value>
+  </data>
+  <data name="SSaveViewSettings" xml:space="preserve">
+    <value>Сохранить настройки представления</value>
+  </data>
+  <data name="SSavingJournal_Cancel" xml:space="preserve">
+    <value>Отменить</value>
+  </data>
+  <data name="SSavingJournal_Load" xml:space="preserve">
+    <value>Применить настройки</value>
+  </data>
+  <data name="SSavingJournal_Save" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="SSCApplyViewSettings" xml:space="preserve">
+    <value>Применить</value>
+  </data>
+  <data name="SSCCancelViewSettings" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="SViewSettings_VerticalHeader" xml:space="preserve">
+    <value>Вертикальный заголовок</value>
+  </data>
+  <data name="SClose" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="SDownLoad" xml:space="preserve">
+    <value>Скачать</value>
+  </data>
+  <data name="SNavigationMenu" xml:space="preserve">
+    <value>Меню навигации</value>
+  </data>
+  <data name="SWithCorner" xml:space="preserve">
+    <value>с уголком</value>
+  </data>
+  <data name="SInputFormat" xml:space="preserve">
+    <value>Введите необходимый формат</value>
+  </data>
+  <data name="SInputFormatList" xml:space="preserve">
+    <value>Выберите необходимый формат</value>
+  </data>
+  <data name="Scm" xml:space="preserve">
+    <value>см.</value>
+  </data>
+  <data name="SHeight" xml:space="preserve">
+    <value>Высота</value>
+  </data>
+  <data name="SWidth" xml:space="preserve">
+    <value>Ширина</value>
+  </data>
+  <data name="SAddedGroupColumnLeft" xml:space="preserve">
+    <value>Объединяются ячейки группы строк</value>
+  </data>
+  <data name="SAddedGroupColumnLeftTotal" xml:space="preserve">
+    <value>Объединяются ячейки группы строк с итогами</value>
+  </data>
+  <data name="SAddedGroupColumnTop" xml:space="preserve">
+    <value>Указана группировка</value>
+  </data>
+  <data name="SAddedGroupColumnTopTotal" xml:space="preserve">
+    <value>Указана группировка с итогами</value>
+  </data>
+  <data name="SAddedGroupColumnTotal" xml:space="preserve">
+    <value>Указан итог</value>
+  </data>
+  <data name="SAddGroupColumnLeft" xml:space="preserve">
+    <value>Группировать объединяя ячейки строк</value>
+  </data>
+  <data name="SAddGroupColumnLeftTotal" xml:space="preserve">
+    <value>Группировать объединяя ячейки строк с итогом</value>
+  </data>
+  <data name="SAddGroupColumnTop" xml:space="preserve">
+    <value>Добавить группировку</value>
+  </data>
+  <data name="SAddGroupColumnTopTotal" xml:space="preserve">
+    <value>Добавить группировку с итогом</value>
+  </data>
+  <data name="SAddGroupColumnTotal" xml:space="preserve">
+    <value>Добавить итог</value>
+  </data>
+  <data name="SGroupColumnNotSet" xml:space="preserve">
+    <value>Группировка не указана</value>
+  </data>
+  <data name="STotal" xml:space="preserve">
+    <value>Итого</value>
+  </data>
+  <data name="STotalFor" xml:space="preserve">
+    <value>Итого за {0}</value>
+  </data>
+  <data name="SWithCornerUpper" xml:space="preserve">
+    <value>С уголком</value>
+  </data>
+  <data name="SCancelColorFill" xml:space="preserve">
+    <value>Прекратить действие заливки</value>
+  </data>
+  <data name="SCancelFontColorFill" xml:space="preserve">
+    <value>Прекратить действие указание цвета</value>
+  </data>
+  <data name="SCellColorFill" xml:space="preserve">
+    <value>Залить ячейки цветом</value>
+  </data>
+  <data name="SCellFontColorFill" xml:space="preserve">
+    <value>Указать цвет текста ячейки</value>
+  </data>
+  <data name="SColumnColorFill" xml:space="preserve">
+    <value>Залить колонки цветом</value>
+  </data>
+  <data name="SColumnFontColorFill" xml:space="preserve">
+    <value>Указать цвет текста колонки</value>
+  </data>
+  <data name="SRowColorFill" xml:space="preserve">
+    <value>Залить строки цветом</value>
+  </data>
+  <data name="SRowFontColorFill" xml:space="preserve">
+    <value>Указать цвет текста строки</value>
+  </data>
+  <data name="SViewSettingsFixedHeader" xml:space="preserve">
+    <value>Настройки закрепления заголовка и колонок</value>
+  </data>
+  <data name="SLoadFilters" xml:space="preserve">
+    <value>Загрузить фильтры (если сохранены)</value>
+  </data>
+  <data name="SNameKz" xml:space="preserve">
+    <value>Наименование (КАЗ)</value>
+  </data>
+  <data name="SNameRu" xml:space="preserve">
+    <value>Наименование (РУС)</value>
+  </data>
+  <data name="SRewriteSettings" xml:space="preserve">
+    <value>Перезаписать настройки:</value>
+  </data>
+  <data name="SSaveFilters" xml:space="preserve">
+    <value>Сохранить фильтры</value>
+  </data>
+  <data name="SShowForAll" xml:space="preserve">
+    <value>Показывать всем</value>
+  </data>
+  <data name="SSessionIsLost" xml:space="preserve">
+    <value>Сессия устарела. Необходимо страницу открыть заново.</value>
+  </data>
+  <data name="SOrderByColumn" xml:space="preserve">
+    <value>Сортировать</value>
+  </data>
+  <data name="SOrderByColumnDesc" xml:space="preserve">
+    <value>Сортировать в обратном порядке</value>
+  </data>
+  <data name="SOrderByColumnRemove" xml:space="preserve">
+    <value>Отменить сортировку</value>
+  </data>
+  <data name="SToReportPlugin" xml:space="preserve">
+    <value>Перейти в менеджер отчетов</value>
+  </data>
+  <data name="SAggregateAvg" xml:space="preserve">
+    <value>Среднее</value>
+  </data>
+  <data name="SAggregateCount" xml:space="preserve">
+    <value>Количество</value>
+  </data>
+  <data name="SAggregateGroupText" xml:space="preserve">
+    <value>Текст группы</value>
+  </data>
+  <data name="SAggregateGroupTextToolTip" xml:space="preserve">
+    <value>Выводится текст группы</value>
+  </data>
+  <data name="SAggregateGroupTextWithTotalPhrase" xml:space="preserve">
+    <value>Итого за "группа"</value>
+  </data>
+  <data name="SAggregateGroupTextWithTotalPhraseToolTip" xml:space="preserve">
+    <value>Выводится фраза "Итого за " и текст группы </value>
+  </data>
+  <data name="SAggregateMax" xml:space="preserve">
+    <value>Максимальное</value>
+  </data>
+  <data name="SAggregateMin" xml:space="preserve">
+    <value>Минимальное</value>
+  </data>
+  <data name="SAggregateNone" xml:space="preserve">
+    <value>Без итога</value>
+  </data>
+  <data name="SAggregateNumericGroup" xml:space="preserve">
+    <value>Числа</value>
+  </data>
+  <data name="SAggregateSum" xml:space="preserve">
+    <value>Сумма</value>
+  </data>
+  <data name="SAggregateTextGroup" xml:space="preserve">
+    <value>Текст группы итога</value>
+  </data>
+  <data name="SCCCApplyConcatenateColumns" xml:space="preserve">
+    <value>Применить</value>
+  </data>
+  <data name="SCCCCancelConcatenateColumns" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="SCCCDeleteConcatenateColumns" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="SConcatenateColumns" xml:space="preserve">
+    <value>Объединить колонки</value>
+  </data>
+  <data name="SCCConcatenatedColumnsTitle" xml:space="preserve">
+    <value>Список объединенных колонок</value>
+  </data>
+  <data name="SCCLeftColumnListTitle" xml:space="preserve">
+    <value>Доступные для объединения колонки</value>
+  </data>
+  <data name="SCCRightColumnListTitle" xml:space="preserve">
+    <value>Объединяемые колонки</value>
+  </data>
+  <data name="SCCFromLeftToRight" xml:space="preserve">
+    <value>Добавить для объединения</value>
+  </data>
+  <data name="SCCFromRightToLeft" xml:space="preserve">
+    <value>Удалить из объединения</value>
+  </data>
+  <data name="SLoadViewSettingsHeader" xml:space="preserve">
+    <value>Применение сохраненных настроек</value>
+  </data>
+  <data name="SLoadViewSettings_SavedSettings" xml:space="preserve">
+    <value>Сохраненные настройки</value>
+  </data>
+  <data name="SSaveViewSettingsHeader" xml:space="preserve">
+    <value>Сохранение настроек представления</value>
+  </data>
+  <data name="SFilterByPeriod" xml:space="preserve">
+    <value>На дату</value>
+  </data>
+  <data name="SFilterInSqlTimeOutException" xml:space="preserve">
+    <value>Необходимо изменить фильтр, т.к. за отведенное время не удалось выбрать необходимые данные. Не рекомендуется использовать критерии "Содержит", "Содержит слова", "Оканчивается на". Рекомендуется использовать критерий "Равно" или "Не равно".</value>
+  </data>
+  <data name="SColorPalette" xml:space="preserve">
+    <value>Палитра</value>
+  </data>
+  <data name="SCurrentColor" xml:space="preserve">
+    <value>Текущий цвет</value>
+  </data>
+  <data name="SRowArchive" xml:space="preserve">
+    <value>Значение не актуально (в архиве)</value>
+  </data>
+  <data name="SRefresh" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="SEndCrossDataEdit" xml:space="preserve">
+    <value>Необходимо обновить страницу.</value>
+  </data>
+  <data name="SPostFileImageFromClipboard" xml:space="preserve">
+    <value>Загрузить файл картинку из буфера обмена (картинка из буфера обмена загружается JPEG файлом)</value>
+  </data>
+  <data name="SPostFileTextFromClipboard" xml:space="preserve">
+    <value>Загрузить текстовый файл из буфера обмена (текст из буфера обмена загружается файлом)</value>
+  </data>
+  <data name="SFileName" xml:space="preserve">
+    <value>Название файла</value>
+  </data>
+  <data name="SPostFileFromDialog" xml:space="preserve">
+    <value>Загрузить файл</value>
+  </data>
+  <data name="SSaveAddToolTip" xml:space="preserve">
+    <value>Сохранить запись и открыть добавление новой записи</value>
+  </data>
+  <data name="SSaveToolTip" xml:space="preserve">
+    <value>Сохранить запись и перейти в журнал</value>
+  </data>
+  <data name="SAccessDanied" xml:space="preserve">
+    <value>Доступ запрещен</value>
+  </data>
+  <data name="SNoOneSelectedRow" xml:space="preserve">
+    <value>Ни одна запись не выбрана</value>
+  </data>
+  <data name="SMoveDownRecord" xml:space="preserve">
+    <value>Опустить запись ниже</value>
+  </data>
+  <data name="SMoveDownRecordOn" xml:space="preserve">
+    <value>Опустить запись ниже на (количество строк):</value>
+  </data>
+  <data name="SMoveUpRecord" xml:space="preserve">
+    <value>Поднять запись выше</value>
+  </data>
+  <data name="SMoveUpRecordOn" xml:space="preserve">
+    <value>Поднять запись выше на (количество строк):</value>
+  </data>
+  <data name="EExportMaxCountRecords" xml:space="preserve">
+    <value>Экспортировать больше {0} записей запрещено. Используйте фильтр что бы получить меньший список.</value>
+  </data>
+  <data name="SScriptExportAttentionCountRecords" xml:space="preserve">
+    <value>if(confirm("В журнале {1} записей. Экспорт потребует некоторого времени. Возможно стоит пересмотреть фильтр что бы получить меньший список.")) return true; return false;</value>
+  </data>
+  <data name="SScriptExportMaxCountRecords" xml:space="preserve">
+    <value>alert("Экспортировать больше {0} записей запрещено. Используйте фильтр что бы получить меньший список."); return false;</value>
+  </data>
+  <data name="SServiceProcedure_BeforeEnabledMessage" xml:space="preserve">
+    <value>С {0} планируется проводить {1}.</value>
+  </data>
+  <data name="SServiceProcedure_CauseMessage" xml:space="preserve">
+    <value>{0}, просим завершить текущие действия и выйти из системы. Обращение на новые страницы запрещено.</value>
+  </data>
+  <data name="SServiceProcedure_ServiceProcedureMessage" xml:space="preserve">
+    <value>{0}.</value>
+  </data>
+  <data name="SServiceProcedure_TimeOfEndCause" xml:space="preserve">
+    <value>Предполагаемое время завершения {0}.</value>
+  </data>
+  <data name="ECanNotEditRecord" xml:space="preserve">
+    <value>Нельзя редактировать запись</value>
+  </data>
+  <data name="SNoOneSelectedRowCheckRecords" xml:space="preserve">
+    <value>Ни одна запись не выбрана. Проставьте галочки.</value>
+  </data>
+  <data name="SErrorMessageTitle" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="SInfoMessageTitle" xml:space="preserve">
+    <value>Информация</value>
+  </data>
+  <data name="ECanNotDeleteUseInSystem" xml:space="preserve">
+    <value>Невозможно удалить запись, используется в системе</value>
+  </data>
+  <data name="ERowIsDeletedOrNotHavePermissions" xml:space="preserve">
+    <value>Запись удалена или недостаточно прав</value>
+  </data>
+  <data name="SAddingText" xml:space="preserve">
+    <value>Добавление</value>
+  </data>
+  <data name="SDateBetween" xml:space="preserve">
+    <value>Период</value>
+  </data>
+  <data name="SDateLess" xml:space="preserve">
+    <value>Раньше</value>
+  </data>
+  <data name="SDateMore" xml:space="preserve">
+    <value>Позже</value>
+  </data>
+  <data name="SContainsAnyWord" xml:space="preserve">
+    <value>Любой из</value>
+  </data>
+  <data name="EDoesNotHavePermitForAdd" xml:space="preserve">
+    <value>Нет прав на добавление</value>
+  </data>
+  <data name="EDoesNotHavePermitForEdit" xml:space="preserve">
+    <value>Нет прав на редактирование</value>
+  </data>
+  <data name="ERecordModifiedByOther" xml:space="preserve">
+    <value>Запись была кем-то изменена</value>
+  </data>
+  <data name="SConfirmTitleText" xml:space="preserve">
+    <value>Подтверждение</value>
+  </data>
+  <data name="SSearchLoading" xml:space="preserve">
+    <value>Поиск...</value>
+  </data>
+  <data name="SQuickSearch" xml:space="preserve">
+    <value>Быстрый поиск</value>
+  </data>
+  <data name="SSearch" xml:space="preserve">
+    <value>Искать</value>
+  </data>
+  <data name="SChildDataContainsFalseText" xml:space="preserve">
+    <value>Не содержит данные</value>
+  </data>
+  <data name="SChildDataContainsTrueText" xml:space="preserve">
+    <value>Содержит данные</value>
+  </data>
+  <data name="SMultipleSelectedMessage" xml:space="preserve">
+    <value>Выбрано записей: {0}</value>
+  </data>
+  <data name="SSelectAllFromAllPages" xml:space="preserve">
+    <value>Выбрать все записи со всех страниц</value>
+  </data>
+  <data name="SUnselectAllFromAllPages" xml:space="preserve">
+    <value>Снять выбор со всех страниц</value>
+  </data>
+  <data name="SAddedGroupColumnInHeader" xml:space="preserve">
+    <value>Указана группировка для заголовка</value>
+  </data>
+  <data name="SAddGroupColumnInHeader" xml:space="preserve">
+    <value>Добавить группировку в заголовок</value>
+  </data>
+  <data name="SWizardNext" xml:space="preserve">
+    <value>Перейти далее</value>
+  </data>
+  <data name="SWizardPrevious" xml:space="preserve">
+    <value>Вернуться назад</value>
+  </data>
+  <data name="SNotContains" xml:space="preserve">
+    <value>Не содержит</value>
+  </data>
+  <data name="SNotContainsWords" xml:space="preserve">
+    <value>Не содержит слова</value>
+  </data>
+  <data name="SInvalidDateFormatInFilter" xml:space="preserve">
+    <value>Не верно введена дата в поле фильтра "{0}".</value>
+  </data>
+  <data name="SInvalidFormatInFilter" xml:space="preserve">
+    <value>Введенное значение не соответствует формату в поле фильтра "{0}".</value>
+  </data>
+  <data name="SInvalidNumericFormatInFilter" xml:space="preserve">
+    <value>Не верно введено число в поле фильтра "{0}".</value>
+  </data>
+  <data name="SExceptionOccurredTryAgainOrReload" xml:space="preserve">
+    <value>Возникла ошибка при выполнении операции, перезагрузить страницу и попробуйте еще раз.</value>
+  </data>
+  <data name="SShowDublicates" xml:space="preserve">
+    <value>Вывести</value>
+  </data>
+  <data name="SDaysAgoAndMore" xml:space="preserve">
+    <value>Прошло от N дней</value>
+  </data>
+  <data name="SDaysLeftAndMore" xml:space="preserve">
+    <value>Осталось от N дней</value>
+  </data>
+  <data name="SToDay" xml:space="preserve">
+    <value>Текущий день</value>
+  </data>
+  <data name="SLengthLess" xml:space="preserve">
+    <value>Длина меньше</value>
+  </data>
+  <data name="SLengthMore" xml:space="preserve">
+    <value>Длина больше</value>
+  </data>
+  <data name="SOnKz" xml:space="preserve">
+    <value>На казахском</value>
+  </data>
+  <data name="SOnRu" xml:space="preserve">
+    <value>На русском</value>
+  </data>
+  <data name="ERecordWasDeletedByOtherUser" xml:space="preserve">
+    <value>Данная запись была удалена другим пользователем.</value>
+  </data>
+  <data name="ERecordWasSavedByOtherUser" xml:space="preserve">
+    <value>Были внесены изменения другим пользователем.</value>
+  </data>
+  <data name="STimeOut" xml:space="preserve">
+    <value>Необходимо изменить фильтр, т.к. за отведенное время не удалось выбрать необходимые данные.</value>
+  </data>
+</root>

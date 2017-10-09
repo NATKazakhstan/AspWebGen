@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Database Name="Default" Class="DBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Table Name="dbo.MON_RequestTables" Member="MON_RequestTables">
+    <Type Name="MON_RequestTable">
+      <Column Name="id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TableName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="TableCode" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="PackageCode" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="PackageName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SYS_ReferencesConflictResolver" Member="SYS_ReferencesConflictResolvers">
+    <Type Name="SYS_ReferencesConflictResolver">
+      <Column Name="id" Type="System.Int64" DbType="bigint" CanBeNull="false" IsDbGenerated="true" IsPrimaryKey="true" />
+      <Column Name="Code" Type="System.String" DbType="nvarchar(250)" CanBeNull="false" />
+      <Column Name="RegexSearch" Type="System.String" DbType="nvarchar(250)" CanBeNull="true" />
+      <Column Name="ConstraintName" Type="System.String" DbType="nvarchar(250)" CanBeNull="true" />
+      <Column Name="TableName" Type="System.String" DbType="nvarchar(250)" CanBeNull="true" />
+      <Column Name="ReferencesConflictResolverClass" Type="System.String" DbType="nvarchar(500)" CanBeNull="true" />
+      <Column Name="ErrorMessageRu" Type="System.String" DbType="nvarchar(250)" CanBeNull="true" />
+      <Column Name="ErrorMessageKz" Type="System.String" DbType="nvarchar(250)" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="DB">
+  <DataContextMoniker Name="/DBDataContext" />
+  <nestedChildShapes>
+    <classShape Id="3e4d9ee6-228e-4727-8f40-003b76505240" absoluteBounds="0.75, 1.25, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/DBDataContext/MSC_Module" />
+      <nestedChildShapes>
+        <elementListCompartment Id="e18a283a-5ca5-43f5-898c-423d3c18c7fb" absoluteBounds="0.765, 1.71, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="1fc88923-7dff-479c-9001-b2241f0d64dd" absoluteBounds="3.5, 0.875, 2, 1.9631982421875">
+      <DataClassMoniker Name="/DBDataContext/MSC_Module_Configuration" />
+      <nestedChildShapes>
+        <elementListCompartment Id="34e660a3-18f0-4822-a10a-65f64d5ade70" absoluteBounds="3.515, 1.335, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.75 : 2.03929768880208); (3.5 : 2.03929768880208)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/DBDataContext/MSC_Module/MSC_Module_MSC_Module_Configuration" />
+      <nodes>
+        <classShapeMoniker Id="3e4d9ee6-228e-4727-8f40-003b76505240" />
+        <classShapeMoniker Id="1fc88923-7dff-479c-9001-b2241f0d64dd" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

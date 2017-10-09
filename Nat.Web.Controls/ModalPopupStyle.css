@@ -1,0 +1,6 @@
+.modalBackground
+{
+	background-color: Gray;
+	filter: alpha(opacity=30);
+    opacity: 0.3;
+}

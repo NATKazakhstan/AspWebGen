@@ -1,0 +1,1072 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SInvalidBindingInput" xml:space="preserve">
+    <value>Қате мәлімет енгізілген</value>
+  </data>
+  <data name="SSelectText" xml:space="preserve">
+    <value>Таңдау</value>
+  </data>
+  <data name="SAddRecord" xml:space="preserve">
+    <value>Жазба қосу</value>
+  </data>
+  <data name="SCancelText" xml:space="preserve">
+<<<<<<< working copy
+    <value>Болдырмау</value>
+=======
+    <value>Жою</value>
+>>>>>>> merge rev
+  </data>
+  <data name="SError" xml:space="preserve">
+    <value>Қате</value>
+  </data>
+  <data name="SEditText" xml:space="preserve">
+    <value>Өзгерту</value>
+  </data>
+  <data name="SDeleteText" xml:space="preserve">
+    <value>Жою</value>
+  </data>
+  <data name="SInsertText" xml:space="preserve">
+    <value>Кірістіру</value>
+  </data>
+  <data name="SLoading" xml:space="preserve">
+    <value>Енгізу</value>
+  </data>
+  <data name="SPleaseWait" xml:space="preserve">
+    <value>Енгізу</value>
+  </data>
+  <data name="SNotSpecified" xml:space="preserve">
+    <value>Белгіленбеген</value>
+  </data>
+  <data name="SNewText" xml:space="preserve">
+    <value>Жаңа</value>
+  </data>
+  <data name="SUpdateText" xml:space="preserve">
+    <value>Сақтау</value>
+  </data>
+  <data name="SConfirmDeleteText" xml:space="preserve">
+    <value>Сіз шынымен жойғыңыз келеді ме?</value>
+  </data>
+  <data name="SEmptyDataText" xml:space="preserve">
+    <value>Деректер жоқ</value>
+  </data>
+  <data name="SReport" xml:space="preserve">
+    <value>Есептемелер</value>
+  </data>
+  <data name="SView" xml:space="preserve">
+    <value>Қарау</value>
+  </data>
+  <data name="SAdd" xml:space="preserve">
+    <value>Қосу</value>
+  </data>
+  <data name="SApplyFilter" xml:space="preserve">
+    <value>Фильтрді қолдану</value>
+  </data>
+  <data name="SSelectedRowsDelete" xml:space="preserve">
+    <value>Таңдалған жою</value>
+  </data>
+  <data name="SRowIsNotSelected" xml:space="preserve">
+    <value>Жол таңдалмаған</value>
+  </data>
+  <data name="SLogErrorMultipleUsers" xml:space="preserve">
+    <value>Хабар журналында жазба жасауға мүмкін емес. Бірнеше есеп карточкаларға бір SID - '{0}' сәйкес келеді.</value>
+  </data>
+  <data name="SViewNotAvailable" xml:space="preserve">
+    <value>Қарау мүмкін емес</value>
+  </data>
+  <data name="SReturnToJournal" xml:space="preserve">
+    <value>Журналға оралу</value>
+  </data>
+  <data name="SYes" xml:space="preserve">
+    <value>Иә</value>
+  </data>
+  <data name="SInformationText" xml:space="preserve">
+    <value>Ақпарат</value>
+  </data>
+  <data name="SNo" xml:space="preserve">
+    <value>Жоқ</value>
+  </data>
+  <data name="SViewJournal" xml:space="preserve">
+    <value>Журналға көшу</value>
+  </data>
+  <data name="SShowHistory" xml:space="preserve">
+    <value>Тарихты қарау</value>
+  </data>
+  <data name="SSave" xml:space="preserve">
+    <value>Сақтау</value>
+  </data>
+  <data name="SSelectCondition" xml:space="preserve">
+    <value>&amp;lt;Шартты таңдау&amp;gt;</value>
+  </data>
+  <data name="SMore" xml:space="preserve">
+    <value>Көбірек</value>
+  </data>
+  <data name="SToJournal" xml:space="preserve">
+    <value>Журналға</value>
+  </data>
+  <data name="SFieldHasError" xml:space="preserve">
+    <value>{0}' алаңында таңдап алынған мәнде қате бар:</value>
+  </data>
+  <data name="SInvalidFieldFormat" xml:space="preserve">
+    <value>{0} алаңының дұрыс емес форматы берілді</value>
+  </data>
+  <data name="SIsFilled" xml:space="preserve">
+    <value>Толтырылды</value>
+  </data>
+  <data name="SErrorHeaderText" xml:space="preserve">
+    <value>Ақпараттық хабарлама</value>
+  </data>
+  <data name="SBetween" xml:space="preserve">
+    <value>Арасында</value>
+  </data>
+  <data name="SLess" xml:space="preserve">
+    <value>Аз</value>
+  </data>
+  <data name="SStartsWith" xml:space="preserve">
+    <value>бастап басталады</value>
+  </data>
+  <data name="ENotCorrectValue" xml:space="preserve">
+    <value>'{0}'алаңы дұрыс таңдалған жоқ, ол сақталына алмайды, қайтадан таңдап алыңыз.</value>
+  </data>
+  <data name="SIsNotFilled" xml:space="preserve">
+    <value>Толтырылған жоқ</value>
+  </data>
+  <data name="SNotEquals" xml:space="preserve">
+    <value>Тең емес</value>
+  </data>
+  <data name="SRequiredFieldMessage" xml:space="preserve">
+    <value>'{0}' алаңын толтыру қажет.</value>
+  </data>
+  <data name="SEndsWith" xml:space="preserve">
+    <value>аяқталады</value>
+  </data>
+  <data name="SCancelAdd" xml:space="preserve">
+    <value>Қосуды алып тастау</value>
+  </data>
+  <data name="ENotCorrectDefaultValue" xml:space="preserve">
+    <value>Сақталуы мүмкін емес мәнімен '{0}' алаңынын автоматты толтыру жүргізілді.</value>
+  </data>
+  <data name="SEquals" xml:space="preserve">
+    <value>Тең</value>
+  </data>
+  <data name="SHideHistory" xml:space="preserve">
+    <value>Тарихты жауып қою</value>
+  </data>
+  <data name="SContains" xml:space="preserve">
+    <value>Құрамында бар</value>
+  </data>
+  <data name="SSaveValidated" xml:space="preserve">
+    <value>Толтырылғанды сақтау</value>
+  </data>
+  <data name="SInfoNotSaveInvalidated" xml:space="preserve">
+    <value>Қатесі бар жолдар сақталмайды. Жалғастыру қажет пе?</value>
+  </data>
+  <data name="SQuestionNotSaveInvalidated" xml:space="preserve">
+    <value>Қатесі бар жолдар сақталмайды. Жалғастыру қажет пе?</value>
+  </data>
+  <data name="SWordExport" xml:space="preserve">
+    <value> MS Word-қа экспорттау</value>
+  </data>
+  <data name="SJournal" xml:space="preserve">
+    <value>Журнал</value>
+  </data>
+  <data name="SRangeValidatorErrorMessageInSummary" xml:space="preserve">
+    <value>"{2}" алаңында тек "{0}" ден "{1}" дейінгі бүтін сандар болуы керек</value>
+  </data>
+  <data name="SRequiredReadOnlyFieldMessage" xml:space="preserve">
+    <value>'{0}' жолын толтыру қажет.</value>
+  </data>
+  <data name="SLook" xml:space="preserve">
+    <value>Қарау</value>
+  </data>
+  <data name="SEdit" xml:space="preserve">
+    <value>Түзету</value>
+  </data>
+  <data name="SRangeValidatorErrorMessage" xml:space="preserve">
+    <value>"{0}" ден "{1}" дейін бүтін сандарға ие</value>
+  </data>
+  <data name="SMoveUpWeight" xml:space="preserve">
+    <value>Үлкейту мәні</value>
+  </data>
+  <data name="SMoveDownWeight" xml:space="preserve">
+    <value>Азайту мәні</value>
+  </data>
+  <data name="SFilter" xml:space="preserve">
+<<<<<<< working copy
+    <value>Сүзгі</value>
+=======
+    <value>Сүзгi</value>
+>>>>>>> merge rev
+  </data>
+  <data name="SNotExistRow" xml:space="preserve">
+    <value>&lt;сақталған мән қолжетімсіз&gt;</value>
+  </data>
+  <data name="SServiceProcedure_TimeToShutDown" xml:space="preserve">
+    <value> {0} жүйемен жұмыс мүмкін емес.</value>
+  </data>
+  <data name="EFieldMaxLength" xml:space="preserve">
+    <value>Алаңда '{0}' символдардың максималды саны асып кеткен {0}</value>
+  </data>
+  <data name="SFieldHasErrorWithText" xml:space="preserve">
+    <value>Алаңдағы '{0}'таңдап алынған  мәнінде '{1}' қате бар:</value>
+  </data>
+  <data name="EMustBeMoreOrEqualsOfField" xml:space="preserve">
+    <value>{0}" алаңынан көп немесе тең болу керек.</value>
+  </data>
+  <data name="EMustBeMoreOfField" xml:space="preserve">
+    <value>{0}' алаңнан көп болу керек.</value>
+  </data>
+  <data name="SServiceProcedure_TimeBetweenRequest" xml:space="preserve">
+    <value>егер ({0}) уақыт аралығында өтініш болмаса, парақтағы жұмыс аяқталды деп саналады.</value>
+  </data>
+  <data name="SChangeHieght" xml:space="preserve">
+    <value>Алаң биіктігін өзгерту</value>
+  </data>
+  <data name="SMaxLengthOfField" xml:space="preserve">
+    <value>{0}' алаңының максималды ұзақтығы  {1} символ</value>
+  </data>
+  <data name="EMaxLength" xml:space="preserve">
+    <value>Символдардың максималды саны:  {0}</value>
+  </data>
+  <data name="SServiceProcedure_EnabledMessage" xml:space="preserve">
+    <value>Техникалық жұмыстар, ағымдағы әрекетті аяқтауды және жүйеден шығуды сұрймыз. Жаңа бетке өтуге тыйым салынған.</value>
+  </data>
+  <data name="SNotCorrectNumber" xml:space="preserve">
+    <value>Сан дұрыс енгізілмеген</value>
+  </data>
+  <data name="SNotCorrectNumberOfField" xml:space="preserve">
+    <value>{0}' алаңында сан дұрыс енгізілмеген.</value>
+  </data>
+  <data name="ENotCorrectValueWithText" xml:space="preserve">
+    <value>{0}' алаңда '{1}' мәні дұрыс таңдап алынбаған, сақталуы мүмкін емес, қайтадан таңдаңыз</value>
+  </data>
+  <data name="ENoPermitToDeleteRecord" xml:space="preserve">
+    <value>Жазбаны жоюға құқық жоқ.</value>
+  </data>
+  <data name="SClearFilter" xml:space="preserve">
+    <value>Сүзгіні тазалау</value>
+  </data>
+  <data name="EFieldMustBeMoreOrEqualsOfField" xml:space="preserve">
+    <value>{0}' алаңы артық немесе алаңға тең болу керек '{1}'.</value>
+  </data>
+  <data name="EFieldMustBeMoreOfField" xml:space="preserve">
+    <value>{0}' алаңы алаңнан артық болуы '{1}'.</value>
+  </data>
+  <data name="SMaxLength" xml:space="preserve">
+    <value>{0} символдардың мүмкін ұзындығынан асып кеткен.</value>
+  </data>
+  <data name="SServiceProcedure_TimeOfEndService" xml:space="preserve">
+    <value>{0} техникалық жұмыстарды болжамды аяқтау уақыты.</value>
+  </data>
+  <data name="SServiceProcedure" xml:space="preserve">
+    <value>Техникалық жұмыстар жүргізіледі.</value>
+  </data>
+  <data name="ENotCorrectDefaultValueWithText" xml:space="preserve">
+    <value>Сақталуы мүмкін емес '{1}' мәнімен {0}'алаңды автоматты түрде толтыру жүргізілді.</value>
+  </data>
+  <data name="SServiceProcedure_TimeToEnableMessage" xml:space="preserve">
+    <value> {0}-дан бастап техникалық жұмыстар жүргізу жоспарланады</value>
+  </data>
+  <data name="SContainsWords" xml:space="preserve">
+    <value>Сөздерден тұрады</value>
+  </data>
+  <data name="SCountPages" xml:space="preserve">
+    <value>Парақтары: ({0})</value>
+  </data>
+  <data name="SCountData" xml:space="preserve">
+    <value>Жолдары: {0}</value>
+  </data>
+  <data name="SServiceProcedure_Disabled" xml:space="preserve">
+    <value>Қазіргі сәтте техникалық жұмыстар жүргізілмейді.</value>
+  </data>
+  <data name="SChangeHieghtMore" xml:space="preserve">
+    <value>Алаң биіктігін ұлғайту</value>
+  </data>
+  <data name="SChangeHieghtLess" xml:space="preserve">
+    <value>Алаң биіктігін төмендету</value>
+  </data>
+  <data name="SClose" xml:space="preserve">
+    <value>Жабу</value>
+  </data>
+  <data name="SSCCancelViewSettings" xml:space="preserve">
+<<<<<<< working copy
+    <value>Болдырмау</value>
+=======
+    <value>Жою</value>
+>>>>>>> merge rev
+  </data>
+  <data name="SSavingJournal_Cancel" xml:space="preserve">
+    <value>Болдырмау</value>
+  </data>
+  <data name="SSCApplyFixedHeader" xml:space="preserve">
+    <value>Пайдалану</value>
+  </data>
+  <data name="SSCApplyViewSettings" xml:space="preserve">
+    <value>Пайдалану</value>
+  </data>
+  <data name="SDownLoad" xml:space="preserve">
+    <value>Көшіріп алу</value>
+  </data>
+  <data name="SSavingJournal_Save" xml:space="preserve">
+    <value>Сақтау</value>
+  </data>
+  <data name="SHelp" xml:space="preserve">
+    <value>Анықтама</value>
+  </data>
+  <data name="STotal" xml:space="preserve">
+    <value>Барлығы</value>
+  </data>
+  <data name="SInputFormat" xml:space="preserve">
+    <value>Қажетті форматты енгізіңіз</value>
+  </data>
+  <data name="SViewSettings_VerticalHeader" xml:space="preserve">
+    <value>Тік тақырып</value>
+  </data>
+  <data name="SViewSettings_Visible" xml:space="preserve">
+    <value>Журналдағы бағананың көрінуі </value>
+  </data>
+  <data name="SInputFormatList" xml:space="preserve">
+    <value>Қажетті форматты таңдаңыз</value>
+  </data>
+  <data name="SMultipleSelect" xml:space="preserve">
+    <value>Жазбаларды таңдау</value>
+  </data>
+  <data name="SSelect" xml:space="preserve">
+    <value>Жазбаны таңдау</value>
+  </data>
+  <data name="SHeight" xml:space="preserve">
+    <value>Биіктігі</value>
+  </data>
+  <data name="SGroupOfJournal" xml:space="preserve">
+    <value>Журналдағы топтасу</value>
+  </data>
+  <data name="SAddGroupColumn" xml:space="preserve">
+    <value>Топтасуды қосу</value>
+  </data>
+  <data name="SAddGroupColumnTop" xml:space="preserve">
+    <value>Топтасуды қосу</value>
+  </data>
+  <data name="SAddFilter" xml:space="preserve">
+    <value>Сүзгіні қосу</value>
+  </data>
+  <data name="EMustBeLessOrEqualsOfField" xml:space="preserve">
+    <value>{0}' торынан кем немесе оған тең болу керек.</value>
+  </data>
+  <data name="EMustBeLessOfField" xml:space="preserve">
+    <value>{0}' торынан кем болу керек.</value>
+  </data>
+  <data name="SNotSelectRecordOrNotExists" xml:space="preserve">
+    <value>Жазу тандап алынған  жоқ немесе жоқ</value>
+  </data>
+  <data name="SSCFixedHeader" xml:space="preserve">
+    <value>Тақырыпты бекіту</value>
+  </data>
+  <data name="SCountChanges" xml:space="preserve">
+    <value>өзгертулер {0}</value>
+  </data>
+  <data name="SChangedData" xml:space="preserve">
+    <value>Мәліметтердің өзгеруі</value>
+  </data>
+  <data name="SSCColsCountFixed" xml:space="preserve">
+    <value>Бекітілген бағаналар саны</value>
+  </data>
+  <data name="SSCRowsCountFixed" xml:space="preserve">
+    <value>Бекітілген жолдар саны</value>
+  </data>
+  <data name="SMaxRecursionInHeader" xml:space="preserve">
+    <value>Тақырыбына барынша салу</value>
+  </data>
+  <data name="SNavigationMenu" xml:space="preserve">
+    <value>Навигациялар мазмұны</value>
+  </data>
+  <data name="SViewSettings" xml:space="preserve">
+    <value>Көріністі күйге келтіру</value>
+  </data>
+  <data name="SNotCorrectNumberForWeight" xml:space="preserve">
+    <value>Сан қате енгізілді.</value>
+  </data>
+  <data name="SDownGroup" xml:space="preserve">
+    <value>Топты төмен түсіру</value>
+  </data>
+  <data name="ENotExistsRowOrName" xml:space="preserve">
+    <value>Жазба немесе жазбаның атауы жоқ</value>
+  </data>
+  <data name="SClearText" xml:space="preserve">
+    <value>Тазарту</value>
+  </data>
+  <data name="SSCParameters" xml:space="preserve">
+    <value>Құю жиегі</value>
+  </data>
+  <data name="SToLeft" xml:space="preserve">
+    <value>Солға орын ауыстыру</value>
+  </data>
+  <data name="SToRight" xml:space="preserve">
+    <value>Оіға орын ауыстыру</value>
+  </data>
+  <data name="PressToOpenCloseGroup" xml:space="preserve">
+    <value>Басу арқылы топ ашылады/жабылады</value>
+  </data>
+  <data name="SUpGroup" xml:space="preserve">
+    <value>Топты жоғары көтеру</value>
+  </data>
+  <data name="SSubscription" xml:space="preserve">
+    <value>Жазылу</value>
+  </data>
+  <data name="SAllHierarchy" xml:space="preserve">
+    <value>Тақырыптың жоғарғы деңгейін көрсету</value>
+  </data>
+  <data name="SShowAllFilters" xml:space="preserve">
+    <value>Сүзгілердің барлық тізімін көрсету</value>
+  </data>
+  <data name="SShowMainGroupFilters" xml:space="preserve">
+    <value>Сүзгілердің тек негізгі тізімін ғана көрсету</value>
+  </data>
+  <data name="EFieldMustBeLessOrEqualsOfField" xml:space="preserve">
+    <value>{0}' торы '{1}' торынан кем немесе оған тең болу керек.</value>
+  </data>
+  <data name="EFieldMustBeLessOfField" xml:space="preserve">
+    <value>{0}' торы '{1}' торынан кем болу керек.</value>
+  </data>
+  <data name="SSavingJournal_Load" xml:space="preserve">
+    <value>Күйге келтіруді қолдану</value>
+  </data>
+  <data name="SLoadViewSettings" xml:space="preserve">
+    <value>Сақталған күйге келтіруді қолдану</value>
+  </data>
+  <data name="SEditLook" xml:space="preserve">
+    <value>Қарау/Түзету</value>
+  </data>
+  <data name="PressToOpenGroup" xml:space="preserve">
+    <value>Топты ашу </value>
+  </data>
+  <data name="SWithCorner" xml:space="preserve">
+    <value>бұрышпен</value>
+  </data>
+  <data name="PressToCloseGroup" xml:space="preserve">
+    <value>Топты жабу</value>
+  </data>
+  <data name="Scm" xml:space="preserve">
+    <value>қара.</value>
+  </data>
+  <data name="SSaveWithoutHistory" xml:space="preserve">
+    <value>Жазбаны тарихсыз сақтау</value>
+  </data>
+  <data name="SSaveAndAddRecord" xml:space="preserve">
+    <value>Сақтау және жазба қосу</value>
+  </data>
+  <data name="SSaveViewSettings" xml:space="preserve">
+    <value>Көріністің реттеулерін сақтау</value>
+  </data>
+  <data name="SStartHeaderFromLevel" xml:space="preserve">
+    <value>бастап тақырыбын жасау</value>
+  </data>
+  <data name="SRemoveAllGroups" xml:space="preserve">
+    <value>Барлық топтасуды алып тастау</value>
+  </data>
+  <data name="SRemoveGroupColumn" xml:space="preserve">
+    <value>Топтасуды алып тастау</value>
+  </data>
+  <data name="SRemoveFilter" xml:space="preserve">
+    <value>Сүзгіні жою</value>
+  </data>
+  <data name="SFilterHeader" xml:space="preserve">
+    <value>Тақырыбын сүзгіден өткізу</value>
+  </data>
+  <data name="SDataFilters" xml:space="preserve">
+    <value>Мәліметтер сүзгісі</value>
+  </data>
+  <data name="SHeaderFilters" xml:space="preserve">
+    <value>Тақырып сүзгілері</value>
+  </data>
+  <data name="SWidth" xml:space="preserve">
+    <value>Ені</value>
+  </data>
+  <data name="SExport" xml:space="preserve">
+    <value>Экспорт</value>
+  </data>
+  <data name="SCCCApplyConcatenateColumns" xml:space="preserve">
+    <value>Пайдалану</value>
+  </data>
+  <data name="SCCCCancelConcatenateColumns" xml:space="preserve">
+<<<<<<< working copy
+    <value>Болдырмау</value>
+=======
+    <value>Жою</value>
+>>>>>>> merge rev
+  </data>
+  <data name="SCCCDeleteConcatenateColumns" xml:space="preserve">
+    <value>Жою</value>
+  </data>
+  <data name="SConcatenateColumns" xml:space="preserve">
+    <value>Бағаналарды біріктіру</value>
+  </data>
+  <data name="SCCConcatenatedColumnsTitle" xml:space="preserve">
+    <value>Біріктірілген бағаналар тізімі</value>
+  </data>
+  <data name="SCCLeftColumnListTitle" xml:space="preserve">
+    <value>Біріктіруге жетімді бағаналар</value>
+  </data>
+  <data name="SCCRightColumnListTitle" xml:space="preserve">
+    <value>Біріктірілетін бағаналар</value>
+  </data>
+  <data name="SCCFromLeftToRight" xml:space="preserve">
+    <value>Біріктіру үшін қосу</value>
+  </data>
+  <data name="SCCFromRightToLeft" xml:space="preserve">
+    <value>Бірлестіктен жою</value>
+  </data>
+  <data name="SAggregateCount" xml:space="preserve">
+    <value>Саны</value>
+  </data>
+  <data name="SAggregateMax" xml:space="preserve">
+    <value>Максимальді</value>
+  </data>
+  <data name="SAggregateMin" xml:space="preserve">
+    <value>Ең аз</value>
+  </data>
+  <data name="SFilterByPeriod" xml:space="preserve">
+    <value>Күні</value>
+  </data>
+  <data name="SNameKz" xml:space="preserve">
+    <value>Атауы (қаз)</value>
+  </data>
+  <data name="SNameRu" xml:space="preserve">
+    <value>Атауы (ОРЫС)</value>
+  </data>
+  <data name="SAggregateSum" xml:space="preserve">
+    <value>Сома</value>
+  </data>
+  <data name="SAggregateNone" xml:space="preserve">
+    <value>Жалпы сансыз</value>
+  </data>
+  <data name="SAggregateGroupTextToolTip" xml:space="preserve">
+    <value>Топтың мәтіні шығады</value>
+  </data>
+  <data name="SAddGroupColumnLeft" xml:space="preserve">
+    <value>жолдардың ұяшықтарын біріктіре отырып, топтастыру</value>
+  </data>
+  <data name="SAddGroupColumnLeftTotal" xml:space="preserve">
+    <value>Жалпыланған жолдардың ұяшықтарын біріктіре отырып, топтастыру</value>
+  </data>
+  <data name="SGroupColumnNotSet" xml:space="preserve">
+    <value>Топтастырма көрсетілмеген</value>
+  </data>
+  <data name="SAddGroupColumnTopTotal" xml:space="preserve">
+    <value>Жалпыланған топтастырманы қосу</value>
+  </data>
+  <data name="SAddGroupColumnTotal" xml:space="preserve">
+    <value>Жалпы санын  қосу</value>
+  </data>
+  <data name="SLoadFilters" xml:space="preserve">
+    <value>Сүзгіштерді жүктеу (егер сақталса)</value>
+  </data>
+  <data name="SColumnColorFill" xml:space="preserve">
+    <value>Бағаналарды түспен бояу</value>
+  </data>
+  <data name="SRowColorFill" xml:space="preserve">
+    <value>жолдарды түспен бояу</value>
+  </data>
+  <data name="SCellColorFill" xml:space="preserve">
+    <value>Ұяшықтарды түспен бояу</value>
+  </data>
+  <data name="STotalFor" xml:space="preserve">
+    <value>{0}-ға жалпы саны</value>
+  </data>
+  <data name="SViewSettingsFixedHeader" xml:space="preserve">
+    <value>Атауын және бағананы бекіту дәлдеулері</value>
+  </data>
+  <data name="SAddedGroupColumnLeft" xml:space="preserve">
+    <value>Жолдар тобының  ұяшықтарын біріктіру</value>
+  </data>
+  <data name="SOrderByColumnRemove" xml:space="preserve">
+    <value>Сорттауды тоқтату</value>
+  </data>
+  <data name="SColorPalette" xml:space="preserve">
+    <value>Палитра</value>
+  </data>
+  <data name="SRewriteSettings" xml:space="preserve">
+    <value>Дәлдеулерді қайта жазу</value>
+  </data>
+  <data name="SToReportPlugin" xml:space="preserve">
+    <value>Есептер менеджеріне көшу</value>
+  </data>
+  <data name="SShowForAll" xml:space="preserve">
+    <value>Барлығына көрсету</value>
+  </data>
+  <data name="SCancelColorFill" xml:space="preserve">
+    <value>Құю әрекеттерін тоқтату</value>
+  </data>
+  <data name="SCancelFontColorFill" xml:space="preserve">
+    <value>Түсті көрсету әрекеттерін тоқтату</value>
+  </data>
+  <data name="SLoadViewSettingsHeader" xml:space="preserve">
+    <value>Сақталған дәлдеулерді қолдану</value>
+  </data>
+  <data name="SWithCornerUpper" xml:space="preserve">
+    <value>Бұрышымен </value>
+  </data>
+  <data name="SSessionIsLost" xml:space="preserve">
+    <value>Сессиясы ескірген. Бетті қайта ашу қажет.</value>
+  </data>
+  <data name="SOrderByColumn" xml:space="preserve">
+    <value>Сұрыптау</value>
+  </data>
+  <data name="SOrderByColumnDesc" xml:space="preserve">
+    <value>Кері ретпен сұрыптау</value>
+  </data>
+  <data name="SSaveViewSettingsHeader" xml:space="preserve">
+    <value>Ұсыныстардың дәлдеулерін сақтау</value>
+  </data>
+  <data name="SLoadViewSettings_SavedSettings" xml:space="preserve">
+    <value>Сақталған дәлдеулер</value>
+  </data>
+  <data name="SSaveFilters" xml:space="preserve">
+    <value>Сүзгіні сақтау</value>
+  </data>
+  <data name="SAggregateAvg" xml:space="preserve">
+    <value>Орта саны</value>
+  </data>
+  <data name="SAggregateGroupText" xml:space="preserve">
+    <value>Топтың мәтіні</value>
+  </data>
+  <data name="SAggregateTextGroup" xml:space="preserve">
+    <value>Жалпыланған топтың мәтіні</value>
+  </data>
+  <data name="SCurrentColor" xml:space="preserve">
+    <value>Қазіргі түсі</value>
+  </data>
+  <data name="SAddedGroupColumnTotal" xml:space="preserve">
+    <value>Барлығы көрсетілген</value>
+  </data>
+  <data name="SAddedGroupColumnTop" xml:space="preserve">
+    <value>Топтастырма көрсетілген</value>
+  </data>
+  <data name="SAddedGroupColumnTopTotal" xml:space="preserve">
+    <value>Жалпыланған топтастырма көрсетілген</value>
+  </data>
+  <data name="SColumnFontColorFill" xml:space="preserve">
+    <value>Бағана мәтінінің түсін көрсету</value>
+  </data>
+  <data name="SRowFontColorFill" xml:space="preserve">
+    <value>Жол мәтінінің түсін көрсету</value>
+  </data>
+  <data name="SCellFontColorFill" xml:space="preserve">
+    <value>Ұяшық мәтінінің түсін көрсету</value>
+  </data>
+  <data name="SAggregateNumericGroup" xml:space="preserve">
+    <value>Сандар</value>
+  </data>
+  <data name="SFilterInSqlTimeOutException" xml:space="preserve">
+    <value>Берілген уақыт ішінде қажетті мәліметтерді таба алмағандықтан сүзгішті өзгерту қажет. ЭҚұрамында", ЭҚұрамындағы сөзі бар", "Келесіге аяқталады" критерийлерін қолдану ұсынылмайды. "Тең" немесе "Тең емес" критерийлерін қолдану ұсынылады.</value>
+  </data>
+  <data name="SRequiredFilters" xml:space="preserve">
+    <value>Міндетті сүзгілерді көрсету қажет. Бұл үшін сүзгілерге кіріп, атауында "*" нышаны барын толтыру керек</value>
+  </data>
+  <data name="EUserDoesNotHaveExportPermitions" xml:space="preserve">
+    <value>"{0}" журнлын экспорттауға құқығы жоқ</value>
+  </data>
+  <data name="EUserDoesNotHaveViewPermitions" xml:space="preserve">
+    <value>"{0}" Журналды қарауға құқығы жоқ</value>
+  </data>
+  <data name="SAggregateGroupTextWithTotalPhrase" xml:space="preserve">
+    <value>"Тобының" жалпы саны</value>
+  </data>
+  <data name="SAggregateGroupTextWithTotalPhraseToolTip" xml:space="preserve">
+    <value>"Қорытынды" фразасы және топ мәтіні шығады</value>
+  </data>
+  <data name="SAddedGroupColumnLeftTotal" xml:space="preserve">
+    <value>Жалпыланған жолдар тобының ұяшықтары біріктіріледі</value>
+  </data>
+  <data name="SRowArchive" xml:space="preserve">
+    <value>Мәні өзекті емес (мұрағатта)</value>
+  </data>
+  <data name="SRefresh" xml:space="preserve">
+    <value>Жаңарту</value>
+  </data>
+  <data name="SPostFileTextFromClipboard" xml:space="preserve">
+    <value>Алмасу буферiнен мәтiндiк файлын жүктеу (алмасу буферiнен мәтiнiн файлмен жүктеледi)</value>
+  </data>
+  <data name="SPostFileFromDialog" xml:space="preserve">
+    <value>Файлды жүктеу</value>
+  </data>
+  <data name="SPostFileImageFromClipboard" xml:space="preserve">
+    <value>Алмасу буферiнен суретiн файлды жүктеу (алмасу буферiнен суретiн JPEG файлмен жүктеледi)</value>
+  </data>
+  <data name="SFileName" xml:space="preserve">
+    <value>Файлдың атауы</value>
+  </data>
+  <data name="SEndCrossDataEdit" xml:space="preserve">
+    <value>Беттi жаңартуға керек.</value>
+  </data>
+  <data name="SServiceProcedure_BeforeEnabledMessage" xml:space="preserve">
+    <value>{0}  бастап {1} өткізу жоспарланып отыр.</value>
+  </data>
+  <data name="SServiceProcedure_CauseMessage" xml:space="preserve">
+    <value>{0}, ағымдағы әрекетті аяқтауды және жүйеден шығуды сұраймыз. Жаңа бетке өтініш жасауға тыйым салынған.</value>
+  </data>
+  <data name="SServiceProcedure_ServiceProcedureMessage" xml:space="preserve">
+    <value>{0}.</value>
+  </data>
+  <data name="SServiceProcedure_TimeOfEndCause" xml:space="preserve">
+    <value>Аяқтаудың күтілетін уақыты {0}</value>
+  </data>
+  <data name="SMultipleSelectedMessage" xml:space="preserve">
+    <value>Жазбалар таңдап алынды: {0}</value>
+  </data>
+  <data name="SAddingText" xml:space="preserve">
+    <value>Қосу</value>
+  </data>
+  <data name="SAccessDanied" xml:space="preserve">
+    <value>Кіру рұқсат етілмеген</value>
+  </data>
+  <data name="SInfoMessageTitle" xml:space="preserve">
+    <value>Ақпарат</value>
+  </data>
+  <data name="SContainsAnyWord" xml:space="preserve">
+    <value>Ұсынылатындардың кез келгені</value>
+  </data>
+  <data name="ECanNotDeleteUseInSystem" xml:space="preserve">
+    <value>Жазбаны өшіру мүмкін емес, жүйеде пайдаланылады</value>
+  </data>
+  <data name="SErrorMessageTitle" xml:space="preserve">
+    <value>Қате</value>
+  </data>
+  <data name="SDateBetween" xml:space="preserve">
+    <value>Кезең</value>
+  </data>
+  <data name="SScriptExportMaxCountRecords" xml:space="preserve">
+    <value>alert("{0} көп жазбаларды экспорттауға тыйым салынған. Аз тізім алу үшін сүзгіні қолданыңыз."); return false;</value>
+  </data>
+  <data name="SScriptExportAttentionCountRecords" xml:space="preserve">
+    <value>if(confirm("Журналда  {1} жазба. Сараптау біршама уақытты талап етеді. Аз тізім алу үшін сүзгіні қайта қарау қажет шығар.")) return true; return false;</value>
+  </data>
+  <data name="SWizardPrevious" xml:space="preserve">
+    <value>Кері қайту</value>
+  </data>
+  <data name="SSelectAllFromAllPages" xml:space="preserve">
+    <value>Барлық беттерден барлық жазбаны таңдап алу</value>
+  </data>
+  <data name="SAddGroupColumnInHeader" xml:space="preserve">
+    <value>Тақырыбына топ қосу</value>
+  </data>
+  <data name="ERowIsDeletedOrNotHavePermissions" xml:space="preserve">
+    <value>Жазба жойылды немесе құқығы жеткіліксіз</value>
+  </data>
+  <data name="SNotContains" xml:space="preserve">
+    <value>Жоқ</value>
+  </data>
+  <data name="SChildDataContainsFalseText" xml:space="preserve">
+    <value>Деректер жоқ</value>
+  </data>
+  <data name="SNotContainsWords" xml:space="preserve">
+    <value>Сөздер жоқ</value>
+  </data>
+  <data name="ECanNotEditRecord" xml:space="preserve">
+    <value>Жазбаны редакциялауға болмайды</value>
+  </data>
+  <data name="SNoOneSelectedRow" xml:space="preserve">
+    <value>Бірде-бір жазба таңдалып алынған жоқ</value>
+  </data>
+  <data name="SNoOneSelectedRowCheckRecords" xml:space="preserve">
+    <value>Бірде-бір жазба таңдалып алынған жоқ. Белгі қойыңыз.</value>
+  </data>
+  <data name="SMoveDownRecord" xml:space="preserve">
+    <value>Тазбаны төмен түсіру</value>
+  </data>
+  <data name="SMoveDownRecordOn" xml:space="preserve">
+    <value>Жазбаны   төмен түсіру (жолдар саны):</value>
+  </data>
+  <data name="SWizardNext" xml:space="preserve">
+    <value>Әрі өту</value>
+  </data>
+  <data name="SMoveUpRecord" xml:space="preserve">
+    <value>Жазбаны жоғары көтеру</value>
+  </data>
+  <data name="SMoveUpRecordOn" xml:space="preserve">
+    <value>Жазбаны   жоғары көтеру (жолдар саны)</value>
+  </data>
+  <data name="SDateMore" xml:space="preserve">
+    <value>Кейін</value>
+  </data>
+  <data name="SDateLess" xml:space="preserve">
+    <value>Бұрын</value>
+  </data>
+  <data name="SUnselectAllFromAllPages" xml:space="preserve">
+    <value>Таңдауды барлық беттерден алу</value>
+  </data>
+  <data name="SChildDataContainsTrueText" xml:space="preserve">
+    <value>Деректерден тұрады</value>
+  </data>
+  <data name="SSaveAddToolTip" xml:space="preserve">
+    <value>Жазбаны сақтау және жаңа жазбаны қосуды ашу</value>
+  </data>
+  <data name="SSaveToolTip" xml:space="preserve">
+    <value>Жазбаны сақтау және журналға өту</value>
+  </data>
+  <data name="SAddedGroupColumnInHeader" xml:space="preserve">
+    <value>Тақырыпқа арналған топ көрсетілген</value>
+  </data>
+  <data name="EExportMaxCountRecords" xml:space="preserve">
+    <value>{0} артық жазбаларды экспорттауға тыйым салынады. Аз тізім алу үшін сүзгіні қолданыңыз.</value>
+  </data>
+  <data name="SInvalidFormatInFilter" xml:space="preserve">
+    <value>Енгізілген мән "{0}" сүзгі алаңындағы форматқа сәйкес келмейді.</value>
+  </data>
+  <data name="SInvalidDateFormatInFilter" xml:space="preserve">
+    <value>"{0}" сүзгі алаңына күн дұрыс енгізілмеген.</value>
+  </data>
+  <data name="SInvalidNumericFormatInFilter" xml:space="preserve">
+    <value>"{0}" сүзгі алаңына сан дұрыс енгізілмеген.</value>
+  </data>
+  <data name="SToDay" xml:space="preserve">
+    <value>Ағымдағы күн</value>
+  </data>
+  <data name="SOnKz" xml:space="preserve">
+    <value>Қазақ тілінде</value>
+  </data>
+  <data name="SOnRu" xml:space="preserve">
+    <value>Орыс тілінде</value>
+  </data>
+  <data name="SExceptionOccurredTryAgainOrReload" xml:space="preserve">
+    <value>Операцияны орындаук езінде қате табылды,  парақты қайта жүктеу және қайталап   көру</value>
+  </data>
+  <data name="SShowDublicates" xml:space="preserve">
+    <value>Шығару</value>
+  </data>
+  <data name="SLengthMore" xml:space="preserve">
+    <value>Ұзындығы  артық</value>
+  </data>
+  <data name="SLengthLess" xml:space="preserve">
+    <value>Ұзындығы  төмен</value>
+  </data>
+  <data name="SDaysLeftAndMore" xml:space="preserve">
+    <value>N күн қалды </value>
+  </data>
+  <data name="SDaysAgoAndMore" xml:space="preserve">
+    <value>N күн өтті </value>
+  </data>
+  <data name="SQuickSearch" xml:space="preserve">
+    <value>Жылдам іздеу</value>
+  </data>
+  <data name="SMultipleSelectedMessage" xml:space="preserve">
+    <value>Жазбалар таңдап алынды: {0}</value>
+  </data>
+  <data name="SAddingText" xml:space="preserve">
+    <value>Қосу</value>
+  </data>
+  <data name="SAccessDanied" xml:space="preserve">
+    <value>Кіру рұқсат етілмеген</value>
+  </data>
+  <data name="SInfoMessageTitle" xml:space="preserve">
+    <value>Ақпарат</value>
+  </data>
+  <data name="SSearch" xml:space="preserve">
+    <value>Іздеу</value>
+  </data>
+  <data name="SContainsAnyWord" xml:space="preserve">
+    <value>Ұсынылатындардың кез келгені</value>
+  </data>
+  <data name="ECanNotDeleteUseInSystem" xml:space="preserve">
+    <value>Жазбаны өшіру мүмкін емес, жүйеде пайдаланылады</value>
+  </data>
+  <data name="SErrorMessageTitle" xml:space="preserve">
+    <value>Қате</value>
+  </data>
+  <data name="SDateBetween" xml:space="preserve">
+    <value>Кезең</value>
+  </data>
+  <data name="SConfirmTitleText" xml:space="preserve">
+    <value>Растау</value>
+  </data>
+  <data name="SSearchLoading" xml:space="preserve">
+    <value>Іздеу...</value>
+  </data>
+  <data name="SNoOneSelectedRow" xml:space="preserve">
+    <value>Ешқандай жазба таңдалып алынған жоқ</value>
+  </data>
+  <data name="SSaveAddToolTip" xml:space="preserve">
+    <value>Жазбаларды сақтау және жаңа жазбаны ашуды қосу</value>
+  </data>
+  <data name="SSaveToolTip" xml:space="preserve">
+    <value>Жазбаларды сақтап, журналға ауысу</value>
+  </data>
+  <data name="SScriptExportMaxCountRecords" xml:space="preserve">
+    <value>alert("Көп жазбаларды экспорттауға {0} тиым салынған. Аз тізімді алу үшін сүзгілеуді қолданыңыз."); return false;</value>
+  </data>
+  <data name="SScriptExportAttentionCountRecords" xml:space="preserve">
+    <value>if(confirm("Жазбалар {1} журналында. Экспорттау шамалы уақытты қажет етеді. Аз тізімді алу үшін сүзгілеуді қарау керек шығар.")) return true; return false;</value>
+  </data>
+  <data name="SSelectAllFromAllPages" xml:space="preserve">
+    <value>Барлық парақтардан жазбаларды таңдау</value>
+  </data>
+  <data name="SAddGroupColumnInHeader" xml:space="preserve">
+    <value>Тақырыпқа топтауды енгізу</value>
+  </data>
+  <data name="ERecordModifiedByOther" xml:space="preserve">
+    <value>Жазба біреу арқылы өзгертілді</value>
+  </data>
+  <data name="ERowIsDeletedOrNotHavePermissions" xml:space="preserve">
+    <value>Жазба жойылды немесе қажетті мөлшерде дұрыс емес</value>
+  </data>
+  <data name="SChildDataContainsFalseText" xml:space="preserve">
+    <value>Деректер жоқ</value>
+  </data>
+  <data name="ECanNotEditRecord" xml:space="preserve">
+    <value>Жазбаға түзету енгізуге болмайды</value>
+  </data>
+  <data name="EDoesNotHavePermitForAdd" xml:space="preserve">
+    <value>Енгізу құқығы жоқ</value>
+  </data>
+  <data name="EDoesNotHavePermitForEdit" xml:space="preserve">
+    <value>Түзету енгізу құқығы жоқ</value>
+  </data>
+  <data name="SNoOneSelectedRowCheckRecords" xml:space="preserve">
+    <value>Ешқандай жазба таңдалып алынған жоқ. Қанат белгісін қойыңыз.</value>
+  </data>
+  <data name="SMoveDownRecord" xml:space="preserve">
+    <value>Жазбаны төмен түсіру</value>
+  </data>
+  <data name="SMoveDownRecordOn" xml:space="preserve">
+    <value>Жазбаны -қа төмен түсіру (жолдар саны)</value>
+  </data>
+  <data name="SMoveUpRecord" xml:space="preserve">
+    <value>Жазбаны жоғары көтеру</value>
+  </data>
+  <data name="SMoveUpRecordOn" xml:space="preserve">
+    <value>Жазбаны  -қа жоғары көтеру (жолдар саны):</value>
+  </data>
+  <data name="SDateMore" xml:space="preserve">
+    <value>Кейінірек </value>
+  </data>
+  <data name="SDateLess" xml:space="preserve">
+    <value>Ертерек</value>
+  </data>
+  <data name="SUnselectAllFromAllPages" xml:space="preserve">
+    <value>Барлық парақтардан Іріктеуді салып тастау</value>
+  </data>
+  <data name="SChildDataContainsTrueText" xml:space="preserve">
+    <value>Деректер бар</value>
+  </data>
+  <data name="SAddedGroupColumnInHeader" xml:space="preserve">
+    <value>Тақырыпқа арналған топтастыру көрсетілген</value>
+  </data>
+  <data name="EExportMaxCountRecords" xml:space="preserve">
+    <value>Көп жазбаларды {0} экспорттауға тиым салынған. Аз тізімді алу үшін сүзгілеуді қолданыңыз.</value>
+  </data>
+</root>

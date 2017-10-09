@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Database Name="Default" Class="DBDataContext" AccessModifier="Internal" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=STENDNAT;Initial Catalog=Default;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.MSC_Modules" Member="MSC_Modules">
+    <Type Name="MSC_Module">
+      <Column Name="id" Type="System.Int64" DbType="bigint" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="nvarchar(255)" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="nvarchar(255)" CanBeNull="false" />
+      <Column Name="Enabled" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+      <Association Name="MSC_Modules_MSC_Module_Configurations_refModule" Member="MSC_Module_Configurations_refModule" ThisKey="id" OtherKey="refModule" Type="MSC_Module_Configuration" />
+      <Association Name="MSC_Modules_MSC_Module_ConfigurationFields_refModule" ThisKey="id" OtherKey="refModule" Type="MSC_Module_ConfigurationField" Member="MSC_Module_ConfigurationFields_refModule" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MSC_Module_Configurations" Member="MSC_Module_Configurations">
+    <Type Name="MSC_Module_Configuration">
+      <Column Name="id" Type="System.Int64" DbType="bigint" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="refModule" Type="System.Int64" DbType="bigint" CanBeNull="false" />
+      <Column Name="refField" Type="System.Int64" DbType="bigint" CanBeNull="false" />
+      <Column Name="Enabled" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+      <Column Name="ContentKz" Type="System.String" DbType="nvarchar(MAX)" CanBeNull="false" />
+      <Column Name="ContentRu" Type="System.String" DbType="nvarchar(MAX)" CanBeNull="false" />
+      <Association Name="MSC_Modules_MSC_Module_Configurations_refModule" Member="MSC_Module_refModule" ThisKey="refModule" OtherKey="id" Type="MSC_Module" IsForeignKey="true" />
+      <Association Name="MSC_Module_ConfigurationFields_MSC_Module_Configurations_refField" ThisKey="refField" OtherKey="id" Type="MSC_Module_ConfigurationField" IsForeignKey="true" Member="MSC_Module_ConfigurationField_refField" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MSC_Module_ConfigurationFields" Member="MSC_Module_ConfigurationFields">
+    <Type Name="MSC_Module_ConfigurationField">
+      <Column Name="id" Type="System.Int64" DbType="bigint" CanBeNull="false" IsDbGenerated="true" IsPrimaryKey="true" />
+      <Column Name="refModule" Type="System.Int64" DbType="bigint" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="nvarchar(100)" CanBeNull="false" />
+      <Column Name="NameKz" Type="System.String" DbType="nvarchar(200)" CanBeNull="false" />
+      <Column Name="NameRu" Type="System.String" DbType="nvarchar(200)" CanBeNull="false" />
+      <Column Name="isDel" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+      <Association Name="MSC_Modules_MSC_Module_ConfigurationFields_refModule" ThisKey="refModule" OtherKey="id" Type="MSC_Module" IsForeignKey="true" Member="MSC_Module_refModule" />
+      <Association Name="MSC_Module_ConfigurationFields_MSC_Module_Configurations_refField" ThisKey="id" OtherKey="refField" Type="MSC_Module_Configuration" Member="MSC_Module_Configurations_refField" />
+    </Type>
+  </Table>
+</Database>

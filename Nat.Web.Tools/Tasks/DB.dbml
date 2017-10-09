@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Class="DBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=STENDNAT;Initial Catalog=Default;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.SYS_TaskStates" Member="SYS_TaskStates">
+    <Type Name="SYS_TaskState">
+      <Column Name="id" Type="System.Int64" DbType="bigint" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TypeName" Type="System.String" DbType="nvarchar(450)" CanBeNull="false" />
+      <Column Name="KeyOfState" Type="System.Int64" DbType="bigint" CanBeNull="false" />
+      <Column Name="ModificationDate" Type="System.DateTime" DbType="datetime" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Function Name="dbo.SYS_P_UpdateTaskStates" Method="SYS_P_UpdateTaskStates">
+    <Parameter Name="typeName" Type="System.String" DbType="NVarChar(450)" />
+    <Parameter Name="keyOfState" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="fromKeyOfState" Type="System.Int64" DbType="BigInt" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>

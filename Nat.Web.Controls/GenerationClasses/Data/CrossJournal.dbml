@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Default" Class="CrossJournalDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=STENDNAT;Initial Catalog=Default;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnectionString1" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.SYS_CrossJournalEdits" Member="SYS_CrossJournalEdits">
+    <Type Name="SYS_CrossJournalEdit">
+      <Column Name="id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SID" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="dtStart" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="dtLast" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="endEdit" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="journalName" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="rowID" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="crossRowID" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.SYS_GetCrossJournalEdits" Method="SYS_GetCrossJournalEdits">
+    <Parameter Name="SID" Parameter="sID" Type="System.String" DbType="NVarChar(255)" />
+    <Parameter Name="JorunalName" Parameter="jorunalName" Type="System.String" DbType="NVarChar(MAX)" />
+    <Parameter Name="RowID" Parameter="rowID" Type="System.String" DbType="NVarChar(MAX)" />
+    <Parameter Name="crossHeaderName" Type="System.String" DbType="NVarChar(MAX)" />
+    <Parameter Name="CrossRowID" Parameter="crossRowID" Type="System.String" DbType="NVarChar(MAX)" />
+    <Parameter Name="startEdit" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="endEdit" Type="System.Boolean" DbType="Bit" />
+    <ElementType Name="SYS_GetCrossJournalEditsResult">
+      <Column Name="id" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="SID" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="dtLast" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.SYS_UpdateCrossJournalEdits" Method="SYS_UpdateCrossJournalEdits">
+    <Parameter Name="SID" Parameter="sID" Type="System.String" DbType="NVarChar(255)" />
+    <Parameter Name="JorunalName" Parameter="jorunalName" Type="System.String" DbType="NVarChar(MAX)" />
+    <Parameter Name="RowID" Parameter="rowID" Type="System.String" DbType="NVarChar(MAX)" />
+    <ElementType Name="SYS_UpdateCrossJournalEditsResult">
+      <Column Name="Result" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+    </ElementType>
+  </Function>
+</Database>

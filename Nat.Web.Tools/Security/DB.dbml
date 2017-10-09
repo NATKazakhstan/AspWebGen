@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Database Name="Default" Class="DBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=STENDNAT;Initial Catalog=Default;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnectionString" Provider="System.Data.SqlClient" />
+  <Function Name="dbo.GetPersonInfoBySid" Method="GetPersonInfoBySid">
+    <Parameter Name="sid" Type="System.String" DbType="NVarChar(255)" />
+    <ElementType Name="GetPersonInfoBySidResult">
+      <Column Name="id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="refPosition" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="refSubdivision" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="refSubdivisionReal" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="Fio_Ru" Type="System.String" DbType="NVarChar(182) NOT NULL" CanBeNull="false" />
+      <Column Name="Fio_Kz" Type="System.String" DbType="NVarChar(182) NOT NULL" CanBeNull="false" />
+      <Column Name="PositionNameRu" Type="System.String" DbType="NVarChar(450)" CanBeNull="true" />
+      <Column Name="PositionNameKz" Type="System.String" DbType="NVarChar(450)" CanBeNull="true" />
+      <Column Name="SubdivisionNameRu" Type="System.String" DbType="NVarChar(450)" CanBeNull="true" />
+      <Column Name="SubdivisionNameKz" Type="System.String" DbType="NVarChar(450)" CanBeNull="true" />
+      <Column Name="PositionCode" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="HasDublicate" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="refRegion" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="IsMilitaryUnitCharge" Type="System.Boolean" DbType="Bit" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.MSD_P_AddViewReports" Method="MSD_P_AddViewReports">
+    <Parameter Name="sid" Type="System.String" DbType="NVarChar(250)" />
+    <Parameter Name="loginName" Type="System.String" DbType="NVarChar(250)" />
+    <Parameter Name="name" Type="System.String" DbType="NVarChar(250)" />
+    <Parameter Name="occurredDate" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="docLocation" Type="System.String" DbType="NVarChar(max)" />
+    <Parameter Name="siteUrl" Type="System.String" DbType="NVarChar(250)" />
+    <Parameter Name="hostName" Type="System.String" DbType="NVarChar(250)" />
+    <Parameter Name="siteID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="export" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="reportPlugin" Type="System.String" DbType="NVarChar(450)" />
+    <Parameter Name="reportTitleRu" Type="System.String" DbType="NVarChar(450)" />
+    <Parameter Name="reportTitleKz" Type="System.String" DbType="NVarChar(450)" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>

@@ -1,0 +1,25 @@
+.modalBackground
+{
+	background-color:Gray;
+	filter:alpha(opacity=30);
+    opacity: 0.3;
+}
+
+.modalPopup
+{
+	background-color:Whitesmoke;
+	border-width:3px;
+	border-style:solid;
+	border-color:CornflowerBlue;
+	padding:0px;
+}
+
+.modalPopupCaption
+{
+	background-color:CornflowerBlue;
+	border:solid 0px Gray;
+	color:Black;
+	text-align:center;
+	height:20px;
+	width:100%;
+}

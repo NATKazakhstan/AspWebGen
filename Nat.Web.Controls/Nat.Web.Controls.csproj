@@ -1,0 +1,1047 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FF9F52A0-FE60-4EE5-8EE8-5B1093378FB3}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Nat.Web.Controls</RootNamespace>
+    <AssemblyName>Nat.Web.Controls</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <UseIISExpress>false</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SkipInvalidConfigurations>False</SkipInvalidConfigurations>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <UseGlobalApplicationHostFile />
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Build\bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;LogRequests;LOCAL</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Build\bin\</OutputPath>
+    <DefineConstants>TRACE;LogRequests</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ForSharepoint|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Build\bin\</OutputPath>
+    <DefineConstants>TRACE;ForSharepoint</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.JScript" />
+    <Reference Include="Microsoft.SharePoint, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\Microsoft.SharePoint.dll</HintPath>
+    </Reference>
+    <Reference Include="Nat.Controls, Version=1.0.14.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\Debug\Nat.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Nat.Resources, Version=1.0.0.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\Debug\Nat.Resources.dll</HintPath>
+    </Reference>
+    <Reference Include="Nat.Tools, Version=1.0.0.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\Debug\Nat.Tools.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Design" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Extensions.Design, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\DBTraceTimingRequests.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>DBTraceTimingRequests.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Data\DBUploadFiles.dbml.layout">
+      <DependentUpon>DBUploadFiles.dbml</DependentUpon>
+    </None>
+    <None Include="Data\DBTraceTimingRequests.dbml.layout">
+      <DependentUpon>DBTraceTimingRequests.dbml</DependentUpon>
+    </None>
+    <EmbeddedResource Include="GenerationClasses\BaseJournal\CrossJournalStillEdit.js" />
+    <Content Include="App_Themes\NAT\accept.png" />
+    <Content Include="App_Themes\NAT\AcceptDocument.png" />
+    <Content Include="App_Themes\NAT\activation-order-not.png" />
+    <Content Include="App_Themes\NAT\activation-order.png" />
+    <Content Include="App_Themes\NAT\Add.png" />
+    <Content Include="App_Themes\NAT\alternativeRow.png" />
+    <Content Include="App_Themes\NAT\Arrow-Down.gif" />
+    <Content Include="App_Themes\NAT\Arrow-Left-min.png" />
+    <Content Include="App_Themes\NAT\Arrow-Left.gif" />
+    <Content Include="App_Themes\NAT\Arrow-Left.png" />
+    <Content Include="App_Themes\NAT\Arrow-Right-min.png" />
+    <Content Include="App_Themes\NAT\Arrow-Right.gif" />
+    <Content Include="App_Themes\NAT\Arrow-Right.png" />
+    <Content Include="App_Themes\NAT\Arrow-Up.gif" />
+    <Content Include="App_Themes\NAT\bg_radio.gif" />
+    <Content Include="App_Themes\NAT\bg_sprav_list_green2.gif" />
+    <Content Include="App_Themes\NAT\bg_sprav_list_red2.gif" />
+    <Content Include="App_Themes\NAT\bg_sprav_list_yell.gif" />
+    <Content Include="App_Themes\NAT\browse.gif" />
+    <Content Include="App_Themes\NAT\buttom_bg.gif" />
+    <Content Include="App_Themes\NAT\calculate.png" />
+    <Content Include="App_Themes\NAT\calendar.png" />
+    <Content Include="App_Themes\NAT\cancel.gif" />
+    <Content Include="App_Themes\NAT\Cancel.png" />
+    <Content Include="App_Themes\NAT\CancelDocument.png" />
+    <Content Include="App_Themes\NAT\CancelFilter.png" />
+    <Content Include="App_Themes\NAT\close.gif" />
+    <Content Include="App_Themes\NAT\ConcatenateColumns.png" />
+    <Content Include="App_Themes\NAT\Config.gif" />
+    <Content Include="App_Themes\NAT\core.css" />
+    <Content Include="App_Themes\NAT\cp_button.png" />
+    <Content Include="App_Themes\NAT\CrossJournalReport.png" />
+    <Content Include="App_Themes\NAT\DefaultFilter.png" />
+    <Content Include="App_Themes\NAT\del.gif" />
+    <Content Include="App_Themes\NAT\Delete.png" />
+    <Content Include="App_Themes\NAT\edit.gif" />
+    <Content Include="App_Themes\NAT\Edit.png" />
+    <Content Include="App_Themes\NAT\edit2.gif" />
+    <Content Include="App_Themes\NAT\export.gif" />
+    <Content Include="App_Themes\NAT\export.png" />
+    <Content Include="App_Themes\NAT\fail.gif" />
+    <Content Include="App_Themes\NAT\FillCell.png" />
+    <Content Include="App_Themes\NAT\FillCellS.png" />
+    <Content Include="App_Themes\NAT\FillColumn.png" />
+    <Content Include="App_Themes\NAT\FillColumnS.png" />
+    <Content Include="App_Themes\NAT\FillRow.png" />
+    <Content Include="App_Themes\NAT\FillRowS.png" />
+    <Content Include="App_Themes\NAT\Filter.png" />
+    <Content Include="App_Themes\NAT\flag_kz2.gif" />
+    <Content Include="App_Themes\NAT\flag_ru2.gif" />
+    <Content Include="App_Themes\NAT\Folder_Open.png" />
+    <Content Include="App_Themes\NAT\FontCell.png" />
+    <Content Include="App_Themes\NAT\FontCellS.png" />
+    <Content Include="App_Themes\NAT\FontColumn.png" />
+    <Content Include="App_Themes\NAT\FontColumnS.png" />
+    <Content Include="App_Themes\NAT\FontRow.png" />
+    <Content Include="App_Themes\NAT\FontRowS.png" />
+    <Content Include="App_Themes\NAT\go_back.gif" />
+    <Content Include="App_Themes\NAT\go_back_right.gif" />
+    <Content Include="App_Themes\NAT\gray.png" />
+    <Content Include="App_Themes\NAT\green.png" />
+    <Content Include="App_Themes\NAT\Group1.png" />
+    <Content Include="App_Themes\NAT\Group1S.png" />
+    <Content Include="App_Themes\NAT\Group2.png" />
+    <Content Include="App_Themes\NAT\Group2S.png" />
+    <Content Include="App_Themes\NAT\Group3.png" />
+    <Content Include="App_Themes\NAT\Group3S.png" />
+    <Content Include="App_Themes\NAT\Group4.png" />
+    <Content Include="App_Themes\NAT\Group4S.png" />
+    <Content Include="App_Themes\NAT\Group5.png" />
+    <Content Include="App_Themes\NAT\Group5S.png" />
+    <Content Include="App_Themes\NAT\Group6.png" />
+    <Content Include="App_Themes\NAT\Group6S.png" />
+    <Content Include="App_Themes\NAT\Group7.png" />
+    <Content Include="App_Themes\NAT\Group7S.png" />
+    <Content Include="App_Themes\NAT\Group8.png" />
+    <Content Include="App_Themes\NAT\Group8S.png" />
+    <Content Include="App_Themes\NAT\Group_ClassifierIndicators.png" />
+    <Content Include="App_Themes\NAT\Group_Subdivisions.png" />
+    <Content Include="App_Themes\NAT\HandleGrip.png" />
+    <Content Include="App_Themes\NAT\headRow.png" />
+    <Content Include="App_Themes\NAT\Help.gif" />
+    <Content Include="App_Themes\NAT\helpicon.gif" />
+    <Content Include="App_Themes\NAT\HoverMenuItem.png" />
+    <Content Include="App_Themes\NAT\icon_rss.gif" />
+    <Content Include="App_Themes\NAT\Import.png" />
+    <Content Include="App_Themes\NAT\info.gif" />
+    <Content Include="App_Themes\NAT\Information.png" />
+    <Content Include="App_Themes\NAT\insert.gif" />
+    <Content Include="App_Themes\NAT\in_magazin_30.gif" />
+    <Content Include="App_Themes\NAT\List.png" />
+    <Content Include="App_Themes\NAT\locked.png" />
+    <Content Include="App_Themes\NAT\Menu.png" />
+    <Content Include="App_Themes\NAT\MenuItem.png" />
+    <Content Include="App_Themes\NAT\new.gif" />
+    <Content Include="App_Themes\NAT\NoGroup.png" />
+    <Content Include="App_Themes\NAT\NoGroupS.png" />
+    <Content Include="App_Themes\NAT\no_pic.gif" />
+    <Content Include="App_Themes\NAT\ok.gif" />
+    <Content Include="App_Themes\NAT\ok_filter.gif" />
+    <Content Include="App_Themes\NAT\ok_filter_30.gif" />
+    <Content Include="App_Themes\NAT\OrderByColumnAsc.png" />
+    <Content Include="App_Themes\NAT\OrderByColumnAscS.png" />
+    <Content Include="App_Themes\NAT\OrderByColumnDesc.png" />
+    <Content Include="App_Themes\NAT\OrderByColumnDescS.png" />
+    <Content Include="App_Themes\NAT\OrderByColumnRemove.png" />
+    <Content Include="App_Themes\NAT\Paste.png" />
+    <Content Include="App_Themes\NAT\PersonsList.png" />
+    <Content Include="App_Themes\NAT\photo_bg.gif" />
+    <Content Include="App_Themes\NAT\PostFileFromDialog.png" />
+    <Content Include="App_Themes\NAT\PostFileImageFromClipboard.png" />
+    <Content Include="App_Themes\NAT\PostFileTextFromClipboard.png" />
+    <Content Include="App_Themes\NAT\PreparedForSendToMZSR.png" />
+    <Content Include="App_Themes\NAT\PressedMenuItem.png" />
+    <Content Include="App_Themes\NAT\process.png" />
+    <Content Include="App_Themes\NAT\processing.png" />
+    <Content Include="App_Themes\NAT\red.png" />
+    <Content Include="App_Themes\NAT\Refresh.png" />
+    <Content Include="App_Themes\NAT\refresh_green.png" />
+    <Content Include="App_Themes\NAT\refresh_yellow.png" />
+    <Content Include="App_Themes\NAT\reload_doc.gif" />
+    <Content Include="App_Themes\NAT\Row.png" />
+    <Content Include="App_Themes\NAT\save.gif" />
+    <Content Include="App_Themes\NAT\Save.png" />
+    <Content Include="App_Themes\NAT\select.gif" />
+    <Content Include="App_Themes\NAT\select.png" />
+    <Content Include="App_Themes\NAT\selectall.png" />
+    <Content Include="App_Themes\NAT\SelectedMenuItem.png" />
+    <Content Include="App_Themes\NAT\SelectedRow.png" />
+    <Content Include="App_Themes\NAT\SendToMZSR.png" />
+    <Content Include="App_Themes\NAT\SendToMZSRRed.png" />
+    <Content Include="App_Themes\NAT\service.gif" />
+    <Content Include="App_Themes\NAT\service2.gif" />
+    <Content Include="App_Themes\NAT\service3.gif" />
+    <Content Include="App_Themes\NAT\ShowAllFilters.png" />
+    <Content Include="App_Themes\NAT\ShowMainGroupFilters.png" />
+    <Content Include="App_Themes\NAT\SmallAdd.png" />
+    <Content Include="App_Themes\NAT\SmallArrowDown.png" />
+    <Content Include="App_Themes\NAT\SmallArrowUp.png" />
+    <Content Include="App_Themes\NAT\SmallRemove.png" />
+    <Content Include="App_Themes\NAT\stop-blue.png" />
+    <Content Include="App_Themes\NAT\stop-green.png" />
+    <Content Include="App_Themes\NAT\subscription_report.gif" />
+    <Content Include="App_Themes\NAT\subscription_report.png" />
+    <Content Include="App_Themes\NAT\success.gif" />
+    <Content Include="App_Themes\NAT\Symbol-Add.gif" />
+    <Content Include="App_Themes\NAT\Symbol-AlertInfo.gif" />
+    <Content Include="App_Themes\NAT\Symbol-Archive.png" />
+    <Content Include="App_Themes\NAT\Symbol-ArchiveForSelected.png" />
+    <Content Include="App_Themes\NAT\Symbol-ArchiveHide.png" />
+    <Content Include="App_Themes\NAT\Symbol-Delete.gif" />
+    <Content Include="App_Themes\NAT\Symbol-Error.gif" />
+    <Content Include="App_Themes\NAT\Symbol-Error.png" />
+    <Content Include="App_Themes\NAT\Symbol-Information.gif" />
+    <Content Include="App_Themes\NAT\Symbol-Restricted.gif" />
+    <Content Include="App_Themes\NAT\Symbol-Stop.gif" />
+    <Content Include="App_Themes\NAT\Symbol-Warning.png" />
+    <Content Include="App_Themes\NAT\table_open.png" />
+    <Content Include="App_Themes\NAT\table_save.png" />
+    <Content Include="App_Themes\NAT\tab_shadow1.gif" />
+    <Content Include="App_Themes\NAT\tab_shadow2.gif" />
+    <Content Include="App_Themes\NAT\TextDirectionBU.png" />
+    <Content Include="App_Themes\NAT\TextDirectionBU_phlip.png" />
+    <Content Include="App_Themes\NAT\TextDirectionLR.png" />
+    <Content Include="App_Themes\NAT\ToJournal.png" />
+    <Content Include="App_Themes\NAT\ToReportPlugin.png" />
+    <Content Include="App_Themes\NAT\unlocked.png" />
+    <Content Include="App_Themes\NAT\UnSelect.png" />
+    <Content Include="App_Themes\NAT\unselectall.png" />
+    <Content Include="App_Themes\NAT\update.gif" />
+    <Content Include="App_Themes\NAT\update1.gif" />
+    <Content Include="App_Themes\NAT\user_male_accept.png" />
+    <Content Include="App_Themes\NAT\user_male_accept_disable.png" />
+    <Content Include="App_Themes\NAT\user_male_delete.png" />
+    <Content Include="App_Themes\NAT\user_male_delete_disable.png" />
+    <Content Include="App_Themes\NAT\user_male_go.png" />
+    <Content Include="App_Themes\NAT\user_male_go_disable.png" />
+    <Content Include="App_Themes\NAT\ViewSettings.png" />
+    <Content Include="App_Themes\NAT\ViewSettingsFixedHeader.png" />
+    <Content Include="App_Themes\NAT\WarningBlue.png" />
+    <Content Include="App_Themes\NAT\WarningGreen.png" />
+    <Content Include="App_Themes\NAT\WarningLightBlue.png" />
+    <Content Include="App_Themes\NAT\WarningOrange.png" />
+    <Content Include="App_Themes\NAT\WarningPink.png" />
+    <Content Include="App_Themes\NAT\WarningPurple.png" />
+    <Content Include="App_Themes\NAT\WarningRed.png" />
+    <Content Include="App_Themes\NAT\WarningYellow.png" />
+    <Content Include="App_Themes\NAT\word.png" />
+    <Content Include="App_Themes\NAT\yellow.png" />
+    <Content Include="DataBinding\Resources\HoverPanel.js" />
+    <Content Include="DataBinding\Resources\info.gif" />
+    <Content Include="DataBinding\Resources\warning.bmp" />
+    <Content Include="DataBinding\Resources\warning.gif" />
+    <Content Include="GenerationClasses\Filter\App_LocalResources\SavedUserFilterValues.ascx.kk-KZ.resx" />
+    <Content Include="GenerationClasses\Filter\App_LocalResources\SavedUserFilterValues.ascx.resx" />
+    <None Include="Data\DBFilterValues.dbml.layout">
+      <DependentUpon>DBFilterValues.dbml</DependentUpon>
+    </None>
+    <None Include="Data\DBUploadFiles.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>DBUploadFiles.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="GenerationClasses\Data\CrossJournal.dbml.layout">
+      <DependentUpon>CrossJournal.dbml</DependentUpon>
+    </None>
+    <EmbeddedResource Include="Properties\BindingResources.kk-KZ.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\BindingResources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>BindingResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GridView\GridStyle.css" />
+    <EmbeddedResource Include="Properties\LookupControlsResources.kk-KZ.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\LookupControlsResources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LookupControlsResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.kk-KZ.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DateTimeControls\calendar.png" />
+    <EmbeddedResource Include="ModalPopupStyle.css" />
+    <EmbeddedResource Include="ScriptResources\ScriptResources.kk-KZ.resx" />
+    <EmbeddedResource Include="ScriptResources\ScriptResources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ScriptResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ScriptResources\ScriptResources.ru.kk-KZ.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatusInfo\WaitStatus.js" />
+    <EmbeddedResource Include="ScrollSaver.js" />
+    <EmbeddedResource Include="DateTimeControls\DatePicker.js" />
+    <EmbeddedResource Include="GridView\GridViewExtRowExpand.js" />
+    <EmbeddedResource Include="TextBoxExt.js" />
+    <EmbeddedResource Include="DropDownListExtBehavior.js" />
+    <EmbeddedResource Include="Filters\ColumnFilter.css" />
+    <EmbeddedResource Include="Filters\ColumnFilter.js" />
+    <EmbeddedResource Include="ewr133.gif" />
+    <EmbeddedResource Include="Filters\ColumnFilterList.js" />
+    <EmbeddedResource Include="Filters\application_cascade.png" />
+    <EmbeddedResource Include="Filters\application_double.png" />
+    <EmbeddedResource Include="EnableControls\EnableControlsBehavior.js" />
+    <EmbeddedResource Include="Filters\table_save.png" />
+    <EmbeddedResource Include="GridView\CheckedField.js" />
+    <EmbeddedResource Include="CommandFieldExt\Images\edit.gif" />
+    <EmbeddedResource Include="CommandFieldExt\Images\del.gif" />
+    <EmbeddedResource Include="CommandFieldExt\Images\insert.gif" />
+    <EmbeddedResource Include="CommandFieldExt\Images\new.gif" />
+    <EmbeddedResource Include="CommandFieldExt\Images\ok.gif" />
+    <EmbeddedResource Include="CommandFieldExt\Images\select.gif" />
+    <EmbeddedResource Include="CommandFieldExt\Images\cancel.gif" />
+    <EmbeddedResource Include="CommandFieldExt\Styles\ButtonStyle.css" />
+    <EmbeddedResource Include="CommandFieldExt\Images\buttom_bg.gif" />
+    <Content Include="Global.asax" />
+    <Content Include="AutoComplete.asmx" />
+    <EmbeddedResource Include="Lookup\LookupTable.js" />
+    <EmbeddedResource Include="Lookup\LookupTextBox.js" />
+    <EmbeddedResource Include="Lookup\AutoCompleteTextBox.css" />
+    <EmbeddedResource Include="Lookup\AutoCompleteTextBox.js" />
+    <EmbeddedResource Include="Lookup\AutoCompleteTextBoxPair.js" />
+    <EmbeddedResource Include="GridViewBehavior.js" />
+    <EmbeddedResource Include="PopupControl.js" />
+    <EmbeddedResource Include="PopupControl.css" />
+    <EmbeddedResource Include="Lookup\control_fastforward_blue.png" />
+    <EmbeddedResource Include="Lookup\control_rewind_blue.png" />
+    <EmbeddedResource Include="CopyValue.js" />
+    <None Include="MainPage.aspx" />
+    <Content Include="WebServiceUploadFiles.asmx" />
+    <Content Include="Trace\TimeOfDestinationUser.ascx" />
+    <Content Include="WebServiceTraceTimeOfDestinationUser.asmx" />
+    <Content Include="UserControls\FileNotExists.ascx" />
+    <None Include="UserControls\NoPermit.ascx" />
+    <None Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseMainPageReadOnly.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BaseSPPage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DataBinding\ErrorDisplay.cs" />
+    <Compile Include="DataBinding\Resources\ControlsResources.cs" />
+    <Compile Include="Data\DataContextExtender.cs" />
+    <Compile Include="Data\DBTraceTimingRequests.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DBTraceTimingRequests.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Data\DBUploadFiles.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DBUploadFiles.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Data\FileData.cs" />
+    <Compile Include="Data\IFile.cs" />
+    <Compile Include="DateTimeControls\DatePickerMode.cs" />
+    <Compile Include="DefaultFilterNamesResources.cs" />
+    <Compile Include="EditComponent\CheckBoxExt.cs" />
+    <Compile Include="ColumnIndexer.cs" />
+    <Compile Include="CommandFieldExt\AdditionalButton.cs" />
+    <Compile Include="CopyValue.cs" />
+    <Compile Include="DataSourceHelper.cs" />
+    <Compile Include="EditComponent\SimpleTextEditor.cs" />
+    <Compile Include="EnableControls\EnableBySelectedValue.cs" />
+    <Compile Include="EnableControls\EnableControls.cs" />
+    <Compile Include="EnableControls\EnableList.cs" />
+    <Compile Include="EnableControls\IEnableControl.cs" />
+    <Compile Include="Adapters\HiddenFieldAdapter.cs" />
+    <Compile Include="Filters\IColumnFilterStorageChanged.cs" />
+    <Compile Include="Filters\WebMultipleValuesColumnFilter.cs" />
+    <Compile Include="GenerationClasses\BaseClientManagmentControlExtensions.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseFilterParameterContainer.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseFilterParameterContent.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseFilterParameterStringSearch.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseFilterParameterStructSearch.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseJoinFilterParameterContainer.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseFilterParameterSearch.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseFilterParameterString.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\ColumnInitializers\CloneDataColumnInitializer.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\ColumnInitializers\GroupInHeaderCustomDataInitializer.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\ColumnInitializers\JoinColumnInitializer.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\ColumnInitializers\PercentColumnInitializer.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\ColumnInitializers\SplitDataToRowsInitializer.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\ColumnInitializers\SplitDataToRowsWithPercentInitializer.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\ColumnInitializers\TotalColumnInitializer.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\CrossJournalStillEditExtender.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\CustomBooleanFilterParameter.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\IBaseFilterParameterContainer.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\ICrossTableNullabel.cs" />
+    <Compile Include="GenerationClasses\Data\CacheQueries.cs" />
+    <Compile Include="GenerationClasses\Data\CrossJournal.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CrossJournal.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="GenerationClasses\Data\EditableListDataSource.cs" />
+    <Compile Include="GenerationClasses\Data\EditableListDataSourceView.cs" />
+    <Compile Include="GenerationClasses\Data\SharedDataSource.cs" />
+    <Compile Include="GenerationClasses\Data\SimpleCache.cs" />
+    <Compile Include="GenerationClasses\Filter\BaseFilterOrItem.cs" />
+    <Compile Include="GenerationClasses\Filter\FilterDataArgs.cs" />
+    <Compile Include="GenerationClasses\Filter\IBaseFilterControl.cs" />
+    <Compile Include="GenerationClasses\Filter\IBaseFilterOrItem.cs" />
+    <Compile Include="GenerationClasses\Filter\SearchFilter.cs" />
+    <Compile Include="GenerationClasses\Filter\FilterItemExtensions.cs" />
+    <Compile Include="GenerationClasses\HierarchyFields\Aligment.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\BaseCheckBox.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\BaseEditControl.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\BaseNumeric.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\BaseRadioButton.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\GetExtenderAjaxControlEventArgs.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\ICheckBox.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\INumeric.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\IRadioButton.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\IRenderComponent.cs" />
+    <Compile Include="GenerationClasses\MenuItemExtender.cs" />
+    <Compile Include="GenerationClasses\Navigator\NavigatorManager.cs" />
+    <Compile Include="GenerationClasses\Validators\ValidateInformationForm.cs" />
+    <Compile Include="GenerationClasses\Validators\ValidateInformationFormApplyArgsInfo.cs" />
+    <Compile Include="HistoryFilters\DateStartEndHistory.cs" />
+    <Compile Include="Log\LogChangedFieldEntry.cs" />
+    <Compile Include="Log\LogMessageEntry.cs" />
+    <Compile Include="Log\LogMessageType.cs" />
+    <Compile Include="Log\LogMonitor.cs" />
+    <Compile Include="Log\LogMonitorWeb.cs" />
+    <Compile Include="Filters\ColumnFilter.cs" />
+    <Compile Include="Filters\ColumnFilterList.cs" />
+    <Compile Include="Filters\ColumnFilterListBase.cs" />
+    <Compile Include="Filters\ColumnFilterStorageList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Filters\WebColumnFilterFactory.cs" />
+    <Compile Include="GridView\IGridColumn.cs" />
+    <Compile Include="GridView\CheckedField.cs" />
+    <Compile Include="GridView\TemplateFieldExpand.cs" />
+    <Compile Include="IColumnName.cs" />
+    <Compile Include="LoaderCssScript.cs" />
+    <Compile Include="Lookup\AutoComplete.asmx.cs">
+      <DependentUpon>AutoComplete.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BaseSPWebPart.cs" />
+    <Compile Include="CommandFieldExt\DataControlImageButton.cs" />
+    <Compile Include="GridView\TemplateExpand.cs" />
+    <Compile Include="Lookup\AutoCompleteTextBox.cs" />
+    <Compile Include="Lookup\AutoCompleteTextBoxPair.cs" />
+    <Compile Include="GridViewDesigner.cs" />
+    <Compile Include="GridViewExtender.cs" />
+    <Compile Include="Lookup\LookupTable.cs" />
+    <Compile Include="Lookup\LookupTextBox.cs" />
+    <Compile Include="MailMessageHelper.cs" />
+    <Compile Include="Maps\MapControl.cs" />
+    <Compile Include="PopupControl.cs" />
+    <Compile Include="ScriptResources\ScriptResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ScriptResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Security\ActionConverter.cs" />
+    <Compile Include="Security\ControlIDConverterForActionBind.cs" />
+    <Compile Include="Security\ModuleActionBinder.cs" />
+    <Compile Include="SelectValues\BaseListDataBoundControl.cs" />
+    <Compile Include="SelectValues\BaseListDataBoundRenderEventArgs.cs" />
+    <Compile Include="SelectValues\FileSelector.cs" />
+    <Compile Include="SelectValues\GroupFieldItem.cs" />
+    <Compile Include="SelectValues\ListControlItem.cs" />
+    <Compile Include="SelectValues\MultipleLookupSelect.cs" />
+    <Compile Include="SelectValues\MultipleSelect.cs" />
+    <Compile Include="SelectValues\MultipleValuesSelect.cs" />
+    <Compile Include="SelectValues\WebServiceUploadFiles.asmx.cs">
+      <DependentUpon>WebServiceUploadFiles.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="System.UI\DataPager.cs" />
+    <Compile Include="TableDataSource\DataSourceSelectExtArguments.cs" />
+    <Compile Include="TemplateFieldExt.cs" />
+    <Compile Include="TextBoxExt.cs" />
+    <Compile Include="CodeDropDownListExt.cs" />
+    <Compile Include="CommandFieldExt\CommandFieldExt.cs" />
+    <Compile Include="ImageExt.cs" />
+    <Compile Include="GridView\ExpandTableCell.cs" />
+    <Compile Include="GridView\GridViewExt.cs" />
+    <Compile Include="GridView\GridViewExtRow.cs" />
+    <Compile Include="GridView\TemplateFieldDelete.cs" />
+    <Compile Include="GridView\TemplateFieldNew.cs" />
+    <Compile Include="Properties\LookupControlsResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LookupControlsResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ScrollSaver.cs" />
+    <Compile Include="TabPanelExt.cs" />
+    <Compile Include="Properties\BindingResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BindingResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Data\ClearTableControl.cs" />
+    <Compile Include="Data\ClearTableItem.cs" />
+    <Compile Include="DateTimeControls\DatePicker.cs" />
+    <Compile Include="Design\ISessionWorkerContainer.cs" />
+    <Compile Include="Design\ListTableItems.cs" />
+    <Compile Include="Design\TableItem.cs" />
+    <Compile Include="DetailsViewExt.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DropDownListExt.cs" />
+    <Compile Include="ExecuteTransaction\ExecuteTransactionControl.cs" />
+    <Compile Include="ExecuteTransaction\ExecuteTransactionErrorEventArgs.cs" />
+    <Compile Include="ExecuteTransaction\ExecuteTransactionInitConnectionEventArgs.cs" />
+    <Compile Include="TableDataSource\HasNewRowException.cs" />
+    <Compile Include="ModalPopupExtenderExt.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\VersionInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="StatusInfo\WaitStatus.cs" />
+    <Compile Include="TableDataSource\TableDataSource.cs" />
+    <Compile Include="TableDataSource\TableDataSourceAddedRowEventArgs.cs" />
+    <Compile Include="TableDataSource\TableDataSourceAddingRowEventArgs.cs" />
+    <Compile Include="TableDataSource\TableDataSourceClearedDataEventArgs.cs" />
+    <Compile Include="TableDataSource\TableDataSourceClearingDataEventArgs.cs" />
+    <Compile Include="TableDataSource\TableDataSourceDataMode.cs" />
+    <Compile Include="TableDataSource\TableDataSourceErrorEventArgs.cs" />
+    <Compile Include="TableDataSource\TableDataSourceFillType.cs" />
+    <Compile Include="TableDataSource\TableDataSourceUpdatedDataEventArgs.cs" />
+    <Compile Include="TableDataSource\TableDataSourceUpdatingDataEventArgs.cs" />
+    <Compile Include="TableDataSource\TableDataSourceView.cs" />
+    <Compile Include="Design\TableTypeConverter.cs" />
+    <Compile Include="Themes.cs" />
+    <Compile Include="Trace\TimeOfDestinationUser.ascx.cs">
+      <DependentUpon>TimeOfDestinationUser.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Trace\TimeOfDestinationUser.ascx.designer.cs">
+      <DependentUpon>TimeOfDestinationUser.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\TraceContextExt.cs" />
+    <Compile Include="Trace\TraceContextExtInstance.cs" />
+    <Compile Include="Trace\TraceContextInfo.cs" />
+    <Compile Include="Trace\TraceTimeOfDestinationUserControl.cs" />
+    <Compile Include="Trace\WebServiceTraceTimeOfDestinationUser.asmx.cs">
+      <DependentUpon>WebServiceTraceTimeOfDestinationUser.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UpdateProgressBar.cs" />
+    <Compile Include="UserControls\DictionariesView.ascx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DataBinding\WebUtils.cs" />
+    <Compile Include="Wizard\WizardAction.cs" />
+    <Compile Include="Wizard\WizardActionAddNew.cs" />
+    <Compile Include="Wizard\WizardActionOpenJournal.cs" />
+    <Compile Include="Wizard\WizardController.cs" />
+    <Compile Include="Wizard\WizardOnAction.cs" />
+    <Compile Include="Wizard\WizardStep.cs" />
+    <Compile Include="WorkFlow\IWorkFlow.cs" />
+    <Compile Include="WorkFlow\IWorkFlowAction.cs" />
+    <Compile Include="WorkFlow\IWorkFlowActionResult.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AggregateConstructions\QueryBuilder.cs" />
+    <Compile Include="Data\DBFilterValues.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DBFilterValues.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Data\DB_RvsSettings.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DB_RvsSettings.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Data\XContainerExtender.cs" />
+    <Compile Include="EnableController\Controller.cs" />
+    <Compile Include="EnableController\ControllerActiveType.cs" />
+    <Compile Include="EnableController\ControllerCompareOperator.cs" />
+    <Compile Include="EnableController\ControllerControlItem.cs" />
+    <Compile Include="EnableController\ControllerItem.cs" />
+    <Compile Include="EnableController\ControllerItemValue.cs" />
+    <Compile Include="EnableController\ControllerItemValueEventArgs.cs" />
+    <Compile Include="GenerationClasses\ActionControlParameters.cs" />
+    <Compile Include="GenerationClasses\ActionControlResults.cs" />
+    <Compile Include="GenerationClasses\ActionControlType.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\AggregateColumn.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\AggregateData.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseColumn.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseFilter.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseGroupingControl.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseJournalButtons.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseJournalCell.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseJournalControl.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseJournalCrossTable.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseJournalCustomColumn.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseFilterParameter.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseJournalFilterEventArgs.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseJournalHeaderControl.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseJournalHeaderCustomTemplateColumn.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseJournalRow.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseJournalTypeCell.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseJournalUpdateValueEventArgs.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseJournalUserControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GenerationClasses\BaseJournal\BaseJournalValidateValueEventArgs.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\Column.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\ColumnAggregateType.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\ColumnType.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\ConcatenateColumn.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\CrossColumn.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\CrossColumnDataSource.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\CrossColumnDataSourceColumn.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\CrossColumnDataSourceItem.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\CrossColumnUnionDataSources.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\CrossDataFilterParameter.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\CrossTreeColumnDataSource.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\GroupColumn.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\GroupedAggregateColumn.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\GroupType.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\HeaderFilterParameter.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\ICrossTable.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\ICrossTreeTable.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\JournalFilterParameter.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\MultipleKey.cs" />
+    <Compile Include="Data\SavedProperties.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\RenderContext.cs" />
+    <Compile Include="GenerationClasses\Data\LinqDataSourceExt.cs" />
+    <Compile Include="GenerationClasses\Data\LinqDataSourceViewExt.cs" />
+    <Compile Include="GenerationClasses\DublicateRender.cs" />
+    <Compile Include="GenerationClasses\FieldEditFilter.cs">
+    </Compile>
+    <Compile Include="GenerationClasses\HierarchyFields\CellProperties.cs" />
+    <Compile Include="GenerationClasses\HierarchyFields\ColumnHierarchyExtensions.cs" />
+    <Compile Include="GenerationClasses\HierarchyFields\RowProperties.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\BaseDropDownList.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\BaseHyperLink.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\BaseLookup.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\BaseTextBox.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\IDropDownList.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\IHyperLink.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\ITextBox.cs" />
+    <Compile Include="GenerationClasses\IFieldControl.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\ILookup.cs" />
+    <Compile Include="GenerationClasses\Navigator\BaseMenu.cs" />
+    <Compile Include="GenerationClasses\Navigator\BaseMenuUserControl.ascx.cs">
+      <DependentUpon>BaseMenuUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GenerationClasses\Navigator\BaseMenuUserControl.ascx.designer.cs">
+      <DependentUpon>BaseMenuUserControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="GenerationClasses\Navigator\BaseMenuItem.cs" />
+    <Compile Include="GenerationClasses\Navigator\BaseNavigatorCustomControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GenerationClasses\Navigator\MenuDefaultDestination.cs" />
+    <Compile Include="GenerationClasses\RichTextBox.cs" />
+    <Compile Include="GenerationClasses\SavingJournalSettings.ascx.cs">
+      <DependentUpon>SavingJournalSettings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GenerationClasses\SavingJournalSettings.ascx.designer.cs">
+      <DependentUpon>SavingJournalSettings.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="GenerationClasses\Buttons\BaseButton.cs" />
+    <Compile Include="GenerationClasses\Buttons\BaseButtonEventArgs.cs" />
+    <Compile Include="GenerationClasses\Buttons\BaseButtonExecuteEventArgs.cs" />
+    <Compile Include="GenerationClasses\Buttons\BaseButtonVisibleEventArgs.cs" />
+    <Compile Include="GenerationClasses\Buttons\ButtonCollection.cs" />
+    <Compile Include="GenerationClasses\Buttons\IButton.cs" />
+    <Compile Include="GenerationClasses\ChangeWeightHelper.cs" />
+    <Compile Include="GenerationClasses\ContextEventArgs.cs" />
+    <Compile Include="GenerationClasses\Data\BaseAdditionalRowInfo.cs" />
+    <Compile Include="GenerationClasses\Data\BaseCodeRow.cs" />
+    <Compile Include="GenerationClasses\Data\BaseDataSource.cs" />
+    <Compile Include="GenerationClasses\Data\BaseDataSourceView.cs" />
+    <Compile Include="GenerationClasses\Data\BaseDataSourceViewCustomBehavior.cs" />
+    <Compile Include="GenerationClasses\Data\BaseTableParameter.cs" />
+    <Compile Include="GenerationClasses\Data\IDataSourceViewCustomBehavior.cs" />
+    <Compile Include="GenerationClasses\Data\IParentDataSourceViews.cs" />
+    <Compile Include="GenerationClasses\Data\ParentDataSourceViewInfo.cs" />
+    <Compile Include="GenerationClasses\Data\SelectedQueryParametersEventArgs.cs" />
+    <Compile Include="GenerationClasses\EmptyLable.cs" />
+    <Compile Include="GenerationClasses\Filter\BaseFilterControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GenerationClasses\Data\BaseRow.cs" />
+    <Compile Include="GenerationClasses\Data\IDataCodeRow.cs" />
+    <Compile Include="GenerationClasses\Data\IDataRow.cs" />
+    <Compile Include="GenerationClasses\Data\RecordValidateArgs.cs" />
+    <Compile Include="GenerationClasses\DeleteEventArgs.cs" />
+    <Compile Include="GenerationClasses\ExpressionHelper.cs" />
+    <Compile Include="GenerationClasses\Filter\BaseFilterEventArgs.cs" />
+    <Compile Include="GenerationClasses\Filter\FilterExpression.cs" />
+    <Compile Include="GenerationClasses\Filter\FilterItem.cs" />
+    <Compile Include="GenerationClasses\Filter\QueryParameters.cs" />
+    <Compile Include="GenerationClasses\Filter\QueryParametersFuncs.cs" />
+    <Compile Include="GenerationClasses\Filter\SavedUserFilterValues.ascx.cs">
+      <DependentUpon>SavedUserFilterValues.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GenerationClasses\Filter\SavedUserFilterValues.ascx.designer.cs">
+      <DependentUpon>SavedUserFilterValues.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="GenerationClasses\Filter\StructQueryParameters.cs" />
+    <Compile Include="GenerationClasses\HelpFileLink.cs" />
+    <Compile Include="GenerationClasses\HierarchyFields\ColumnHierarchy.cs" />
+    <Compile Include="GenerationClasses\HierarchyFields\ColumnHierarchyDirection.cs" />
+    <Compile Include="GenerationClasses\IActionControl.cs" />
+    <Compile Include="GenerationClasses\Navigator\BaseNavigatorInfo.cs" />
+    <Compile Include="GenerationClasses\Navigator\BaseNavigatorControl.cs" />
+    <Compile Include="GenerationClasses\Navigator\BaseNavigatorInfoVisibleEventArgs.cs" />
+    <Compile Include="GenerationClasses\Navigator\BaseNavigatorValues.cs" />
+    <Compile Include="GenerationClasses\SelectingColumn.ascx.cs">
+      <DependentUpon>SelectingColumn.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GenerationClasses\SelectingColumn.ascx.designer.cs">
+      <DependentUpon>SelectingColumn.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="GenerationClasses\SelectParameters.cs" />
+    <Compile Include="GenerationClasses\TextFormater.cs" />
+    <Compile Include="GenerationClasses\Validators\DateTimeCompareValidatorProperties.cs" />
+    <Compile Include="GenerationClasses\WebServiceFilters.asmx.cs">
+      <DependentUpon>WebServiceFilters.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GenerationClasses\WebServiceSavedJournalSettings.asmx.cs">
+      <DependentUpon>WebServiceSavedJournalSettings.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="HistoryFilters\FilterIsDel.cs" />
+    <Compile Include="HistoryFilters\FilterKeepIDHistory.cs" />
+    <Compile Include="HistoryFilters\FilterPeriodHistory.cs" />
+    <Compile Include="BaseLogic\BaseJournalLogic.cs" />
+    <Compile Include="BaseLogic\BaseLogic.cs" />
+    <Compile Include="BaseLogic\IJournalLogic.cs" />
+    <Compile Include="BaseLogic\ILogic.cs" />
+    <Compile Include="BaseLogic\LocalizationColumnVisible.cs" />
+    <Compile Include="BaseLogic\NameCopy.cs" />
+    <Compile Include="BaseLogic\PeriodHistory.cs" />
+    <Compile Include="BaseMainPage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CommandFieldExt\DataControlImageTextButton.cs" />
+    <Compile Include="CommandFieldExt\DataControlLinkButton.cs" />
+    <Compile Include="CommandFieldExt\FieldDisplayStyle.cs" />
+    <Compile Include="CommandFieldExt\IDataControlButton.cs" />
+    <Compile Include="CommandFieldExt\ImageTextButton.cs">
+    </Compile>
+    <Compile Include="CustomConditionsEventArgs.cs" />
+    <Compile Include="DateTimeControls\DayHourMinutePicker.cs" />
+    <Compile Include="EditComponent\DecimalTextBox.cs" />
+    <Compile Include="EnableControls\EnableByDropDownList.cs" />
+    <Compile Include="EnableControls\EnableByEmpty.cs" />
+    <Compile Include="EnableControls\EnableByTextBox.cs" />
+    <Compile Include="EnableControls\EnableByDatePicker.cs" />
+    <Compile Include="EnableControls\EnableByHiddenField.cs" />
+    <Compile Include="FilterConverter.cs" />
+    <Compile Include="Filters\ColumnFilterListCreatingEventArgs.cs" />
+    <Compile Include="GenerationClasses\BaseControlInfo.cs" />
+    <Compile Include="GenerationClasses\Filter\BaseFilterProvider.cs" />
+    <Compile Include="GenerationClasses\BaseHeaderControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GenerationClasses\AbstractUserControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GenerationClasses\Buttons\AdditionalButtons.cs" />
+    <Compile Include="GenerationClasses\AdditionalField.cs" />
+    <Compile Include="GenerationClasses\AddSaveLinkArgs.cs" />
+    <Compile Include="GenerationClasses\BaseGridColumns.cs" />
+    <Compile Include="GenerationClasses\ChildrenLinksGenerator.cs" />
+    <Compile Include="GenerationClasses\ClientGridValues.cs" />
+    <Compile Include="GenerationClasses\BaseInformationValues.cs" />
+    <Compile Include="GenerationClasses\BaseRecordEvents.cs" />
+    <Compile Include="GenerationClasses\Filter\BrowseFilterParameters.cs" />
+    <Compile Include="GenerationClasses\BaseClientManagmentControl.cs" />
+    <Compile Include="GenerationClasses\Validators\CompareValidatorProperties.cs" />
+    <Compile Include="GenerationClasses\Validators\CustomValidatorProperties.cs" />
+    <Compile Include="GenerationClasses\DataSourceSelectingEventArgs.cs" />
+    <Compile Include="GenerationClasses\Filter\DefaultFilters.cs" />
+    <Compile Include="GenerationClasses\DisabledTextBox.cs" />
+    <Compile Include="GenerationClasses\ExtenderAjaxControl.cs" />
+    <Compile Include="GenerationClasses\Filter\FilterHtmlGenerator.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\GridHtmlGenerator.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\GenerationHelper.cs" />
+    <Compile Include="GenerationClasses\HtmlGeneration\HtmlGenerator.cs" />
+    <Compile Include="GenerationClasses\IAdditionalFields.cs" />
+    <Compile Include="GenerationClasses\Data\ICodeRow.cs" />
+    <Compile Include="GenerationClasses\IDataSourceView.cs" />
+    <Compile Include="GenerationClasses\IFilterProvider.cs" />
+    <Compile Include="GenerationClasses\IHeaderControl.cs" />
+    <Compile Include="GenerationClasses\IItemNavigatorsInitializer.cs" />
+    <Compile Include="GenerationClasses\Data\IRow.cs" />
+    <Compile Include="GenerationClasses\MenuItem.cs" />
+    <Compile Include="GenerationClasses\NullableTextBox.cs" />
+    <Compile Include="GenerationClasses\Validators\RangeValidatorProperties.cs" />
+    <Compile Include="GenerationClasses\RecordEventArgs.cs" />
+    <Compile Include="GenerationClasses\Validators\RequiredValidatorProperties.cs" />
+    <Compile Include="GenerationClasses\Validators\ValidateInformation.cs" />
+    <Compile Include="GenerationClasses\Validators\ValidatorProperties.cs" />
+    <Compile Include="GenerationClasses\HierarchicalDataSource.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="HistoryFilters\FilterDelHistory.cs" />
+    <Compile Include="IFilterControl.cs" />
+    <Compile Include="IFilterSupport.cs" />
+    <Compile Include="ImageCheckBox.cs" />
+    <Compile Include="ISelectedValue.cs" />
+    <Compile Include="GenerationClasses\Filter\LinqFilterGenerator.cs" />
+    <Compile Include="LinqToSqlHelper.cs" />
+    <Compile Include="Lookup\ErrorRowCreatedEventArgs.cs" />
+    <Compile Include="GenerationClasses\MainPageUrlBuilder.cs" />
+    <Compile Include="GenerationClasses\Validators\RegexValidatorProperties.cs" />
+    <Compile Include="Preview\FileLinkBuilder.cs" />
+    <Compile Include="Preview\FileLinkWithPreview.cs" />
+    <Compile Include="Preview\PicturePreview.ascx.cs">
+      <DependentUpon>PicturePreview.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Preview\PicturePreview.ascx.designer.cs">
+      <DependentUpon>PicturePreview.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ReportMenu\ButtonReport.cs" />
+    <Compile Include="EnableControls\EnableByChecked.cs" />
+    <Compile Include="EnableControls\EnableEnum.cs" />
+    <Compile Include="EnableControls\TypeComponent.cs" />
+    <Compile Include="ReportMenu\ReportMenu.cs" />
+    <Compile Include="ReportMenu\ReportMenuEventArgs.cs" />
+    <Compile Include="SaveValuesControl.cs" />
+    <Compile Include="GenerationClasses\SelectedParameterNavigator.cs" />
+    <Compile Include="SelectedValueConverter.cs" />
+    <Compile Include="Service\ServiceProcedure.cs" />
+    <Compile Include="Service\ServiceProcedureConfig.cs" />
+    <Compile Include="Service\ServiceProcedureControl.cs" />
+    <Compile Include="SessionWorker\SessionWorkerControl.cs" />
+    <Compile Include="SessionWorker\SessionWorkerTypeNameEditor.cs" />
+    <Compile Include="ToolBar\ToolBar.cs" />
+    <Compile Include="ToolBar\ToolBarItem.cs" />
+    <Compile Include="UnderConstruction.aspx.cs">
+      <DependentUpon>UnderConstruction.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UnderConstruction.aspx.designer.cs">
+      <DependentUpon>UnderConstruction.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ValuesSaver.cs" />
+    <Compile Include="GenerationClasses\WebServiceAdditinalFields.asmx.cs">
+      <DependentUpon>WebServiceAdditinalFields.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GenerationClasses\WebServiceAutoComplete.asmx.cs">
+      <DependentUpon>WebServiceAutoComplete.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WebSpecificInstances.cs" />
+    <None Include="Data\DBFilterValues.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>DBFilterValues.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Data\DB_RvsSettings.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>DB_RvsSettings.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="GenerationClasses\Data\CrossJournal.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>CrossJournal.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="key.snk" />
+    <EmbeddedResource Include="GenerationClasses\CrossJournal.js" />
+    <Content Include="GenerationClasses\Navigator\BaseMenuUserControl.ascx" />
+    <Content Include="GenerationClasses\SavingJournalSettings.ascx" />
+    <Content Include="GenerationClasses\Filter\SavedUserFilterValues.ascx" />
+    <None Include="Data\DB_RvsSettings.dbml.layout">
+      <DependentUpon>DB_RvsSettings.dbml</DependentUpon>
+    </None>
+    <EmbeddedResource Include="GenerationClasses\MainScripts.js" />
+    <Content Include="GenerationClasses\SelectingColumn.ascx" />
+    <Content Include="WebServiceFilters.asmx" />
+    <Content Include="WebServiceSavedJournalSettings.asmx" />
+    <Content Include="Preview\PicturePreview.ascx" />
+    <Content Include="UnderConstruction.aspx" />
+    <Content Include="WebServiceAdditinalFields.asmx" />
+    <Content Include="WebServiceAutoComplete.asmx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AjaxControlToolkit\AjaxControlToolkit.csproj">
+      <Project>{e2720d82-a9ca-4dae-925a-d91334b1b0b1}</Project>
+      <Name>AjaxControlToolkit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JS.Linq.Extensions\JS.Linq.Extensions.csproj">
+      <Project>{6b73dc79-4a4c-4644-8b69-44df33c4377c}</Project>
+      <Name>JS.Linq.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Nat.Web.Tools\Nat.Web.Tools.csproj">
+      <Project>{e2f1c772-023d-49fc-b1c8-45c407a300bd}</Project>
+      <Name>Nat.Web.Tools</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Build\bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;LogRequests;LOCAL</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  -->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>24712</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Включите восстановление пакетов NuGet, чтобы загрузить их. Дополнительные сведения см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <PropertyGroup>
+    <PreBuildEvent>Copy $(ProjectDir)\..\BuildConfig\VersionInfo.cs $(ProjectDir)\Properties\VersionInfo.cs</PreBuildEvent>
+  </PropertyGroup>
+</Project>

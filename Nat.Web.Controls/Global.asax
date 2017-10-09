@@ -1,0 +1,1 @@
+﻿<%@ Assembly Name="Nat.Web.Controls"%><%@ Application Codebehind="Global.asax.cs" Inherits="Nat.Web.Controls.Global" Language="C#" %>

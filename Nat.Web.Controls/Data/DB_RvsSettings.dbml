@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Default" Class="DB_RvsSettingsDataContext" AccessModifier="Internal" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=192.168.100.46;Initial Catalog=Default_20091016;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.RVS_Exports" Member="RVS_Exports">
+    <Type Name="RVS_Export">
+      <Column Name="id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="dateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="refProperties" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="refSid" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Association Name="RVS_Property_RVS_Export" Member="RVS_Property" ThisKey="refProperties" OtherKey="id" Type="RVS_Property" IsForeignKey="true" />
+      <Association Name="LOG_SidIdentification_RVS_Export" Member="LOG_SidIdentification" ThisKey="refSid" OtherKey="ID" Type="LOG_SidIdentification" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RVS_SavedProperties" Member="RVS_SavedProperties">
+    <Type Name="RVS_SavedProperty">
+      <Column Name="id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="nameKz" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="nameRu" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="refProperties" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="dateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="refSid" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="JournalTypeName" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="isDefaultView" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="isSharedView" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="context" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Association Name="RVS_Property_RVS_SavedProperty" Member="RVS_Property" ThisKey="refProperties" OtherKey="id" Type="RVS_Property" IsForeignKey="true" />
+      <Association Name="LOG_SidIdentification_RVS_SavedProperty" Member="LOG_SidIdentification" ThisKey="refSid" OtherKey="ID" Type="LOG_SidIdentification" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RVS_Properties" Member="RVS_Properties">
+    <Type Name="RVS_Property">
+      <Column Name="id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="nameKz" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="nameRu" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="JournalTypeName" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Grouping" Storage="_Gouping" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="Filter" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="ColumnsVisible" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="ColumnsStyle" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="RowsStyle" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="CellsStyle" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="FixedHeader" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="StorageValues" Type="System.Data.Linq.Binary" DbType="varbinary(MAX)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="ReportPluginName" Type="System.String" DbType="nvarchar(500)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="OrderByColumns" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="OtherParameters" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="false" UpdateCheck="Never" />
+      <Association Name="RVS_Property_RVS_Export" Member="RVS_Exports" ThisKey="id" OtherKey="refProperties" Type="RVS_Export" />
+      <Association Name="RVS_Property_RVS_SavedProperty" Member="RVS_SavedProperties" ThisKey="id" OtherKey="refProperties" Type="RVS_SavedProperty" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LOG_SidIdentification" Member="LOG_SidIdentifications">
+    <Type Name="LOG_SidIdentification">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Sid" Type="System.String" DbType="VarChar(250) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="email" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="isDisabled" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="LOG_SidIdentification_RVS_Export" Member="RVS_Exports" ThisKey="ID" OtherKey="refSid" Type="RVS_Export" />
+      <Association Name="LOG_SidIdentification_RVS_SavedProperty" Member="RVS_SavedProperties" ThisKey="ID" OtherKey="refSid" Type="RVS_SavedProperty" />
+    </Type>
+  </Table>
+</Database>

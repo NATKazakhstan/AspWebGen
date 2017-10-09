@@ -1,0 +1,35 @@
+.main {
+	padding:2px;
+	margin:5px;
+	float:none;
+	border-left:1px solid #BCC8C9;
+	border-right:#C7D4D5 solid 1px;
+	border-top:#B9D19E solid 1px;
+	border-bottom:#C0C0C0 solid 1px;
+	white-space:nowrap;
+}
+.text_butt {
+	font-weight:normal;
+	font-size:12px; 
+	text-align:center;
+	color:#000000;
+	vertical-align:middle;
+}
+.text_butt a{
+	font-weight:normal;
+	font-size:12px; 
+	text-align:center;
+	color:#000000;
+	vertical-align:middle;
+}
+.text_butt a:hover{
+	font-weight:normal;
+	font-size:12px; 
+	text-align:center;
+	color:#000000;
+	vertical-align:middle;
+}
+.image {
+    vertical-align:top;
+	margin:0 2px;
+}

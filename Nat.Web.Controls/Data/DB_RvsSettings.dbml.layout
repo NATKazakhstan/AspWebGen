@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="DB_RvsSettings">
+  <DataContextMoniker Name="/DB_RvsSettingsDataContext" />
+  <nestedChildShapes>
+    <classShape Id="72103391-9238-4e83-a0c3-851ff8f3e046" absoluteBounds="3.5, 1.125, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/DB_RvsSettingsDataContext/RVS_Export" />
+      <nestedChildShapes>
+        <elementListCompartment Id="dc025639-784d-4170-b010-a8f3b8bcdc56" absoluteBounds="3.515, 1.585, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="cd11cd47-1a30-4705-8b3c-e2aa596a38e9" absoluteBounds="3.5, 3.375, 2, 2.7324039713541666">
+      <DataClassMoniker Name="/DB_RvsSettingsDataContext/RVS_SavedProperty" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b6cf5210-b534-4b71-b6d7-ca1b6b609609" absoluteBounds="3.515, 3.835, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d456df4a-f46e-4019-aea7-8348eead105a" absoluteBounds="0.75, 2.125, 2, 3.6939111328124996">
+      <DataClassMoniker Name="/DB_RvsSettingsDataContext/RVS_Property" />
+      <nestedChildShapes>
+        <elementListCompartment Id="10e22783-88fb-4b77-b50f-7b84342c1b53" absoluteBounds="0.765, 2.585, 1.9700000000000002, 3.1339111328125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.75 : 2.41429768880208); (3.5 : 2.41429768880208)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/DB_RvsSettingsDataContext/RVS_Property/RVS_Property_RVS_Export" />
+      <nodes>
+        <classShapeMoniker Id="d456df4a-f46e-4019-aea7-8348eead105a" />
+        <classShapeMoniker Id="72103391-9238-4e83-a0c3-851ff8f3e046" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.75 : 4.59695556640625); (3.5 : 4.59695556640625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/DB_RvsSettingsDataContext/RVS_Property/RVS_Property_RVS_SavedProperty" />
+      <nodes>
+        <classShapeMoniker Id="d456df4a-f46e-4019-aea7-8348eead105a" />
+        <classShapeMoniker Id="cd11cd47-1a30-4705-8b3c-e2aa596a38e9" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="8b021274-c336-4eb5-bf89-5c3713c74503" absoluteBounds="6.375, 3.25, 2, 1.7708968098958327">
+      <DataClassMoniker Name="/DB_RvsSettingsDataContext/LOG_SidIdentification" />
+      <nestedChildShapes>
+        <elementListCompartment Id="12522536-5abd-4ed3-ba7c-e317a646f186" absoluteBounds="6.39, 3.71, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(7.375 : 3.25); (7.375 : 1.91429768880208); (5.5 : 1.91429768880208)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/DB_RvsSettingsDataContext/LOG_SidIdentification/LOG_SidIdentification_RVS_Export" />
+      <nodes>
+        <classShapeMoniker Id="8b021274-c336-4eb5-bf89-5c3713c74503" />
+        <classShapeMoniker Id="72103391-9238-4e83-a0c3-851ff8f3e046" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(6.375 : 4.19794840494792); (5.5 : 4.19794840494792)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/DB_RvsSettingsDataContext/LOG_SidIdentification/LOG_SidIdentification_RVS_SavedProperty" />
+      <nodes>
+        <classShapeMoniker Id="8b021274-c336-4eb5-bf89-5c3713c74503" />
+        <classShapeMoniker Id="cd11cd47-1a30-4705-8b3c-e2aa596a38e9" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Default" Class="DBTraceTimingRequestsDataContext" AccessModifier="Internal" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=STENDNAT;Initial Catalog=Default;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnectionString1" Provider="System.Data.SqlClient" />
+  <Function Name="dbo.P_LOG_UpdateTraceTimingRequest" Method="P_LOG_UpdateTraceTimingRequest">
+    <Parameter Name="TraceKey" Parameter="traceKey" Type="System.Guid" DbType="uniqueidentifier" />
+    <Parameter Name="TimeOfDestinationUser" Parameter="timeOfDestinationUser" Type="System.Int64" DbType="BigInt" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.P_LOG_InsertTraceTimingRequest" Method="P_LOG_InsertTraceTimingRequest">
+    <Parameter Name="Page" Parameter="page" Type="System.String" DbType="NVarChar(255)" />
+    <Parameter Name="Url" Parameter="url" Type="System.String" DbType="NVarChar(MAX)" />
+    <Parameter Name="DateTimeStart" Parameter="dateTimeStart" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="TimeOfCreatingPage" Parameter="timeOfCreatingPage" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="refUser" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="refRegion" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="TableName" Parameter="tableName" Type="System.String" DbType="NVarChar(255)" />
+    <Parameter Name="SelectMode" Parameter="selectMode" Type="System.String" DbType="NVarChar(255)" />
+    <Parameter Name="PageType" Parameter="pageType" Type="System.String" DbType="NVarChar(255)" />
+    <Parameter Name="Parameters" Parameter="parameters" Type="System.Xml.Linq.XElement" DbType="Xml" />
+    <Parameter Name="Trace" Parameter="trace" Type="System.Xml.Linq.XElement" DbType="Xml" />
+    <Parameter Name="TraceKey" Parameter="traceKey" Type="System.Guid" DbType="uniqueidentifier" />
+    <Parameter Name="id" Type="System.Int64" DbType="BigInt" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>

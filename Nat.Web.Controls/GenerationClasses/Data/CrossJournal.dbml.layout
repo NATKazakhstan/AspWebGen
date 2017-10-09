@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="CrossJournalDataContext">
+  <DataContextMoniker Name="/CrossJournalDataContext" />
+  <nestedChildShapes>
+    <classShape Id="9e40f599-088f-468b-b81f-5a333ae8b75c" absoluteBounds="5.25, 3.125, 2, 2.3478011067708335">
+      <DataClassMoniker Name="/CrossJournalDataContext/SYS_CrossJournalEdit" />
+      <nestedChildShapes>
+        <elementListCompartment Id="233c6c88-9d9f-4e03-a9ff-9b3c0c0ea843" absoluteBounds="5.265, 3.585, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

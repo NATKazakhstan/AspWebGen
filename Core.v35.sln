@@ -1,0 +1,148 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nat.Web.Controls", "Nat.Web.Controls\Nat.Web.Controls.csproj", "{FF9F52A0-FE60-4EE5-8EE8-5B1093378FB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JS.Linq.Extensions", "JS.Linq.Extensions\JS.Linq.Extensions.csproj", "{6B73DC79-4A4C-4644-8B69-44DF33C4377C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JS.LinqToJavaScript", "JS.LinqToJavaScript\JS.LinqToJavaScript.csproj", "{3900F19C-819F-4B45-A0C9-8EDC4049CC48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JS.LinqToJavaScript.Tests", "JS.LinqToJavaScript.Tests\JS.LinqToJavaScript.Tests.csproj", "{5952A4E7-738E-4C98-9CA6-C31235139752}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nat.ExportInExcel", "Nat.ExportInExcel\Nat.ExportInExcel.csproj", "{D2D366E9-9212-4F0B-B914-081F099E5A29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nat.SqlDbInitializer", "Nat.SqlDbInitializer\Nat.SqlDbInitializer.csproj", "{81465AEA-933E-4F6E-B37C-D43BD2E3C0F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nat.Web.Controls.ExtNet", "Nat.Web.Controls.ExtNet\Nat.Web.Controls.ExtNet.csproj", "{08859287-0782-4987-929C-885C577F48E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nat.Web.ReportManager", "Nat.Web.ReportManager\Nat.Web.ReportManager.v35.csproj", "{C27556F8-274B-483A-B4D7-BC6808DA2EC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nat.Web.Tools", "Nat.Web.Tools\Nat.Web.Tools.csproj", "{E2F1C772-023D-49FC-B1C8-45C407A300BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nat.Web.Tools.ExtNet", "Nat.Web.Tools.ExtNet\Nat.Web.Tools.ExtNet.csproj", "{7558F48C-9A0F-4CD8-9DD7-33276C64AADB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nat.Web.WorkFlow", "Nat.Web.WorkFlow\Nat.Web.WorkFlow.csproj", "{B6910540-C9A6-403D-9582-80DDB8500DDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubsystemReferencesConflictResolver", "SubsystemReferencesConflictResolver\SubsystemReferencesConflictResolver.csproj", "{569DEA8B-CF30-43EE-84DC-12F33B662C0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AjaxControlToolkit", "AjaxControlToolkit\AjaxControlToolkit.csproj", "{E2720D82-A9CA-4DAE-925A-D91334B1B0B1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		ForSharepoint|Any CPU = ForSharepoint|Any CPU
+		Local|Any CPU = Local|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF9F52A0-FE60-4EE5-8EE8-5B1093378FB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF9F52A0-FE60-4EE5-8EE8-5B1093378FB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF9F52A0-FE60-4EE5-8EE8-5B1093378FB3}.ForSharepoint|Any CPU.ActiveCfg = ForSharepoint|Any CPU
+		{FF9F52A0-FE60-4EE5-8EE8-5B1093378FB3}.ForSharepoint|Any CPU.Build.0 = ForSharepoint|Any CPU
+		{FF9F52A0-FE60-4EE5-8EE8-5B1093378FB3}.Local|Any CPU.ActiveCfg = Local|Any CPU
+		{FF9F52A0-FE60-4EE5-8EE8-5B1093378FB3}.Local|Any CPU.Build.0 = Local|Any CPU
+		{FF9F52A0-FE60-4EE5-8EE8-5B1093378FB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF9F52A0-FE60-4EE5-8EE8-5B1093378FB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B73DC79-4A4C-4644-8B69-44DF33C4377C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B73DC79-4A4C-4644-8B69-44DF33C4377C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B73DC79-4A4C-4644-8B69-44DF33C4377C}.ForSharepoint|Any CPU.ActiveCfg = Release|Any CPU
+		{6B73DC79-4A4C-4644-8B69-44DF33C4377C}.ForSharepoint|Any CPU.Build.0 = Release|Any CPU
+		{6B73DC79-4A4C-4644-8B69-44DF33C4377C}.Local|Any CPU.ActiveCfg = Release|Any CPU
+		{6B73DC79-4A4C-4644-8B69-44DF33C4377C}.Local|Any CPU.Build.0 = Release|Any CPU
+		{6B73DC79-4A4C-4644-8B69-44DF33C4377C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B73DC79-4A4C-4644-8B69-44DF33C4377C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3900F19C-819F-4B45-A0C9-8EDC4049CC48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3900F19C-819F-4B45-A0C9-8EDC4049CC48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3900F19C-819F-4B45-A0C9-8EDC4049CC48}.ForSharepoint|Any CPU.ActiveCfg = Release|Any CPU
+		{3900F19C-819F-4B45-A0C9-8EDC4049CC48}.ForSharepoint|Any CPU.Build.0 = Release|Any CPU
+		{3900F19C-819F-4B45-A0C9-8EDC4049CC48}.Local|Any CPU.ActiveCfg = Release|Any CPU
+		{3900F19C-819F-4B45-A0C9-8EDC4049CC48}.Local|Any CPU.Build.0 = Release|Any CPU
+		{3900F19C-819F-4B45-A0C9-8EDC4049CC48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3900F19C-819F-4B45-A0C9-8EDC4049CC48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5952A4E7-738E-4C98-9CA6-C31235139752}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5952A4E7-738E-4C98-9CA6-C31235139752}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5952A4E7-738E-4C98-9CA6-C31235139752}.ForSharepoint|Any CPU.ActiveCfg = Release|Any CPU
+		{5952A4E7-738E-4C98-9CA6-C31235139752}.ForSharepoint|Any CPU.Build.0 = Release|Any CPU
+		{5952A4E7-738E-4C98-9CA6-C31235139752}.Local|Any CPU.ActiveCfg = Release|Any CPU
+		{5952A4E7-738E-4C98-9CA6-C31235139752}.Local|Any CPU.Build.0 = Release|Any CPU
+		{5952A4E7-738E-4C98-9CA6-C31235139752}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5952A4E7-738E-4C98-9CA6-C31235139752}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2D366E9-9212-4F0B-B914-081F099E5A29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2D366E9-9212-4F0B-B914-081F099E5A29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2D366E9-9212-4F0B-B914-081F099E5A29}.ForSharepoint|Any CPU.ActiveCfg = Release|Any CPU
+		{D2D366E9-9212-4F0B-B914-081F099E5A29}.ForSharepoint|Any CPU.Build.0 = Release|Any CPU
+		{D2D366E9-9212-4F0B-B914-081F099E5A29}.Local|Any CPU.ActiveCfg = Release|Any CPU
+		{D2D366E9-9212-4F0B-B914-081F099E5A29}.Local|Any CPU.Build.0 = Release|Any CPU
+		{D2D366E9-9212-4F0B-B914-081F099E5A29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2D366E9-9212-4F0B-B914-081F099E5A29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81465AEA-933E-4F6E-B37C-D43BD2E3C0F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81465AEA-933E-4F6E-B37C-D43BD2E3C0F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81465AEA-933E-4F6E-B37C-D43BD2E3C0F6}.ForSharepoint|Any CPU.ActiveCfg = Release|Any CPU
+		{81465AEA-933E-4F6E-B37C-D43BD2E3C0F6}.ForSharepoint|Any CPU.Build.0 = Release|Any CPU
+		{81465AEA-933E-4F6E-B37C-D43BD2E3C0F6}.Local|Any CPU.ActiveCfg = Release|Any CPU
+		{81465AEA-933E-4F6E-B37C-D43BD2E3C0F6}.Local|Any CPU.Build.0 = Release|Any CPU
+		{81465AEA-933E-4F6E-B37C-D43BD2E3C0F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81465AEA-933E-4F6E-B37C-D43BD2E3C0F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08859287-0782-4987-929C-885C577F48E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08859287-0782-4987-929C-885C577F48E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08859287-0782-4987-929C-885C577F48E5}.ForSharepoint|Any CPU.ActiveCfg = Release|Any CPU
+		{08859287-0782-4987-929C-885C577F48E5}.ForSharepoint|Any CPU.Build.0 = Release|Any CPU
+		{08859287-0782-4987-929C-885C577F48E5}.Local|Any CPU.ActiveCfg = Release|Any CPU
+		{08859287-0782-4987-929C-885C577F48E5}.Local|Any CPU.Build.0 = Release|Any CPU
+		{08859287-0782-4987-929C-885C577F48E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08859287-0782-4987-929C-885C577F48E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C27556F8-274B-483A-B4D7-BC6808DA2EC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C27556F8-274B-483A-B4D7-BC6808DA2EC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C27556F8-274B-483A-B4D7-BC6808DA2EC6}.ForSharepoint|Any CPU.ActiveCfg = ForSharepoint|Any CPU
+		{C27556F8-274B-483A-B4D7-BC6808DA2EC6}.ForSharepoint|Any CPU.Build.0 = ForSharepoint|Any CPU
+		{C27556F8-274B-483A-B4D7-BC6808DA2EC6}.Local|Any CPU.ActiveCfg = Local|Any CPU
+		{C27556F8-274B-483A-B4D7-BC6808DA2EC6}.Local|Any CPU.Build.0 = Local|Any CPU
+		{C27556F8-274B-483A-B4D7-BC6808DA2EC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C27556F8-274B-483A-B4D7-BC6808DA2EC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2F1C772-023D-49FC-B1C8-45C407A300BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2F1C772-023D-49FC-B1C8-45C407A300BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2F1C772-023D-49FC-B1C8-45C407A300BD}.ForSharepoint|Any CPU.ActiveCfg = ForSharepoint|Any CPU
+		{E2F1C772-023D-49FC-B1C8-45C407A300BD}.ForSharepoint|Any CPU.Build.0 = ForSharepoint|Any CPU
+		{E2F1C772-023D-49FC-B1C8-45C407A300BD}.Local|Any CPU.ActiveCfg = Local|Any CPU
+		{E2F1C772-023D-49FC-B1C8-45C407A300BD}.Local|Any CPU.Build.0 = Local|Any CPU
+		{E2F1C772-023D-49FC-B1C8-45C407A300BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2F1C772-023D-49FC-B1C8-45C407A300BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7558F48C-9A0F-4CD8-9DD7-33276C64AADB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7558F48C-9A0F-4CD8-9DD7-33276C64AADB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7558F48C-9A0F-4CD8-9DD7-33276C64AADB}.ForSharepoint|Any CPU.ActiveCfg = Release|Any CPU
+		{7558F48C-9A0F-4CD8-9DD7-33276C64AADB}.ForSharepoint|Any CPU.Build.0 = Release|Any CPU
+		{7558F48C-9A0F-4CD8-9DD7-33276C64AADB}.Local|Any CPU.ActiveCfg = Release|Any CPU
+		{7558F48C-9A0F-4CD8-9DD7-33276C64AADB}.Local|Any CPU.Build.0 = Release|Any CPU
+		{7558F48C-9A0F-4CD8-9DD7-33276C64AADB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7558F48C-9A0F-4CD8-9DD7-33276C64AADB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6910540-C9A6-403D-9582-80DDB8500DDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6910540-C9A6-403D-9582-80DDB8500DDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6910540-C9A6-403D-9582-80DDB8500DDA}.ForSharepoint|Any CPU.ActiveCfg = Local|Any CPU
+		{B6910540-C9A6-403D-9582-80DDB8500DDA}.ForSharepoint|Any CPU.Build.0 = Local|Any CPU
+		{B6910540-C9A6-403D-9582-80DDB8500DDA}.Local|Any CPU.ActiveCfg = Local|Any CPU
+		{B6910540-C9A6-403D-9582-80DDB8500DDA}.Local|Any CPU.Build.0 = Local|Any CPU
+		{B6910540-C9A6-403D-9582-80DDB8500DDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6910540-C9A6-403D-9582-80DDB8500DDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{569DEA8B-CF30-43EE-84DC-12F33B662C0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{569DEA8B-CF30-43EE-84DC-12F33B662C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{569DEA8B-CF30-43EE-84DC-12F33B662C0B}.ForSharepoint|Any CPU.ActiveCfg = Release|Any CPU
+		{569DEA8B-CF30-43EE-84DC-12F33B662C0B}.ForSharepoint|Any CPU.Build.0 = Release|Any CPU
+		{569DEA8B-CF30-43EE-84DC-12F33B662C0B}.Local|Any CPU.ActiveCfg = Release|Any CPU
+		{569DEA8B-CF30-43EE-84DC-12F33B662C0B}.Local|Any CPU.Build.0 = Release|Any CPU
+		{569DEA8B-CF30-43EE-84DC-12F33B662C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{569DEA8B-CF30-43EE-84DC-12F33B662C0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2720D82-A9CA-4DAE-925A-D91334B1B0B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2720D82-A9CA-4DAE-925A-D91334B1B0B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2720D82-A9CA-4DAE-925A-D91334B1B0B1}.ForSharepoint|Any CPU.ActiveCfg = Local|Any CPU
+		{E2720D82-A9CA-4DAE-925A-D91334B1B0B1}.ForSharepoint|Any CPU.Build.0 = Local|Any CPU
+		{E2720D82-A9CA-4DAE-925A-D91334B1B0B1}.Local|Any CPU.ActiveCfg = Local|Any CPU
+		{E2720D82-A9CA-4DAE-925A-D91334B1B0B1}.Local|Any CPU.Build.0 = Local|Any CPU
+		{E2720D82-A9CA-4DAE-925A-D91334B1B0B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2720D82-A9CA-4DAE-925A-D91334B1B0B1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -212,9 +212,7 @@
                 }
             }
 
-            return value == null || value.HasDublicate == null || value.HasDublicate.Value
-                       ? null
-                       : value;
+            return value;
         }
 
         public static string GetMacAddress()

@@ -19,6 +19,7 @@ namespace Nat.Web.Controls.Trace
     using Nat.Tools.Specific;
     using Nat.Web.Controls.Data;
     using Nat.Web.Tools.Initialization;
+    using Nat.Web.Tools.Security;
 
     public class TraceTimeOfDestinationUserControl : Control
     {
@@ -152,14 +153,14 @@ $(document).ready(function()
                         pageType = match.Groups["PageType"].Value;
                 }
 
-                var personInfo = Tools.Security.User.GetPersonInfo();
+                var personInfo = User.GetPersonInfo();
                 db.P_LOG_InsertTraceTimingRequest(
                     page,
                     HttpContext.Current.Request.Url.ToString(),
                     HttpContext.Current.Timestamp,
                     (DateTime.Now.Ticks - HttpContext.Current.Timestamp.Ticks) / 10000,
-                    personInfo != null ? (long?)personInfo.id : null,
-                    personInfo != null ? personInfo.refRegion : null,
+                    User.GetSID(),
+                    personInfo?.refRegion,
                     tableName,
                     HttpContext.Current.Request.QueryString["mode"],
                     pageType,

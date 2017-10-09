@@ -28,7 +28,7 @@ namespace SubsystemReferencesConflictResolver
 		
 		private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();
 		
-    #region Extensibility Method Definitions
+    #region Определения метода расширяемости
     partial void OnCreated();
     partial void InsertMON_RequestTable(MON_RequestTable instance);
     partial void UpdateMON_RequestTable(MON_RequestTable instance);
@@ -95,7 +95,7 @@ namespace SubsystemReferencesConflictResolver
 		
 		private string _PackageName;
 		
-    #region Extensibility Method Definitions
+    #region Определения метода расширяемости
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
@@ -259,7 +259,7 @@ namespace SubsystemReferencesConflictResolver
 		
 		private string _ErrorMessageKz;
 		
-    #region Extensibility Method Definitions
+    #region Определения метода расширяемости
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();

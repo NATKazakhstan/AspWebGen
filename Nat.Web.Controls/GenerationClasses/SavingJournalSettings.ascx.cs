@@ -114,7 +114,7 @@ namespace Nat.Web.Controls.GenerationClasses
                 var data = (IQueryable<RVS_SavedProperty>)
                            db.RVS_SavedProperties.
                                Where(r => r.JournalTypeName == journalTypeName
-                                          && (r.LOG_SidIdentification.Sid == sid || r.isSharedView)).
+                                          && (r.UserSID == sid || r.isSharedView)).
                                OrderByDescending(r => r.dateTime);
                 var result = data.Select(r =>
                                          new ListItem
@@ -124,7 +124,7 @@ namespace Nat.Web.Controls.GenerationClasses
                                                  NameRu = r.nameRu,
                                                  dateTime = r.dateTime,
                                                  isShared = r.isSharedView,
-                                                 Sid = r.LOG_SidIdentification.Sid,
+                                                 Sid = r.UserSID,
                                                  SaveFilters = r.RVS_Property.Filter != null,
                                              }).ToList();
                 _ddlLoadFilters.DataSource = result;

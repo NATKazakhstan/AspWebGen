@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Default" Class="DBFilterValuesDataContext" AccessModifier="Internal" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=STENDNAT;Initial Catalog=Default;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnectionString1" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=.\sqlexpress2014;Initial Catalog=Sample;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnectionString1" Provider="System.Data.SqlClient" />
   <Function Name="dbo.SYS_SetUserFilters" Method="SYS_SetUserFilters">
     <Parameter Name="refUserFilterValues" Type="System.Int64" DbType="BigInt" />
     <Parameter Name="TableName" Parameter="tableName" Type="System.String" DbType="NVarChar(250)" />
-    <Parameter Name="sid" Type="System.String" DbType="VarChar(250)" />
+    <Parameter Name="sid" Type="System.String" DbType="NVarChar(200)" />
     <Parameter Name="Name" Parameter="name" Type="System.String" DbType="NVarChar(100)" />
     <Parameter Name="FilterValues" Parameter="filterValues" Type="System.String" DbType="NVarChar(MAX)" />
     <ElementType Name="SYS_SetUserFiltersResult">
@@ -30,7 +30,7 @@
   </Function>
   <Function Name="dbo.SYS_GetDefaultUserFilter" Method="SYS_GetDefaultUserFilter">
     <Parameter Name="TableName" Parameter="tableName" Type="System.String" DbType="NVarChar(250)" />
-    <Parameter Name="sid" Type="System.String" DbType="VarChar(250)" />
+    <Parameter Name="sid" Type="System.String" DbType="NVarChar(200)" />
     <ElementType Name="SYS_GetDefaultUserFilterResult">
       <Column Name="id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
@@ -41,7 +41,7 @@
   <Function Name="dbo.SYS_SetDefaultUserFilter" Method="SYS_SetDefaultUserFilter">
     <Parameter Name="refUserFilterValues" Type="System.Int64" DbType="BigInt" />
     <Parameter Name="TableName" Parameter="tableName" Type="System.String" DbType="NVarChar(250)" />
-    <Parameter Name="sid" Type="System.String" DbType="VarChar(250)" />
+    <Parameter Name="sid" Type="System.String" DbType="NVarChar(200)" />
     <Return Type="System.Int32" />
   </Function>
 </Database>

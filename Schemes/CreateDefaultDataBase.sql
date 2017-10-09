@@ -14,6 +14,13 @@ go
 
 if exists (select 1
           from sysobjects
+          where  id = object_id('SYS_GetFilterValues')
+          and type in ('P','PC'))
+   drop procedure SYS_GetFilterValues
+go
+
+if exists (select 1
+          from sysobjects
           where  id = object_id('SYS_GetUserFilters')
           and type in ('P','PC'))
    drop procedure SYS_GetUserFilters
@@ -28,6 +35,13 @@ go
 
 if exists (select 1
           from sysobjects
+          where  id = object_id('SYS_SetFilterValues')
+          and type in ('P','PC'))
+   drop procedure SYS_SetFilterValues
+go
+
+if exists (select 1
+          from sysobjects
           where  id = object_id('SYS_SetIsDangerousUserFilter')
           and type in ('P','PC'))
    drop procedure SYS_SetIsDangerousUserFilter
@@ -38,27 +52,6 @@ if exists (select 1
           where  id = object_id('SYS_SetUserFilters')
           and type in ('P','PC'))
    drop procedure SYS_SetUserFilters
-go
-
-if exists (select 1
-          from sysobjects
-          where  id = object_id('SYS_getFilterValues')
-          and type in ('P','PC'))
-   drop procedure SYS_getFilterValues
-go
-
-if exists (select 1
-          from sysobjects
-          where  id = object_id('SYS_setFilterValues')
-          and type in ('P','PC'))
-   drop procedure SYS_setFilterValues
-go
-
-if exists (select 1
-   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('LOG_TraceTimingRequests') and o.name = 'FK_LOG_TraceTimingRequests_LOG_SidIdentification_refUser')
-alter table LOG_TraceTimingRequests
-   drop constraint FK_LOG_TraceTimingRequests_LOG_SidIdentification_refUser
 go
 
 if exists (select 1
@@ -77,41 +70,9 @@ go
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('SYS_UserFilters') and o.name = 'FK_SYS_UserFilters_LOG_SidIdentification_refSid')
-alter table SYS_UserFilters
-   drop constraint FK_SYS_UserFilters_LOG_SidIdentification_refSid
-go
-
-if exists (select 1
-   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
    where r.fkeyid = object_id('SYS_UserFilters') and o.name = 'FK_SYS_UserFilters_SYS_UserFilterValues_refUserFilterValueDefault')
 alter table SYS_UserFilters
    drop constraint FK_SYS_UserFilters_SYS_UserFilterValues_refUserFilterValueDefault
-go
-
-if exists (select 1
-            from  sysindexes
-           where  id    = object_id('dbo.LOG_SidIdentification')
-            and   name  = 'NDX_SidInBase64'
-            and   indid > 0
-            and   indid < 255)
-   drop index dbo.LOG_SidIdentification.NDX_SidInBase64
-go
-
-if exists (select 1
-            from  sysindexes
-           where  id    = object_id('dbo.LOG_SidIdentification')
-            and   name  = 'Index_Sid'
-            and   indid > 0
-            and   indid < 255)
-   drop index dbo.LOG_SidIdentification.Index_Sid
-go
-
-if exists (select 1
-            from  sysobjects
-           where  id = object_id('dbo.LOG_SidIdentification')
-            and   type = 'U')
-   drop table dbo.LOG_SidIdentification
 go
 
 if exists (select 1
@@ -153,6 +114,22 @@ go
 
 if exists (select 1
             from  sysindexes
+           where  id    = object_id('SYS_FilterValues')
+            and   name  = 'Index_SidKey'
+            and   indid > 0
+            and   indid < 255)
+   drop index SYS_FilterValues.Index_SidKey
+go
+
+if exists (select 1
+            from  sysobjects
+           where  id = object_id('SYS_FilterValues')
+            and   type = 'U')
+   drop table SYS_FilterValues
+go
+
+if exists (select 1
+            from  sysindexes
            where  id    = object_id('SYS_ReferencesConflictResolver')
             and   name  = 'NDX_Code'
             and   indid > 0
@@ -190,184 +167,6 @@ if exists (select 1
    drop table SYS_UserFilters
 go
 
-
-/*==============================================================*/
-/* Table: LOG_SidIdentification                                 */
-/*==============================================================*/
-create table dbo.LOG_SidIdentification (
-   id                   bigint               identity,
-   Sid                  nvarchar(255)        not null,
-   Name                 nvarchar(255)        null,
-   email                nvarchar(255)        null,
-   isDisabled           bit                  not null default 0,
-   RowName              AS (coalesce(Name, Sid)),
-   LoginName            nvarchar(255)        null,
-   SidInBase64          varchar(450)         null,
-   constraint PK_LOG_SIDIDENTIFICATION primary key (id)
-)
-go
-
-if exists (select 1 from  sys.extended_properties
-           where major_id = object_id('dbo.LOG_SidIdentification') and minor_id = 0)
-begin 
-   execute sp_dropextendedproperty 'MS_Description',  
-   'user', 'dbo', 'table', 'LOG_SidIdentification' 
- 
-end 
-
-
-execute sp_addextendedproperty 'MS_Description',  
-   'Пользователи', 
-   'user', 'dbo', 'table', 'LOG_SidIdentification'
-go
-
-if exists(select 1 from sys.extended_properties p where
-      p.major_id = object_id('dbo.LOG_SidIdentification')
-  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'id')
-)
-begin
-   execute sp_dropextendedproperty 'MS_Description', 
-   'user', 'dbo', 'table', 'LOG_SidIdentification', 'column', 'id'
-
-end
-
-
-execute sp_addextendedproperty 'MS_Description', 
-   'Идентификатор',
-   'user', 'dbo', 'table', 'LOG_SidIdentification', 'column', 'id'
-go
-
-if exists(select 1 from sys.extended_properties p where
-      p.major_id = object_id('dbo.LOG_SidIdentification')
-  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'Sid')
-)
-begin
-   execute sp_dropextendedproperty 'MS_Description', 
-   'user', 'dbo', 'table', 'LOG_SidIdentification', 'column', 'Sid'
-
-end
-
-
-execute sp_addextendedproperty 'MS_Description', 
-   'SID пользователя AD',
-   'user', 'dbo', 'table', 'LOG_SidIdentification', 'column', 'Sid'
-go
-
-if exists(select 1 from sys.extended_properties p where
-      p.major_id = object_id('dbo.LOG_SidIdentification')
-  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'Name')
-)
-begin
-   execute sp_dropextendedproperty 'MS_Description', 
-   'user', 'dbo', 'table', 'LOG_SidIdentification', 'column', 'Name'
-
-end
-
-
-execute sp_addextendedproperty 'MS_Description', 
-   'Имя учетки пользователя AD',
-   'user', 'dbo', 'table', 'LOG_SidIdentification', 'column', 'Name'
-go
-
-if exists(select 1 from sys.extended_properties p where
-      p.major_id = object_id('dbo.LOG_SidIdentification')
-  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'email')
-)
-begin
-   execute sp_dropextendedproperty 'MS_Description', 
-   'user', 'dbo', 'table', 'LOG_SidIdentification', 'column', 'email'
-
-end
-
-
-execute sp_addextendedproperty 'MS_Description', 
-   'Адрес электронной почты',
-   'user', 'dbo', 'table', 'LOG_SidIdentification', 'column', 'email'
-go
-
-if exists(select 1 from sys.extended_properties p where
-      p.major_id = object_id('dbo.LOG_SidIdentification')
-  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'isDisabled')
-)
-begin
-   execute sp_dropextendedproperty 'MS_Description', 
-   'user', 'dbo', 'table', 'LOG_SidIdentification', 'column', 'isDisabled'
-
-end
-
-
-execute sp_addextendedproperty 'MS_Description', 
-   'Учетна запись заблокирована',
-   'user', 'dbo', 'table', 'LOG_SidIdentification', 'column', 'isDisabled'
-go
-
-if exists(select 1 from sys.extended_properties p where
-      p.major_id = object_id('dbo.LOG_SidIdentification')
-  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'RowName')
-)
-begin
-   execute sp_dropextendedproperty 'MS_Description', 
-   'user', 'dbo', 'table', 'LOG_SidIdentification', 'column', 'RowName'
-
-end
-
-
-execute sp_addextendedproperty 'MS_Description', 
-   'Наименование',
-   'user', 'dbo', 'table', 'LOG_SidIdentification', 'column', 'RowName'
-go
-
-if exists(select 1 from sys.extended_properties p where
-      p.major_id = object_id('dbo.LOG_SidIdentification')
-  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'LoginName')
-)
-begin
-   execute sp_dropextendedproperty 'MS_Description', 
-   'user', 'dbo', 'table', 'LOG_SidIdentification', 'column', 'LoginName'
-
-end
-
-
-execute sp_addextendedproperty 'MS_Description', 
-   'Имя входа',
-   'user', 'dbo', 'table', 'LOG_SidIdentification', 'column', 'LoginName'
-go
-
-if exists(select 1 from sys.extended_properties p where
-      p.major_id = object_id('dbo.LOG_SidIdentification')
-  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'SidInBase64')
-)
-begin
-   execute sp_dropextendedproperty 'MS_Description', 
-   'user', 'dbo', 'table', 'LOG_SidIdentification', 'column', 'SidInBase64'
-
-end
-
-
-execute sp_addextendedproperty 'MS_Description', 
-   'SID пользователя AD в формате base64',
-   'user', 'dbo', 'table', 'LOG_SidIdentification', 'column', 'SidInBase64'
-go
-
-/*==============================================================*/
-/* Index: Index_Sid                                             */
-/*==============================================================*/
-create unique index Index_Sid on dbo.LOG_SidIdentification (
-Sid ASC
-)
-include (id,SidInBase64)
-go
-
-/*==============================================================*/
-/* Index: NDX_SidInBase64                                       */
-/*==============================================================*/
-create unique index NDX_SidInBase64 on dbo.LOG_SidIdentification (
-SidInBase64 ASC
-)
-include (id)
-where (SidInBase64 is not null)
-go
-
 /*==============================================================*/
 /* Table: LOG_TraceTimingRequests                               */
 /*==============================================================*/
@@ -379,7 +178,7 @@ create table LOG_TraceTimingRequests (
    DateTimeStart        datetime             not null,
    TimeOfCreatingPage   bigint               not null,
    TimeOfDestinationUser bigint               null,
-   refUser              bigint               null,
+   UserSID              nvarchar(200)        collate Cyrillic_General_CS_AS null,
    refRegion            bigint               null,
    TableName            nvarchar(255)        null,
    SelectMode           nvarchar(255)        null,
@@ -542,13 +341,13 @@ go
 
 if exists(select 1 from sys.extended_properties p where
       p.major_id = object_id('LOG_TraceTimingRequests')
-  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'refUser')
+  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'UserSID')
 )
 begin
    declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_dropextendedproperty 'MS_Description', 
-   'user', @CurrentUser, 'table', 'LOG_TraceTimingRequests', 'column', 'refUser'
+   'user', @CurrentUser, 'table', 'LOG_TraceTimingRequests', 'column', 'UserSID'
 
 end
 
@@ -556,7 +355,7 @@ end
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description', 
    'Пользователь',
-   'user', @CurrentUser, 'table', 'LOG_TraceTimingRequests', 'column', 'refUser'
+   'user', @CurrentUser, 'table', 'LOG_TraceTimingRequests', 'column', 'UserSID'
 go
 
 if exists(select 1 from sys.extended_properties p where
@@ -1015,7 +814,7 @@ create table RVS_SavedProperties (
    nameRu               nvarchar(255)        not null,
    refProperties        bigint               not null,
    dateTime             datetime             not null,
-   refSid               bigint               not null,
+   UserSID              nvarchar(200)        collate Cyrillic_General_CS_AS not null,
    JournalTypeName      nvarchar(300)        not null,
    isDefaultView        bit                  not null,
    isSharedView         bit                  not null,
@@ -1138,13 +937,13 @@ go
 
 if exists(select 1 from sys.extended_properties p where
       p.major_id = object_id('RVS_SavedProperties')
-  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'refSid')
+  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'UserSID')
 )
 begin
    declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_dropextendedproperty 'MS_Description', 
-   'user', @CurrentUser, 'table', 'RVS_SavedProperties', 'column', 'refSid'
+   'user', @CurrentUser, 'table', 'RVS_SavedProperties', 'column', 'UserSID'
 
 end
 
@@ -1152,7 +951,7 @@ end
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description', 
    'SID пользователя',
-   'user', @CurrentUser, 'table', 'RVS_SavedProperties', 'column', 'refSid'
+   'user', @CurrentUser, 'table', 'RVS_SavedProperties', 'column', 'UserSID'
 go
 
 if exists(select 1 from sys.extended_properties p where
@@ -1240,7 +1039,7 @@ create table SYS_FileUploads (
    dataFileName         varchar(max)         not null,
    UploadDate           datetime             not null,
    SubSystemName        varchar(max)         not null,
-   PersonSID            varchar(max)         not null,
+   PersonSID            nvarchar(200)        collate Cyrillic_General_CS_AS not null,
    constraint PK_SYS_FILEUPLOADS primary key (id)
 )
 go
@@ -1357,6 +1156,140 @@ select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description', 
    'SID сотрудника',
    'user', @CurrentUser, 'table', 'SYS_FileUploads', 'column', 'PersonSID'
+go
+
+/*==============================================================*/
+/* Table: SYS_FilterValues                                      */
+/*==============================================================*/
+create table SYS_FilterValues (
+   id                   bigint               identity,
+   "key"                nvarchar(400)        not null,
+   "values"             varbinary(MAX)       not null,
+   BinarySid            varbinary(64)        not null default 0x0,
+   UserSID              nvarchar(200)        collate Cyrillic_General_CS_AS not null default '',
+   constraint PK_SYS_FILTERVALUES primary key (id)
+)
+go
+
+if exists (select 1 from  sys.extended_properties
+           where major_id = object_id('SYS_FilterValues') and minor_id = 0)
+begin 
+   declare @CurrentUser sysname 
+select @CurrentUser = user_name() 
+execute sp_dropextendedproperty 'MS_Description',  
+   'user', @CurrentUser, 'table', 'SYS_FilterValues' 
+ 
+end 
+
+
+select @CurrentUser = user_name() 
+execute sp_addextendedproperty 'MS_Description',  
+   'Выбранные значения пользователями системы', 
+   'user', @CurrentUser, 'table', 'SYS_FilterValues'
+go
+
+if exists(select 1 from sys.extended_properties p where
+      p.major_id = object_id('SYS_FilterValues')
+  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'id')
+)
+begin
+   declare @CurrentUser sysname
+select @CurrentUser = user_name()
+execute sp_dropextendedproperty 'MS_Description', 
+   'user', @CurrentUser, 'table', 'SYS_FilterValues', 'column', 'id'
+
+end
+
+
+select @CurrentUser = user_name()
+execute sp_addextendedproperty 'MS_Description', 
+   'Идентификатор',
+   'user', @CurrentUser, 'table', 'SYS_FilterValues', 'column', 'id'
+go
+
+if exists(select 1 from sys.extended_properties p where
+      p.major_id = object_id('SYS_FilterValues')
+  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'key')
+)
+begin
+   declare @CurrentUser sysname
+select @CurrentUser = user_name()
+execute sp_dropextendedproperty 'MS_Description', 
+   'user', @CurrentUser, 'table', 'SYS_FilterValues', 'column', 'key'
+
+end
+
+
+select @CurrentUser = user_name()
+execute sp_addextendedproperty 'MS_Description', 
+   'Ключ элемента значений',
+   'user', @CurrentUser, 'table', 'SYS_FilterValues', 'column', 'key'
+go
+
+if exists(select 1 from sys.extended_properties p where
+      p.major_id = object_id('SYS_FilterValues')
+  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'values')
+)
+begin
+   declare @CurrentUser sysname
+select @CurrentUser = user_name()
+execute sp_dropextendedproperty 'MS_Description', 
+   'user', @CurrentUser, 'table', 'SYS_FilterValues', 'column', 'values'
+
+end
+
+
+select @CurrentUser = user_name()
+execute sp_addextendedproperty 'MS_Description', 
+   'Заполненные значения пользователем',
+   'user', @CurrentUser, 'table', 'SYS_FilterValues', 'column', 'values'
+go
+
+if exists(select 1 from sys.extended_properties p where
+      p.major_id = object_id('SYS_FilterValues')
+  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'BinarySid')
+)
+begin
+   declare @CurrentUser sysname
+select @CurrentUser = user_name()
+execute sp_dropextendedproperty 'MS_Description', 
+   'user', @CurrentUser, 'table', 'SYS_FilterValues', 'column', 'BinarySid'
+
+end
+
+
+select @CurrentUser = user_name()
+execute sp_addextendedproperty 'MS_Description', 
+   'SID пользователя',
+   'user', @CurrentUser, 'table', 'SYS_FilterValues', 'column', 'BinarySid'
+go
+
+if exists(select 1 from sys.extended_properties p where
+      p.major_id = object_id('SYS_FilterValues')
+  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'UserSID')
+)
+begin
+   declare @CurrentUser sysname
+select @CurrentUser = user_name()
+execute sp_dropextendedproperty 'MS_Description', 
+   'user', @CurrentUser, 'table', 'SYS_FilterValues', 'column', 'UserSID'
+
+end
+
+
+select @CurrentUser = user_name()
+execute sp_addextendedproperty 'MS_Description', 
+   'SID пользователя',
+   'user', @CurrentUser, 'table', 'SYS_FilterValues', 'column', 'UserSID'
+go
+
+/*==============================================================*/
+/* Index: Index_SidKey                                          */
+/*==============================================================*/
+create index Index_SidKey on SYS_FilterValues (
+BinarySid ASC,
+"key" ASC
+)
 go
 
 /*==============================================================*/
@@ -1514,7 +1447,7 @@ go
 create table SYS_UserFilters (
    id                   bigint               not null,
    TableName            nvarchar(250)        not null,
-   refSid               bigint               not null,
+   UserSID              nvarchar(200)        collate Cyrillic_General_CS_AS not null,
    refUserFilterValueDefault bigint               null,
    constraint PK_SYS_USERFILTERS primary key (id)
 )
@@ -1577,13 +1510,13 @@ go
 
 if exists(select 1 from sys.extended_properties p where
       p.major_id = object_id('SYS_UserFilters')
-  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'refSid')
+  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'UserSID')
 )
 begin
    declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_dropextendedproperty 'MS_Description', 
-   'user', @CurrentUser, 'table', 'SYS_UserFilters', 'column', 'refSid'
+   'user', @CurrentUser, 'table', 'SYS_UserFilters', 'column', 'UserSID'
 
 end
 
@@ -1591,7 +1524,7 @@ end
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description', 
    'SID пользователя',
-   'user', @CurrentUser, 'table', 'SYS_UserFilters', 'column', 'refSid'
+   'user', @CurrentUser, 'table', 'SYS_UserFilters', 'column', 'UserSID'
 go
 
 if exists(select 1 from sys.extended_properties p where
@@ -1618,14 +1551,9 @@ go
 /*==============================================================*/
 create index Index_SYS_UserFilters on SYS_UserFilters (
 TableName ASC,
-refSid ASC
+UserSID ASC
 )
 include (id)
-go
-
-alter table LOG_TraceTimingRequests
-   add constraint FK_LOG_TraceTimingRequests_LOG_SidIdentification_refUser foreign key (refUser)
-      references dbo.LOG_SidIdentification (id)
 go
 
 alter table RVS_SavedProperties
@@ -1638,11 +1566,6 @@ alter table SYS_UserFilterValues
    add constraint FK_SYS_UserFilterValues_SYS_UserFilters_refUserFilter foreign key (refUserFilter)
       references SYS_UserFilters (id)
          on delete cascade
-go
-
-alter table SYS_UserFilters
-   add constraint FK_SYS_UserFilters_LOG_SidIdentification_refSid foreign key (refSid)
-      references dbo.LOG_SidIdentification (id)
 go
 
 alter table SYS_UserFilters
@@ -1666,29 +1589,54 @@ go
 
 create procedure SYS_GetDefaultUserFilter
     @TableName nvarchar(250),
-    @sid varchar(250)
+    @sid nvarchar(400)
 as
 begin
     select ufv.id, ufv.Name, ufv.isDangerous, ufv.FilterValues
     from SYS_UserFilters uf
-        join SYS_UserFilterValues ufv on ufv.id = uf.refUserFilterValueDefault
-        join LOG_SidIdentification sidi on sidi.id = uf.refSid
-    where uf.TableName = @TableName and sidi.[sid] = @sid
+    join SYS_UserFilterValues ufv on ufv.id = uf.refUserFilterValueDefault
+    where uf.TableName = @TableName and uf.[UserSid] = @sid
 	order by ufv.Name
 end
 go
 
 
+set ANSI_NULLS ON
+set QUOTED_IDENTIFIER ON
+go
+
+-- =============================================
+-- Author:		sergey.shpakovskiy
+-- Create date: 23.01.2008
+-- Description:	Получение условий фильтра
+-- =============================================
+CREATE PROCEDURE [dbo].[SYS_GetFilterValues]
+	@key nvarchar (500),
+	@binarySid varbinary(64),
+    @sid nvarchar (400)
+AS 
+BEGIN
+	declare @values varbinary(MAX)
+	set @key = lower(@key)
+
+	select @values = [values]
+	from SYS_FilterValues
+	where (binarySid = @binarySid or UserSid = @sid) and [key] = @key
+
+	select @values
+END
+go
+
+
 create procedure SYS_GetUserFilters
     @TableName nvarchar(250),
-    @sid varchar(250)
+    @sid nvarchar(400)
 as
 begin
     select ufv.id, ufv.Name, ufv.isDangerous, ufv.FilterValues
     from SYS_UserFilters uf
         join SYS_UserFilterValues ufv on ufv.refUserFilter = uf.id
-        join LOG_SidIdentification sidi on sidi.id = uf.refSid
-    where uf.TableName = @TableName and sidi.[sid] = @sid
+    where uf.TableName = @TableName and uf.[UserSID] = @sid
 	order by ufv.Name
 end
 go
@@ -1697,14 +1645,50 @@ go
 create procedure SYS_SetDefaultUserFilter
     @refUserFilterValues bigint,
     @TableName nvarchar(250),
-    @sid varchar(250)
+    @sid nvarchar(400)
 as
 begin
     update SYS_UserFilters set refUserFilterValueDefault = @refUserFilterValues
     from SYS_UserFilters uf
-        join LOG_SidIdentification sidi on sidi.id = uf.refSid
-    where uf.TableName = @TableName and sidi.[sid] = @sid
+    where uf.TableName = @TableName and uf.[UserSID] = @sid
 end
+go
+
+
+set ANSI_NULLS ON
+set QUOTED_IDENTIFIER ON
+go
+
+-- =============================================
+-- Author:		sergey.shpakovskiy
+-- Create date: 23.01.2008
+-- Description:	Установление условий фильтра
+-- =============================================
+CREATE PROCEDURE [dbo].[SYS_SetFilterValues]
+	@key nvarchar (500),
+	@BinarySid varbinary(64),
+    @UserSid nvarchar(400),
+	@values varbinary(MAX)
+AS 
+BEGIN
+	declare @id bigint
+	set @key = lower(@key)
+
+	select @id = id
+	from SYS_FilterValues
+	where (BinarySid = @BinarySid OR UserSid = @UserSid) and [key] = @key
+
+	if @id is null
+	begin
+		INSERT INTO SYS_FilterValues (BinarySid, UserSid, [key], [values]) Values(@BinarySid, @UserSid, @key, @values)
+	end else begin
+		UPDATE SYS_FilterValues
+		SET [values] = @values, UserSid = IsNull(@UserSid, UserSid), BinarySid = IsNull(@BinarySid, BinarySid)
+		where id = @id
+	end
+
+	return 0
+END
 go
 
 
@@ -1721,7 +1705,7 @@ go
 create procedure SYS_SetUserFilters
     @refUserFilterValues bigint,
     @TableName nvarchar(250),
-    @sid varchar(250),
+    @sid nvarchar(400),
     @Name nvarchar(100),
     @FilterValues nvarchar(MAX)
 as
@@ -1735,81 +1719,15 @@ begin
             (
                 select * 
                 from SYS_UserFilters uf
-                    join LOG_SidIdentification sidi on sidi.id = uf.refSid
-                where uf.TableName = @TableName and sidi.[sid] = @sid
+                where uf.TableName = @TableName and uf.[UserSID] = @sid
             )
-            insert into SYS_UserFilters(TableName, refSid)
-            select @TableName, sidi.id
-            from LOG_SidIdentification sidi
-            where sidi.[sid] = @sid
+            insert into SYS_UserFilters(TableName, UserSID)
+            select @TableName, @sid
         insert into SYS_UserFilterValues(refUserFilter, Name, FilterValues, isDangerous)
         select uf.id, @Name, @FilterValues, 0
             from SYS_UserFilters uf
-            join LOG_SidIdentification sidi on sidi.id = uf.refSid
-        where uf.TableName = @TableName and sidi.[sid] = @sid
+        where uf.TableName = @TableName and uf.[UserSID] = @sid
     end
     select isnull(@refUserFilterValues, Scope_Identity()) as refUserFilterValues
 end
-go
-
-
-set ANSI_NULLS ON
-set QUOTED_IDENTIFIER ON
-go
-
--- =============================================
--- Author:		sergey.shpakovskiy
--- Create date: 23.01.2008
--- Description:	Получение условий фильтра
--- =============================================
-CREATE PROCEDURE [dbo].[SYS_getFilterValues]
-	@key nvarchar (500),
-	@sid varbinary(64)
-AS 
-BEGIN
-	declare @values varbinary(MAX)
-	set @key = lower(@key)
-
-	select @values = [values]
-	from SYS_FilterValues
-	where sid = @sid and [key] = @key
-
-	select @values
-END
-go
-
-
-set ANSI_NULLS ON
-set QUOTED_IDENTIFIER ON
-go
-
--- =============================================
--- Author:		sergey.shpakovskiy
--- Create date: 23.01.2008
--- Description:	Установление условий фильтра
--- =============================================
-CREATE PROCEDURE [dbo].[SYS_setFilterValues]
-	@key nvarchar (500),
-	@sid varbinary(64),
-	@values varbinary(MAX)
-AS 
-BEGIN
-	declare @id bigint
-	set @key = lower(@key)
-
-	select @id = id
-	from SYS_FilterValues
-	where sid = @sid and [key] = @key
-
-	if @id is null
-	begin
-		INSERT INTO SYS_FilterValues (sid, [key], [values]) Values(@sid, @key, @values)
-	end else begin
-		UPDATE SYS_FilterValues
-		SET [values] = @values
-		where id = @id
-	end
-
-	return 0
-END
 go

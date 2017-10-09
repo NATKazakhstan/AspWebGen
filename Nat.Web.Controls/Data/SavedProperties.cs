@@ -75,7 +75,7 @@ namespace Nat.Web.Controls.Data
             {
                 var row = db.RVS_SavedProperties.
                     Where(r => r.id == idSavedProperty
-                               && (r.isSharedView || r.LOG_SidIdentification.Sid == User.GetSID())).
+                               && (r.isSharedView || r.UserSID == User.GetSID())).
                     Select(r => r.RVS_Property).
                     FirstOrDefault();
                 return LoadFrom(db, row);
@@ -110,10 +110,6 @@ namespace Nat.Web.Controls.Data
                     db.Transaction = transaction;
                     var row = SaveProperties(db);
                     db.SubmitChanges();
-                    var refSID = db.LOG_SidIdentifications.
-                        Where(r => r.Sid == User.GetSID()).
-                        Select(r => r.ID).
-                        FirstOrDefault();
 
                     RVS_SavedProperty viewRow = null;
                     if (argument.id != null)
@@ -121,9 +117,9 @@ namespace Nat.Web.Controls.Data
                         var data = db.RVS_SavedProperties.
                             Where(r => r.id == argument.id);
                         if (UserRoles.IsInRole(UserRoles.AllowChangeOrDeleteJournalSettingsAsShared))
-                            data = data.Where(r => r.isSharedView || r.refSid == refSID);
+                            data = data.Where(r => r.isSharedView || r.UserSID == User.GetSID());
                         else
-                            data = data.Where(r => r.refSid == refSID);
+                            data = data.Where(r => r.UserSID == User.GetSID());
                         viewRow = data.FirstOrDefault();
                     }
                     if (viewRow == null)
@@ -139,7 +135,7 @@ namespace Nat.Web.Controls.Data
                     viewRow.JournalTypeName = JournalTypeName;
                     viewRow.nameRu = argument.nameRu;
                     viewRow.nameKz = argument.nameKz;
-                    viewRow.refSid = refSID;
+                    viewRow.UserSID = User.GetSID();
                     viewRow.refProperties = row.id;
 
                     db.SubmitChanges();
@@ -452,9 +448,9 @@ namespace Nat.Web.Controls.Data
                 var data = db.RVS_SavedProperties.
                     Where(r => r.id == id);
                 if (UserRoles.IsInRole(UserRoles.AllowChangeOrDeleteJournalSettingsAsShared))
-                    data = data.Where(r => r.LOG_SidIdentification.Sid == User.GetSID() || r.isSharedView);
+                    data = data.Where(r => r.UserSID == User.GetSID() || r.isSharedView);
                 else
-                    data = data.Where(r => r.LOG_SidIdentification.Sid == User.GetSID());
+                    data = data.Where(r => r.UserSID == User.GetSID());
 
                 var row = data.FirstOrDefault();
                 if (row == null) return false;

@@ -30,6 +30,7 @@ namespace Nat.Web.ReportManager
     using Nat.Web.Tools.Security;
 
     using Stimulsoft.Report.Dictionary;
+    using static Stimulsoft.Report.Web.StiWebViewer;
 
     public partial class ReportResultPage : BaseSPPage
     {
@@ -53,7 +54,7 @@ namespace Nat.Web.ReportManager
             //Page.Error += PageError;
         }
         
-        private void StiWebViewer1OnReportExport(object sender, StiWebViewer.StiExportDataEventArgs stiExportDataEventArgs)
+        private void StiWebViewer1OnReportExport(object sender, StiExportDataEventArgs stiExportDataEventArgs)
         {
             DBDataContext.AddViewReports(
                 Tools.Security.User.GetSID(),

@@ -359,7 +359,7 @@ namespace Nat.Web.Controls
         {
             sb.Append("/");
             sb.Append(Page ?? "MainPage");
-            sb.Append(".aspx");
+            //sb.Append(".aspx");
             if (IsDataControl) sb.Append("/data");
             if (NavigateTo) sb.Append("/navigateto");
             if (IsDownload) sb.Append("/download");

@@ -21,7 +21,7 @@
         [DllImport("iphlpapi.dll", ExactSpelling = true)]
         public static extern int SendARP(int DestIP, int SrcIP, [Out] byte[] pMacAddr, ref int PhyAddrLen);
 
-        private const string PersonInfoBySid = "Nat.Web.Tools.Security.User.PersonInfoBySid:";
+        private const string PersonInfoBySid = "Nat.Web.Tools.Security.User.PersonInfoBySid<";
 
         public static void SetSID(string sid)
         {
@@ -153,7 +153,11 @@
         public static string GetSubdivisionKSP()
         {
             var config = InitializerSection.GetSection();
-            var type = BuildManager.GetType(config.TypeOfMethodGetSubdivisionKSP, true, true);
+            var typeName = config.TypeOfMethodGetSubdivisionKSP;
+            if (string.IsNullOrEmpty(typeName))
+                return string.Empty;
+
+            var type = BuildManager.GetType(typeName, true, true);
             var mehtod = type.GetMethod("GetSubdivisionKSP", new Type[0]);
             return (string)mehtod.Invoke(null, new object[0]);
         }
@@ -166,14 +170,37 @@
             return value;
         }
 
+        public static TResult GetPersonInfoRequired<TResult>()
+        {
+            var value = GetPersonInfo<TResult>(GetSID());
+            if (value == null)
+                HttpContext.Current.Response.Redirect("/MainPage.aspx/data/NoPermit");
+            return value;
+        }
+
         public static GetPersonInfoBySidResult GetPersonInfo()
         {
             return GetPersonInfo(GetSID());
         }
 
+        public static TResult GetPersonInfo<TResult>()
+        {
+            return GetPersonInfo<TResult>(GetSID());
+        }
+
         public static GetPersonInfoBySidResult GetPersonInfo(string sid)
         {
-            if (string.IsNullOrEmpty(sid)) return null;
+            return GetPersonInfoInternal<GetPersonInfoBySidResult>(sid);
+        }
+
+        public static TResult GetPersonInfo<TResult>(string sid)
+        {
+            return GetPersonInfoInternal<TResult>(sid);
+        }
+
+        private static TResult GetPersonInfoInternal<TResult>(string sid)
+        {
+            if (string.IsNullOrEmpty(sid)) return default(TResult);
 
             try
             {
@@ -188,16 +215,16 @@
             {
             }
 
-            var key = PersonInfoBySid + sid;
-            GetPersonInfoBySidResult value;
+            var key = PersonInfoBySid + typeof(TResult).FullName + ">:" + sid;
+            TResult value;
             if (HttpContext.Current != null && HttpContext.Current.Cache[key] != null)
-                value = (GetPersonInfoBySidResult)HttpContext.Current.Cache[key];
+                value = (TResult)HttpContext.Current.Cache[key];
             else
             {
                 WebInitializer.Initialize();
                 using (var db = new DBDataContext(SpecificInstances.DbFactory.CreateConnection()))
                 {
-                    value = db.GetPersonInfoBySid(sid).FirstOrDefault();
+                    value = db.GetPersonInfoBySid<TResult>(sid).FirstOrDefault();
                     if (value != null && HttpContext.Current != null)
                     {
                         HttpContext.Current.Cache.Add(

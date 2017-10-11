@@ -1,7 +1,10 @@
 namespace Nat.Web.Tools.Security
 {
     using System;
+    using System.Collections.Generic;
+    using System.Data.Linq;
     using System.Globalization;
+    using System.Reflection;
     using System.Threading;
 
     using Nat.ReportManager.QueryGeneration;
@@ -73,6 +76,12 @@ namespace Nat.Web.Tools.Security
                     titleRu,
                     titleKz);
             }
+        }
+
+
+        public IEnumerable<TResult> GetPersonInfoBySid<TResult>(string sid)
+        {
+            return ExecuteQuery<TResult>("exec dbo.GetPersonInfoBySid {0}", sid);
         }
     }
 }

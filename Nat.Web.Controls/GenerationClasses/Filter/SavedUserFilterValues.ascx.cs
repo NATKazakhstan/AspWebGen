@@ -73,10 +73,7 @@ namespace Nat.Web.Controls.GenerationClasses.Filter
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            if (!IsPostBack)
-            {
-                FillFilterList();
-            }
+            FillFilterList();
         }
 
         protected override void OnPreRender(EventArgs e)

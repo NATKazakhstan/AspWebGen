@@ -317,9 +317,9 @@
     <Content Include="App_Themes\NAT\word.png" />
     <Content Include="App_Themes\NAT\yellow.png" />
     <Content Include="DataBinding\Resources\HoverPanel.js" />
-    <Content Include="DataBinding\Resources\info.gif" />
-    <Content Include="DataBinding\Resources\warning.bmp" />
-    <Content Include="DataBinding\Resources\warning.gif" />
+    <EmbeddedResource Include="DataBinding\Resources\info.gif" />
+    <EmbeddedResource Include="DataBinding\Resources\warning.bmp" />
+    <EmbeddedResource Include="DataBinding\Resources\warning.gif" />
     <Content Include="GenerationClasses\Filter\App_LocalResources\SavedUserFilterValues.ascx.kk-KZ.resx" />
     <Content Include="GenerationClasses\Filter\App_LocalResources\SavedUserFilterValues.ascx.resx" />
     <None Include="Data\DBFilterValues.dbml.layout">

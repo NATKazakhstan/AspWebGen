@@ -15,6 +15,8 @@ using Nat.Web.Tools.Initialization;
 
 namespace Nat.Web.Tools
 {
+    using Nat.Web.Tools.Security;
+
     [Serializable]
     public class StorageValues
     {
@@ -253,9 +255,15 @@ namespace Nat.Web.Tools
                 command.Parameters.Add(parameter);
 
                 parameter = command.CreateParameter();
-                parameter.ParameterName = parameterPrefix + "sid";
+                parameter.ParameterName = parameterPrefix + "BinarySid";
                 parameter.DbType = DbType.Binary;
                 parameter.Value = sid;
+                command.Parameters.Add(parameter);
+
+                parameter = command.CreateParameter();
+                parameter.ParameterName = parameterPrefix + "sid";
+                parameter.DbType = DbType.String;
+                parameter.Value = User.GetSID();
                 command.Parameters.Add(parameter);
 
                 DbDataReader reader = command.ExecuteReader(CommandBehavior.SingleResult);
@@ -322,9 +330,15 @@ namespace Nat.Web.Tools
                 command.Parameters.Add(parameter);
 
                 parameter = command.CreateParameter();
-                parameter.ParameterName = parameterPrefix + "sid";
+                parameter.ParameterName = parameterPrefix + "BinarySid";
                 parameter.DbType = DbType.Binary;
                 parameter.Value = sid;
+                command.Parameters.Add(parameter);
+
+                parameter = command.CreateParameter();
+                parameter.ParameterName = parameterPrefix + "UserSid";
+                parameter.DbType = DbType.String;
+                parameter.Value = User.GetSID();
                 command.Parameters.Add(parameter);
 
                 parameter = command.CreateParameter();

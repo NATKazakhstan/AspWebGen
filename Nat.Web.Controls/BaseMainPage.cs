@@ -104,13 +104,13 @@ namespace Nat.Web.Controls
 
         protected override void OnInit(EventArgs e)
         {
-            if (ScriptManager != null)
+            if (File.Exists(HttpContext.Current.Server.MapPath("WebServiceFilters.asmx")))
             {
-//                ScriptManager.Services.Add(
-//                    new ServiceReference
-//                        {
-//                            Path = "/WebServiceFilters.asmx",
-//                        });
+                ScriptManager?.Services.Add(
+                    new ServiceReference
+                        {
+                            Path = "/WebServiceFilters.asmx",
+                        });
             }
 
             Trace.WriteExt("BaseMainPage.BeginOnInit");
@@ -224,7 +224,16 @@ namespace Nat.Web.Controls
                                                             + "</span>",
                                                  });
                 }
-              
+
+                if (_control is IFilterSupport fSupport && InitializerSection.AddFilterInMainPageInternal && (url.IsSelect || url.ShowFilter))
+                {
+                    _filterControl = LoadControlFilter(fSupport.GetDefaultFilterControl());
+                    _filterControl.ID = "filter";
+                    placeHolder.Controls.Add(_filterControl);
+                    placeHolder.Controls.Add(new Literal { Text = "<br /><br />" });
+                    fSupport.FilterControl = _filterControl.ID;
+                }
+
                 if (selected != null)
                 {
                     selected.ShowHistory = url.ShowHistory;
@@ -430,9 +439,27 @@ namespace Nat.Web.Controls
         protected abstract string GetRedirectUrl(string userControl);
 
         protected string PageTitle { get; set; }
+
+        protected override void OnError(EventArgs e)
+        {
+            base.OnError(e);
+
+            if (!InitializerSection.RedirectOnSQLTimeoutInternal)
+                return;
+
+            var sqlException = HttpContext.Current.Error as SqlException;
+            var url = MainPageUrlBuilder.Current;
+            if (sqlException != null && sqlException.Number == 2
+                && url.IsDataControl
+                && url.UserControl.EndsWith("Journal"))
+            {
+                url.UserControl = url.UserControl.Substring(0, url.UserControl.Length - 7) + "Filter"; //"Journal".Length
+                url.IsFilterWindow = true;
+                url.TimeoutInSQL = true;
+                HttpContext.Current.Response.Redirect(url.CreateUrl());
+            }
+        }
         
-
-
         #region AddControlForAction
 
         protected virtual UpdatePanel UpdatePanelForActions

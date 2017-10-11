@@ -968,29 +968,38 @@ function GetSerializedFilters(filterTable) {
 }
 
 function savedUserFilter_change(control) {
+    debugger;
     var fControl = savedUserFilter_getControl(control);
-    var hvSettings = $get(fControl.hvSettings);
-    var tbName = $get(fControl.tbName);
-    var delButton = $get(fControl.delButton);
+    var $fControl = $(fControl);
+    var hvSettings = $get($fControl.attr('hvSettings'));
+    var tbName = $get($fControl.attr('tbName'));
+    var delButton = $get($fControl.attr('delButton'));
     delButton.style.display = control.selectedIndex > 0 ? '' : 'none';
-    if (control.options[control.selectedIndex].valueColl1 != null
-                && control.options[control.selectedIndex].valueColl1.toLowerCase() == 'true')
+    var $selectedOption = $(control.options[control.selectedIndex]);
+    if ($selectedOption.attr('valueColl1') != null &&
+        $selectedOption.attr('valueColl1').toLowerCase() == 'true')
         alert('Фильтр приводил к зависанию. Рекомендуется в ссылках использовать условие выбора "равно".');
     tbName.value = control.options[control.selectedIndex].innerText;
-    hvSettings.value = control.options[control.selectedIndex].valueColl0;
-    SetSerializedFilters($get(fControl.fControl), hvSettings.value);
+    hvSettings.value = $selectedOption.attr('valueColl0');
+    SetSerializedFilters($get($fControl.attr('fControl')), hvSettings.value);
 }
 
 function savedUserFilter_saveSettings(control) {
     var fControl = savedUserFilter_getControl(control);
-    var hvSettings = $get(fControl.hvSettings);
-    hvSettings.value = decodeURIComponent(GetSerializedFilters($get(fControl.fControl)));
+    var $fControl = $(fControl);
+    var hvSettings = $get($fControl.attr('hvSettings'));
+    hvSettings.value = decodeURIComponent(GetSerializedFilters($get($fControl.attr('fControl'))));
     return true;
 }
 
 function savedUserFilter_getControl(control) {
-    if (control.tableName != undefined) return control;
-    return savedUserFilter_getControl(control.parentNode);
+    while (control) {
+        if ($(control).attr('tableName'))
+            return control;
+        control = control.parentNode;
+    }
+
+    return null;
 }
 
 function ApplyFilter(filterTable, url) {

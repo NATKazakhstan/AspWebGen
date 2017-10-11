@@ -701,12 +701,14 @@ function {1} (checkbox){{
                 .FirstOrDefault(
                     r => r.ContainingField is CheckedField
                          && ((CheckedField)r.ContainingField).ColumnName == gridViewExt.DeleteFieldColumnName);
-            if (checkedField != null)
-            {
-                var checkBox = checkedField.Controls.OfType<CheckBox>().FirstOrDefault();
-                if (checkBox != null) checkBox.AutoPostBack = PostBack;
-                if (checkBox != null) list.Add(new DefaultFilterValues { ClientId = checkBox.ClientID, Value = string.Empty });
-            }
+            var checkBox = checkedField?.Controls.OfType<CheckBox>().FirstOrDefault();
+            if (checkBox == null)
+                return;
+
+            if (row.DataItemIndex >= 0 && _storage.Values.Contains(gridViewExt.DataKeys[row.DataItemIndex].Value))
+                checkBox.Checked = true;
+            checkBox.AutoPostBack = PostBack;
+            list.Add(new DefaultFilterValues { ClientId = checkBox.ClientID, Value = string.Empty });
         }
 
         /// <summary>

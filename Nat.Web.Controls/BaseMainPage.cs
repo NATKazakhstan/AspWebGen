@@ -346,7 +346,8 @@ namespace Nat.Web.Controls
                 RegisterStartupScript(Page, GetType(), _updateProgressBar.ClientID);
             if (_picturePreview != null)
                 RegisterPicturePreviewStartupScript(Page, GetType(), _picturePreview.ControlID);
-            //ClientScript.RegisterClientScriptResource(typeof(BaseMainPage), "Nat.Web.Controls.GenerationClasses.MainScripts.js");
+            if (InitializerSection.RegisterMainScriptsInternal)
+                ClientScript.RegisterClientScriptResource(typeof(BaseMainPage), "Nat.Web.Controls.GenerationClasses.MainScripts.js");
             if (MainPageUrlBuilder.Current.TimeoutInSQL && MainPageUrlBuilder.Current.IsDataControl)
             {
                 var url = MainPageUrlBuilder.Current.Clone();

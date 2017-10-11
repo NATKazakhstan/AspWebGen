@@ -14,6 +14,8 @@ namespace Nat.Web.Tools.Initialization
 {
     public class InitializerSection : ConfigurationSection
     {
+        private static bool? useMainPageExt;
+
         private static readonly ConfigurationPropertyCollection _properties;
         private static readonly ConfigurationProperty _propInitializerClasses;
         private static readonly ConfigurationProperty _propFilterNamesResourcesType;
@@ -21,6 +23,7 @@ namespace Nat.Web.Tools.Initialization
         private static readonly ConfigurationProperty _propExporterType;
         private static readonly ConfigurationProperty _propSiteUrl;
         private static readonly ConfigurationProperty _propSecurityRoles;
+        private static readonly ConfigurationProperty _propUseMainPageExtension;
         private static readonly ConfigurationProperty _propReportAccess;
 
         private static readonly ConfigurationProperty _propTypeOfMethodGetSubdivisionKSP;
@@ -42,6 +45,7 @@ namespace Nat.Web.Tools.Initialization
             _propExporterType = new ConfigurationProperty("excelExporterType", typeof(string), "Nat.ExportInExcel.Exporter, Nat.ExportInExcel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", ConfigurationPropertyOptions.None);
             _propSiteUrl = new ConfigurationProperty("siteUrl", typeof(string), "", ConfigurationPropertyOptions.None);
             _propSecurityRoles = new ConfigurationProperty("securityRoles", typeof(string), "", ConfigurationPropertyOptions.None);
+            _propUseMainPageExtension = new ConfigurationProperty("useMainPageExtension", typeof(bool), false, ConfigurationPropertyOptions.None);
             _propReportAccess = new ConfigurationProperty("reportAccess", typeof(string), "Nat.Web.ReportManager.WebReportManager, Nat.Web.ReportManager, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", ConfigurationPropertyOptions.None);
 
             _propTypeOfMethodGetSubdivisionKSP = new ConfigurationProperty("typeOfMethodGetSubdivisionKSP", typeof(string), "", ConfigurationPropertyOptions.None);
@@ -59,6 +63,7 @@ namespace Nat.Web.Tools.Initialization
                                   _propFilterNamesResourcesType,
                                   _propLogMonitorType,
                                   _propSecurityRoles,
+                                  _propUseMainPageExtension,
                                   _propReportAccess,
                                   _propTypeOfMethodGetSubdivisionKSP,
                                   _propTypeOfMethodEnsurePersonInfoCorrect,
@@ -69,6 +74,8 @@ namespace Nat.Web.Tools.Initialization
                                   _propExternalSystems,
                               };
         }
+
+        public static bool UseMainPageExt => useMainPageExt ?? (useMainPageExt = GetSection().UseMainPageExtension).Value;
 
         public static InitializerSection GetSection()
         {
@@ -122,6 +129,9 @@ namespace Nat.Web.Tools.Initialization
         {
             get { return (string)base[_propSecurityRoles]; }
         }
+
+        [ConfigurationProperty("useMainPageExtension", DefaultValue = false)]
+        public bool UseMainPageExtension => (bool)base[_propUseMainPageExtension];
 
         [ConfigurationProperty("reportAccess", DefaultValue = @"Nat.Web.ReportManager.WebReportManager, Nat.Web.ReportManager, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415")]
         public string ReportAccess

@@ -13,6 +13,8 @@ using Convert = System.Convert;
 
 namespace Nat.Web.Controls
 {
+    using Nat.Web.Tools.Initialization;
+
     public class MainPageUrlBuilder : ICloneable
     {
         public const string CustomParameterPrefix = "__p__";
@@ -33,7 +35,7 @@ namespace Nat.Web.Controls
 
         private static readonly Regex _regex =
             new Regex(
-                @"/(?<page>\w+?)(\.aspx|\.asmx|\.ashx|\.\w+)?/(?<type>(data|download|execute|custom|navigateto)/)?(?<usercontrol>[\w\d_]+)?(?<param1>/[\w\d_]+)?(?<param2>/[\w\d_]+)?(?<param3>/[\w\d_]+)?(?<param4>/[\w\d_]+)?(?<param5>/[\w\d_]+)?(?<query>\?.*)?",
+                @"/(?<page>\w+?)(?<pageExt>\.aspx|\.asmx|\.ashx|\.\w+)?/(?<type>(data|download|execute|custom|navigateto)/)?(?<usercontrol>[\w\d_]+)?(?<param1>/[\w\d_]+)?(?<param2>/[\w\d_]+)?(?<param3>/[\w\d_]+)?(?<param4>/[\w\d_]+)?(?<param5>/[\w\d_]+)?(?<query>\?.*)?",
                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private bool _isSelect;
@@ -111,6 +113,7 @@ namespace Nat.Web.Controls
         public string SelectedValues { get; set; }
         public bool CreateBackUrlByRequest { get; set; }
         public string Page { get; set; }
+        public string PageExt { get; set; }
         public bool RemoveQueryParameterPrefix { get; set; }
         public DateTime? HistoryOnDate { get; set; }
         public string CustomFilterClassName { get; set; }
@@ -164,6 +167,7 @@ namespace Nat.Web.Controls
                 return;
 
             Page = match.Groups["page"].Value;
+            PageExt = match.Groups["pageExt"].Value;
             if (match.Groups["type"].Success)
             {
                 if (match.Groups["type"].Value.Equals("data/"))
@@ -359,13 +363,14 @@ namespace Nat.Web.Controls
         {
             sb.Append("/");
             sb.Append(Page ?? "MainPage");
-            //sb.Append(".aspx");
+            if (InitializerSection.UseMainPageExt)
+                sb.Append(".aspx");
             if (IsDataControl) sb.Append("/data");
             if (NavigateTo) sb.Append("/navigateto");
             if (IsDownload) sb.Append("/download");
             if (IsExecute) sb.Append("/execute");
             if (IsCustomUserControl) sb.Append("/custom");
-            if (new[] { IsDataControl, IsDownload, IsExecute, NavigateTo }.Where(r => r).Count() > 1)
+            if (new[] { IsDataControl, IsDownload, IsExecute, NavigateTo }.Count(r => r) > 1)
                 throw new Exception("заданы взаимоисключающие параметры IsDataControl, IsDownload, IsExecute, NavigateTo");
 
             if (UserControl != null && !UserControl.Equals(""))

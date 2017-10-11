@@ -25,6 +25,8 @@ namespace Nat.Web.Tools.Initialization
         private static readonly ConfigurationProperty _propSecurityRoles;
         private static readonly ConfigurationProperty _propUseMainPageExtension;
         private static readonly ConfigurationProperty _propRegisterMainScripts;
+        private static readonly ConfigurationProperty _propRedirectOnSQLTimeout;
+        private static readonly ConfigurationProperty _propAddFilterInMainPage;
         private static readonly ConfigurationProperty _propReportAccess;
 
         private static readonly ConfigurationProperty _propTypeOfMethodGetSubdivisionKSP;
@@ -48,6 +50,8 @@ namespace Nat.Web.Tools.Initialization
             _propSecurityRoles = new ConfigurationProperty("securityRoles", typeof(string), "", ConfigurationPropertyOptions.None);
             _propUseMainPageExtension = new ConfigurationProperty("useMainPageExtension", typeof(bool), false, ConfigurationPropertyOptions.None);
             _propRegisterMainScripts = new ConfigurationProperty("registerMainScripts", typeof(bool), false, ConfigurationPropertyOptions.None);
+            _propRedirectOnSQLTimeout = new ConfigurationProperty("redirectOnSQLTimeout", typeof(bool), false, ConfigurationPropertyOptions.None);
+            _propAddFilterInMainPage = new ConfigurationProperty("addFilterInMainPage", typeof(bool), false, ConfigurationPropertyOptions.None);
             _propReportAccess = new ConfigurationProperty("reportAccess", typeof(string), "Nat.Web.ReportManager.WebReportManager, Nat.Web.ReportManager, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", ConfigurationPropertyOptions.None);
 
             _propTypeOfMethodGetSubdivisionKSP = new ConfigurationProperty("typeOfMethodGetSubdivisionKSP", typeof(string), "", ConfigurationPropertyOptions.None);
@@ -67,6 +71,8 @@ namespace Nat.Web.Tools.Initialization
                                   _propSecurityRoles,
                                   _propUseMainPageExtension,
                                   _propRegisterMainScripts,
+                                  _propRedirectOnSQLTimeout,
+                                  _propAddFilterInMainPage,
                                   _propReportAccess,
                                   _propTypeOfMethodGetSubdivisionKSP,
                                   _propTypeOfMethodEnsurePersonInfoCorrect,
@@ -80,6 +86,8 @@ namespace Nat.Web.Tools.Initialization
 
         public static bool UseMainPageExt => useMainPageExt ?? (useMainPageExt = GetSection().UseMainPageExtension).Value;
         internal static bool RegisterMainScriptsInternal => useMainPageExt ?? (useMainPageExt = GetSection().RegisterMainScripts).Value;
+        internal static bool AddFilterInMainPageInternal => useMainPageExt ?? (useMainPageExt = GetSection().AddFilterInMainPage).Value;
+        internal static bool RedirectOnSQLTimeoutInternal => useMainPageExt ?? (useMainPageExt = GetSection().RedirectOnSQLTimeout).Value;
 
         public static InitializerSection GetSection()
         {
@@ -139,6 +147,12 @@ namespace Nat.Web.Tools.Initialization
 
         [ConfigurationProperty("registerMainScripts", DefaultValue = false)]
         public bool RegisterMainScripts => (bool)base[_propRegisterMainScripts];
+
+        [ConfigurationProperty("redirectOnSQLTimeout", DefaultValue = false)]
+        public bool RedirectOnSQLTimeout => (bool)base[_propRedirectOnSQLTimeout];
+
+        [ConfigurationProperty("addFilterInMainPage", DefaultValue = false)]
+        public bool AddFilterInMainPage => (bool)base[_propAddFilterInMainPage];
 
         [ConfigurationProperty("reportAccess", DefaultValue = @"Nat.Web.ReportManager.WebReportManager, Nat.Web.ReportManager, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415")]
         public string ReportAccess

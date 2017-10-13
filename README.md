@@ -15,6 +15,7 @@ ASP.NET Web Form generation framework
 Справочные таблицы обычно не содержат дополнительной логики.
 
 Пример приложения: https://GitHub.com/NATKazakhstan/AspWebGenSample
+Wiki: https://github.com/NATKazakhstan/AspWebGen/wiki
 
 ## Getting Started in Visual Studio
 

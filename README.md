@@ -2,14 +2,14 @@
 ASP.NET Web Form generation framework
 
 ## Введение
-Данный проект предназначен для упрощения разработки ПО, при иcпользовании ASP.NET WebForms, MS SQL и компонент Ext.Net.
+Данный проект предназначен для упрощения разработки ПО, при использовании ASP.NET WebForms, MS SQL и компонент Ext.Net.
 Разработан и используется на нескольких проектах компании.
 
 Выполняется проектирование БД в PowerDesigner, на выходе получаются скрипты для БД и генерируются исходные коды 
 для работы с таблицами и представлениями. 
 Формируются разные поля в соответствии с типами колонок и ссылками на другие таблицы/представления.
 
-Для PowerDesigner разработано расширение, которое добавляет таблицам, представлениям, колонкам и другим объектам 
+Для PowerDesigner 16.5 разработано расширение, которое добавляет таблицам, представлениям, колонкам и другим объектам 
 дополнительные атрибуты, на основании этого генерируются исходные коды.
 Для реализации логики используются partial методы, внедренные в нужные места генерируемого кода.
 Справочные таблицы обычно не содержат дополнительной логики.
@@ -20,18 +20,30 @@ Wiki: https://github.com/NATKazakhstan/AspWebGen/wiki
 
 ## Getting Started in Visual Studio
 
-Создать проект "Веб приложение ASP.NET (.NET Framework)" - .NET Framework 4.0 или выше. 
+Необходимые шаги:
+* Установить Visual Studio 2017 с компонентами "ASP.NET и разработка Web-приложений", "Инструменты LINQ to SQL" (вкладка отдельные компоненты)
+* Клонировать репозиторий [AspWebGen](https://github.com/NATKazakhstan/AspWebGen.git) в отдельную папку решения, например, AspWebGen.
+* Скомпилировать Core.sln во Visual Studio 2017.
+* Скомпилировать Tools.sln во Visual Studio 2017.
+* Создать проект "Веб приложение ASP.NET (.NET Framework)" - .NET Framework 4.0 или выше.
 
-Добавить ссылки на проекты или скомпилированные библиотеки AspWebGen. 
-Добавить ссылку на Microsoft.JScript. 
-Установить nuget пакет Ext.NET 2.5.3.1 (совместимость с более старшей версией 3, 4 не производилась). 
-Добавить файл "DB.dbml" - модель LINQ to SQL.
-Скопировать из примера приложения файлы EmptyPage.aspx, MainPage.aspx, IFrameSite.Master, 
-AutoCompleteHandler.ashx, DataSourceViewHandler.ashx, LinqToJavaScriptHandler.ashx.
-Скопировать настройки файла Web.Config из примера, 
-разделы: configSections, assemblyBinding, Nat.SqlDbInitializer, Nat.Initializer, Nat.WebReportManager.
+В созданном проекте:
+* Добавить ссылки на все проекты из Core.sln.
+* Добавить ссылку на Microsoft.JScript. 
+* Установить nuget пакет Ext.NET 2.5.3.1 (совместимость с более старшей версией 3, 4 не производилась). 
+* Добавить модель LINQ to SQL с названием файла "DB.dbml".
+* Скопировать из [примера приложения](https://GitHub.com/NATKazakhstan/AspWebGenSample) файлы EmptyPage.aspx, MainPage.aspx, IFrameSite.Master, AutoCompleteHandler.ashx, DataSourceViewHandler.ashx, LinqToJavaScriptHandler.ashx.
+* Скопировать из примера приложения настройки файла Web.Config, разделы: configSections, assemblyBinding, Nat.SqlDbInitializer, Nat.Initializer, Nat.WebReportManager.
 
-После генерации исходных кодов из PD включить новые файлы в проект. 
+После генерации исходных кодов из PowerDesigner включить новые файлы в проект, за исключением файлов из папок с названием, начинающимся с символа "_", они являются шаблонами. 
+
+Для использования файлов с расширением ".SDBML", которые обновляют модель данных DB.dbml в соответствии с генерированной моделью из PowerDesigner:
+* В контекстном меню нажать "открыть с помощью"
+* В открывшемся окне нажать "добавить"
+* Указать программу AspWebGen\BuildTools\SyncDbmlByScript\SyncDbmlByScript.exe, нажать ОК
+* Нажать "По умолчанию", ОК
+
+После внесения изменений в модель и генерации исходных кодов для актуализации модели данных DB.dbml достаточно запустить файл с расширением ".SDBML" либо в папке с проектом на все таблицы/представления, либо с именем нужной таблицы/представления.
 
 ## Getting Started in PowerDesigner (PD)
 Расширения из директории "Extended Model Definitions" для PowerDesigner необходимо скопировать в 

@@ -46,22 +46,26 @@ Wiki: https://github.com/NATKazakhstan/AspWebGen/wiki
 После внесения изменений в модель и генерации исходных кодов для актуализации модели данных DB.dbml достаточно запустить файл с расширением ".SDBML" либо в папке с проектом на все таблицы/представления, либо с именем нужной таблицы/представления.
 
 ## Getting Started in PowerDesigner (PD)
-Расширения из директории "Extended Model Definitions" для PowerDesigner необходимо скопировать в 
+
+Необходимые шаги:
+* Установить PowerDesigner 16.5
+* Добавить расширения. Скопировать из директории репозитория "Extended Model Definitions" в установленную папку PD 
 "C:\Program Files (x86)\Sybase\PowerDesigner 16\Resource Files\Extended Model Definitions\" 
 (предварительно PD закрыть, запускать от имени администратора)
-
-После можно создать модель "Physical Data Model" (PDM) и добавить расширение "UserControlsGenerator" - 
+* Создать модель "Physical Data Model" (PDM) и добавить расширение "UserControlsGenerator" - 
 в меню Model/Extensions нажать "Attach an Extension", поставить галочку для "UserControlsGenerator". 
-Создать Package, указать Code и Comment, в нем создать таблицу, указать Code и Comment.
-Добавить необходимые колонки с указанием Code, Comment, DataType, Mandatory, ...
-У таблицы на вкладке "Генерация UserControls" выбрать одно из обязательных полей в атрибуте NameColumn.
-
-Обязательно добавить колонку RowVersion, тип данных timestamp, 
+* Создать Package, указать Code и Comment
+* В нем создать таблицу, указать Code и Comment.
+* Добавить необходимые колонки с указанием Code, Comment, DataType, Mandatory, ...
+* У таблицы на вкладке "Генерация UserControls" выбрать одно из обязательных полей в атрибуте NameColumn.
+* Обязательно добавить колонку RowVersion, тип данных timestamp, 
 на вкладке "Генерация UserControls" убрать галочки GridViewVisible, DetailsViewVisible, FilterVisible, Логирование поля.
-
-У таблицы обычно и по умолчанию используется колонка id - идентификатор, инкрементируется базой данных, т.е. identity, и обычно не отображается.
+* У таблицы обычно и по умолчанию используется колонка id - идентификатор, инкрементируется базой данных, т.е. identity, и обычно не отображается, т.е. сняты галочки GridViewVisible, DetailsViewVisible, FilterVisible.
 
 Code используется как название поля, проекта, класса и др. Comment и Name - названия для пользователей.
 
-Для генерации можно пользоваться стандартным вызовом из меню - Tools/Extended Generation, выбрать Package, указать путь к папке решения и OK.
-Или же в контекстном меню у таблицы или Package "Генерировать UserControls", указать путь к папке решения и ОК
+Генерировать исходные коды можно несколькими путями:
+* Можно пользоваться стандартным вызовом из меню - Tools/Extended Generation, выбрать нужный пакет (Package) или таблицу/представление, указать путь к папке решения и OK.
+* Или же в контекстном меню у таблицы/представления или пакета "Генерировать UserControls", указать путь к папке решения и ОК.
+
+Пример созданой модели: https://GitHub.com/NATKazakhstan/AspWebGenSample

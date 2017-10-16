@@ -247,7 +247,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 
         protected abstract IEnumerable<FilterHtmlGenerator.Filter> GetAllFilters();
 
-        public void SetFiltersByStorageValues(StorageValues storageValues, MainPageUrlBuilder urlBuilder)
+        public virtual void SetFiltersByStorageValues(StorageValues storageValues, MainPageUrlBuilder urlBuilder)
         {
             var filterValues = GetFilterValues();
             foreach (var item in storageValues.GetStorageNames())

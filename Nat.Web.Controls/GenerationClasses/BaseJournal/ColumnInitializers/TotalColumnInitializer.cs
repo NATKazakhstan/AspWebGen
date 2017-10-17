@@ -43,6 +43,7 @@
             Initialize();
             customComputeAggregate = compute;
             totalColumn.GetValueHandler = GetCustomValueAggregate;
+            totalColumn.GetTotalNameHandler = context => string.Format(totalColumn.Format, GetCustomValueAggregate(context));
             this.getSumValues = getSumValues ?? new Func<RenderContext, BaseColumn, decimal>[columns.Length];
         }
 

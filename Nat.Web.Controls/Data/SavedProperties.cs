@@ -225,7 +225,10 @@ namespace Nat.Web.Controls.Data
 
         public static string GetJournalTypeName(BaseJournalUserControl journal)
         {
-            return journal.GetType().BaseType.FullName + "," + journal.GetType().BaseType.Assembly.FullName;
+            var type = journal.GetType();
+            if (type.BaseType?.IsGenericType ?? true)
+                return type.FullName + "," + type.Assembly.FullName;
+            return type.BaseType.FullName + "," + type.BaseType.Assembly.FullName;
         }
 
         public void SetToJournal(BaseJournalUserControl journal)

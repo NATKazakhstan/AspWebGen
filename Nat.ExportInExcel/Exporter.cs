@@ -97,8 +97,11 @@
         }
 
         public static Stream GetExcel<TDataContext, TFilterControl, TKey, TTable, TDataSource, TRow, TJournal, TNavigatorControl, TNavigatorValues, TFilter>(
-            BaseJournalUserControl<TDataContext, TFilterControl, TKey, TTable, TDataSource, TRow, TJournal, TNavigatorControl, TNavigatorValues, TFilter> journalControl,
-            RvsSavedProperties properties, ILogMonitor logMonitor, bool checkPermit)
+            BaseJournalUserControl<TDataContext, TFilterControl, TKey, TTable, TDataSource, TRow, TJournal, TNavigatorControl, TNavigatorValues, TFilter>
+                journalControl,
+            RvsSavedProperties properties,
+            ILogMonitor logMonitor,
+            bool checkPermit)
 
             where TDataContext : DataContext, new()
             where TKey : struct
@@ -111,14 +114,22 @@
             where TNavigatorValues : BaseNavigatorValues, new()
             where TFilter : BaseFilter<TKey, TTable, TDataContext>, new()
         {
-            var identity = Thread.CurrentPrincipal.Identity as WindowsIdentity;
-            var sid = identity == null ? Thread.CurrentPrincipal.Identity.Name : identity.User.Value;
-            logMonitor.Log(
-                new LogMessageEntry(
-                    sid,
-                    journalControl.ExportLog,
-                    properties.NameRu,
-                    properties));
+            Stream stream;
+
+            journalControl.LogMonitor = logMonitor;
+            if (checkPermit) journalControl.CheckExportPermit();
+            if ("xml".Equals(properties.Format, StringComparison.OrdinalIgnoreCase))
+            {
+                var exporterXml = new ExporterXml<TDataContext, TFilterControl, TKey, TTable, TDataSource, TRow, TJournal,
+                    TNavigatorControl, TNavigatorValues, TFilter> { LogMonitor = logMonitor };
+                stream = exporterXml.GetExcel(journalControl, properties);
+            }
+            else
+            {
+                var exporterXslx = new ExporterXslx<TDataContext, TFilterControl, TKey, TTable, TDataSource, TRow, TJournal,
+                    TNavigatorControl, TNavigatorValues, TFilter> { LogMonitor = logMonitor };
+                stream = exporterXslx.GetExcel(journalControl, properties);
+            }
 
             DBDataContext.AddViewReports(
                 User.GetSID(),
@@ -130,37 +141,14 @@
                 true,
                 BuildManager.GetType(properties.ReportPluginName, true, true));
 
-            if ("xml".Equals(properties.Format, StringComparison.OrdinalIgnoreCase))
-            {
-                var exporterXml = new ExporterXml<TDataContext, TFilterControl, TKey, TTable, TDataSource, TRow, TJournal,
-                    TNavigatorControl, TNavigatorValues, TFilter>();
-                journalControl.LogMonitor = logMonitor;
-                if (checkPermit) journalControl.CheckExportPermit();
-                exporterXml.LogMonitor = logMonitor;
-                var stream = exporterXml.GetExcel(journalControl, properties);
-                /*logMonitor.Log(
-                    new LogMessageEntry(
-                        sid,
-                        journalControl.ExportLog,
-                        properties.NameRu,
-                        RvsSavedProperties.GetFromJournal(journalControl)));*/
-                
-                return stream;
-            }
-
-            var exporterXslx = new ExporterXslx<TDataContext, TFilterControl, TKey, TTable, TDataSource, TRow, TJournal,
-                TNavigatorControl, TNavigatorValues, TFilter>();
-            journalControl.LogMonitor = logMonitor;
-            if (checkPermit) journalControl.CheckExportPermit();
-            exporterXslx.LogMonitor = logMonitor;
-            var excel = exporterXslx.GetExcel(journalControl, properties);
-            /*logMonitor.Log(
+            logMonitor.Log(
                 new LogMessageEntry(
-                    sid,
+                    User.GetSID(),
                     journalControl.ExportLog,
                     properties.NameRu,
-                    RvsSavedProperties.GetFromJournal(journalControl)));*/
-            return excel;
+                    journalControl.OnExportNewSavedProperties ? RvsSavedProperties.GetFromJournal(journalControl) : properties));
+
+            return stream;
         }
 
         public string GetFileNameExtension(string format)

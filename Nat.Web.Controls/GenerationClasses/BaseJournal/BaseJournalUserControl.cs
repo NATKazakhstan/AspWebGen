@@ -37,6 +37,8 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
         public abstract BaseJournalControl BaseJournal { get; }
         public abstract BaseFilter BaseFilter { get; }
 
+        public virtual bool OnExportNewSavedProperties { get; } = false;
+
         public ScriptManager ScriptManager 
         {
             get { return _scriptManager ?? (_scriptManager = ScriptManager.GetCurrent(Page)); } 

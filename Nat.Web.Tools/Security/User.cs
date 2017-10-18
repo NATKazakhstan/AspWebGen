@@ -166,7 +166,12 @@
         {
             var value = GetPersonInfo();
             if (value == null)
+            {
+                if (AccessDeniedException.IsInService())
+                    throw new AccessDeniedException("User.GetPersonInfoRequired() is null");
                 HttpContext.Current.Response.Redirect("/MainPage.aspx/data/NoPermit");
+			}
+
             return value;
         }
 
@@ -174,7 +179,12 @@
         {
             var value = GetPersonInfo<TResult>(GetSID());
             if (value == null)
+            {
+                if (AccessDeniedException.IsInService())
+                    throw new AccessDeniedException("User.GetPersonInfoRequired() is null");
                 HttpContext.Current.Response.Redirect("/MainPage.aspx/data/NoPermit");
+			}
+
             return value;
         }
 

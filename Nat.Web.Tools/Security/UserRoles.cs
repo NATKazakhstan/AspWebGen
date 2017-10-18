@@ -106,6 +106,10 @@
         public static void UserDoesNotHavePermitions(string errorMassage)
         {
             var config = InitializerSection.GetSection();
+
+            if (AccessDeniedException.IsInService())
+                throw new AccessDeniedException(errorMassage);
+
             HttpContext.Current.Response.Redirect(config.DoesNotHavePermitionsPage + "?ErrorMessage=" + HttpUtility.UrlEncode(errorMassage));
         }
 

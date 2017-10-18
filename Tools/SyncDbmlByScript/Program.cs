@@ -67,6 +67,13 @@ namespace SyncDbmlByScript
                         dbmlFile = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(scriptFile), "../../DB.dbml"));
                 }
             }
+
+            if (string.IsNullOrEmpty(dbmlFile))
+            {
+                dbmlFile = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n"
+                           + "<Database Class=\"DBDataContext\" xmlns=\"http://schemas.microsoft.com/linqtosql/dbml/2007\"></Database>";
+            }
+
             var doc = XDocument.Load(dbmlFile);
             using (var stream = new FileStream(scriptFile, FileMode.Open, FileAccess.Read))
                 scripts = (ScriptList)ser.Deserialize(stream);

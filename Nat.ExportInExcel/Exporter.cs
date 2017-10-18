@@ -117,6 +117,7 @@
             Stream stream;
 
             journalControl.LogMonitor = logMonitor;
+            journalControl.Url = MainPageUrlBuilder.Current.Clone();
             if (checkPermit) journalControl.CheckExportPermit();
             if ("xml".Equals(properties.Format, StringComparison.OrdinalIgnoreCase))
             {

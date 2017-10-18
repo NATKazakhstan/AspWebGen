@@ -158,6 +158,7 @@
     </Compile>
     <Compile Include="MailMessageContent\ModuleConfiguration.cs" />
     <Compile Include="Modules\UnhandledExceptionModule.cs" />
+    <Compile Include="Security\AccessDeniedException.cs" />
     <Compile Include="Security\DB.cs">
       <DependentUpon>DB.dbml</DependentUpon>
     </Compile>

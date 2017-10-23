@@ -103,8 +103,19 @@
                 url.QueryParameters[referenceName + parameter.Key] = parameter.Value;
             }
 
-            if (url.QueryParameters.ContainsKey("ref" + fromTableName))
-                url.QueryParameters[referenceName + "id"] = url.QueryParameters["ref" + fromTableName];
+            if (url.QueryParameters.ContainsKey(MainPageUrlBuilder.ReferencIDPrefix + fromTableName))
+                url.QueryParameters[referenceName + "id"] = url.QueryParameters[MainPageUrlBuilder.ReferencIDPrefix + fromTableName];
+        }
+
+        public static void ChangeUrlToChild(MainPageUrlBuilder url, string fromTableName, string toTable, string toID, string referenceName)
+        {
+            ChangeUrlToChild(url, referenceName, fromTableName);
+            if (!string.IsNullOrEmpty(toID))
+                url.QueryParameters[MainPageUrlBuilder.ReferencIDPrefix + toTable] = toID;
+            url.UserControl = toTable + MainPageUrlBuilder.UserControlTypeJournal;
+            url.IsDataControl = true;
+            url.IsNew = false;
+            url.IsRead = false;
         }
 
         public static void ChangeUrlToParent(MainPageUrlBuilder url, string referenceName, string toTableName)

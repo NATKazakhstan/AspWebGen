@@ -15,6 +15,10 @@ function CreateFixedHeader(table, fixedHeader, rowsCount, colsCount) {
         else
             i++;
     }
+
+    if (!$('#ctl00_PlaceHolderMain_item_Journal').is(":visible"))
+        return;
+
     var rowsTable = document.createElement("table");
     var colsTable = document.createElement("table");
     var crosTable = document.createElement("table");

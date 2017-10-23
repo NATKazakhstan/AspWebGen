@@ -69,7 +69,7 @@ namespace Nat.Web.Controls.GenerationClasses
 
             if (IsPostBack)
                 PrepareSettings();
-            if (!Journal.DetailsRender && Journal.DrawPanelVisible)
+            if (!Journal.DetailsRender && Journal.DrawPanelVisible && !ScriptManager.IsInAsyncPostBack)
             {
                 var extender = new CollapsiblePanelExtender
                                    {
@@ -150,11 +150,7 @@ namespace Nat.Web.Controls.GenerationClasses
                 if (_fixedColumnsCount != null)
                     FixedColumnsCount = _fixedColumnsCount.Value;
 
-                var startupScript = string.Format("$(function() {{ CreateFixedHeader($get('{0}'), {1}, {2}, {3}); }});",
-                                                  Journal.ClientID,
-                                                  FixedHeader.ToString().ToLower(),
-                                                  FixedRowsCount,
-                                                  FixedColumnsCount);
+                var startupScript = $"$(function() {{ {GetScriptToInitialFixedHeader()} }});";
                 if (HasAjax)
                     ScriptManager.RegisterStartupScript(this, typeof (SelectingColumn),
                                                         "initFixedHeader", startupScript, true);
@@ -163,6 +159,11 @@ namespace Nat.Web.Controls.GenerationClasses
                                                             "initFixedHeader", startupScript, true);
             }
             InitializeControls();
+        }
+
+        public string GetScriptToInitialFixedHeader()
+        {
+            return $"CreateFixedHeader($get('{Journal.ClientID}'), {FixedHeader.ToString().ToLower()}, {FixedRowsCount}, {FixedColumnsCount});";
         }
 
         public void PrepareSettings()

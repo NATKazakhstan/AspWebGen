@@ -8,6 +8,8 @@ using Nat.Web.Controls.Properties;
 
 namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 {
+    using Nat.Web.Tools;
+
     public class BaseGroupingControl : WebControl
     {
         public override bool EnableViewState
@@ -24,6 +26,9 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
     public class BaseGroupingControl<TRow> : BaseGroupingControl
         where TRow : BaseRow
     {
+        private ScriptManager _scriptManager;
+        public ScriptManager ScriptManager => _scriptManager ?? (_scriptManager = ScriptManager.GetCurrent(Page));
+
         public BaseJournalControl<TRow> Journal { get; set; }
         protected BaseJournalHeaderControl<TRow> InnerHeader { get { return Journal.InnerHeader; } }
         protected List<GroupColumn> GroupColumns { get { return Journal.GroupColumns; } }
@@ -312,7 +317,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
-            if (!Journal.DetailsRender && Journal.GroupPanelVisible && !HideGroupControls)
+            if (!Journal.DetailsRender && Journal.GroupPanelVisible && !HideGroupControls && !ScriptManager.IsInAsyncPostBack)
             {
                 var extender = new CollapsiblePanelExtender
                                    {

@@ -60,6 +60,11 @@ namespace Nat.Web.Controls.GenerationClasses
             sb.AppendFormat("<a href=\"{0}\" title=\"{1}\" class=\"linkAsButton\">{2}</a>", url, HttpUtility.HtmlAttributeEncode(toolTip), text);
         }
 
+        public static void AddHyperLinkAsLink(this StringBuilder sb, string url, string text, string toolTip)
+        {
+            sb.AppendFormat("<a href=\"{0}\" title=\"{1}\">{2}</a>", url, HttpUtility.HtmlAttributeEncode(toolTip), text);
+        }
+
 
         public static void AddHyperLink(this StringBuilder sb, Action<StringBuilder> writeUrl, string text, string toolTip)
         {

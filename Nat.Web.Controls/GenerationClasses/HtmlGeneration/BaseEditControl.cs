@@ -19,6 +19,9 @@ namespace Nat.Web.Controls.GenerationClasses
     {
         private bool _inited;
 
+        private string _uniqueID;
+        private string _clientID;
+
         protected BaseEditControl()
         {
             ValidatorProperties = new List<ValidatorProperties>();
@@ -27,14 +30,14 @@ namespace Nat.Web.Controls.GenerationClasses
 
         string IRenderComponent.ClientID
         {
-            get { return ClientID; }
-            set { }
+            get => _clientID ?? ClientID;
+            set => _clientID = value;
         }
 
         string IRenderComponent.UniqueID
         {
-            get { return UniqueID; }
-            set { }
+            get => _uniqueID ?? UniqueID;
+            set => _uniqueID = value;
         }
 
         public string ValidationGroup { get; set; }

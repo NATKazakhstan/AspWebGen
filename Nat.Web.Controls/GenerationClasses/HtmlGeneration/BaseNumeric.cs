@@ -174,6 +174,11 @@ namespace Nat.Web.Controls.GenerationClasses
             writer.RenderEndTag();
         }
 
+        public override void Render(HtmlTextWriter writer, ExtenderAjaxControl extenderAjaxControl)
+        {
+            RenderContents(writer);
+        }
+
         public bool LoadPostData(string postDataKey, NameValueCollection postCollection)
         {
             var valueD = ValueD;

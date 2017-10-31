@@ -24,6 +24,7 @@
         private const string ConstraintGroup = "Constraint";
         private static readonly Dictionary<string, string> ProjectCodesCache = new Dictionary<string, string>();
         private static readonly Dictionary<string, string> ProjectHeadersCache = new Dictionary<string, string>();
+        private static readonly Dictionary<string, string> ProjectFieldHeadersCache = new Dictionary<string, string>();
 
         private static readonly Regex DeleteRegex = new Regex(@"DELETE.*?REFERENCE.*?""(?<Reference>.*?)"".*?""(?<Catalog>.*?)"".*?""(\w+\.)?(?<Table>.*?)"".*?'(?<Column>.*?)'", RegexOptions.Compiled);
         private static readonly Regex ConstraintRegex = new Regex(@"CHECK constraint.*?""(?<Constraint>.*?)"".*?""(?<Catalog>.*?)"".*?""(\w+\.)?(?<Table>.*?)""", RegexOptions.Compiled);
@@ -297,8 +298,9 @@
 
         public static string GetTableHeader(string projectCode, string tableName)
         {
-            if (ProjectHeadersCache.ContainsKey(tableName))
-                return ProjectHeadersCache[tableName];
+            var cacheKey = tableName + ":" + LocalizationHelper.IsCultureKZ;
+            if (ProjectHeadersCache.ContainsKey(cacheKey))
+                return ProjectHeadersCache[cacheKey];
 
             string header = null;
             var type = BuildManager.GetType(
@@ -331,7 +333,34 @@
             if (string.IsNullOrEmpty(header))
                 header = tableName;
 
-            return ProjectHeadersCache[tableName] = header;
+            return ProjectHeadersCache[cacheKey] = header;
+        }
+        public static string GetTableFieldHeader(string projectCode, string tableName, string fieldName)
+        {
+            var cacheKey = $"{tableName}.{fieldName}:{LocalizationHelper.IsCultureKZ}";
+            if (ProjectFieldHeadersCache.ContainsKey(cacheKey))
+                return ProjectFieldHeadersCache[cacheKey];
+
+            string header = null;
+            var type = BuildManager.GetType(
+                string.Format("{0}Resources, {1}, Version=1.0.0.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a", tableName, projectCode),
+                false,
+                true);
+
+            if (type != null)
+            {
+                var descriptor = TypeDescriptor.GetProperties(type);
+                var property = descriptor.Find(fieldName + "__Header", false);
+
+                // ReSharper disable once AssignNullToNotNullAttribute
+                if (property != null)
+                    header = (string)property.GetValue(null);
+            }
+            
+            if (string.IsNullOrEmpty(header))
+                header = tableName + "." + fieldName;
+
+            return ProjectFieldHeadersCache[cacheKey] = header;
         }
 
         private List<long> GetPrimaryKeys(string tableName, string columnName, long id)

@@ -46,6 +46,8 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 
         public BaseJournalControl<TRow> Journal { get; set; }
 
+        protected virtual DataContext DataContext => Journal.DataContext;
+
         protected virtual bool CacheGroupValuesForRow
         {
             get { return false; }
@@ -92,7 +94,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
         public virtual IQueryable<TResult> GetQueryOfData<TDataContext, TResult>(TRow row, TDataContext dataContext)
           where TDataContext : DataContext
         {
-            var provider = Journal.DataContext.GetTable(CrossTableType).Provider;
+            var provider = DataContext.GetTable(CrossTableType).Provider;
             var dataExp = GetDataExpression<TDataContext, TResult>();
             var rowExp = Expression.Constant(row);
             var dbExp = Expression.Constant(dataContext);
@@ -142,7 +144,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 #if DEBUG
             HttpContext.Current.Trace.WriteExt("LoadData", "BaseJournalCrossTable.GetAllGroupData.Begin");
 #endif
-            var db = (TDataContext)Journal.DataContext;
+            var db = (TDataContext)DataContext;
             IQueryable<TAggregateRow> data;
             if (CacheGroupValuesForRow && context?.DataRow != null)
                 data = GetQueryOfData<TDataContext, TAggregateRow>(CurrentRow, db);
@@ -606,7 +608,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
         public override void GetValues(TRow row)
         {
             if (FilledData.ContainsKey(row.Value)) return;
-            var db = (TDataContext)Journal.DataContext;
+            var db = (TDataContext)DataContext;
             var data = GetQueryOfData<TDataContext, TAggregateRow>(row, db);
             var groupBy = GetGroupBy();
             if (string.IsNullOrEmpty(groupBy))

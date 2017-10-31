@@ -2750,3 +2750,36 @@ function ValidatorGetValueCustom(val) {
 
     return '';
 }
+
+function ShowHiddenEditor() {
+    var c = $(this).hasClass('nat-hideEditorDIV') ? $(this) : $(this).closest('.nat-hideEditorDIV');
+    setTimeout(function() {
+            c.find("> div").show();
+            c.find("> a").hide();
+            c.find("> div input:visible").focus();
+        },
+        1);
+    return false;
+}
+
+function HideHiddenEditor() {
+    var c = $(this).closest('.nat-hideEditorDIV');
+    var value = $(this).val();
+
+    setTimeout(function() {
+            if (value === '' || value == null)
+                c.find("> a").html('&nbsp;&nbsp;&nbsp;&nbsp;');
+            else
+                c.find("> a").text(value);
+            c.find("> div").hide();
+            c.find("> a").show();
+        },
+        5);
+    return false;
+}
+
+$(function() {
+    $('.nat-hideEditorDIV').click(ShowHiddenEditor);
+    $('.nat-hideEditorDIV > a').focus(ShowHiddenEditor);
+    $('.nat-hideEditorDIV > div input').blur(HideHiddenEditor);
+});

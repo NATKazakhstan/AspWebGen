@@ -62,9 +62,11 @@ namespace Nat.Web.Controls.GenerationClasses
 
         public override string Text
         {
-            get { return ValueD == null ? null : string.Format(Format, ValueD); }
+            get { return ValueD == null ? string.Empty : string.Format(GetFormat(), ValueD); }
             set {  }
         }
+
+        public bool HideEditor { get; set; }
 
         protected override void InitValidatorProperties()
         {
@@ -136,6 +138,22 @@ namespace Nat.Web.Controls.GenerationClasses
 
         protected override void RenderContents(HtmlTextWriter writer)
         {
+            if (HideEditor)
+            {
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "nat-hideEditorDIV");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+
+                writer.AddAttribute(HtmlTextWriterAttribute.Href, "javascript: void(0)");
+                writer.AddAttribute(HtmlTextWriterAttribute.Title, Resources.SEditText);
+                writer.AddStyleAttribute("min-width", Width.ToString());
+                writer.RenderBeginTag(HtmlTextWriterTag.A);
+                writer.Write(string.IsNullOrEmpty(Text) ? "&nbsp;&nbsp;&nbsp;&nbsp;" : Text);
+                writer.RenderEndTag();
+
+                writer.AddStyleAttribute(HtmlTextWriterStyle.Display, "none");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+            }
+
             string uniqueID = ((IRenderComponent)this).UniqueID;
             string clientID = ((IRenderComponent)this).ClientID;
             if (!string.IsNullOrEmpty(uniqueID)) writer.AddAttribute(HtmlTextWriterAttribute.Name, uniqueID);
@@ -151,27 +169,35 @@ namespace Nat.Web.Controls.GenerationClasses
                 writer.AddAttribute(HtmlTextWriterAttribute.Maxlength,
                                     (Length + 1 + (Precision == 0 ? 0 : 1)).ToString());
             writer.AddAttribute(HtmlTextWriterAttribute.Type, "text");
-            if (ValueD == null)
-                writer.AddAttribute(HtmlTextWriterAttribute.Value, (Value ?? "").ToString());
-            else if (string.IsNullOrEmpty(Format))
-            {
-                var format = Length == 0 ? "{0" : "{0:";
-                for (int i = 0; i < Length; i++)
-                {
-                    if (Length > Precision)
-                        format += "#";
-                    else if (Length == Precision)
-                        format += ".#";
-                    else
-                        format += "#";
-                }
-                format += "}";
-                writer.AddAttribute(HtmlTextWriterAttribute.Value, string.Format(format, ValueD));
-            }
-            else
-                writer.AddAttribute(HtmlTextWriterAttribute.Value, string.Format(Format, ValueD));
+            writer.AddAttribute(HtmlTextWriterAttribute.Value, Text);
             writer.RenderBeginTag(HtmlTextWriterTag.Input);
             writer.RenderEndTag();
+
+
+            if (HideEditor)
+            {
+                writer.RenderEndTag();
+                writer.RenderEndTag();
+            }
+        }
+
+        private string GetFormat()
+        {
+            if (!string.IsNullOrEmpty(Format))
+                return Format;
+
+            var format = Length == 0 ? "{0" : "{0:";
+            for (int i = 0; i < Length; i++)
+            {
+                if (Length > Precision)
+                    format += "#";
+                else if (Length == Precision)
+                    format += ".#";
+                else
+                    format += "#";
+            }
+            format += "}";
+            return format;
         }
 
         public override void Render(HtmlTextWriter writer, ExtenderAjaxControl extenderAjaxControl)

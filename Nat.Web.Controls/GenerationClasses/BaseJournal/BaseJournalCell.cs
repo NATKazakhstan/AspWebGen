@@ -190,12 +190,12 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                 writer.AddAttribute(HtmlTextWriterAttribute.Align, "center");
                 writer.AddAttribute(HtmlTextWriterAttribute.Valign, "center");
             }
-            else if (!IsEmpty)
+            else
             {
-                var rowProps = Row.RowKey != null && Row.JournalControl.RowsPropertiesDic.ContainsKey(Row.RowKey)
+                var rowProps = Row?.RowKey != null && Row.JournalControl.RowsPropertiesDic.ContainsKey(Row.RowKey)
                                 ? Row.JournalControl.RowsPropertiesDic[Row.RowKey]
                                 : null;
-                if (rowProps != null && rowProps.HAligment != null)
+                if (rowProps?.HAligment != null)
                     writer.AddStyleAttribute(HtmlTextWriterStyle.TextAlign, rowProps.HAligment.ToString().ToLower());
                 else if (Column.ColumnType == ColumnType.Numeric && (Row == null || !Row.JournalControl.DetailsRender))
                     writer.AddStyleAttribute(HtmlTextWriterStyle.TextAlign, "center");
@@ -206,7 +206,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
             }
             RenderCellProperties(writer);
             writer.RenderBeginTag(HtmlTextWriterTag.Td);
-            if (!IsEmpty)
+            if (!IsEmpty || RenderContext.AllowEdit && RenderContext.Journal.AllowEditEmptyCell)
             {
                 if ((Column.GroupType & GroupType.Left) != GroupType.Left)
                 {

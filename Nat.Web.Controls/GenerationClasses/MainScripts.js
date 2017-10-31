@@ -2768,7 +2768,7 @@ function HideHiddenEditor() {
 
     setTimeout(function() {
             if (value === '' || value == null)
-                c.find("> a").html('&nbsp;&nbsp;&nbsp;&nbsp;');
+                c.find("> a").text('');
             else
                 c.find("> a").text(value);
             c.find("> div").hide();

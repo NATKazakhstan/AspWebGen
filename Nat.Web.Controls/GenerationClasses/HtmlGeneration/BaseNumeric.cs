@@ -147,7 +147,7 @@ namespace Nat.Web.Controls.GenerationClasses
                 writer.AddAttribute(HtmlTextWriterAttribute.Title, Resources.SEditText);
                 writer.AddStyleAttribute("min-width", Width.ToString());
                 writer.RenderBeginTag(HtmlTextWriterTag.A);
-                writer.Write(string.IsNullOrEmpty(Text) ? "&nbsp;&nbsp;&nbsp;&nbsp;" : Text);
+                writer.Write(Text);
                 writer.RenderEndTag();
 
                 writer.AddStyleAttribute(HtmlTextWriterStyle.Display, "none");

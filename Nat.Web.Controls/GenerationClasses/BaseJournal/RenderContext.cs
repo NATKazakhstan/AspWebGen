@@ -5,6 +5,8 @@ using Nat.Web.Controls.GenerationClasses.HierarchyFields;
 
 namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 {
+    using System;
+
     using Nat.Web.Tools.Export.Formatting;
 
     public class RenderContext
@@ -215,6 +217,23 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
         public object GetValue()
         {
             return Column.GetValue(this);
+        }
+
+        public RenderContext GetRenderContextFor(BaseColumn column)
+        {
+            string columnName;
+            if (string.IsNullOrEmpty(CrossColumnId))
+                columnName = column.ColumnName;
+            else
+            {
+                var length = ColumnHierarchy.ColumnKey.Length - Column.ColumnName.Length - CrossColumnId.Length - 1;
+                columnName = ColumnHierarchy.ColumnKey.Substring(0, length) + column.ColumnName + "_" + CrossColumnId;
+            }
+
+            if (!OtherColumns.ContainsKey(columnName))
+                throw new ArgumentException("RenderContext does not contain column with name " + columnName);
+
+            return OtherColumns[columnName];
         }
     }
 }

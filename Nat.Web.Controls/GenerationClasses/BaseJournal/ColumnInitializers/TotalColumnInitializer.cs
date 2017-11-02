@@ -38,6 +38,11 @@
             totalColumn.GetNameHandler = GetName;
         }
 
+        public void InitializeCustomAggregate(Func<decimal[], decimal> compute)
+        {
+            InitializeCustomAggregate(compute, null);
+        }
+
         public void InitializeCustomAggregate(Func<decimal[], decimal> compute, Func<RenderContext, BaseColumn, decimal>[] getSumValues)
         {
             Initialize();

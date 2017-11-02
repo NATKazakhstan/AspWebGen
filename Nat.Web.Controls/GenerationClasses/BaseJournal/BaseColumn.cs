@@ -382,9 +382,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 
         public virtual object GetValueByContext(RenderContext context)
         {
-            if (!context.OtherColumns.ContainsKey(ColumnName))
-                throw new ArgumentException("RenderContext does not contain column with name " + ColumnName);
-            return GetValue(context.OtherColumns[ColumnName]);
+            return GetValue(context.GetRenderContextFor(this));
         }
 
         public virtual object GetValue(RenderContext context)
@@ -653,7 +651,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                         this.DependedColumn(renderContext, column);
                     }
                 }
-                else
+                else if (context.OtherColumns.ContainsKey(column.ColumnName))
                 {
                     var renderContext = context.OtherColumns[column.ColumnName];
                     this.DependedColumn(renderContext, column);

@@ -96,7 +96,7 @@
             get { return !isStartLevel; }
         }
 
-        public int MaxRecursion { get; protected set; }
+        public int MaxRecursion { get; set; }
 
         public List<string> StartHeaderValues { get; protected set; }
         
@@ -115,6 +115,7 @@
 
         protected internal override Expression OnFilter(Enum filtertype, FilterItem filterItem, QueryParameters queryParameters)
         {
+            ProcessDependedFilters(filtertype, filterItem, qParams);
             if (IsStartLevel)
             {
                 if (valuesForQParams != queryParameters || queryParameters == null)

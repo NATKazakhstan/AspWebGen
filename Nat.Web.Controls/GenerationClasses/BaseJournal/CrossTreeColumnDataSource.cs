@@ -18,6 +18,11 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 
         public int MaxRecursion { get; set; }
 
+        /// <summary>
+        /// Колонки выводятся до дочерних данных.
+        /// </summary>
+        public bool FirstColumns { get; set; }
+
         protected override void AddItems(THeaderTable row)
         {
             AddItems(row, ListItems, 1);
@@ -46,11 +51,15 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 
             DicItems[row.Id.ToString()] = item;
 
+            if (FirstColumns)
+                AddColumns(row, item);
+
             if (MaxRecursion > level && row.ChildObjects != null)
                 foreach (var childRow in FilterData(row.ChildObjects.AsQueryable(), null))
                     AddItems(childRow, item.Childs, level + 1);
 
-            AddColumns(row, item);
+            if (!FirstColumns)
+                AddColumns(row, item);
         }
 
         protected override IQueryable<THeaderTable> FilterData(IQueryable<THeaderTable> data, System.Data.Linq.DataContext db)

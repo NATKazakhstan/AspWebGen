@@ -36,7 +36,7 @@
 
         private int GetRowsCount(RenderContext context)
         {
-            var count = this.fullCountColumn.GetRowsCount(context.OtherColumns[this.fullCountColumn.ColumnName]);
+            var count = this.fullCountColumn.GetRowsCount(context.GetRenderContextFor(fullCountColumn));
             return count == 0 ? 1 : count;
         }
 

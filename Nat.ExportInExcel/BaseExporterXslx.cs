@@ -657,7 +657,7 @@ namespace Nat.ExportInExcel
         private void RenderSheetHeader(int colSpan)
         {
             WriteStartRow(28);
-            RenderCell(_writer, GetHeader(), 1, colSpan, HeaderSheetStyleId, ColumnType.Other);
+            RenderCell(_writer, GetHeader(), 1, colSpan, HeaderSheetStyleId, ColumnType.Other, string.Empty);
             _writer.WriteEndElement();
             _addedRowSpans.Clear();
         }
@@ -673,13 +673,13 @@ namespace Nat.ExportInExcel
             foreach (var filter in filters)
             {
                 WriteStartRow(null);
-                RenderCell(_writer, filter, 1, fullColSpan, FilterStyleId, ColumnType.Other);
+                RenderCell(_writer, filter, 1, fullColSpan, FilterStyleId, ColumnType.Other, string.Empty);
                 _writer.WriteEndElement();
                 _addedRowSpans.Clear();
             }
 
             WriteStartRow(null);
-            RenderCell(_writer, string.Empty, 1, fullColSpan, FilterStyleId, ColumnType.Other);
+            RenderCell(_writer, string.Empty, 1, fullColSpan, FilterStyleId, ColumnType.Other, string.Empty);
             _writer.WriteEndElement();
             _addedRowSpans.Clear();
         }
@@ -901,7 +901,7 @@ namespace Nat.ExportInExcel
             }
         }
 
-        protected string RenderCell(XmlTextWriter writer, string stringData, int rowSpan, int colSpan, string styleId, ColumnType columnType)
+        protected string RenderCell(XmlTextWriter writer, string stringData, int rowSpan, int colSpan, string styleId, ColumnType columnType, string formula)
         {
             var startCell = GetLaterByInt(_columnIndex) + _rowIndex;
             if (_baseStyles.ContainsKey(styleId))
@@ -909,6 +909,9 @@ namespace Nat.ExportInExcel
             writer.WriteStartElementExt("c", "r", startCell, "s", styleId);
             if (!string.IsNullOrEmpty(stringData))
             {
+                if (!string.IsNullOrEmpty(formula))
+                    writer.WriteElementString("f", formula);
+
                 decimal decimalValue;
                 if (columnType == ColumnType.Numeric && decimal.TryParse(stringData, out decimalValue))
                 {
@@ -920,6 +923,8 @@ namespace Nat.ExportInExcel
                     writer.WriteElementString("v", GetSharedStringIndex(stringData).ToString());
                 }
             }
+            else if (!string.IsNullOrEmpty(formula))
+                writer.WriteElementString("f", formula);
 
             writer.WriteEndElement();
 

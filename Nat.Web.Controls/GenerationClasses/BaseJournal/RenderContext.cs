@@ -7,6 +7,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 {
     using System;
 
+    using Nat.Web.Tools.Export.Computing;
     using Nat.Web.Tools.Export.Formatting;
 
     public class RenderContext
@@ -234,6 +235,11 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                 throw new ArgumentException("RenderContext does not contain column with name " + columnName);
 
             return OtherColumns[columnName];
+        }
+
+        public Formula GetFormula()
+        {
+            return Column.GetFormulaHandler?.Invoke(this);
         }
     }
 }

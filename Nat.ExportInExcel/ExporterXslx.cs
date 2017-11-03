@@ -176,7 +176,7 @@ namespace Nat.ExportInExcel
 
         private void RenderColumnHierarchy(ColumnHierarchy columnHierarchy, XmlTextWriter writer)
         {
-            RenderCell(writer, columnHierarchy.Header, columnHierarchy.RowSpan, columnHierarchy.ColSpan, columnHierarchy.StyleId ?? (columnHierarchy.IsVerticalHeader ? HeaderVertiacalStyleId : HeaderStyleId), ColumnType.Other);
+            RenderCell(writer, columnHierarchy.Header, columnHierarchy.RowSpan, columnHierarchy.ColSpan, columnHierarchy.StyleId ?? (columnHierarchy.IsVerticalHeader ? HeaderVertiacalStyleId : HeaderStyleId), ColumnType.Other, string.Empty);
         }
 
         protected override IEnumerable<string> GetFilterStrings()
@@ -248,7 +248,8 @@ namespace Nat.ExportInExcel
                         sb.Append(GetLaterByInt(_columnIndex)).Append(_rowIndex);
                     }
 
-                    var rangeOfCell = RenderCell(_writer, cellData, bCell.RowSpan, bCell.ColSpan, styleId, bCell.Column == null ? ColumnType.Other : bCell.Column.ColumnType);
+                    var formula = bCell.RenderContext.GetFormula()?.ToString(_columnIndex, _rowIndex) ?? string.Empty;
+                    var rangeOfCell = RenderCell(_writer, cellData, bCell.RowSpan, bCell.ColSpan, styleId, bCell.Column == null ? ColumnType.Other : bCell.Column.ColumnType, formula);
                     if (cell.Key != null && cell.Key.TypeCell == BaseJournalTypeCell.HyperLink && bCell.RenderContext.TotalGroupValues == null)
                     {
                         var href = cell.Key.GetHyperLink(bCell.RenderContext);
@@ -257,7 +258,7 @@ namespace Nat.ExportInExcel
                     }
                 }
                 else
-                    RenderCell(_writer, string.Empty, 1, 1, styleId, ColumnType.Other);
+                    RenderCell(_writer, string.Empty, 1, 1, styleId, ColumnType.Other, string.Empty);
             }
 
             _writer.WriteEndElement();
@@ -285,7 +286,8 @@ namespace Nat.ExportInExcel
                         cell.RowSpan == 0 ? 1 : cell.RowSpan,
                         cell.ColumnSpan == 0 ? 1 : cell.ColumnSpan,
                         cell.Attributes["StyleID"],
-                        ColumnType.Other);
+                        ColumnType.Other,
+                        string.Empty);
                 }
 
                 _writer.WriteEndElement();

@@ -124,6 +124,10 @@
     <Compile Include="ClearTable\ClearType.cs" />
     <Compile Include="DataBinding\IWebBinder.cs" />
     <Compile Include="DataBinding\IWebBinding.cs" />
+    <Compile Include="Export\Computing\Formula.cs" />
+    <Compile Include="Export\Computing\FormulaCell.cs" />
+    <Compile Include="Export\Computing\FormulaCellException.cs" />
+    <Compile Include="Export\Computing\FormulaItem.cs" />
     <Compile Include="Export\Formatting\ConditionalFormatting.cs" />
     <Compile Include="Export\Formatting\ConditionalFormattingBaseItem.cs" />
     <Compile Include="Export\Formatting\ConditionalFormattingColorScale.cs" />

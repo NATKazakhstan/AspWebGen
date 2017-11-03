@@ -156,7 +156,8 @@ namespace Nat.ExportInExcel
                     column.RowSpan,
                     column.ColSpan,
                     styleId,
-                    column.IsNumericColumn ? ColumnType.Numeric : ColumnType.Other);
+                    column.IsNumericColumn ? ColumnType.Numeric : ColumnType.Other,
+                    string.Empty);
                 
                 var href = column.GetHyperLink(row);
                 if (!string.IsNullOrEmpty(href)) AddHyperLink(rangeOfCell, cellData, href);
@@ -196,7 +197,8 @@ namespace Nat.ExportInExcel
                         column.HasChild ? 1 : maxRowSpan - currentLevel,
                         column.HasChild ? column.GetChilds().Sum((Func<IExportColumn, int>)GetColSpan) : 1,
                         column.IsVerticalHeaderText ? HeaderVertiacalStyleId : HeaderStyleId,
-                        ColumnType.Other);
+                        ColumnType.Other,
+                        string.Empty);
                 }
                 else if (column.HasChild)
                     RenderHeader(column.GetChilds(), renderLevel, currentLevel + 1, maxRowSpan);

@@ -15,6 +15,8 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
     using System.ServiceModel.Configuration;
     using System.Text;
 
+    using Nat.Web.Tools.Export.Computing;
+
     public class BaseColumn
     {
         #region fields
@@ -281,6 +283,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
         public GetResultBool ShowAsTemplateHandler { get; set; }
 
         public GetResult<object> GetValueHandler { get; set; }
+        public GetResult<Formula> GetFormulaHandler { get; set; }
         public GetResult<object> GetTotalValueHandler { get; set; }
         public GetResult<string> GetRowNumberHandler { get; set; }
         public GetResult<string> GetNameHandler { get; set; }

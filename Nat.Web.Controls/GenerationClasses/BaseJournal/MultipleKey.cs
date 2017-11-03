@@ -12,9 +12,9 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
         bool Equals(IMultipleKey secondObj);
     }
     public struct MultipleKey<T1>
-        where T1: struct
+        //where T1: struct
     {
-        public T1? id1;
+        public T1 id1;
 
         public static MultipleKey<T1> Create(T1 id1)
         {
@@ -37,11 +37,11 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
         }
     }
     public struct MultipleKey<T1, T2>
-        where T1 : struct
-        where T2 : struct
+        //where T1 : struct
+        //where T2 : struct
     {
-        public T1? id1;
-        public T2? id2;
+        public T1 id1;
+        public T2 id2;
 
         public static MultipleKey<T1, T2> Create(T1 id1, T2 id2)
         {
@@ -64,13 +64,13 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
         }
     }
     public struct MultipleKey<T1, T2, T3>
-        where T1 : struct
-        where T2 : struct
-        where T3 : struct
+        //where T1 : struct
+        //where T2 : struct
+        //where T3 : struct
     {
-        public T1? id1;
-        public T2? id2;
-        public T3? id3;
+        public T1 id1;
+        public T2 id2;
+        public T3 id3;
 
         public static MultipleKey<T1, T2, T3> Create(T1 id1, T2 id2, T3 id3)
         {
@@ -93,15 +93,15 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
         }
     }
     public struct MultipleKey<T1, T2, T3, T4>
-        where T1 : struct
-        where T2 : struct
-        where T3 : struct
-        where T4 : struct
+        //where T1 : struct
+        //where T2 : struct
+        //where T3 : struct
+        //where T4 : struct
     {
-        public T1? id1;
-        public T2? id2;
-        public T3? id3;
-        public T4? id4;
+        public T1 id1;
+        public T2 id2;
+        public T3 id3;
+        public T4 id4;
 
         public static MultipleKey<T1, T2, T3, T4> Create(T1 id1, T2 id2, T3 id3, T4 id4)
         {

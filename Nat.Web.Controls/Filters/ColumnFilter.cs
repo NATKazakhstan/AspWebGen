@@ -32,6 +32,7 @@ using Nat.Web.Tools;
 
 namespace Nat.Web.Controls
 {
+    using System.ComponentModel;
     using System.Linq;
 
     using Nat.Tools.Classes;
@@ -445,10 +446,7 @@ namespace Nat.Web.Controls
                 for (int i = 0; i != controlsCount; i++)
                 {
                     if (ColumnFilterStorage.RefTableRolledIn)
-                    {
                         ((LookupTextBox)controls[i]).Value = ColumnFilterStorage.GetValue(i);
-                        ((LookupTextBox)controls[i]).AutoPostBack = postBack;
-                    }
                     else
                     {
                         var selectedValue = ColumnFilterStorage.GetValue(i);
@@ -463,7 +461,6 @@ namespace Nat.Web.Controls
                                 OnColumnFilterStorageChanged();
                             }
                         }
-                        list.AutoPostBack = postBack;
                     }
                 }
             }
@@ -476,26 +473,23 @@ namespace Nat.Web.Controls
                     ColumnFilterStorage.DataType == typeof(String))
             {
                 for (int i = 0; i != controlsCount; i++)
-                {
                     ((TextBox)controls[i]).Text = Convert.ToString(ColumnFilterStorage.GetValue(i));
-                    ((TextBox)controls[i]).AutoPostBack = postBack;
-                }
             }
             else if (ColumnFilterStorage.DataType == typeof(DateTime))
             {
                 for (int i = 0; i != controlsCount; i++)
-                {
                     ((DatePicker)controls[i]).Date = ColumnFilterStorage.GetValue(i);
-                    ((DatePicker)controls[i]).AutoPostBack = postBack;
-                }
             }
             else if (ColumnFilterStorage.DataType == typeof(Boolean))
             {
                 for (int i = 0; i != controlsCount; i++)
-                {
                     ((DropDownList)controls[i]).SelectedValue = Convert.ToString(ColumnFilterStorage.GetValue(i)).ToLower();
-                    ((DropDownList)controls[i]).AutoPostBack = postBack;
-                }
+            }
+
+            foreach (var webControl in controls.Where(r => r != null))
+            {
+                var property = TypeDescriptor.GetProperties(webControl).Find("AutoPostBack", false);
+                property?.SetValue(webControl, postBack);
             }
         }
 

@@ -532,6 +532,8 @@ namespace Nat.Web.Controls.GenerationClasses
                     filterTypeValues = textList;
                     break;
                 case FilterType.Reference:
+                    if ("EqualsCollection".Equals(filterItem.FilterType, StringComparison.OrdinalIgnoreCase))
+                        filterItem.FilterType = nameof(DefaultFilters.ReferenceFilter.Equals);
                     var baseFilterParameter = filter as BaseFilterParameter;
                     if (filter.FilterByStartsWithCode)
                     {
@@ -1011,6 +1013,8 @@ namespace Nat.Web.Controls.GenerationClasses
                 switch (Type)
                 {
                     case FilterType.Reference:
+                        if ("EqualsCollection".Equals(value, StringComparison.OrdinalIgnoreCase))
+                            return DefaultFilters.ReferenceFilter.Equals;
                         return (Enum)Enum.Parse(typeof (DefaultFilters.ReferenceFilter), value);
                     case FilterType.Numeric:
                         return (Enum)Enum.Parse(typeof(DefaultFilters.NumericFilter), value);

@@ -202,7 +202,7 @@ namespace Nat.Web.Controls
                     }
                     else
                     {
-                        var lookupList = new DropDownList();
+                        var lookupList = new DropDownListExt();
                         if (tableDataSource != null)
                         {
                             lookupList.DataSource = tableDataSource;
@@ -212,6 +212,7 @@ namespace Nat.Web.Controls
                             lookupList.DataSource = ColumnFilterStorage.RefDataSource;
                         lookupList.DataTextField = ColumnFilterStorage.DisplayColumn;
                         lookupList.DataValueField = ColumnFilterStorage.ValueColumn;
+                        lookupList.IncludeNullItem = true;
                         lookupList.DataBind();
                         controls[i] = lookupList;
                     }

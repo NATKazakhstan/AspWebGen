@@ -371,7 +371,7 @@ namespace Nat.Web.Controls
                 }
             }
 
-            if (IncludeNullItem && (Items.Count == 0 || Items[0] != nullItem))
+            if (IncludeNullItem && (Items.Count == 0 || Items[0].Value != nullItem.Value))
             {
                 Items.Insert(0, nullItem);
                 AppendDataBoundItems = true;

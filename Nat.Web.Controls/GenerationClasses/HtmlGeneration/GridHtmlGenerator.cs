@@ -298,12 +298,12 @@ namespace Nat.Web.Controls.GenerationClasses
                 var columnValue = ColumnValueHandler();
                 if (columnValue == null)
                     return;
-                sb.Append("/MainPage.aspx/data/");
+                sb.Append("/MainPage.aspx/navigateto/");
                 sb.Append(TableName);
                 sb.Append("Edit/read?ref");
                 sb.Append(TableName);
                 sb.Append("=");
-                sb.Append(columnValue);
+                sb.Append(HttpUtility.UrlEncode(Convert.ToString(columnValue)));
                 AddToHyperLinkParameters?.Invoke(sb);
             }
 

@@ -1137,7 +1137,13 @@ namespace Nat.Web.Controls.GenerationClasses
                 switch (Type)
                 {
                     case FilterType.Reference:
-                        var referenceType = (DefaultFilters.ReferenceFilter)Enum.Parse(typeof(DefaultFilters.ReferenceFilter), filterItem.FilterType);
+                        
+                        DefaultFilters.ReferenceFilter referenceType;
+                        if ("EqualsCollection".Equals(filterItem.FilterType, StringComparison.OrdinalIgnoreCase))
+                            referenceType = DefaultFilters.ReferenceFilter.Equals;
+                        else
+                            referenceType = (DefaultFilters.ReferenceFilter)Enum.Parse(typeof(DefaultFilters.ReferenceFilter), filterItem.FilterType);
+                        
                         List<string> values;
                         switch (referenceType)
                         {

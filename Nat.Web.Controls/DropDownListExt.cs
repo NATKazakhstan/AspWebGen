@@ -31,6 +31,7 @@ namespace Nat.Web.Controls
         private NullValueType nullValue = NullValueType.Null;
         private string selectedValueHistory;
         private string selectedValue;
+        private object selectedValueBeforDataBinding;
         private bool _allowSetHistoricalValue = true;
         private int _historicalIndexValue = 0;
 
@@ -353,10 +354,18 @@ namespace Nat.Web.Controls
                 Items.Insert(0, nullItem);
                 SelectedValue = selectedValue;
             }
+
+            if (selectedValueBeforDataBinding != null 
+                && selectedValueBeforDataBinding != SelectedValue
+                && Items.Cast<ListItem>().Any(r => r.Value == Convert.ToString(selectedValueBeforDataBinding)))
+            {
+                SelectedValue = selectedValueBeforDataBinding;
+            }
         }
 
         private object BeforeOnDataBinding(out bool setValue, out TableDataSourceView data)
         {
+            selectedValueBeforDataBinding = SelectedValue;
             object value = null;
             setValue = false;
             data = null;

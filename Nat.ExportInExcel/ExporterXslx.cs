@@ -213,7 +213,7 @@ namespace Nat.ExportInExcel
 
             MoveRowIndex();
             var cellsPropertiesDic = _journalControl.Journal.CellsPropertiesDic;
-            foreach (var cell in row.AllCells)
+            foreach (var cell in row.AllCells.Where(r => r.Value.Visible))
             {
                 var bCell = cell.Value as BaseJournalCell;
                 string styleId = null;

@@ -177,6 +177,9 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 
         public override void RenderControl(HtmlTextWriter writer)
         {
+            if (!Visible)
+                return;
+
             writer.WriteLine();
             if (ColSpan > 1)
                 writer.AddAttribute(HtmlTextWriterAttribute.Colspan, ColSpan.ToString());

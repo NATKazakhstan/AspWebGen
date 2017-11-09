@@ -50,6 +50,8 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
         public int SplitedRowIndex { get; set; }
         public int MaxRowsCount { get; protected set; }
 
+        public event EventHandler RowInitialized;
+
         public string RowKey
         {
             get
@@ -144,7 +146,12 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
         {
             return _errorMessages;
         }
-        
+
+        protected virtual void OnRowInitialized()
+        {
+            RowInitialized?.Invoke(this, EventArgs.Empty);
+        }
+
         protected class CrossJournalEditQueryParam
         {
             public string JorunalName;
@@ -536,6 +543,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                     GroupColumn.RowIndex = SplitedRowIndex;
                 }
                 AddColumnInRow(GroupColumn, null, 0, null);
+                OnRowInitialized();
                 return;
             }
             else
@@ -607,6 +615,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
             }
             if (JournalControl.DetailsRender)
                 AddAjaxControlsInDetailsRender();
+            OnRowInitialized();
         }
 
         private void InitializeKeyAndID()

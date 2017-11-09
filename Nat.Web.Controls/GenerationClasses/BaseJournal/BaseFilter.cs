@@ -185,8 +185,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 
         public virtual int GetFiltersCount()
         {
-            EnsureFilterStrings();
-            return _filters.Count;
+            return GetFilterStrings().Count();
         }
 
         public virtual IList<string> GetFilterStringsByName(string filterName)

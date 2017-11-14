@@ -1,6 +1,9 @@
 ﻿/*Valesa*/
 
 /* --- Data 27.06.08 --- */
+body,form{
+margin:0;
+}
 body {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 }

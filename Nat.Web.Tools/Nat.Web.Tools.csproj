@@ -140,6 +140,7 @@
     <Compile Include="Export\JournalExportEventArgs.cs" />
     <Compile Include="FileNameLegalSimbols.cs" />
     <Compile Include="Export\MarkupConverter\HtmlCssParser.cs" />
+    <Compile Include="Export\MarkupConverter\HtmlFromXamlConverter.cs" />
     <Compile Include="Export\MarkupConverter\HtmlLexicalAnalyzer.cs" />
     <Compile Include="Export\MarkupConverter\HtmlParser.cs" />
     <Compile Include="Export\MarkupConverter\HtmlSchema.cs" />

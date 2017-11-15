@@ -124,6 +124,8 @@
     <Compile Include="ClearTable\ClearType.cs" />
     <Compile Include="DataBinding\IWebBinder.cs" />
     <Compile Include="DataBinding\IWebBinding.cs" />
+    <Compile Include="DictionaryCacheDependency.cs" />
+    <Compile Include="DictionaryRecordCacheDependency.cs" />
     <Compile Include="Export\Computing\Formula.cs" />
     <Compile Include="Export\Computing\FormulaCell.cs" />
     <Compile Include="Export\Computing\FormulaCellException.cs" />

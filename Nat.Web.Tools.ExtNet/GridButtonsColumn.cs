@@ -124,64 +124,69 @@ namespace Nat.Web.Tools.ExtNet
                     MenuText = Properties.Resources.SActionColumnText,
                 };
 
-            if (LookVisible && !string.IsNullOrEmpty(LookUrl))
+            column.PreRender += AddActionItems;
+            
+            return column;
+
+            void AddActionItems(object sender, EventArgs e)
             {
-                var actionItem = new ActionItem
+                if (LookVisible && !string.IsNullOrEmpty(LookUrl))
+                {
+                    var actionItem = new ActionItem
                     {
                         Icon = Icon.Note,
                         Tooltip = Resources.SLook,
                         Handler = string.Format(@"function(view, rowIndex, colIndex, item, eArgs, record){{{0}}}", GetLookScript()),
                         IconCls = ResourceManager.GetIconClassName(Icon.Note) + " CursorPointer",
                     };
-                actionItem.CustomConfig.Add(new ConfigItem("ActionType", "Look"));
-                column.Items.Add(actionItem);
-            }
+                    actionItem.CustomConfig.Add(new ConfigItem("ActionType", "Look"));
+                    column.Items.Add(actionItem);
+                }
 
-            if (EditVisible && !string.IsNullOrEmpty(EditUrl))
-            {
-                var actionItem = new ActionItem
+                if (EditVisible && !string.IsNullOrEmpty(EditUrl))
+                {
+                    var actionItem = new ActionItem
                     {
                         Icon = Icon.NoteEdit,
                         Tooltip = Resources.SEditText,
                         Handler = string.Format(@"function(view, rowIndex, colIndex, item, eArgs, record){{{0}}}", GetEditScript()),
                         IconCls = ResourceManager.GetIconClassName(Icon.NoteEdit) + " CursorPointer",
                     };
-                actionItem.IsDisabled.Handler = "return !record.data.CanEdit || record.data.id == null;";
-                actionItem.CustomConfig.Add(new ConfigItem("ActionType", "Edit"));
-                column.Items.Add(actionItem);
-            }
+                    actionItem.IsDisabled.Handler = "return !record.data.CanEdit || record.data.id == null;";
+                    actionItem.CustomConfig.Add(new ConfigItem("ActionType", "Edit"));
+                    column.Items.Add(actionItem);
+                }
 
-            if (DeleteVisible)
-            {
-                var actionItem = new ActionItem
+                if (DeleteVisible)
+                {
+                    var actionItem = new ActionItem
                     {
                         Icon = Icon.Cross,
                         Tooltip = Resources.SDeleteText,
                         Handler = string.Format(@"function(view, rowIndex, colIndex, item, eArgs, record){{{0}}}", GetDeleteScript()),
                         IconCls = ResourceManager.GetIconClassName(Icon.Cross) + " CursorPointer",
                     };
-                actionItem.IsDisabled.Handler = "return !record.data.CanDelete;";
-                actionItem.CustomConfig.Add(new ConfigItem("ActionType", "Delete"));
-                column.Items.Add(actionItem);
-            }
-
-            var buttons = GetAdditionalButtons();
-            if (buttons != null)
-            {
-                foreach (var actionItem in buttons)
-                {
-                    if (actionItem.Icon != Icon.None)
-                    {
-                        var iconCls = ResourceManager.GetIconClassName(actionItem.Icon);
-                        actionItem.IconCls += iconCls + " CursorPointer";
-                    }
-                    else
-                        actionItem.IconCls += " CursorPointer";
+                    actionItem.IsDisabled.Handler = "return !record.data.CanDelete;";
+                    actionItem.CustomConfig.Add(new ConfigItem("ActionType", "Delete"));
                     column.Items.Add(actionItem);
                 }
-            }
 
-            return column;
+                var buttons = GetAdditionalButtons();
+                if (buttons != null)
+                {
+                    foreach (var actionItem in buttons)
+                    {
+                        if (actionItem.Icon != Icon.None)
+                        {
+                            var iconCls = ResourceManager.GetIconClassName(actionItem.Icon);
+                            actionItem.IconCls += iconCls + " CursorPointer";
+                        }
+                        else
+                            actionItem.IconCls += " CursorPointer";
+                        column.Items.Add(actionItem);
+                    }
+                }
+            }
         }
 
         protected virtual void AddEditButton(StringBuilder listener, CommandColumn commandColumn)

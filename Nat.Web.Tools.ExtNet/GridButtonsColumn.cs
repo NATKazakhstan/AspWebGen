@@ -10,6 +10,7 @@ namespace Nat.Web.Tools.ExtNet
 {
     using System.Collections.Generic;
     using System.Text;
+    using System.Web.UI;
     using System.Web.UI.WebControls;
 
     using Ext.Net;
@@ -42,6 +43,8 @@ namespace Nat.Web.Tools.ExtNet
         public string DeleteUrl { get; set; }
 
         public string ControlIDWithDirectMethod { get; set; }
+
+        public Control JournalControl { get; set; }
 
         /// <summary>
         /// Необходимо создавать ActionItem. И инициализировать Icon, Tooltip, Handler = "function(view, rowIndex, colIndex, item, eArgs, record){sctipt}".
@@ -315,7 +318,9 @@ if (!w.collapsed)
             else // fix: используется ActionColumn который не верно рендерит доступ до DirectMethods
             {
                 if (string.IsNullOrEmpty(ControlIDWithDirectMethod))
-                    deleteScript = @"
+                    ControlIDWithDirectMethod = JournalControl?.ClientID ?? "PlaceHolderMain_item";
+
+                deleteScript = @"
     if (record.data.id == null){{
         record.store.remove(record);
     }}
@@ -328,24 +333,7 @@ if (!w.collapsed)
             }
         }}
 
-        #{DirectMethods}.PlaceHolderMain_item.DeleteRow(record.internalId);
-    }}";
-                else
-                    deleteScript = @"
-    if (record.data.id == null){{
-        record.store.remove(record);
-    }}
-    else {{
-        var treeStore = record.store;
-        if (treeStore.tree != null && record.data.refParent != null && treeStore.getNodeById(record.data.refParent) != null) {{
-            var node = treeStore.getNodeById(record.data.refParent);
-            if (!node.isLeaf() && node.childNodes.length == 1) {
-                node.data.leaf = true;
-            }
-        }}
-
-        #{DirectMethods}." + ControlIDWithDirectMethod +
-                                   @".DeleteRow(record.internalId);
+        #{DirectMethods}." + ControlIDWithDirectMethod + @".DeleteRow(record.internalId);
     }}";
             }
 

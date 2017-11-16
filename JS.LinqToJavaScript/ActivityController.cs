@@ -123,7 +123,7 @@ namespace JS.LinqToJavaScript
 
         protected void InitializeControls(params ActivityControl[] controls)
         {
-            Controls = controls.ToDictionary(r => r.ControlName);
+            Controls = controls.Where(r => r.ControlName != null).ToDictionary(r => r.ControlName);
         }
 
         #endregion

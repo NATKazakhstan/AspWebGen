@@ -290,11 +290,15 @@ namespace MarkupConverter
                 double value;
                 if (double.TryParse(values[i], out value))
                 {
-                    values[i] = Math.Ceiling(value).ToString();
+                    values[i] = Math.Ceiling(value) + "px";
+                }
+                else if (double.TryParse(values[i].Replace(".", ","), out value))
+                {
+                    values[i] = Math.Ceiling(value) + "px";
                 }
                 else
                 {
-                    values[i] = "1";
+                    values[i] = "1px";
                 }
             }
 

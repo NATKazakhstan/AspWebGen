@@ -45,6 +45,8 @@ namespace Nat.Web.Controls.GenerationClasses
 
         public string CurrentArgument { get; set; }
 
+        public Page Page => _page;
+
         public void AddCustom(string html)
         {
             sb.Append(html);

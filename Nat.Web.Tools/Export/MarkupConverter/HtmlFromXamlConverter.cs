@@ -56,7 +56,7 @@ namespace MarkupConverter
                 return "";
             }
 
-            string htmlString = htmlStringBuilder.ToString().Replace("\t", "&emsp;");
+            string htmlString = htmlStringBuilder.ToString().Replace("\t", "&emsp;&emsp;&emsp;");
 
             return htmlString;
         }
@@ -174,7 +174,7 @@ namespace MarkupConverter
                     case "FontStretch":
                         break;
                     case "FontSize":
-                        css = "font-size:" + xamlReader.Value + ";";
+                        css = "font-size:" + xamlReader.Value + "px;";
                         break;
                     case "Foreground":
                         css = "color:" + ParseXamlColor(xamlReader.Value) + ";";

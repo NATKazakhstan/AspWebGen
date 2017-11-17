@@ -148,6 +148,7 @@
     <Compile Include="Export\MarkupConverter\HtmlSchema.cs" />
     <Compile Include="Export\MarkupConverter\HtmlTokenType.cs" />
     <Compile Include="Export\MarkupConverter\HtmlToXamlConverter.cs" />
+    <Compile Include="Export\RtfToHtml.cs" />
     <Compile Include="FindHelper.cs" />
     <Compile Include="ControlIDConverter.cs" />
     <Compile Include="IClientElementProvider.cs" />

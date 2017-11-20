@@ -16,7 +16,7 @@ namespace Nat.Web.Tools
         public static string Correct(string fileName)
         {
             if (fileName.IsNullOrEmpty()) return fileName;
-            char[] chars = { '"', '*', '<', '>', '?', '/', '\\', '|' };
+            char[] chars = { '"', '*', '<', '>', '?', '/', '\\', '|', '+' };
             fileName = Path.GetFileName(fileName) ?? fileName;
             return new string(fileName.Select(c => chars.Contains(c) ? '_' : c).ToArray());
         }

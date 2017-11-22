@@ -17,6 +17,8 @@ namespace Nat.Web.Controls.SelectValues
 {
     using System.Collections.Specialized;
 
+    using Nat.Web.Tools;
+
     public abstract class BaseListDataBoundControl : DataBoundControl, INamingContainer
     {
         private List<ListControlItem> _items = new List<ListControlItem>();
@@ -54,11 +56,8 @@ namespace Nat.Web.Controls.SelectValues
         public string ClassCSS { get; set; }
         public string SortExpression { get; set; }
         public string DataReferenceValueField { get; set; }
-
         public string ReferenceTableName { get; set; }
-
         protected bool RenderOnlyText { get; set; }
-
         public string DefaultSortExpression { get; set; }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -335,11 +334,20 @@ namespace Nat.Web.Controls.SelectValues
             foreach (var propertyName in dataTextField.Split('.'))
             {
                 var property = TypeDescriptor.GetProperties(dataItem).Find(propertyName, false);
+                if (LocalizationHelper.IsCultureKZ && propertyName.EndsWith("Ru"))
+                {
+                    var kzProperty = TypeDescriptor.GetProperties(dataItem).Find(propertyName.Substring(0, propertyName.Length - 2) + "Kz", false);
+                    if (kzProperty != null)
+                        property = kzProperty;
+                }
+
                 if (property == null)
                     throw new ArgumentException("Не найдено свойство " + dataTextField, "dataTextField");
+
                 dataItem = property.GetValue(dataItem);
                 if (dataItem == null) return null;
             }
+
             return dataItem;
         }
 

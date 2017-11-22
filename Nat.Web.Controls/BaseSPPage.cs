@@ -59,7 +59,10 @@ namespace Nat.Web.Controls
 
         protected override void InitializeCulture()
         {
-            LocalizationHelper.SetCulture(Page);
+            if (string.IsNullOrEmpty(MainPageUrlBuilder.Current.Culture))
+                LocalizationHelper.SetCulture(Page);
+            else
+                LocalizationHelper.SetCulture(MainPageUrlBuilder.Current.Culture, this);
         }
 
         protected override void OnPreLoad(EventArgs e)

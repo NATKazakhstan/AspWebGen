@@ -2589,7 +2589,10 @@ $(function () {
 
         if (newWindow == null) {
 
-            var html = "<div id='windowsDialog{0}' style='display: none; overflow: hidden;'><div class='LoadingControl'><div class='LoadingControl-info'><div><span class='text-center' role='text'>Загрузка...</span><div role='img'><img src='/_themes/KVV/ewr133.gif'></div></div></div><div class='LoadingControl-hide'></div></div><iframe name='windowsDialog{0}Frame' width='100%' style='height: inherit' src='' frameborder='0' scrolling='none' /></div>";
+            var html =
+                "<div id='windowsDialog{0}' style='display: none; overflow: hidden;'><div class='LoadingControl'><div class='LoadingControl-info'><div><span class='text-center' role='text'>" +
+                    (IsCultureKz() ? 'Енгізу' : 'Загрузка') +
+                    "...</span><div role='img'><img src='/_themes/KVV/ewr133.gif'></div></div></div><div class='LoadingControl-hide'></div></div><iframe name='windowsDialog{0}Frame' width='100%' style='height: inherit' src='' frameborder='0' scrolling='none' /></div>";
             html = html.replace("{0}", windowsDialogCacheNextId).replace("{0}", windowsDialogCacheNextId);
             var $dialog = $(html);
             parentWindow.document.body.appendChild($dialog[0]);
@@ -2614,11 +2617,18 @@ $(function () {
                 isLoaded: false
             };
 
-            $dialog.dialog('option', 'buttons', {
-                'Отмена': function () {
-                    newWindow.dialog.dialog('close');
+            var dialogButtons = IsCultureKz()
+                ? {
+                    'Болдырмау': function() {
+                        newWindow.dialog.dialog('close');
+                    }
                 }
-            });
+                : {
+                    'Отмена': function() {
+                        newWindow.dialog.dialog('close');
+                    }
+                };
+            $dialog.dialog('option', 'buttons', dialogButtons);
 
             if (Sys.Browser.agent === Sys.Browser.InternetExplorer) {
                 $(newWindow.iframe).css('height', '100%');
@@ -2783,3 +2793,8 @@ $(function() {
     $('.nat-hideEditorDIV > a').focus(ShowHiddenEditor);
     $('.nat-hideEditorDIV > div input').blur(HideHiddenEditor);
 });
+
+function IsCultureKz() {
+    return document.location.search.indexOf('culture=ru-ru') === -1 &&
+        (document.cookie.indexOf('lcid=1087') !== -1 || document.location.search.indexOf('culture=kk-kz') !== -1);
+};

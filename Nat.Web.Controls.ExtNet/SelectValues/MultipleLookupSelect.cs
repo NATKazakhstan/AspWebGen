@@ -54,7 +54,7 @@ namespace Nat.Web.Controls.ExtNet.SelectValues
         public Hidden HiddenInsertedValues { get; protected set; }
 
         public bool AllowDublicateSelect { get; set; }
-
+        public Label BeforeElementText { get; protected set; }
         protected override void SetOnChangedValuesFn()
         {
         }
@@ -230,8 +230,16 @@ if (newValue != null && newValue != '') {{
                 };
             LabelErrorText.Style.Add("color", "red");
 
+            BeforeElementText = new Label
+            {
+                ID = "beforeElementText" + ID,
+                Hidden = true
+            };
+            BeforeElementText.Style.Add("color", "blue");
+
             /*Items.Add(LookupBox);
             Items.Add(GridPanel);*/
+            Items.Add(BeforeElementText);
             Items.Add(_containerLookupBox);
             Items.Add(containerGridPanel);
 

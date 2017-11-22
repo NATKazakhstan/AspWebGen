@@ -136,6 +136,12 @@ namespace Nat.Web.Tools
 
         public static CultureInfo SetThreadCulture(string culture, string lcid)
         {
+            if (culture == "ru")
+                culture = "ru-ru";
+            else if (culture == "kz")
+                culture = "kk-kz";
+            else if (culture == "kk")
+                culture = "kk-kz";
             CultureInfo ci;
             if (!string.IsNullOrEmpty(culture))
             {

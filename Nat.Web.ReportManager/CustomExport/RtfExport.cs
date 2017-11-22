@@ -1889,7 +1889,7 @@
                 {
                     int num3 = StiEncode.codePagesTable[_fontToCodePages[k], 2];
                     _sw.Write("{");
-                    _sw.Write(@"\f{0}\fcharset{1} {2};", (i * _charsetCount) + k, (num3 == 1) ? 0 : num3, font.Name);
+                    _sw.Write(@"\f{0}\fcharset{1} {2};", (i * _charsetCount) + k, (num3 == 1) ? 204 : num3, font.Name);
                     _sw.WriteLine("}");
                 }
             }

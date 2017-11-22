@@ -97,4 +97,26 @@
             DictionaryCacheDependency<TSource4>.SetCache(0);
         }
     }
+
+    public class DictionaryCacheDependency<TSource1, TSource2, TSource3, TSource4, TSource5> : CacheDependency
+    {
+        public DictionaryCacheDependency()
+            : base(
+                null,
+                new[]
+                    {
+                        DictionaryCacheDependency<TSource1>.GetKey(),
+                        DictionaryCacheDependency<TSource2>.GetKey(),
+                        DictionaryCacheDependency<TSource3>.GetKey(),
+                        DictionaryCacheDependency<TSource4>.GetKey(),
+                        DictionaryCacheDependency<TSource5>.GetKey()
+                    })
+        {
+            DictionaryCacheDependency<TSource1>.SetCache(0);
+            DictionaryCacheDependency<TSource2>.SetCache(0);
+            DictionaryCacheDependency<TSource3>.SetCache(0);
+            DictionaryCacheDependency<TSource4>.SetCache(0);
+            DictionaryCacheDependency<TSource5>.SetCache(0);
+        }
+    }
 }

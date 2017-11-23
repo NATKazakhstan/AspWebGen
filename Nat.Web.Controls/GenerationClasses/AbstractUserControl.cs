@@ -28,6 +28,8 @@ using Nat.Web.Tools.WorkFlow;
 
 namespace Nat.Web.Controls.GenerationClasses
 {
+    using System.Collections;
+
     using Microsoft.JScript;
     using Nat.Tools.Filtering;
 
@@ -210,8 +212,8 @@ namespace Nat.Web.Controls.GenerationClasses
 
         protected virtual void ClearSelectedValues()
         {
-            if (_selectedValues != null)
-                _selectedValues.Clear();
+            RemoveSelectedText(GetSelectedValues());
+            _selectedValues?.Clear();
             if (!string.IsNullOrEmpty(SelectedValues))
                 SelectedValues = string.Empty;
         }
@@ -237,6 +239,45 @@ namespace Nat.Web.Controls.GenerationClasses
             }
         }
 
+        protected virtual void SetSelectedValue<TKey>(ICollection<KeyValuePair<TKey, string>> values)
+        {
+            if (values != null && values.Count > 0)
+            {
+                EnsureSelectedValuesCreated();
+                foreach (var value in values)
+                    _selectedValues[value.Key.ToString()] = 1;
+                UpdateSelectedValues(_selectedValues.Keys);
+                SetSelectedText(values);
+            }
+        }
+
+        protected virtual void SetSelectedText<TKey>(IEnumerable<KeyValuePair<TKey, string>> values)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("if (dialogArguments) {");
+            sb.AppendLine("\tif (dialogArguments.selectedTexts == null) dialogArguments.selectedTexts = new Array();");
+            foreach (var pair in values)
+                sb.AppendFormat("\tdialogArguments.selectedTexts['{0}'] = '{1}';\n", pair.Key, pair.Value);
+            sb.AppendLine("}");
+            if (HasAjax)
+                ScriptManager.RegisterClientScriptBlock(this, GetType(), "dialogArguments.selectedTexts", sb.ToString(), true);
+            else
+                Page.ClientScript.RegisterClientScriptBlock(GetType(), "dialogArguments.selectedTexts", sb.ToString(), true);
+        }
+
+        protected virtual void RemoveSelectedText(IEnumerable values)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("if (dialogArguments && dialogArguments.selectedTexts) {");
+            foreach (var key in values)
+                sb.AppendFormat("\tdialogArguments.selectedTexts['{0}'] = null;\n", key);
+            sb.AppendLine("}");
+            if (HasAjax)
+                ScriptManager.RegisterClientScriptBlock(this, GetType(), "dialogArguments.selectedTexts", sb.ToString(), true);
+            else
+                Page.ClientScript.RegisterClientScriptBlock(GetType(), "dialogArguments.selectedTexts", sb.ToString(), true);
+        }
+
         protected virtual void RemoveSelectedValues(ICollection<object> values)
         {
             if (values != null && values.Count > 0)
@@ -246,6 +287,7 @@ namespace Nat.Web.Controls.GenerationClasses
                     _selectedValues.Remove(value);
 
                 UpdateSelectedValues(_selectedValues.Keys);
+                RemoveSelectedText(values);
             }
         }
 

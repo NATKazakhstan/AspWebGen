@@ -23,5 +23,16 @@
                     }
                 };
         }
+
+        public static EventHandler<ActivityChangedEventArgs> ReadOnlyChanged(Control control)
+        {
+            return delegate(object sender, ActivityChangedEventArgs args)
+                {
+                    if (control is Field field)
+                        field.ReadOnly = args.Value;
+                    else if (control is GridPanel grid)
+                        grid.CustomConfig.Add(new ConfigItem("readOnly", args.Value.ToString().ToLower(), ParameterMode.Raw));
+                };
+        }
     }
 }

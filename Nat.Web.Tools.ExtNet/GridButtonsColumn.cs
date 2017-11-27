@@ -130,6 +130,9 @@ namespace Nat.Web.Tools.ExtNet
 
             void AddActionItems(object sender, EventArgs e)
             {
+                if (column.Items.Count > 0)
+                    return;
+
                 if (LookVisible && !string.IsNullOrEmpty(LookUrl))
                 {
                     var actionItem = new ActionItem

@@ -152,7 +152,7 @@
 
         private static void Export(HttpContext context, string queryParameters, IDataSourceView4 dataSourceView, IExportJournal journal, ICollection<string> selectedValues)
         {
-            if (!dataSourceView.CheckPermitExport())
+            if (!dataSourceView.CheckPermit() || !dataSourceView.CheckPermitExport())
             {
                 context.Response.StatusCode = 404;
                 context.Response.End();

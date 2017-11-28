@@ -103,6 +103,7 @@
     <Compile Include="ExtNetSelectColumnParameters.cs" />
     <Compile Include="GridButtonsColumn.cs" />
     <Compile Include="GridColumn.cs" />
+    <Compile Include="IExportJournal.cs" />
     <Compile Include="IGridColumn.cs" />
     <Compile Include="LookupBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

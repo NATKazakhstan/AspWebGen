@@ -291,6 +291,26 @@ namespace Nat.Web.Controls
             }
         }
 
+        public static TFilterType LoadFilterControl<TFilterType>(Page page, string controlName)
+            where TFilterType: UserControl, new()
+        {
+            var watch = new Stopwatch();
+            watch.Start();
+            try
+            {
+                if (page == null)
+                    return new TFilterType();
+                var userControlFile = controlName + ".ascx";
+                var control = GetControl(page, controlName, userControlFile, "Filter");
+                if (control != null) return (TFilterType)control;
+                return (TFilterType)page.LoadControl("/UserControls/" + userControlFile);
+            }
+            finally
+            {
+                TraceLoadControl(controlName, watch.ElapsedMilliseconds);
+            }
+        }
+
         private static void TraceLoadControl(string controlName, long ms)
         {
             // если загрузка больше чем 50 мс, то логируем эту информацию

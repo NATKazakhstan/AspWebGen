@@ -36,6 +36,12 @@ namespace Nat.Web.Controls.GenerationClasses
         bool HideRecordCanNotSelected { get; set; }
     }
 
+    public interface IDataSourceView4 : IDataSourceView2
+    {
+        bool CheckPermitExport();
+        IQueryable<IDataRow> GetSelectIRowByID(string queryParameters, params string[] id);
+    }
+
     public interface IDataSourceViewGetName
     {
         Type KeyType { get; }

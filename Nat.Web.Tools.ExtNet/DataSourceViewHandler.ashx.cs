@@ -3,9 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using System.Web;
     using System.Web.Compilation;
     using System.Web.SessionState;
+    using System.Web.UI;
 
     using Ext.Net;
 
@@ -14,6 +16,7 @@
     using Nat.Web.Controls;
     using Nat.Web.Controls.GenerationClasses;
     using Nat.Web.Controls.GenerationClasses.BaseJournal;
+    using Nat.Web.Tools.Export;
     using Nat.Web.Tools.ExtNet.Data;
     using Nat.Web.Tools.Initialization;
 
@@ -21,9 +24,12 @@
 
     public class DataSourceViewHandler : IHttpHandler, IReadOnlySessionState
     {
+        public const string ExcelContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
         private const string Limit = "limit";
         private const string Start = "start";
         private const string DataSourceType = "dataSourceType";
+        private const string JournalType = "journalType";
 
         #region IHttpHandler Members
 
@@ -35,15 +41,16 @@
         public void ProcessRequest(HttpContext context)
         {
             WebInitializer.Initialize();
-            context.Response.ContentType = "text/json";
+            var excelExport = "excel".Equals(context.Request["export"], StringComparison.OrdinalIgnoreCase);
+            context.Response.ContentType = excelExport ? ExcelContentType : "text/json";
             int total;
-            var data = GetData(context, out total);
+            var data = GetData(context, excelExport, out total);
             context.Response.Write(string.Format("{{Total:{1},'Data':{0}}}", JSON.Serialize(data), total));
         }
 
         #endregion
 
-        private static IEnumerable<IDataRow> GetData(HttpContext context, out int total)
+        private static IEnumerable<IDataRow> GetData(HttpContext context, bool excelExport, out int total)
         {
             var start = 0;
             var limit = 0;
@@ -82,18 +89,36 @@
                 LocalizationHelper.SetThreadCulture("kk-kz", null);
 
             var sourceObj = Activator.CreateInstance(BuildManager.GetType(dataSourceType, true, true), null);
+            var queryParameters = GetQueryParameters(parameters, showHistory, search);
 
-            return GetData(start, limit, (IDataSourceViewExtNet)sourceObj, parameters, refParent, search, showHistory, out total);
+            if (!excelExport)
+                return GetData(start, limit, (IDataSourceViewExtNet)sourceObj, queryParameters, refParent, out total);
+
+            ICollection<string> selectedValues = context.Request["selectedValues"]?.Split(',');
+            var journal = Activator.CreateInstance(BuildManager.GetType(context.Request[JournalType], true, true));
+            Export(context, queryParameters, (IDataSourceView4)sourceObj, (IExportJournal)journal, selectedValues);
+            total = 0;
+            return null;
+        }
+
+        private static string GetQueryParameters(string parameters, bool showHistory, string search)
+        {
+            var queryParameters = GlobalObject.decodeURIComponent(parameters);
+            if (showHistory)
+                queryParameters = "/showhistory?" + queryParameters;
+            if (string.IsNullOrEmpty(queryParameters) || queryParameters[queryParameters.Length - 1] == '?')
+                queryParameters += BaseFilterParameterSearch<object>.SearchQueryParameter + "=" + search;
+            else
+                queryParameters += "&" + BaseFilterParameterSearch<object>.SearchQueryParameter + "=" + search;
+            return queryParameters;
         }
 
         private static IEnumerable<IDataRow> GetData(
             int start,
             int limit,
             IDataSourceViewExtNet dataSource,
-            string parameters,
+            string queryParameters,
             string refParent,
-            string search,
-            bool showHistory,
             out int total)
         {
             total = 0;
@@ -106,13 +131,6 @@
 
             MainPageUrlBuilder.Current.IsDataControl = true;
             IQueryable<IDataRow> queryable;
-            var queryParameters = GlobalObject.decodeURIComponent(parameters);
-            if (showHistory)
-                queryParameters = "/showhistory?" + queryParameters;
-            if (string.IsNullOrEmpty(queryParameters) || queryParameters[queryParameters.Length - 1] == '?')
-                queryParameters += BaseFilterParameterSearch<object>.SearchQueryParameter + "=" + search;
-            else
-                queryParameters += "&" + BaseFilterParameterSearch<object>.SearchQueryParameter + "=" + search;
 
             if (string.IsNullOrEmpty(refParent))
                 queryable = dataSource.GetFullModelData(queryParameters);
@@ -130,6 +148,48 @@
                 queryable = queryable.Skip(start).Take(limit);
 
             return queryable.ToList();
+        }
+
+        private static void Export(HttpContext context, string queryParameters, IDataSourceView4 dataSourceView, IExportJournal journal, ICollection<string> selectedValues)
+        {
+            if (!dataSourceView.CheckPermitExport())
+            {
+                context.Response.StatusCode = 404;
+                context.Response.End();
+                return;
+            }
+
+            var data = selectedValues != null && selectedValues.Count > 0
+                           ? dataSourceView.GetSelectIRowByID(queryParameters, selectedValues.ToArray())
+                           : dataSourceView.GetSelectIRow(queryParameters);
+            var log = InitializerSection.GetSection().LogMonitor;
+            log.Init();
+            var exportData = data.ToList();
+            journal.Url = new MainPageUrlBuilder("/MainPage.aspx/data/" + journal.TableName + "Journal" + queryParameters);
+            journal.PrepareExportData(exportData);
+            var args = new JournalExportEventArgs
+                {
+                    CheckPermit = true,
+                    Columns = GridHtmlGenerator.GetColumnsForExport(journal.GetColumns()),
+                    FilterValues = journal.GetFilterValues(),
+                    Format = "Excel",
+                    Header = journal.TableHeader,
+                    LogMonitor = log,
+                    Control = new AccessControl(dataSourceView.CheckPermitExport),
+                    Data = exportData,
+                };
+            var url = new MainPageUrlBuilder
+                {
+                    UserControl = journal.TableName + "Journal",
+                    IsDataControl = true,
+                    ShowHistory = true,
+                };
+            args.ViewJournalUrl = new StringBuilder();
+            url.CreateUrl(args.ViewJournalUrl);
+            args.ViewJournalUrl.Append("?id.EqualsCollection=");
+
+            var stream = WebSpecificInstances.GetExcelExporter().GetExcelStream(args);
+            PageHelper.DownloadFile(stream, journal.TableHeader + "." + args.FileNameExtention, context.Response);
         }
     }
 }

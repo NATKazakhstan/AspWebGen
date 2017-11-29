@@ -68,10 +68,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Debug\Nat.Tools.dll</HintPath>
     </Reference>
-    <Reference Include="ReportManager, Version=0.0.3.3, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\Debug\ReportManager.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
@@ -136,10 +132,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Nat.SqlDbInitializer\Nat.SqlDbInitializer.csproj">
-      <Project>{81465AEA-933E-4F6E-B37C-D43BD2E3C0F6}</Project>
-      <Name>Nat.SqlDbInitializer</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Nat.Web.Controls\Nat.Web.Controls.csproj">
       <Project>{FF9F52A0-FE60-4EE5-8EE8-5B1093378FB3}</Project>
       <Name>Nat.Web.Controls</Name>

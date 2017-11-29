@@ -16,34 +16,79 @@ namespace Nat.Web.Tools.Export
 
     public class JournalExportEventArgs
     {
+        /// <summary>
+        /// Заголовок отчета.
+        /// </summary>
         public string Header { get; set; }
 
+        /// <summary>
+        /// Список примененных фильтров или другие строки перед таблицей данных.
+        /// </summary>
         public List<string> FilterValues { get; set; }
 
+        /// <summary>
+        /// Набор данных.
+        /// </summary>
         public ICollection Data { get; set; }
 
+        /// <summary>
+        /// Проверка доступа.
+        /// </summary>
         public IAccessControl Control { get; set; }
 
+        /// <summary>
+        /// Описание колонок.
+        /// </summary>
         public IEnumerable<IExportColumn> Columns { get; set; }
 
+        /// <summary>
+        /// Формат выходных данных. Сейчас только xlsx.
+        /// </summary>
         public string Format { get; set; }
-
+        
+        /// <summary>
+        /// Класс для логирования.
+        /// </summary>
         public ILogMonitor LogMonitor { get; set; }
         
+        /// <summary>
+        /// Флаг о необходимости проверять права. True значит вызывается проверка прав.
+        /// </summary>
         public bool CheckPermit { get; set; }
 
+        /// <summary>
+        /// Расширение выходного файла.
+        /// </summary>
         public string FileNameExtention { get; set; }
 
+        /// <summary>
+        /// Вызывется метод в начале рендера новой строки.
+        /// </summary>
         public Action<object> StartRenderRow { get; set; }
 
+        /// <summary>
+        /// Ссылка на просомотр журнала.
+        /// </summary>
         public StringBuilder ViewJournalUrl { get; set; }
 
+        /// <summary>
+        /// Код лога эеспорта.
+        /// </summary>
         public long ExportLog { get; set; }
 
+        /// <summary>
+        /// Описание форматирования.
+        /// </summary>
         public List<ConditionalFormatting> ConditionalFormatting { get; set; }
 
+        /// <summary>
+        /// Количество фиксированных колонок.
+        /// </summary>
         public int FixedColumnsCount { get; set; }
 
+        /// <summary>
+        /// Количество фиксированных строк.
+        /// </summary>
         public int FixedRowsCount { get; set; }
     }
 }

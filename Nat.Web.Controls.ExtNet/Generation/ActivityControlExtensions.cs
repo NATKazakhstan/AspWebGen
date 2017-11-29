@@ -13,14 +13,15 @@
         {
             return delegate(object sender, ActivityChangedEventArgs args)
                 {
-                    var field = control as Field;
-                    if (field != null && ":".Equals(field.LabelSeparator))
+                    if (control is Field field && ":".Equals(field.LabelSeparator))
                     {
                         field.LabelSeparator =
                             args.Value
                                 ? "<span class='requiredFieldMark' data-qtip='Required'>*</span>:"
                                 : "<span class='requiredFieldMark' style='display:none' data-qtip='Required'>*</span>:";
                     }
+                    else if (control is GridPanel grid)
+                        grid.CustomConfig.Add(new ConfigItem("allowBlank", (!args.Value).ToString().ToLower(), ParameterMode.Raw));
                 };
         }
 

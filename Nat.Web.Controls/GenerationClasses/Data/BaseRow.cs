@@ -49,6 +49,12 @@ namespace Nat.Web.Controls.GenerationClasses
 
         #endregion
 
+        /// <summary>
+        /// Используется для хранения информации об изменениях, при редактировании таблицы на форме Edit.
+        /// т.е. использлвание AdditionalField_Grid.
+        /// </summary>
+        public bool Dirty { get; set; }
+
         public virtual int CountChildsData()
         {
             return 0;

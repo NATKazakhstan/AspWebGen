@@ -89,19 +89,21 @@
                 LocalizationHelper.SetThreadCulture("kk-kz", null);
 
             var sourceObj = Activator.CreateInstance(BuildManager.GetType(dataSourceType, true, true), null);
-            var queryParameters = GetQueryParameters(parameters, showHistory, search);
+            var journal = string.IsNullOrEmpty(context.Request[JournalType])
+                              ? null
+                              : Activator.CreateInstance(BuildManager.GetType(context.Request[JournalType], true, true));
+            var queryParameters = GetQueryParameters(parameters, showHistory, search, context.Request["gridFilters"], (IJournal)journal);
 
             if (!excelExport)
                 return GetData(start, limit, (IDataSourceViewExtNet)sourceObj, queryParameters, refParent, out total);
 
             ICollection<string> selectedValues = context.Request["selectedValues"]?.Split(',');
-            var journal = Activator.CreateInstance(BuildManager.GetType(context.Request[JournalType], true, true));
             Export(context, queryParameters, (IDataSourceView4)sourceObj, (IExportJournal)journal, selectedValues);
             total = 0;
             return null;
         }
 
-        private static string GetQueryParameters(string parameters, bool showHistory, string search)
+        private static string GetQueryParameters(string parameters, bool showHistory, string search, string gridFiltersStr, IJournal journal)
         {
             var queryParameters = GlobalObject.decodeURIComponent(parameters);
             if (showHistory)
@@ -110,6 +112,51 @@
                 queryParameters += BaseFilterParameterSearch<object>.SearchQueryParameter + "=" + search;
             else
                 queryParameters += "&" + BaseFilterParameterSearch<object>.SearchQueryParameter + "=" + search;
+
+            if (!string.IsNullOrEmpty(gridFiltersStr) && journal != null)
+            {
+                var gridFilters = new FilterConditions(gridFiltersStr);
+                if (gridFilters.Conditions.Count > 0)
+                {
+                    var columnsDic = journal.GetColumns().OfType<GridColumn>().ToDictionary(r => r.ColumnNameIndex);
+                    foreach (var condition in gridFilters.Conditions)
+                    {
+                    if (!string.IsNullOrEmpty(queryParameters))
+                        queryParameters += "&" + (columnsDic[condition.Field].FilterColumnMapping ?? condition.Field);
+                        
+                        switch (condition.Type)
+                        {
+                            case FilterType.List:
+                                queryParameters += ".EqualsCollection=" + string.Join(",", condition.List);
+                                break;
+                            case FilterType.Boolean:
+                            case FilterType.Date:
+                            case FilterType.Numeric:
+                                switch (condition.Comparison)
+                                {
+                                    case Comparison.Eq:
+                                        queryParameters += ".Equals=";
+                                        break;
+                                    case Comparison.Gt:
+                                        queryParameters += ".EqualsOrMore=";
+                                        break;
+                                    case Comparison.Lt:
+                                        queryParameters += ".EqualsOrLess=";
+                                        break;
+                                    default:
+                                        throw new ArgumentOutOfRangeException();
+                                }
+                                queryParameters += condition.Value<string>();
+                                break;
+                            case FilterType.String:
+                                queryParameters += ".Contains=" + condition.Value<string>();
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                }
+            }
             return queryParameters;
         }
 

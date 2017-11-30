@@ -32,6 +32,8 @@ namespace Nat.Web.Controls.GenerationClasses
                                                      IDataSourceView3
         where TKey : struct
     {
+        private DbConnection _initConnection;
+
         protected BaseDataSourceView(IDataSource owner, string viewName)
             : base(owner, viewName)
         {
@@ -47,9 +49,19 @@ namespace Nat.Web.Controls.GenerationClasses
 
         public virtual Type RowType { get; private set; }
 
-        public virtual DbConnection InitConnection { get; set; }
+        public virtual DbConnection InitConnection
+        {
+            get { return _initConnection; }
+            set
+            {
+                _initConnection = value;
+                if (DataContext.Connection != value)
+                    DataContext = null;
+            }
+        }
+
         public virtual DbTransaction InitTransaction { get; set; }
-        public virtual DataContext DataContext { get; private set; }
+        public virtual DataContext DataContext { get; protected set; }
 
         internal protected virtual bool CancelTreeUse { get; set; }
 
@@ -950,6 +962,7 @@ namespace Nat.Web.Controls.GenerationClasses
         public override DataContext DataContext
         {
             get { return DB; }
+            protected set { DB = (TDataContext)value; }
         }
 
         public TDataContext DB

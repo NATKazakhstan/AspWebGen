@@ -185,8 +185,7 @@
 
         protected virtual void SetVisibleToControl(bool value)
         {
-            if (Control != null)
-                Control.Visible = value;
+            //if (Control != null) Control.Visible = value;
             OnVisibleChanged(new ActivityChangedEventArgs(ActivityType.Visible, value));
         }
 

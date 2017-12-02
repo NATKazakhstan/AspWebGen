@@ -2489,7 +2489,6 @@ var fixTreeStoreRecords = function(records) {
 
 // респонз файла в урле
 var saveFile = function (url) {
-    debugger;
     var a = document.createElement('a');
     a.href = url;
     var fileName = url.substring(url.lastIndexOf('/') + 1);

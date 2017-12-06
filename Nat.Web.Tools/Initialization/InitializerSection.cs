@@ -15,6 +15,9 @@ namespace Nat.Web.Tools.Initialization
     public class InitializerSection : ConfigurationSection
     {
         private static bool? useMainPageExt;
+        private static bool? registerMainScripts;
+        private static bool? addFilterInMainPageInternal;
+        private static bool? redirectOnSQLTimeoutInternal;
 
         private static readonly ConfigurationPropertyCollection _properties;
         private static readonly ConfigurationProperty _propInitializerClasses;
@@ -85,9 +88,9 @@ namespace Nat.Web.Tools.Initialization
         }
 
         public static bool UseMainPageExt => useMainPageExt ?? (useMainPageExt = GetSection().UseMainPageExtension).Value;
-        internal static bool RegisterMainScriptsInternal => useMainPageExt ?? (useMainPageExt = GetSection().RegisterMainScripts).Value;
-        internal static bool AddFilterInMainPageInternal => useMainPageExt ?? (useMainPageExt = GetSection().AddFilterInMainPage).Value;
-        internal static bool RedirectOnSQLTimeoutInternal => useMainPageExt ?? (useMainPageExt = GetSection().RedirectOnSQLTimeout).Value;
+        internal static bool RegisterMainScriptsInternal => registerMainScripts ?? (registerMainScripts = GetSection().RegisterMainScripts).Value;
+        internal static bool AddFilterInMainPageInternal => addFilterInMainPageInternal ?? (addFilterInMainPageInternal = GetSection().AddFilterInMainPage).Value;
+        internal static bool RedirectOnSQLTimeoutInternal => redirectOnSQLTimeoutInternal ?? (redirectOnSQLTimeoutInternal = GetSection().RedirectOnSQLTimeout).Value;
 
         public static InitializerSection GetSection()
         {

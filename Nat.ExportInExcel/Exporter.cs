@@ -1,10 +1,10 @@
 ﻿namespace Nat.ExportInExcel
 {
     using System;
+    using System.Collections.Generic;
     using System.Data.Linq;
     using System.Globalization;
     using System.IO;
-    using System.Security.Principal;
     using System.Text;
     using System.Threading;
     using System.Web;
@@ -186,11 +186,14 @@
                         {
                             var message = new StringBuilder();
                             message.Append(args.Header);
-                            message.Append("; Фильтры: \r\n");
-                            foreach (var value in args.FilterValues)
+                            if (args.FilterValues != null)
                             {
-                                message.Append(value);
-                                message.Append(";\r\n");
+                                message.Append("; Фильтры: \r\n");
+                                foreach (var value in args.FilterValues)
+                                {
+                                    message.Append(value);
+                                    message.Append(";\r\n");
+                                }
                             }
 
                             message.AddHyperLink(docLocation, Resources.SViewJournal, string.Empty);
@@ -199,6 +202,48 @@
             }
 
             return stream;
+        }
+        
+        public ExportResultArgs GetExcelResult(JournalExportEventArgs args)
+        {
+            try
+            {
+                var export = new ExporterXslxByArgs();
+                var stream = export.GetExcel(args);
+                if (args.ExportLog != 0)
+                {
+                    args.LogMonitor.Log(
+                        args.ExportLog,
+                        () =>
+                            {
+                                var message = new StringBuilder();
+                                message.Append(args.Header);
+                                if (args.FilterValues != null)
+                                {
+                                    message.Append("; Фильтры: \r\n");
+                                    foreach (var value in args.FilterValues)
+                                    {
+                                        message.Append(value);
+                                        message.Append(";\r\n");
+                                    }
+                                }
+
+                                return new LogMessageEntry(User.GetSID(), args.ExportLog, message.ToString());
+                            });
+                }
+                return new ExportResultArgs
+                    {
+                        Stream = stream
+                    };
+            }
+            catch (Exception e)
+            {
+                return new ExportResultArgs
+                    {
+                        Exception = e,
+                        ErrorMessage = e.ToString()
+                    };
+            }
         }
     }
 }

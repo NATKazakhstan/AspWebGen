@@ -670,12 +670,15 @@ namespace Nat.ExportInExcel
         {
             var filters = GetFilterStrings();
             var fullColSpan = GetCountColumns();
-            foreach (var filter in filters)
+            if (filters != null)
             {
-                WriteStartRow(null);
-                RenderCell(_writer, filter, 1, fullColSpan, FilterStyleId, ColumnType.Other, string.Empty);
-                _writer.WriteEndElement();
-                _addedRowSpans.Clear();
+                foreach (var filter in filters)
+                {
+                    WriteStartRow(null);
+                    RenderCell(_writer, filter, 1, fullColSpan, FilterStyleId, ColumnType.Other, string.Empty);
+                    _writer.WriteEndElement();
+                    _addedRowSpans.Clear();
+                }
             }
 
             WriteStartRow(null);

@@ -47,7 +47,7 @@ namespace Nat.ExportInExcel
         {
             return _args.Data.Count // количество данных
                 + _args.Columns.Max((Func<IExportColumn, int>)GetLevel) // количество строк в заголовке таблицы
-                + _args.FilterValues.Count + 1 // количество фильтров + пустая строка
+                + (_args.FilterValues?.Count ?? 0) + 1 // количество фильтров + пустая строка
                 + 1; // строка заголовка
         }
 

@@ -90,5 +90,15 @@ namespace Nat.Web.Tools.Export
         /// Количество фиксированных строк.
         /// </summary>
         public int FixedRowsCount { get; set; }
+
+        /// <summary>
+        /// Добавить колонку.
+        /// </summary>
+        /// <param name="exportColumn"></param>
+        public void AddColumn(IExportColumn exportColumn)
+        {
+            if (Columns == null) Columns = new List<IExportColumn>();
+            ((ICollection<IExportColumn>)Columns).Add(exportColumn);
+        }
     }
 }

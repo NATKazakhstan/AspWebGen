@@ -102,7 +102,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
         public override void RenderBackUrls(HtmlTextWriter writer)
         {
             var keys = Filter.GetStartTreeKeys<THeaderTable>(this);
-            if (keys.Count == 0) return;
+            if (keys.Count != 1) return;
             var data = GetData(keys.First());
             var row = data.FirstOrDefault();
             if (row != null)

@@ -98,13 +98,18 @@
 
         public int MaxRecursion { get; set; }
 
+        public override void ClearState()
+        {
+            StartHeaderValues?.Clear();
+            base.ClearState();
+        }
+
         public List<string> StartHeaderValues { get; protected set; }
         
         protected override IQueryable OnFilter(IQueryable query, Enum filtertype, string value1, string value2)
         {
             if (IsStartLevel)
             {
-                StartHeaderValues.Clear();
                 if (!string.IsNullOrEmpty(value1))
                     StartHeaderValues.Add(value1);
             }
@@ -119,10 +124,7 @@
             if (IsStartLevel)
             {
                 if (valuesForQParams != queryParameters || queryParameters == null)
-                {
-                    StartHeaderValues.Clear();
                     valuesForQParams = queryParameters;
-                }
 
                 if (!string.IsNullOrEmpty(filterItem.Value1))
                     StartHeaderValues.Add(filterItem.Value1);

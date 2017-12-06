@@ -661,3 +661,17 @@ DIV.childlinks_cssform P
 	top: 0px;
 	left: 0px;
 }
+.nat-hideEditorDIV
+{
+	margin: -4px;
+	cursor: pointer;
+}
+.nat-hideEditorDIV > a
+{
+	display: inline-block;
+	padding: 1px 2px 0px 2px;
+}
+.nat-hideEditorDIV input
+{
+	padding-top: 1px
+}

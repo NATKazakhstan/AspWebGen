@@ -5,6 +5,7 @@
     using System.ComponentModel;
     using System.Data.SqlClient;
     using System.Linq;
+    using System.Reflection;
     using System.Text.RegularExpressions;
     using System.Web;
     using System.Web.Compilation;
@@ -304,19 +305,13 @@
 
             string header = null;
             var type = BuildManager.GetType(
-                string.Format("{0}Resources, {1}, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", tableName, projectCode),
+                string.Format("{1}.Properties.{0}Resources, {1}, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", tableName, projectCode),
                 false,
                 true);
 
-            if (type != null)
-            {
-                var descriptor = TypeDescriptor.GetProperties(type);
-                var property = descriptor.Find("Header", false);
-
-                // ReSharper disable once AssignNullToNotNullAttribute
-                if (property != null)
-                    header = (string)property.GetValue(null);
-            }
+            var property = type?.GetProperty("Header", BindingFlags.Static | BindingFlags.Public);
+            if (property != null)
+                header = (string)property.GetValue(null, new object[0]);
 
             if (string.IsNullOrEmpty(header))
             {
@@ -335,6 +330,7 @@
 
             return ProjectHeadersCache[cacheKey] = header;
         }
+
         public static string GetTableFieldHeader(string projectCode, string tableName, string fieldName)
         {
             var cacheKey = $"{tableName}.{fieldName}:{LocalizationHelper.IsCultureKZ}";
@@ -343,20 +339,14 @@
 
             string header = null;
             var type = BuildManager.GetType(
-                string.Format("{0}Resources, {1}, Version=1.0.0.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a", tableName, projectCode),
+                string.Format("{1}.Properties.{0}Resources, {1}, Version=1.0.0.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a", tableName, projectCode),
                 false,
                 true);
 
-            if (type != null)
-            {
-                var descriptor = TypeDescriptor.GetProperties(type);
-                var property = descriptor.Find(fieldName + "__Header", false);
+            var property = type?.GetProperty(fieldName + "__Header", BindingFlags.Static | BindingFlags.Public);
+            if (property != null)
+                header = (string)property.GetValue(null, new object[0]);
 
-                // ReSharper disable once AssignNullToNotNullAttribute
-                if (property != null)
-                    header = (string)property.GetValue(null);
-            }
-            
             if (string.IsNullOrEmpty(header))
                 header = tableName + "." + fieldName;
 

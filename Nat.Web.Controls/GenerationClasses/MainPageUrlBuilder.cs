@@ -72,6 +72,7 @@ namespace Nat.Web.Controls
         public bool IsMultipleSelect { get; set; }
         public string Culture { get; set; }
         public string StorageValuesSessionKey { get; set; }
+        public string DataSessionKey { get; set; }
         public string ReportPluginName { get; set; }
         public bool TimeoutInSQL { get; set; }
 
@@ -238,6 +239,8 @@ namespace Nat.Web.Controls
                             Culture = fieldValue;
                         else if (match.Groups["field"].Value == "storageValues")
                             StorageValuesSessionKey = fieldValue;
+                        else if (match.Groups["field"].Value == "DataSessionKey")
+                            DataSessionKey = match.Groups["value"].Value;
                         else if (match.Groups["field"].Value == "reportPluginName")
                             ReportPluginName = fieldValue;
                         else if (match.Groups["field"].Value == "__backurl")
@@ -433,6 +436,7 @@ namespace Nat.Web.Controls
                 }
 
             AddParameter(sb, "culture", Culture, ref hasQuery);
++            AddParameter(sb, "DataSessionKey", DataSessionKey, ref hasQuery);
             AddParameter(sb, "reportPluginName", HttpUtility.UrlEncode(ReportPluginName), ref hasQuery);
             AddParameter(sb, "mode", HttpUtility.UrlEncode(SelectMode), ref hasQuery);
             AddParameter(sb, "viewmode", HttpUtility.UrlEncode(ViewMode), ref hasQuery);

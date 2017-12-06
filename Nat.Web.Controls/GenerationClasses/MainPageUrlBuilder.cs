@@ -436,7 +436,7 @@ namespace Nat.Web.Controls
                 }
 
             AddParameter(sb, "culture", Culture, ref hasQuery);
-+            AddParameter(sb, "DataSessionKey", DataSessionKey, ref hasQuery);
+            AddParameter(sb, "DataSessionKey", DataSessionKey, ref hasQuery);
             AddParameter(sb, "reportPluginName", HttpUtility.UrlEncode(ReportPluginName), ref hasQuery);
             AddParameter(sb, "mode", HttpUtility.UrlEncode(SelectMode), ref hasQuery);
             AddParameter(sb, "viewmode", HttpUtility.UrlEncode(ViewMode), ref hasQuery);

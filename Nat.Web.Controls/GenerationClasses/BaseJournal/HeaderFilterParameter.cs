@@ -120,7 +120,7 @@
 
         protected internal override Expression OnFilter(Enum filtertype, FilterItem filterItem, QueryParameters queryParameters)
         {
-            ProcessDependedFilters(filtertype, filterItem, qParams);
+            ProcessDependedFilters(filtertype, filterItem, queryParameters);
             if (IsStartLevel)
             {
                 if (valuesForQParams != queryParameters || queryParameters == null)

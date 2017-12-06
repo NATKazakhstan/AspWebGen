@@ -31,7 +31,7 @@ namespace Nat.Web.Controls.Filters
     using Nat.Tools.QueryGeneration;
 
     public class WebMultipleValuesColumnFilter : WebControl, IMultipleValuesColumnFilter, ISupportSessionWorker,
-        ISupportLog, IDefaultFilterValues, INamingContainer, ISupportPostBack
+        ISupportLog, IColumnFilterStorageChanged, IDefaultFilterValues, INamingContainer, ISupportPostBack
     {
         #region Fields
 
@@ -56,7 +56,11 @@ namespace Nat.Web.Controls.Filters
         private ScriptManager _ScriptManager;
         private bool checkedIdsCleared;
 
+        private IColumnFilterStorageChanged _columnFilterStorageChangedImplementation;
+
         #endregion
+
+        public event EventHandler<EventArgs> ColumnFilterStorageChanged;
 
         public WebMultipleValuesColumnFilter()
         {
@@ -431,6 +435,7 @@ function {1} (checkbox){{
             {
                 dataSource = value;
                 _storage.RefDataSource = value;
+                OnColumnFilterStorageChanged();
             }
         }
 
@@ -472,6 +477,7 @@ function {1} (checkbox){{
                 columnFilterType = value;
                 _storage.FilterType = value;
                 _storage.AvailableFilters = ColumnFilterType.In | ColumnFilterType.Equal | ColumnFilterType.None;
+                OnColumnFilterStorageChanged();
             }
         }
 
@@ -480,6 +486,11 @@ function {1} (checkbox){{
         #region IColumnFilter Members
 
         public event ValidateEventHandler FilterValidate;
+
+        protected virtual void OnColumnFilterStorageChanged()
+        {
+            ColumnFilterStorageChanged?.Invoke(this, EventArgs.Empty);
+        }
 
         public ColumnFilterStorage GetStorage()
         {
@@ -521,6 +532,7 @@ function {1} (checkbox){{
         public void SetStorage(ColumnFilterStorage storage)
         {
             _storage = (ColumnFilterStorage)storage.Clone();
+            OnColumnFilterStorageChanged();
         }
 
         public DataRow GetRow(int index)

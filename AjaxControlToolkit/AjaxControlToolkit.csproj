@@ -521,7 +521,7 @@
     <VisualStudio AllowExistingFolder="true" />
   </ProjectExtensions>
   <!-- Strip the comments out of any JavaScript files that were embedded as resources -->
-  <UsingTask TaskName="AjaxControlToolkit.JavaScriptCommentStripperTask" AssemblyFile="$(MSBuildProjectDirectory)\..\Binaries\JavaScriptCommentStripper.dll" />
+  <UsingTask TaskName="AjaxControlToolkit.JavaScriptCommentStripperTask" AssemblyFile="$(MSBuildProjectDirectory)\..\Libraries\AjaxControlToolkit\JavaScriptCommentStripper.dll" />
   <PropertyGroup>
     <CompileDependsOn>
       StripJavaScriptComments;

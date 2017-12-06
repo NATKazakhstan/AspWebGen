@@ -51,7 +51,14 @@ namespace Nat.Web.Tools
 
         public void AddStorage(ColumnFilterStorage storage, string[] textValues)
         {
-            _values.Add(storage.Name, new Data(storage.Values, storage.FilterType, textValues));
+            var existValue = _values.ContainsKey(storage.Name) ? (Data)_values[storage.Name] : null;
+            if (existValue == null
+                || (storage.Values != null && storage.Values.Any(r => r != null)
+                    && (storage.FilterType == ColumnFilterType.In
+                        || storage.FilterType != ColumnFilterType.In && storage.FilterType != ColumnFilterType.None)))
+            {
+                _values[storage.Name] = new Data(storage.Values, storage.FilterType, textValues);
+            }
         }
         
         public void SetStorageValues(string name, ColumnFilterType filterType, params object[] values)

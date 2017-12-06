@@ -17,6 +17,8 @@ namespace Nat.Web.Controls.GenerationClasses
 {
     using System.Web.UI;
 
+    using Nat.Tools.Filtering;
+
     public abstract class BaseFilterControl<TKey> : BaseHeaderControl, IBaseFilterControl, IFilterControl where TKey : struct
     {
         private MainPageUrlBuilder _url;
@@ -854,11 +856,8 @@ namespace Nat.Web.Controls.GenerationClasses
                 {
                     var values = storageValues.GetStorageValues(item);
                     var textValues = storageValues.GetStorageTextValues(item);
-                    defaultFilters.SetFilter(
-                        item,
-                        storageValues.GetStorageFilterType(item),
-                        GetValue1(values),
-                        GetValue2(values, textValues));
+                    var filterType = storageValues.GetStorageFilterType(item);
+                    SetFilter(defaultFilters, item, filterType, values, textValues);
                 }
 
                 for (int i = 0; i < storageValues.CountListValues; i++)
@@ -881,6 +880,31 @@ namespace Nat.Web.Controls.GenerationClasses
 
             var lists = jss.Serialize(filterItems.SelectMany(r => r.Value).ToList());
             return lists;
+        }
+
+        private static void SetFilter(DefaultFilters defaultFilters, string filterName, ColumnFilterType? filterType, object[] values, string[] textValues)
+        {
+            switch (filterType)
+            {
+                case ColumnFilterType.In:
+                case ColumnFilterType.OutOf:
+                    for (var index = 0; index < values.Length; index++)
+                    {
+                        defaultFilters.SetFilter(
+                            filterName,
+                            filterType,
+                            Convert.ToString(values[index]),
+                            textValues?[index]);
+                    }
+                    break;
+                default:
+                    defaultFilters.SetFilter(
+                        filterName,
+                        filterType,
+                        GetValue1(values),
+                        GetValue2(values, textValues));
+                    break;
+            }
         }
 
         private static string GetValue1(object[] values)

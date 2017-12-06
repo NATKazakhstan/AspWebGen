@@ -509,7 +509,7 @@ namespace Nat.Web.ReportManager
             foreach (BaseReportCondition condition in conditions)
             {
                 ColumnFilterStorage storage = condition.ColumnFilter.GetStorage();
-                contants.Add(storage.Name, BuildConstants(condition, storage, addFilterType));
+                contants[storage.Name] = BuildConstants(condition, storage, addFilterType);
             }
             
             if (circleFillConditions != null)

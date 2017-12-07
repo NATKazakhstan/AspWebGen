@@ -49,7 +49,7 @@ namespace Nat.ExportInExcel
         {
             if (HttpContext.Current != null)
             {
-                foreach (var key in HttpContext.Current.Items.Keys.Cast<string>().ToList().Where(r => r.EndsWith(".FiltersCache")))
+                foreach (var key in HttpContext.Current.Items.Keys.OfType<string>().ToList().Where(r => r.EndsWith(".FiltersCache")))
                     HttpContext.Current.Items.Remove(key);
             }
 

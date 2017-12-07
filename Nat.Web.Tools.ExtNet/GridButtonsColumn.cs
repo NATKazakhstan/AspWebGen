@@ -5,6 +5,7 @@
 */
 
 using System;
+using System.Web;
 
 namespace Nat.Web.Tools.ExtNet
 {
@@ -207,7 +208,7 @@ namespace Nat.Web.Tools.ExtNet
         }
 
         public Func<string, string> EditUrlJavaScript { get; set; } =
-            urlTemplate => $"'{urlTemplate}'.replace('{{0}}', record.internalId)";
+            urlTemplate => $"'{urlTemplate}'.replace('{HttpUtility.UrlEncode("{0}")}', record.internalId)";
 
         public Func<string, string> EditWindowTitleJavaScript { get; set; } =
             title => $"'{title}' + ': ' + record.data.RowName";
@@ -276,7 +277,7 @@ namespace Nat.Web.Tools.ExtNet
         }
 
         public Func<string, string> LookUrlJavaScript { get; set; } = 
-            urlTemplate => $"'{urlTemplate}'.replace('{{0}}', record.internalId)";
+            urlTemplate => $"'{urlTemplate}'.replace('{HttpUtility.UrlEncode("{0}")}', record.internalId)";
 
         public Func<string, string> LookWindowTitleJavaScript { get; set; } =
             title => $"'{title}' + ': ' + record.data.RowName";
@@ -316,12 +317,12 @@ namespace Nat.Web.Tools.ExtNet
             {
                 deleteScript = string.Format(@"
 var w = #{{ModalWindow}};
-w.loader.url = '{0}'.replace('{{0}}', record.internalId);
+w.loader.url = '{0}'.replace('{2}', record.internalId);
 w.setTitle('{1}' + ': ' + record.data.RowName);
 w.show();
 if (!w.collapsed)
     w.loader.load();
-", DeleteUrl, Resources.SDeleteText);
+", DeleteUrl, Resources.SDeleteText, HttpUtility.UrlEncode("{0}"));
             }
             else // fix: используется ActionColumn который не верно рендерит доступ до DirectMethods
             {

@@ -1,23 +1,33 @@
 ﻿ALTER TABLE SYS_UserFilters ADD UserSID NVARCHAR(200) collate Cyrillic_General_CS_AS NULL
+go
 
 UPDATE SYS_UserFilters
 SET UserSID = s.[Sid]
 FROM SYS_UserFilters uf
 JOIN LOG_SidIdentification s ON s.id = uf.refSid
+go
 
 ALTER TABLE SYS_UserFilters
 
-ALTER COLUMN SYS_UserFilters NVARCHAR(200) collate Cyrillic_General_CS_AS NOT NULL
+ALTER COLUMN UserSID NVARCHAR(200) collate Cyrillic_General_CS_AS NOT NULL
 
 ALTER TABLE SYS_UserFilters DROP COLUMN refSid
 GO
 
+truncate table LOG_TraceTimingRequests
+go
+
 ALTER TABLE LOG_TraceTimingRequests ADD UserSID NVARCHAR(200) collate Cyrillic_General_CS_AS NULL
+go
 
 UPDATE LOG_TraceTimingRequests
 SET UserSID = s.[Sid]
 FROM LOG_TraceTimingRequests ttr
 JOIN LOG_SidIdentification s ON s.id = ttr.refUser
+go
+
+drop index AutoIndex_LOG_TraceTimingRequests_refUser on LOG_TraceTimingRequests
+go
 
 ALTER TABLE LOG_TraceTimingRequests
 
@@ -27,17 +37,23 @@ ALTER TABLE LOG_TraceTimingRequests DROP COLUMN refUser
 GO
 
 ALTER TABLE RVS_SavedProperties ADD UserSID NVARCHAR(200) collate Cyrillic_General_CS_AS NULL
+go
 
 UPDATE RVS_SavedProperties
 SET UserSID = s.[Sid]
 FROM RVS_SavedProperties ttr
 JOIN LOG_SidIdentification s ON s.id = ttr.refSid
+go
 
 ALTER TABLE RVS_SavedProperties
 
 ALTER COLUMN UserSID NVARCHAR(200) collate Cyrillic_General_CS_AS NOT NULL
 
-ALTER TABLE LOG_TraceTimingRequests DROP COLUMN refSid
+drop index AutoIndex_RVS_SavedProperties_refSid on RVS_SavedProperties
+
+ALTER TABLE [dbo].[RVS_SavedProperties] DROP CONSTRAINT [TableRef_RVS_SavedProperties_refSid]
+
+ALTER TABLE RVS_SavedProperties DROP COLUMN refSid
 GO
 
 ALTER TABLE SYS_FilterValues ADD UserSID NVARCHAR(200) collate Cyrillic_General_CS_AS NULL
@@ -49,9 +65,11 @@ ALTER COLUMN PersonSID NVARCHAR(200) collate Cyrillic_General_CS_AS NOT NULL
 GO
 
 ALTER TABLE SYS_FilterValues ADD BinarySid VARBINARY(64) NULL
+go
 
 UPDATE SYS_FilterValues
 SET BinarySid = [sid]
+go
 
 ALTER TABLE SYS_FilterValues
 

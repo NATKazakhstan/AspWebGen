@@ -1724,12 +1724,21 @@ function initIDDivTopDetecter() {
     var div3 = $('#idDivTopDetecter3');
     if (div.length == 1) {
         var top = div.offset().top + 45 + div3.offset().top - div2.offset().top;
-        div3.next().css('top', top + 'px');
+        if (top < 0)
+            top = '';
+        else
+            top = top + 'px';
+        div3.next().css('top', top);
 
         $(window).resize(function () {
             if (div.length == 1) {
                 top = div.offset().top + 45 + div3.offset().top - div2.offset().top;
-                div3.next().css('top', top + 'px');
+
+                if (top < 0)
+                    top = '';
+                else
+                    top = top + 'px';
+                div3.next().css('top', top);
             }
         });
     }

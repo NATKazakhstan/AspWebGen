@@ -413,7 +413,7 @@ namespace Nat.Web.Controls
                     else
                         sb.Append(pair.Key);
                     sb.Append("=");
-                    sb.Append(HttpUtility.UrlEncode(pair.Value));
+                    sb.Append(pair.Value == "{0}" ? pair.Value : HttpUtility.UrlEncode(pair.Value));
                     sb.Append("&");
                 }
                 sb.Remove(sb.Length - 1, 1); //убираем симол "&"  конца строки

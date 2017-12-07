@@ -150,7 +150,7 @@ namespace Nat.Web.Controls.GenerationClasses
                 if (_fixedColumnsCount != null)
                     FixedColumnsCount = _fixedColumnsCount.Value;
 
-                var startupScript = $"$(function() {{ {GetScriptToInitialFixedHeader()} }});";
+                var startupScript= $"if (window.Ext != null) Ext.onReady(function() {{ {GetScriptToInitialFixedHeader()} }}); else $(function() {{ {GetScriptToInitialFixedHeader()} }});";
                 if (HasAjax)
                     ScriptManager.RegisterStartupScript(this, typeof (SelectingColumn),
                                                         "initFixedHeader", startupScript, true);

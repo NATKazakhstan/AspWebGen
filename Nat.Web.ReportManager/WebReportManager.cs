@@ -448,13 +448,12 @@ namespace Nat.Web.ReportManager
         /// <returns>Адрес отчета</returns>
         public static string GetReportUrl(string idrec, string pluginType, string backText, string backUrl, string culture, bool export)
         {
+            var reportPageViewer = ReportInitializerSection.GetReportInitializerSection().ReportPageViewer;
             if (export)
-                return string.Format(@"{0}?expword=1&idrec={1}&ClassName={2}&text={3}&culture={5}&backPath={4}",
-                                     ReportInitializerSection.GetReportInitializerSection().ReportPageViewer,
-                                     idrec, pluginType, backText, backUrl, culture);
+                return $@"{reportPageViewer}?expword=1&idrec={idrec}&ClassName={pluginType}&culture={culture}";
             return string.Format(@"{0}?idrec={1}&ClassName={2}&text={3}&culture={5}&backPath={4}",
-                                 ReportInitializerSection.GetReportInitializerSection().ReportPageViewer,
-                                 idrec, pluginType, backText, backUrl, culture);
+                                 reportPageViewer,
+                                 idrec, pluginType, HttpUtility.UrlEncode(backText), HttpUtility.UrlEncode(backUrl), culture);
         }
 
         private static object[] BuildConstants(BaseReportCondition condition, ColumnFilterStorage storage, bool addFilterType)

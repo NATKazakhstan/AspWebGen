@@ -7,15 +7,16 @@ FROM SYS_UserFilters uf
 JOIN LOG_SidIdentification s ON s.id = uf.refSid
 go
 
+drop index AutoIndex_SYS_UserFilters_refSid on SYS_UserFilters
+drop index Index_SYS_UserFilters on SYS_UserFilters
+alter table SYS_UserFilters drop constraint TableRef_SYS_UserFilters_refSid
+
 ALTER TABLE SYS_UserFilters
 
 ALTER COLUMN UserSID NVARCHAR(200) collate Cyrillic_General_CS_AS NOT NULL
 
 ALTER TABLE SYS_UserFilters DROP COLUMN refSid
 GO
-
-truncate table LOG_TraceTimingRequests
-go
 
 ALTER TABLE LOG_TraceTimingRequests ADD UserSID NVARCHAR(200) collate Cyrillic_General_CS_AS NULL
 go
@@ -28,6 +29,9 @@ go
 
 drop index AutoIndex_LOG_TraceTimingRequests_refUser on LOG_TraceTimingRequests
 go
+
+drop index NDX_refUser_DateTimeStart on LOG_TraceTimingRequests
+alter table LOG_TraceTimingRequests drop constraint TableRef_LOG_TraceTimingRequests_refUser
 
 ALTER TABLE LOG_TraceTimingRequests
 
@@ -50,8 +54,7 @@ ALTER TABLE RVS_SavedProperties
 ALTER COLUMN UserSID NVARCHAR(200) collate Cyrillic_General_CS_AS NOT NULL
 
 drop index AutoIndex_RVS_SavedProperties_refSid on RVS_SavedProperties
-
-ALTER TABLE [dbo].[RVS_SavedProperties] DROP CONSTRAINT [TableRef_RVS_SavedProperties_refSid]
+drop index NDX_JournalTypeName_dateTime on RVS_SavedProperties
 
 ALTER TABLE RVS_SavedProperties DROP COLUMN refSid
 GO
@@ -70,6 +73,8 @@ go
 UPDATE SYS_FilterValues
 SET BinarySid = [sid]
 go
+
+drop index Index_SidKey on SYS_FilterValues
 
 ALTER TABLE SYS_FilterValues
 
@@ -291,5 +296,52 @@ begin
         where uf.TableName = @TableName and uf.[UserSID] = @sid
     end
     select isnull(@refUserFilterValues, Scope_Identity()) as refUserFilterValues
+end
+go
+
+create index NDX_UserSID_DateTimeStart on LOG_TraceTimingRequests (UserSID, DateTimeStart) include([TimeOfDestinationUser])
+
+CREATE NONCLUSTERED INDEX [NDX_JournalTypeName_dateTime] ON [dbo].[RVS_SavedProperties]
+(
+	[JournalTypeName] ASC,
+	[dateTime] DESC
+)
+INCLUDE ( 	[id],
+	[nameKz],
+	[nameRu],
+	[refProperties],
+	UserSID,
+	[isSharedView])
+GO
+
+
+
+if exists (select 1
+          from sysobjects
+          where  id = object_id('P_LOG_InsertTraceTimingRequest')
+          and type in ('P','PC'))
+   drop procedure P_LOG_InsertTraceTimingRequest
+go
+
+
+create procedure P_LOG_InsertTraceTimingRequest
+   @Page                 nvarchar(255),
+   @Url                  nvarchar(MAX),
+   @DateTimeStart        datetime     ,
+   @TimeOfCreatingPage   bigint       ,
+   @UserSID              nvarchar(200),
+   @refRegion            bigint       ,
+   @TableName            nvarchar(255),
+   @SelectMode           nvarchar(255),
+   @PageType             nvarchar(255),
+   @Parameters           xml,
+   @Trace                xml          ,
+   @TraceKey             uniqueidentifier,
+   @id bigint output
+as
+begin
+    insert into LOG_TraceTimingRequests (Page, Url, DateTimeStart, TimeOfCreatingPage, UserSID, refRegion, TableName, SelectMode, PageType, Parameters, Trace, TraceKey)
+    values (@Page, @Url, @DateTimeStart, @TimeOfCreatingPage, @UserSID, @refRegion, @TableName, @SelectMode, @PageType, @Parameters, @Trace, @TraceKey)
+    set @id = Scope_Identity()
 end
 go

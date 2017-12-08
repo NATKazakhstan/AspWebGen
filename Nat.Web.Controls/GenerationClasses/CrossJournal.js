@@ -1300,6 +1300,7 @@ function changeWidthCell_RememberHeightHRows(table) {
 }
 function changeWidthCell_RememberSizeOnLoad(table) {
     $(table).attr('crossJournalID', table.id);
+    $(table).width($(table).width() - 2);
     changeWidthCell_LoadColH(table);
     for (var key in _changeWidthCell_colHDic) {
         if (!_changeWidthCell_colHDic.hasOwnProperty(key))

@@ -16,7 +16,8 @@ function CreateFixedHeader(table, fixedHeader, rowsCount, colsCount) {
             i++;
     }
 
-    if (!$('#ctl00_PlaceHolderMain_item_Journal').is(":visible"))
+    // todo: подумать, возможно условие нужно только для IE
+    if (!$('#ctl00_PlaceHolderMain_item_Journal').is(":visible") && window.Ext == null)
         return;
 
     var rowsTable = document.createElement("table");
@@ -1724,7 +1725,7 @@ function initIDDivTopDetecter() {
     var div3 = $('#idDivTopDetecter3');
     if (div.length == 1) {
         var top = div.offset().top + 45 + div3.offset().top - div2.offset().top;
-        if (top < 0)
+        if (window.Ext != null || top < 0)
             top = '';
         else
             top = top + 'px';
@@ -1734,7 +1735,7 @@ function initIDDivTopDetecter() {
             if (div.length == 1) {
                 top = div.offset().top + 45 + div3.offset().top - div2.offset().top;
 
-                if (top < 0)
+                if (window.Ext != null || top < 0)
                     top = '';
                 else
                     top = top + 'px';

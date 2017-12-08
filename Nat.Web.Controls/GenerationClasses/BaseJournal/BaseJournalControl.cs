@@ -2029,12 +2029,10 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
             GroupControl.Visible = GroupColumns.Count > 0 ||
                                    InnerHeader.Columns.FirstOrDefault(r => r.AllowGrouping) != null;
 
+            var startupScript = $"if (window.Ext != null) Ext.onReady(function() {{ changeWidthCell_RememberSizeOnLoad($get('{ClientID}')); }}); else $(function() {{ changeWidthCell_RememberSizeOnLoad($get('{ClientID}')); }});";
+
             if (!DetailsRender)
-                Page.ClientScript.RegisterStartupScript(
-                    GetType(),
-                    "RememberSizeOnLoad",
-                    string.Format("changeWidthCell_RememberSizeOnLoad($get('{0}'));", ClientID),
-                    true);
+                Page.ClientScript.RegisterStartupScript(GetType(), "RememberSizeOnLoad", startupScript, true);
             _buttons = new AdditionalButtons(Page, this, ParentUserControl.ExtenderAjaxControl);
             InitializeAdditionalButtons(_buttons);
         }

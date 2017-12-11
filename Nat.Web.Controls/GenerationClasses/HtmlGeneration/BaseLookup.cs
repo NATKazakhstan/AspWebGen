@@ -73,9 +73,9 @@ namespace Nat.Web.Controls.GenerationClasses
 
         public bool LoadPostData(string postDataKey, NameValueCollection postCollection)
         {
-            Value = postCollection[UniqueID];
-            Text = postCollection[UniqueID + "$tbT"];
-            AlternateText = postCollection[UniqueID + "$tbA"];
+            Value = postCollection[((IRenderComponent)this).UniqueID] ?? postCollection[UniqueID];
+            Text = postCollection[((IRenderComponent)this).UniqueID + "$tbT"] ?? postCollection[UniqueID + "$tbT"];
+            AlternateText = postCollection[((IRenderComponent)this).UniqueID + "$tbA"] ?? postCollection[UniqueID + "$tbA"];
             return true;
         }
 

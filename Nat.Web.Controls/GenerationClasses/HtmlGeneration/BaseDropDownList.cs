@@ -102,10 +102,8 @@ namespace Nat.Web.Controls.GenerationClasses
         public bool LoadPostData(string postDataKey, NameValueCollection postCollection)
         {
             // note: IExplorer отправляет Post с текстом вместо value.
-            if ((postCollection[UniqueID] ?? string.Empty).Equals(TextOfValueNotSet, StringComparison.OrdinalIgnoreCase))
-                SelectedValue = null;
-            else
-                SelectedValue = postCollection[UniqueID];
+            var value = postCollection[((IRenderComponent)this).UniqueID] ?? postCollection[UniqueID];
+            SelectedValue = (value ?? string.Empty).Equals(TextOfValueNotSet, StringComparison.OrdinalIgnoreCase) ? null : value;
             return true;
         }
 

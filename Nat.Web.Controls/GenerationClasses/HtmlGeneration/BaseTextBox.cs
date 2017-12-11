@@ -44,12 +44,13 @@ namespace Nat.Web.Controls.GenerationClasses
         public bool LoadPostData(string postDataKey, NameValueCollection postCollection)
         {
             var text = TextValue;
-            var str2 = postCollection[UniqueID];
+            var str2 = postCollection[((IRenderComponent)this).UniqueID] ?? postCollection[UniqueID];
             if (!text.Equals(str2, StringComparison.Ordinal))
             {
                 TextValue = str2;
                 return true;
             }
+
             return false;
         }
 

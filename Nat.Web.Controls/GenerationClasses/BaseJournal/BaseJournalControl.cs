@@ -2077,12 +2077,12 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 
         protected virtual string GetGridRight()
         {
-            return "23px";
+            return "0px";
         }
 
         protected virtual string GetGridLeft()
         {
-            return "23px";
+            return "3px";
         }
 
         protected virtual string GetGridTop()

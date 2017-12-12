@@ -287,9 +287,12 @@ namespace Nat.Web.ReportManager.UserControls
                                 redirectReportPlugin.GetType());
                         }
 
-                        redirectReportPlugin.OpenReport(webReportManager, values, Request.QueryString["rs:format"],
-                                                        culture, HttpUtility.UrlEncode(Request.QueryString["backPath"]),
-                                                        Request.QueryString["text"], Request.QueryString["rs:command"]);
+                        redirectReportPlugin.OpenReport(
+                            webReportManager,
+                            values,
+                            Request.QueryString["rs:format"],
+                            culture, HttpUtility.UrlEncode(backPath),
+                            backText, Request.QueryString["rs:command"]);
                     }
                     else
                     {
@@ -300,7 +303,7 @@ namespace Nat.Web.ReportManager.UserControls
                                 webReportManager.Plugin.GetType().FullName,
                                 guid,
                                 backText,
-                                HttpUtility.UrlEncode(Request.QueryString["backPath"]),
+                                HttpUtility.UrlEncode(backPath),
                                 Request.QueryString["expword"],
                                 culture,
                                 ReportInitializerSection.GetReportInitializerSection().ReportingStiReportResultPage));

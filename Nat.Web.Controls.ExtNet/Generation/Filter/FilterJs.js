@@ -244,8 +244,7 @@ Array.prototype.ApplyFilter = function(applyFunctionName) {
             filterObj.FilterTypeId != undefined) {
 
             var filterOperation = filterObj.ClientFilterTypeControl.getValue();
-            if (filterOperation == null || filterObj.disabledByDependeds)
-            {
+            if (filterOperation == null || filterObj.disabledByDependeds) {
                 if (filterObj.RequiredFilter) {
                     isApplyFilter = false;
                     filterObj.ClientFilterTypeControl.allowBlank = false;
@@ -254,7 +253,7 @@ Array.prototype.ApplyFilter = function(applyFunctionName) {
 
                 return;
             }
-            
+
             filterObj.ClientFilterTypeControl.allowBlank = true;
             filterObj.ClientFilterTypeControl.clearInvalid();
 
@@ -262,9 +261,9 @@ Array.prototype.ApplyFilter = function(applyFunctionName) {
                 filterOperation !== "IsNotNull" &&
                 filterObj.ClientFirstFilterValueControl &&
                 filterObj.ClientFirstFilterValueControl.rememberMaxValue &&
-                   filterObj.ClientFirstFilterValueControl.getValue() &&
-                   Date.parseInvariant(filterObj.ClientFirstFilterValueControl.rememberMaxValue, "dd.MM.yyyy") < filterObj.ClientFirstFilterValueControl.getValue())
-            {
+                filterObj.ClientFirstFilterValueControl.getValue() &&
+                Date.parseInvariant(filterObj.ClientFirstFilterValueControl.rememberMaxValue, "dd.MM.yyyy") <
+                filterObj.ClientFirstFilterValueControl.getValue()) {
                 filterObj.ClientFirstFilterValueControl.validate();
                 isApplyFilter = false;
                 return;
@@ -274,15 +273,15 @@ Array.prototype.ApplyFilter = function(applyFunctionName) {
                 filterObj.ClientSecondFilterValueControl &&
                 filterObj.ClientSecondFilterValueControl.rememberMaxValue &&
                 filterObj.ClientSecondFilterValueControl.getValue() &&
-                Date.parseInvariant(filterObj.ClientSecondFilterValueControl.rememberMaxValue, "dd.MM.yyyy") < filterObj.ClientSecondFilterValueControl.getValue())
-            {
+                Date.parseInvariant(filterObj.ClientSecondFilterValueControl.rememberMaxValue, "dd.MM.yyyy") <
+                filterObj.ClientSecondFilterValueControl.getValue()) {
                 filterObj.ClientSecondFilterValueControl.validate();
                 isApplyFilter = false;
                 return;
             }
 
             if (filterOperation === "Between") {
-               
+
                 if (filterObj.ClientFirstFilterValueControl.getValue() != undefined &&
                     filterObj.ClientSecondFilterValueControl.getValue() != undefined) {
                     filtersList.push({
@@ -326,25 +325,34 @@ Array.prototype.ApplyFilter = function(applyFunctionName) {
                     filterObj.ClientFirstFilterValueControl.allowBlank = false;
                     filterObj.ClientFirstFilterValueControl.validate();
                 } else {
-                    filterObj.ClientFirstFilterValueControl.allowBlank = true;
-                    filterObj.ClientFirstFilterValueControl.clearInvalid();
-                    var itemsValue = value.toString().split(", ");
-                    if (itemsValue != null && itemsValue.length > 0 && filterObj.LookupValues != undefined) {
-                        for (var i = 0; i < filterObj.LookupValues.length; i++) {
+                    if (filterObj.ClientFirstFilterValueControl !== undefined) {
+                        filterObj.ClientFirstFilterValueControl.allowBlank = true;
+                        filterObj.ClientFirstFilterValueControl.clearInvalid();
+                        var itemsValue = value.toString().split(", ");
+                        if (itemsValue != null && itemsValue.length > 0 && filterObj.LookupValues != undefined) {
+                            for (var i = 0; i < filterObj.LookupValues.length; i++) {
+                                filtersList.push({
+                                    FilterName: filterObj.FilterName,
+                                    FilterType: filterOperation,
+                                    Value1: filterObj.LookupValues[i],
+                                    Value2: filterObj.ClientFirstFilterValueControl.store.data.items
+                                        .getTextByValue(filterObj.LookupValues[i])
+                                });
+                            }
+                        } else if (itemsValue != undefined && itemsValue.length > 1) {
+                            for (var i = 0; i < itemsValue.length; i++) {
+                                filtersList.push({
+                                    FilterName: filterObj.FilterName,
+                                    FilterType: filterOperation,
+                                    Value1: itemsValue[i],
+                                    Value2: ""
+                                });
+                            }
+                        } else {
                             filtersList.push({
                                 FilterName: filterObj.FilterName,
                                 FilterType: filterOperation,
-                                Value1: filterObj.LookupValues[i],
-                                Value2: filterObj.ClientFirstFilterValueControl.store.data.items
-                                    .getTextByValue(filterObj.LookupValues[i])
-                            });
-                        }
-                    } else if (itemsValue != undefined && itemsValue.length > 1) {
-                        for (var i = 0; i < itemsValue.length; i++) {
-                            filtersList.push({
-                                FilterName: filterObj.FilterName,
-                                FilterType: filterOperation,
-                                Value1: itemsValue[i],
+                                Value1: getControlValue(filterObj.ClientFirstFilterValueControl),
                                 Value2: ""
                             });
                         }
@@ -352,7 +360,7 @@ Array.prototype.ApplyFilter = function(applyFunctionName) {
                         filtersList.push({
                             FilterName: filterObj.FilterName,
                             FilterType: filterOperation,
-                            Value1: getControlValue(filterObj.ClientFirstFilterValueControl),
+                            Value1: true,
                             Value2: ""
                         });
                     }

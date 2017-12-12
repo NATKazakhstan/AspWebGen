@@ -6,7 +6,7 @@
         <script type="text/javascript">
             useUPBarOnPostBack = false;
         </script>
-        <asp:Button ID="bBack" runat="server" OnClick="bBack_Click" Text="Button" Visible="False" />
+        <asp:Button ID="bBack" runat="server" OnClick="bBack_Click" Text="Button" Visible="True" />
         <br />
         <cc1:stiwebviewer id="StiWebViewer1" runat="server" CacheMode="ObjectSession" RenderMode="UseCache" AllowBookmarks="False" ShowExportToBmp="False" ShowExportToCsv="False" ShowExportToDbf="False" ShowExportToDif="False" ShowExportToGif="False" ShowExportToHtml="False" ShowExportToHtml5="False" ShowExportToDocument="False" ShowExportToMetafile="False" ShowExportToMht="False" ShowExportToOds="False" ShowExportToOdt="False" ShowExportToPcx="False" ShowExportToPng="False" ShowExportToPowerPoint="False" ShowExportToSvg="False" ShowExportToSvgz="False" ShowExportToSylk="False" ShowExportToText="False" ShowExportToTiff="False" ShowExportToXps="False" ShowExportToExcelXml="False" ShowExportToXml="False" ShowExportToRtf="False"></cc1:stiwebviewer>
     </div>

@@ -41,6 +41,7 @@ namespace Nat.Web.Tools.Initialization
 
         private static readonly ConfigurationProperty _propDatasources;
         private static readonly ConfigurationProperty _propExternalSystems;
+        private static readonly ConfigurationProperty _isConvertToSSDL;
 
         static InitializerSection()
         {
@@ -66,6 +67,8 @@ namespace Nat.Web.Tools.Initialization
             _propDatasources = new ConfigurationProperty("datasources", typeof(DatasourcesSectionCollection), null, ConfigurationPropertyOptions.IsDefaultCollection);
             _propExternalSystems = new ConfigurationProperty("externalSystems", typeof(ExternalSystemSectionCollection), null, ConfigurationPropertyOptions.IsDefaultCollection);
 
+            _isConvertToSSDL = new ConfigurationProperty("isConvertToSSDL", typeof(bool), false, ConfigurationPropertyOptions.None);
+
             _properties = new ConfigurationPropertyCollection
                               {
                                   _propInitializerClasses,
@@ -84,6 +87,7 @@ namespace Nat.Web.Tools.Initialization
                                   _propGroupProviderType,
                                   _propDatasources,
                                   _propExternalSystems,
+                                  _isConvertToSSDL
                               };
         }
 
@@ -264,5 +268,8 @@ namespace Nat.Web.Tools.Initialization
         {
             get { return (ExternalSystemSectionCollection)base[_propExternalSystems]; }
         }
+
+        [ConfigurationProperty("isConvertToSSDL", DefaultValue = false)]
+        public bool IsConvertToSSDL => (bool)base[_isConvertToSSDL];
     }
 }

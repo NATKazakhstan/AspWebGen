@@ -259,13 +259,12 @@ namespace Nat.Web.ReportManager.UserControls
 
                     if (string.IsNullOrEmpty(backPath) && webReportManager.Plugin.Visible)
                     {
-                        backPath = HttpUtility.UrlEncode(
-                            WebReportManager.GetReportUrl(
-                                string.Empty,
-                                webReportManager.Plugin.GetType().FullName,
-                                string.Empty,
-                                string.Empty,
-                                false) + "&open=false");
+                        backPath = WebReportManager.GetReportUrl(
+                                       string.Empty,
+                                       webReportManager.Plugin.GetType().FullName,
+                                       string.Empty,
+                                       string.Empty,
+                                       false) + "&open=false";
                     }
 
                     if (string.IsNullOrEmpty(backText))

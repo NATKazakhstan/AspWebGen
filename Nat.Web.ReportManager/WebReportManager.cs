@@ -423,7 +423,7 @@ namespace Nat.Web.ReportManager
         public static string GetReportUrl(string idrec, string pluginType, string backText, string backUrl, bool export)
         {
             var reportUrl = ReportInitializerSection.GetReportInitializerSection().ReportPageViewer;
-            idrec = HttpUtility.UrlEncode(idrec);
+            idrec = idrec == "{0}" ? idrec : HttpUtility.UrlEncode(idrec);
             pluginType = HttpUtility.UrlEncode(pluginType);
             if (export)
                 return $@"{reportUrl}?expword=1&idrec={idrec}&ClassName={pluginType}";
@@ -442,7 +442,7 @@ namespace Nat.Web.ReportManager
         public static string GetReportUrl(string idrec, string pluginType, string backText, string backUrl, string culture, bool export)
         {
             var reportPageViewer = ReportInitializerSection.GetReportInitializerSection().ReportPageViewer;
-            idrec = HttpUtility.UrlEncode(idrec);
+            idrec = idrec == "{0}" ? idrec : HttpUtility.UrlEncode(idrec);
             pluginType = HttpUtility.UrlEncode(pluginType);
             if (export)
                 return $@"{reportPageViewer}?expword=1&idrec={idrec}&ClassName={pluginType}&culture={culture}";

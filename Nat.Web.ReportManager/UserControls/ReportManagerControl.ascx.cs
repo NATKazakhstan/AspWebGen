@@ -259,13 +259,12 @@ namespace Nat.Web.ReportManager.UserControls
 
                     if (string.IsNullOrEmpty(backPath) && webReportManager.Plugin.Visible)
                     {
-                        backPath = HttpUtility.UrlEncode(
-                            WebReportManager.GetReportUrl(
-                                string.Empty,
-                                webReportManager.Plugin.GetType().FullName,
-                                string.Empty,
-                                string.Empty,
-                                false) + "&open=false");
+                        backPath = WebReportManager.GetReportUrl(
+                                       string.Empty,
+                                       webReportManager.Plugin.GetType().FullName,
+                                       string.Empty,
+                                       string.Empty,
+                                       false) + "&open=false";
                     }
 
                     if (string.IsNullOrEmpty(backText))
@@ -287,9 +286,12 @@ namespace Nat.Web.ReportManager.UserControls
                                 redirectReportPlugin.GetType());
                         }
 
-                        redirectReportPlugin.OpenReport(webReportManager, values, Request.QueryString["rs:format"],
-                                                        culture, HttpUtility.UrlEncode(Request.QueryString["backPath"]),
-                                                        Request.QueryString["text"], Request.QueryString["rs:command"]);
+                        redirectReportPlugin.OpenReport(
+                            webReportManager,
+                            values,
+                            Request.QueryString["rs:format"],
+                            culture, HttpUtility.UrlEncode(backPath),
+                            backText, Request.QueryString["rs:command"]);
                     }
                     else
                     {
@@ -300,7 +302,7 @@ namespace Nat.Web.ReportManager.UserControls
                                 webReportManager.Plugin.GetType().FullName,
                                 guid,
                                 backText,
-                                HttpUtility.UrlEncode(Request.QueryString["backPath"]),
+                                HttpUtility.UrlEncode(backPath),
                                 Request.QueryString["expword"],
                                 culture,
                                 ReportInitializerSection.GetReportInitializerSection().ReportingStiReportResultPage));

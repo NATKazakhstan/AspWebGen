@@ -2,7 +2,7 @@
 <%@ Register Assembly="Stimulsoft.Report.Web" Namespace="Stimulsoft.Report.Web" TagPrefix="cc1" %>
 
 <asp:Content ID="main" ContentPlaceHolderId="PlaceHolderMain" runat="server">
-    <div>
+    <div style="margin-top: 10px;margin-left: 10px;">
         <script type="text/javascript">
             useUPBarOnPostBack = false;
         </script>

@@ -42,6 +42,7 @@ namespace Nat.Web.Controls.ExtNet.Generation.Filter
               $('body').keydown(function(event) {
                   if ( event.which == 13 ) {
                      window.applyFilterButton.fireEvent('click', window.applyFilterButton);
+                     event.preventDefault();
                   }
                 });";
 

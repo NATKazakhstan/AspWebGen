@@ -486,6 +486,7 @@
     <Compile Include="GenerationClasses\Filter\IBaseFilterOrItem.cs" />
     <Compile Include="GenerationClasses\Filter\SearchFilter.cs" />
     <Compile Include="GenerationClasses\Filter\FilterItemExtensions.cs" />
+    <Compile Include="GenerationClasses\Filter\StringFilterExtension.cs" />
     <Compile Include="GenerationClasses\HierarchyFields\Aligment.cs" />
     <Compile Include="GenerationClasses\HtmlGeneration\BaseCheckBox.cs" />
     <Compile Include="GenerationClasses\HtmlGeneration\BaseEditControl.cs" />

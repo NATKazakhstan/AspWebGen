@@ -214,6 +214,7 @@
 
             try
             {
+                if(InitializerSection.GetSection().IsConvertToSSDL)
                 if (!sid.StartsWith("S-") && !"anonymous".Equals(sid))
                 {
                     var base64 = Convert.FromBase64String(sid);

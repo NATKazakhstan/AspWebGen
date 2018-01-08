@@ -1154,16 +1154,12 @@ namespace Nat.Web.Controls.GenerationClasses
                                 values = GetNamesByValue(value1).ToList();
                                 if (values.Count == 0)
                                 {
-                                    yield return InitializerSection.StaticFilterNamesResources.SEquals.ToLower() + ":";
+                                    yield return InitializerSection.StaticFilterNamesResources.SEquals.ToFilterTypeString();
                                     yield return value2;
                                 }
                                 else
                                 {
-                                    yield return
-                                        "("
-                                        +
-                                        InitializerSection.StaticFilterNamesResources.SEquals.
-                                            ToLower() + "):";
+                                    yield return InitializerSection.StaticFilterNamesResources.SEquals.ToFilterTypeString();
                                     foreach (var value in values) yield return value;
                                 }
 
@@ -1173,68 +1169,48 @@ namespace Nat.Web.Controls.GenerationClasses
                                 values = GetNamesByValue(value1).ToList();
                                 if (values.Count == 0)
                                 {
-                                    yield return InitializerSection.StaticFilterNamesResources.SNotEquals.ToLower() + ":";
+                                    yield return InitializerSection.StaticFilterNamesResources.SNotEquals.ToFilterTypeString();
                                     yield return value2;
                                 }
                                 else
                                 {
-                                    yield return
-                                        "("
-                                        +
-                                        InitializerSection.StaticFilterNamesResources.SNotEquals.
-                                            ToLower() + "):";
+                                    yield return InitializerSection.StaticFilterNamesResources.SNotEquals.ToFilterTypeString();
                                     foreach (var value in values) yield return value;
                                 }
 
                                 break;
                             case DefaultFilters.ReferenceFilter.IsNotNull:
-                                yield return
-                                    "("
-                                    +
-                                    InitializerSection.StaticFilterNamesResources.SIsFilled.ToLower(
-                                        ) + ")";
+                                yield return InitializerSection.StaticFilterNamesResources.SIsFilled.ToFilterTypeStringBit();
                                 break;
                             case DefaultFilters.ReferenceFilter.IsNull:
-                                yield return
-                                    "("
-                                    +
-                                    InitializerSection.StaticFilterNamesResources.SIsNotFilled.
-                                        ToLower() + ")";
+                                yield return InitializerSection.StaticFilterNamesResources.SIsNotFilled.ToFilterTypeStringBit();
                                 break;
                             case DefaultFilters.ReferenceFilter.ContainsByRef:
                                 if (string.IsNullOrEmpty(value1)) break;
-                                yield return InitializerSection.StaticFilterNamesResources.SContains.ToLower() + ": " + value1;
+                                yield return InitializerSection.StaticFilterNamesResources.SContains.ToFilterTypeString() + value1;
                                 break;
                             case DefaultFilters.ReferenceFilter.StartsWithByRef:
                                 if (string.IsNullOrEmpty(value1)) break;
-                                yield return InitializerSection.StaticFilterNamesResources.SStartsWith.ToLower() + ": " + value1;
+                                yield return InitializerSection.StaticFilterNamesResources.SStartsWith.ToFilterTypeString() + value1;
                                 break;
                             case DefaultFilters.ReferenceFilter.EndsWithByRef:
                                 if (string.IsNullOrEmpty(value1)) break;
-                                yield return InitializerSection.StaticFilterNamesResources.SEndsWith.ToLower() + ": " + value1;
+                                yield return InitializerSection.StaticFilterNamesResources.SEndsWith.ToFilterTypeString() + value1;
                                 break;
                             case DefaultFilters.ReferenceFilter.ContainsWordsByRef:
                                 if (string.IsNullOrEmpty(value1)) break;
-                                yield return InitializerSection.StaticFilterNamesResources.SContainsWords.ToLower() + ": " + value1;
+                                yield return InitializerSection.StaticFilterNamesResources.SContainsWords.ToFilterTypeString() + value1;
                                 break;
                             case DefaultFilters.ReferenceFilter.ContainsAnyWordByRef:
                                 if (string.IsNullOrEmpty(filterItem.Value2)) break;
-                                yield return
-                                    "("
-                                    +
-                                    InitializerSection.StaticFilterNamesResources.SContainsAnyWord.
-                                        ToLower() + "): " + filterItem.Value2;
+                                yield return InitializerSection.StaticFilterNamesResources.SContainsAnyWord.ToFilterTypeString() + filterItem.Value2;
                                 break;
                             case DefaultFilters.ReferenceFilter.StartsWithCode:
                                 if (string.IsNullOrEmpty(filterItem.Value1)) break;
                                 values = GetNamesByValue(filterItem.Value1).ToList();
                                 if (values.Count > 0)
                                 {
-                                    yield return
-                                        "("
-                                        +
-                                        InitializerSection.StaticFilterNamesResources.SEquals.
-                                            ToLower() + "):";
+                                    yield return InitializerSection.StaticFilterNamesResources.SEquals.ToFilterTypeString();
                                     foreach (var value in values) yield return value;
                                 }
 
@@ -1244,11 +1220,7 @@ namespace Nat.Web.Controls.GenerationClasses
                                 values = GetNamesByValue(filterItem.Value1).ToList();
                                 if (values.Count > 0)
                                 {
-                                    yield return
-                                        "("
-                                        +
-                                        InitializerSection.StaticFilterNamesResources.SNotEquals.
-                                            ToLower() + "):";
+                                    yield return InitializerSection.StaticFilterNamesResources.SNotEquals.ToFilterTypeString();
                                     foreach (var value in values) yield return value;
                                 }
 
@@ -1283,47 +1255,62 @@ namespace Nat.Web.Controls.GenerationClasses
                                 break;
                             case DefaultFilters.NumericFilter.Equals:
                                 if (string.IsNullOrEmpty(value1)) break;
-                                yield return InitializerSection.StaticFilterNamesResources.SEquals.ToLower() + ": " + value1;
+                                yield return InitializerSection.StaticFilterNamesResources.SEquals.ToFilterTypeString() + value1;
                                 break;
                             case DefaultFilters.NumericFilter.NotEquals:
                                 if (string.IsNullOrEmpty(value1)) break;
-                                yield return InitializerSection.StaticFilterNamesResources.SNotEquals.ToLower() + ": " + value1;
+                                yield return InitializerSection.StaticFilterNamesResources.SNotEquals.ToFilterTypeString() + value1;
                                 break;
                             case DefaultFilters.NumericFilter.IsNotNull:
-                                yield return "(" + InitializerSection.StaticFilterNamesResources.SIsFilled.ToLower() + ")";
+                                yield return InitializerSection.StaticFilterNamesResources.SIsFilled.ToFilterTypeStringBit();
                                 break;
                             case DefaultFilters.NumericFilter.IsNull:
-                                yield return "(" + InitializerSection.StaticFilterNamesResources.SIsNotFilled.ToLower() + ")";
+                                yield return InitializerSection.StaticFilterNamesResources.SIsNotFilled.ToFilterTypeStringBit();
                                 break;
                             case DefaultFilters.NumericFilter.More:
                                 if (string.IsNullOrEmpty(value1)) break;
                                 if (IsDateTime)
-                                    yield return InitializerSection.StaticFilterNamesResources.SDateMore.ToLower() + ": " + value1;
-                                else 
-                                    yield return InitializerSection.StaticFilterNamesResources.SMore.ToLower() + ": " + value1;
+                                    yield return InitializerSection.StaticFilterNamesResources.SDateMore.ToFilterTypeString() + value1;
+                                else
+                                    yield return InitializerSection.StaticFilterNamesResources.SMore.ToFilterTypeString() + value1;
                                 break;
                             case DefaultFilters.NumericFilter.Less:
                                 if (string.IsNullOrEmpty(value1)) break;
                                 if (IsDateTime)
-                                    yield return InitializerSection.StaticFilterNamesResources.SDateLess.ToLower() + ": " + value1;
+                                    yield return InitializerSection.StaticFilterNamesResources.SDateLess.ToFilterTypeString() + value1;
                                 else
-                                    yield return InitializerSection.StaticFilterNamesResources.SLess.ToLower() + ": " + value1;
-                                yield return "(" + InitializerSection.StaticFilterNamesResources.SMore.ToLower() + "): " + filterItem.Value1;
+                                    yield return InitializerSection.StaticFilterNamesResources.SLess.ToFilterTypeString() + value1;
+                                yield return InitializerSection.StaticFilterNamesResources.SMore.ToFilterTypeString() + filterItem.Value1;
                                 break;
                             case DefaultFilters.NumericFilter.LessOrEqual:
                                 if (string.IsNullOrEmpty(filterItem.Value1)) break;
-                                yield return "(" + InitializerSection.StaticFilterNamesResources.SLess.ToLower() + "): " + filterItem.Value1;
+                                yield return InitializerSection.StaticFilterNamesResources.SLess.ToFilterTypeString() + filterItem.Value1;
+                                break;
+                            case DefaultFilters.NumericFilter.MoreOrEqual:
+                                if (string.IsNullOrEmpty(filterItem.Value1)) break;
+                                yield return InitializerSection.StaticFilterNamesResources.SMore.ToFilterTypeString() + filterItem.Value1;
                                 break;
                             case DefaultFilters.NumericFilter.Between:
                                 if (string.IsNullOrEmpty(value1)) break;
                                 if (IsDateTime)
-                                    yield return InitializerSection.StaticFilterNamesResources.SDateBetween.ToLower() + ": " + value1 + " - " + value2;
+                                    yield return InitializerSection.StaticFilterNamesResources.SDateBetween.ToFilterTypeString() + value1 + " - " + value2;
                                 else
-                                    yield return InitializerSection.StaticFilterNamesResources.SBetween.ToLower() + ": " + value1 + " - " + value2;
+                                    yield return InitializerSection.StaticFilterNamesResources.SBetween.ToFilterTypeString() + value1 + " - " + value2;
                                 break;
                             case DefaultFilters.NumericFilter.BetweenColumns:
                                 if (string.IsNullOrEmpty(value1)) break;
-                                yield return InitializerSection.StaticFilterNamesResources.SFilterByPeriod.ToLower() + ": " + value1;
+                                yield return InitializerSection.StaticFilterNamesResources.SFilterByPeriod.ToFilterTypeString() + value1;
+                                break;
+                            case DefaultFilters.NumericFilter.DaysAgoAndMore:
+                                if (string.IsNullOrEmpty(value1)) break;
+                                yield return InitializerSection.StaticFilterNamesResources.SDaysAgoAndMore.ToFilterTypeString() + value1;
+                                break;
+                            case DefaultFilters.NumericFilter.DaysLeftAndMore:
+                                if (string.IsNullOrEmpty(value1)) break;
+                                yield return InitializerSection.StaticFilterNamesResources.SDaysLeftAndMore.ToFilterTypeString() + value1;
+                                break;
+                            case DefaultFilters.NumericFilter.ToDay:
+                                yield return InitializerSection.StaticFilterNamesResources.SToDay.ToFilterTypeStringBit();
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();
@@ -1338,16 +1325,16 @@ namespace Nat.Web.Controls.GenerationClasses
                             case DefaultFilters.BooleanFilter.Non:
                                 break;
                             case DefaultFilters.BooleanFilter.Equals:
-                                yield return TrueBooleanText.ToLower();
+                                yield return TrueBooleanText.ToFilterTypeStringBit();
                                 break;
                             case DefaultFilters.BooleanFilter.NotEquals:
-                                yield return FalseBooleanText.ToLower();
+                                yield return FalseBooleanText.ToFilterTypeStringBit();
                                 break;
                             case DefaultFilters.BooleanFilter.IsNotNull:
-                                yield return "(" + InitializerSection.StaticFilterNamesResources.SIsFilled.ToLower() + ")";
+                                yield return InitializerSection.StaticFilterNamesResources.SIsFilled.ToFilterTypeStringBit();
                                 break;
                             case DefaultFilters.BooleanFilter.IsNull:
-                                yield return "(" + InitializerSection.StaticFilterNamesResources.SIsNotFilled.ToLower() + ")";
+                                yield return InitializerSection.StaticFilterNamesResources.SIsNotFilled.ToFilterTypeStringBit();
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();
@@ -1362,37 +1349,53 @@ namespace Nat.Web.Controls.GenerationClasses
                                 break;
                             case DefaultFilters.TextFilter.Equals:
                                 if (string.IsNullOrEmpty(value1)) break;
-                                yield return InitializerSection.StaticFilterNamesResources.SEquals.ToLower() + ": " + value1;
+                                yield return InitializerSection.StaticFilterNamesResources.SEquals.ToFilterTypeString() + value1;
                                 break;
                             case DefaultFilters.TextFilter.NotEquals:
                                 if (string.IsNullOrEmpty(value1)) break;
-                                yield return InitializerSection.StaticFilterNamesResources.SNotEquals.ToLower() + ": " + value1;
+                                yield return InitializerSection.StaticFilterNamesResources.SNotEquals.ToFilterTypeString() + value1;
                                 break;
                             case DefaultFilters.TextFilter.IsNotNull:
-                                yield return "(" + InitializerSection.StaticFilterNamesResources.SIsFilled.ToLower() + ")";
+                                yield return InitializerSection.StaticFilterNamesResources.SIsFilled.ToFilterTypeStringBit();
                                 break;
                             case DefaultFilters.TextFilter.IsNull:
-                                yield return "(" + InitializerSection.StaticFilterNamesResources.SIsNotFilled.ToLower() + ")";
+                                yield return InitializerSection.StaticFilterNamesResources.SIsNotFilled.ToFilterTypeStringBit();
                                 break;
                             case DefaultFilters.TextFilter.Contains:
                                 if (string.IsNullOrEmpty(value1)) break;
-                                yield return InitializerSection.StaticFilterNamesResources.SContains.ToLower() + ": " + value1;
+                                yield return InitializerSection.StaticFilterNamesResources.SContains.ToFilterTypeString() + value1;
                                 break;
                             case DefaultFilters.TextFilter.StartsWith:
                                 if (string.IsNullOrEmpty(value1)) break;
-                                yield return InitializerSection.StaticFilterNamesResources.SStartsWith.ToLower() + ": " + value1;
+                                yield return InitializerSection.StaticFilterNamesResources.SStartsWith.ToFilterTypeString() + value1;
                                 break;
                             case DefaultFilters.TextFilter.EndsWith:
                                 if (string.IsNullOrEmpty(value1)) break;
-                                yield return InitializerSection.StaticFilterNamesResources.SEndsWith.ToLower() + ": " + value1;
+                                yield return InitializerSection.StaticFilterNamesResources.SEndsWith.ToFilterTypeString() + value1;
                                 break;
                             case DefaultFilters.TextFilter.ContainsWords:
                                 if (string.IsNullOrEmpty(value1)) break;
-                                yield return InitializerSection.StaticFilterNamesResources.SContainsWords.ToLower() + ": " + value1;
+                                yield return InitializerSection.StaticFilterNamesResources.SContainsWords.ToFilterTypeString() + value1;
                                 break;
                             case DefaultFilters.TextFilter.ContainsAnyWord:
                                 if (string.IsNullOrEmpty(filterItem.Value1)) break;
-                                yield return "(" + InitializerSection.StaticFilterNamesResources.SContainsAnyWord.ToLower() + "): " + filterItem.Value1;
+                                yield return InitializerSection.StaticFilterNamesResources.SContainsAnyWord.ToFilterTypeString() + filterItem.Value1;
+                                break;
+                            case DefaultFilters.TextFilter.NotContains:
+                                if (string.IsNullOrEmpty(filterItem.Value1)) break;
+                                yield return InitializerSection.StaticFilterNamesResources.SNotContains.ToFilterTypeString() + filterItem.Value1;
+                                break;
+                            case DefaultFilters.TextFilter.NotContainsWords:
+                                if (string.IsNullOrEmpty(filterItem.Value1)) break;
+                                yield return InitializerSection.StaticFilterNamesResources.SNotContainsWords.ToFilterTypeString() + filterItem.Value1;
+                                break;
+                            case DefaultFilters.TextFilter.LengthMore:
+                                if (string.IsNullOrEmpty(filterItem.Value1)) break;
+                                yield return InitializerSection.StaticFilterNamesResources.SLengthMore.ToFilterTypeString() + filterItem.Value1;
+                                break;
+                            case DefaultFilters.TextFilter.LengthLess:
+                                if (string.IsNullOrEmpty(filterItem.Value1)) break;
+                                yield return InitializerSection.StaticFilterNamesResources.SLengthLess.ToFilterTypeString() + filterItem.Value1;
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();
@@ -1405,8 +1408,10 @@ namespace Nat.Web.Controls.GenerationClasses
                         {
                             case DefaultFilters.FullTextSearchFilter.Contains:
                                 if (string.IsNullOrEmpty(filterItem.Value1)) break;
-                                yield return "(" + InitializerSection.StaticFilterNamesResources.SContains.ToLower() + "): " + filterItem.Value1;
+                                yield return InitializerSection.StaticFilterNamesResources.SContains.ToFilterTypeString() + filterItem.Value1;
                                 break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
                         }
                         break;
                     default:

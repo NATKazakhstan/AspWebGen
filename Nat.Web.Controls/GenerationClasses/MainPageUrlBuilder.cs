@@ -193,7 +193,25 @@ namespace Nat.Web.Controls
             }
 
             if (match.Groups["usercontrol"].Success)
-                UserControl = HttpUtility.UrlDecode(match.Groups["usercontrol"].Value);
+            {
+                var setUC = true;
+                if (!match.Groups["type"].Success)
+                {
+                    if (match.Groups["usercontrol"].Value.Equals("download"))
+                    {
+                        IsDownload = true;
+                        setUC = false;
+                    }
+                    else if (match.Groups["usercontrol"].Value.Equals("execute"))
+                    {
+                        IsExecute = true;
+                        setUC = false;
+                    }
+                }
+
+                if (setUC)
+                    UserControl = HttpUtility.UrlDecode(match.Groups["usercontrol"].Value);
+            }
 
             var dic = new Dictionary<string, string>();
             if (IsCustomUserControl)

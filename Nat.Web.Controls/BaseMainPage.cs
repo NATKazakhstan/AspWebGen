@@ -33,6 +33,8 @@ namespace Nat.Web.Controls
 {
     
  //todo: попробовать заюзать Microsoft.SharePoint.Portal.WebControls.PersonalWebPartPage
+    using System.Text.RegularExpressions;
+
     using Nat.Web.Controls.GenerationClasses.BaseJournal;
     using Nat.Web.Controls.GenerationClasses.Navigator;
 
@@ -48,6 +50,7 @@ namespace Nat.Web.Controls
         UpdateProgressBar _updateProgressBar;
         private PicturePreview _picturePreview;
         protected virtual string DefaultControl { get { return null; } }
+        private Regex regexPublicKeyToken = new Regex("PublicKeyToken=(.+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private ScriptManager _ScriptManager;
 
@@ -208,7 +211,8 @@ namespace Nat.Web.Controls
                         url.QueryParameters[MainPageUrlBuilder.ReferencIDPrefix + tableName],
                         url.QueryParameters.ContainsKey(MainPageUrlBuilder.NavigateToDestinationParentTableName)
                             ? url.QueryParameters[MainPageUrlBuilder.NavigateToDestinationParentTableName]
-                            : string.Empty);
+                            : string.Empty,
+                        regexPublicKeyToken.Match(baseType.Assembly.FullName).Groups[1].Value);
                     Response.Redirect(navigateUrl);
                 }
 

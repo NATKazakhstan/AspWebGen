@@ -420,7 +420,7 @@ namespace Nat.Web.Controls
                 Page.Header.Title = headerControl.Header;
             }
 
-            if (Form != null && MainPageUrlBuilder.Current.IsDataControl)
+            if (Form != null && (MainPageUrlBuilder.Current.IsDataControl || MainPageUrlBuilder.Current.IsCustomUserControl))
             {
                 Form.Action = MainPageUrlBuilder.Current.CreateUrl(true, true);
                 if (hiddenfieldForUrl != null)

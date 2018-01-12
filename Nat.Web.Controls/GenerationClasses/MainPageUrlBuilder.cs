@@ -38,6 +38,9 @@ namespace Nat.Web.Controls
                 @"/(?<page>\w+?)(?<pageExt>\.aspx|\.asmx|\.ashx|\.\w+)?/(?<type>(data|download|execute|custom|navigateto)/)?(?<usercontrol>[\w\d_]+)?(?<param1>/[\w\d_]+)?(?<param2>/[\w\d_]+)?(?<param3>/[\w\d_]+)?(?<param4>/[\w\d_]+)?(?<param5>/[\w\d_]+)?(?<query>\?.*)?",
                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        private static readonly Regex _regex2 =
+            new Regex(@"/(?<page>\w+)(?<pageExt>\.aspx|\.asmx|\.ashx|\.\w+)?(?<query>\?.*)?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         private bool _isSelect;
 
         public MainPageUrlBuilder()
@@ -165,7 +168,11 @@ namespace Nat.Web.Controls
             SelectedValues = "";
             FilterQuery = null;
             if (!match.Success)
-                return;
+            {
+                match = _regex2.Match(Url);
+                if (!match.Success)
+                    return;
+            }
 
             Page = match.Groups["page"].Value;
             PageExt = match.Groups["pageExt"].Value;

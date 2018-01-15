@@ -37,30 +37,45 @@ namespace Nat.Web.ReportManager
         protected override void OnLoadComplete(EventArgs e)
         {
             base.OnLoadComplete(e);
-            if (Page.IsPostBack)
+
+            if (!string.IsNullOrEmpty(Request.QueryString["backPath"]) &&
+                !string.IsNullOrEmpty(Request.QueryString["text"]) 
+                && bBack != null)
             {
-                if (!string.IsNullOrEmpty(Request.QueryString["backPath"]) && !string.IsNullOrEmpty(Request.QueryString["text"]))
-                {
-                    bBack.Visible = true;
-                    bBack.Text = Request.QueryString["text"];
-                }
+                bBack.Visible = true;
+                bBack.Text = Request.QueryString["text"];
             }
-            else
+
+            if (!Page.IsPostBack)
             {
                 string guid = Request.QueryString["values"];
                 var storageValues = (StorageValues)Session[guid];
                 if (storageValues == null)
                 {
-                    Response.Redirect(ReportInitializerSection.GetReportInitializerSection().ReportPageViewer + "?open=off&setDefaultParams=on&ClassName=" + Request.QueryString["reportName"]);
+                    Response.Redirect(
+                        ReportInitializerSection.GetReportInitializerSection().ReportPageViewer + "?open=off&setDefaultParams=on&ClassName="
+                        + Request.QueryString["reportName"]);
                     return;
                 }
 
                 string fileNameExtention;
-                GetReport(false, Request.QueryString["reportName"], guid, storageValues,
-                    Request.QueryString["culture"], Page, Request.QueryString["rs:format"],
-                    Request.QueryString["rs:command"], LogMonitor.LogMonitor, rv.ServerReport, out fileNameExtention, true);
+                GetReport(
+                    false,
+                    Request.QueryString["reportName"],
+                    guid,
+                    storageValues,
+                    Request.QueryString["culture"],
+                    Page,
+                    Request.QueryString["rs:format"],
+                    Request.QueryString["rs:command"],
+                    LogMonitor.LogMonitor,
+                    rv.ServerReport,
+                    out fileNameExtention,
+                    true);
 
-                var property = rv.GetType().GetProperty("InstanceIdentifier", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                var property = rv.GetType().GetProperty(
+                    "InstanceIdentifier",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
                 if (property != null)
                 {
                     var instanceIdentifier = Convert.ToString(property.GetValue(rv, null));

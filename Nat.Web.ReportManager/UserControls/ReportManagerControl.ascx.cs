@@ -264,7 +264,7 @@ namespace Nat.Web.ReportManager.UserControls
                                        webReportManager.Plugin.GetType().FullName,
                                        string.Empty,
                                        string.Empty,
-                                       false) + "&open=false";
+                                       false) + "&open=false&setDefaultParams=true";
                     }
 
                     if (string.IsNullOrEmpty(backText))

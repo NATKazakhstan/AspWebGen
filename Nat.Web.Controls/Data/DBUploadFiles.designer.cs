@@ -155,7 +155,7 @@ namespace Nat.Web.Controls.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_dataFileName", DbType="VarChar(MAX)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_dataFileName", DbType="NVarChar(MAX)")]
 		public string dataFileName
 		{
 			get
@@ -195,7 +195,7 @@ namespace Nat.Web.Controls.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SubSystemName", DbType="VarChar(MAX)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SubSystemName", DbType="NVarChar(MAX)")]
 		public string SubSystemName
 		{
 			get

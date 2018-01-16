@@ -1058,7 +1058,7 @@ function ApplyFilter(filterTable, url) {
         if (curF.Value.length > 100) {
             ApplyFilterCurF = curF;
             ApplyFilterF = f;
-            // Nat.Web.Controls.WebServiceFilters.SetFilterValue(curF.Value, SetFilterSucceededCallback, SetFilterFailedCallback);
+            Nat.Web.Controls.WebServiceFilters.SetFilterValue(curF.Value, SetFilterSucceededCallback, SetFilterFailedCallback);
             return;
         }
     }

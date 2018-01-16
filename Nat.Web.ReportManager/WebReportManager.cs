@@ -408,13 +408,7 @@ namespace Nat.Web.ReportManager
         /// <returns>Адрес отчета</returns>
         public static string GetReportUrl(string idrec, Type pluginType, string backText, string backUrl, bool export)
         {
-            if (export)
-                return string.Format(@"{0}?expword=1&idrec={1}&ClassName={2}&text={3}&backPath={4}",
-                                     ReportInitializerSection.GetReportInitializerSection().ReportPageViewer,
-                                     idrec, pluginType.FullName, backText, backUrl);
-            return string.Format(@"{0}?idrec={1}&ClassName={2}&text={3}&backPath={4}",
-                                 ReportInitializerSection.GetReportInitializerSection().ReportPageViewer,
-                                 idrec, pluginType.FullName, backText, backUrl);
+            return GetReportUrl(idrec, pluginType.FullName, backText, backUrl, export);
         }
 
         /// <summary>
@@ -428,13 +422,12 @@ namespace Nat.Web.ReportManager
         /// <returns>Адрес отчета</returns>
         public static string GetReportUrl(string idrec, string pluginType, string backText, string backUrl, bool export)
         {
+            var reportUrl = ReportInitializerSection.GetReportInitializerSection().ReportPageViewer;
+            idrec = idrec == "{0}" ? idrec : HttpUtility.UrlEncode(idrec);
+            pluginType = HttpUtility.UrlEncode(pluginType);
             if (export)
-                return string.Format(@"{0}?expword=1&idrec={1}&ClassName={2}&text={3}&backPath={4}",
-                                     ReportInitializerSection.GetReportInitializerSection().ReportPageViewer,
-                                     idrec, pluginType, backText, backUrl);
-            return string.Format(@"{0}?idrec={1}&ClassName={2}&text={3}&backPath={4}",
-                                 ReportInitializerSection.GetReportInitializerSection().ReportPageViewer,
-                                 idrec, pluginType, backText, backUrl);
+                return $@"{reportUrl}?expword=1&idrec={idrec}&ClassName={pluginType}";
+            return $@"{reportUrl}?idrec={idrec}&ClassName={pluginType}&text={HttpUtility.UrlEncode(backText)}&backPath={HttpUtility.UrlEncode(backUrl)}";
         }
 
         /// <summary>
@@ -449,11 +442,18 @@ namespace Nat.Web.ReportManager
         public static string GetReportUrl(string idrec, string pluginType, string backText, string backUrl, string culture, bool export)
         {
             var reportPageViewer = ReportInitializerSection.GetReportInitializerSection().ReportPageViewer;
+            idrec = idrec == "{0}" ? idrec : HttpUtility.UrlEncode(idrec);
+            pluginType = HttpUtility.UrlEncode(pluginType);
             if (export)
                 return $@"{reportPageViewer}?expword=1&idrec={idrec}&ClassName={pluginType}&culture={culture}";
-            return string.Format(@"{0}?idrec={1}&ClassName={2}&text={3}&culture={5}&backPath={4}",
-                                 reportPageViewer,
-                                 idrec, pluginType, HttpUtility.UrlEncode(backText), HttpUtility.UrlEncode(backUrl), culture);
+            return string.Format(
+                @"{0}?idrec={1}&ClassName={2}&text={3}&culture={5}&backPath={4}",
+                reportPageViewer,
+                idrec,
+                pluginType,
+                HttpUtility.UrlEncode(backText),
+                HttpUtility.UrlEncode(backUrl),
+                culture);
         }
 
         private static object[] BuildConstants(BaseReportCondition condition, ColumnFilterStorage storage, bool addFilterType)

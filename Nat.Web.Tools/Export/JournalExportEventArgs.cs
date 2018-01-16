@@ -100,5 +100,16 @@ namespace Nat.Web.Tools.Export
             if (Columns == null) Columns = new List<IExportColumn>();
             ((ICollection<IExportColumn>)Columns).Add(exportColumn);
         }
+
+        /// <summary>
+        /// Добавить значение в параметр FilterValues.
+        /// </summary>
+        /// <param name="filterValue"></param>
+        public void AddFilterValue(string filterValue)
+        {
+            if (FilterValues == null)
+                FilterValues = new List<string>();
+            FilterValues.Add(filterValue);
+        }
     }
 }

@@ -208,7 +208,7 @@ namespace Nat.Web.Controls.GenerationClasses
         public bool LoadPostData(string postDataKey, NameValueCollection postCollection)
         {
             var valueD = ValueD;
-            var newValueStr = postCollection[postDataKey];
+            var newValueStr = postCollection[((IRenderComponent)this).UniqueID] ?? postCollection[UniqueID];
             var decimalSeparator = Thread.CurrentThread.CurrentUICulture.NumberFormat.NumberDecimalSeparator;
             if (!string.IsNullOrEmpty(newValueStr))
                 newValueStr = decimalSeparator == "."

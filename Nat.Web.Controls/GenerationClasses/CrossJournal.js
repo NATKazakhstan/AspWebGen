@@ -452,14 +452,14 @@ function ApplyTableSettings(divId) {
     var $divT = $(divT);
     var hfCols = $get($divT.attr('hfColsID'));
     var hfSort = $get($divT.attr('hfSortID'));
-    hfCols.value = Sys.Serialization.JavaScriptSerializer.serialize($(divT.firstChild).attr('colH'));
+    hfCols.value = Sys.Serialization.JavaScriptSerializer.serialize($(divT.firstChild).data('colH'));
     hfSort.value = changeOrderOfColumns_sortCols.join(",");
 }
 
 function CreateTableByColumnHierarchy(container, colH) {
     var t = document.createElement("table");
     t.border = 1;
-    $(t).attr('colH', colH);
+    $(t).data('colH', colH);
     if (container.firstChild != null)
         container.removeChild(container.firstChild);
     container.appendChild(t);

@@ -38,6 +38,9 @@ namespace Nat.Web.Controls
                 @"/(?<page>\w+?)(?<pageExt>\.aspx|\.asmx|\.ashx|\.\w+)?/(?<type>(data|download|execute|custom|navigateto)/)?(?<usercontrol>[\w\d_]+)?(?<param1>/[\w\d_]+)?(?<param2>/[\w\d_]+)?(?<param3>/[\w\d_]+)?(?<param4>/[\w\d_]+)?(?<param5>/[\w\d_]+)?(?<query>\?.*)?",
                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        private static readonly Regex _regex2 =
+            new Regex(@"/(?<page>\w+)(?<pageExt>\.aspx|\.asmx|\.ashx|\.\w+)?(?<query>\?.*)?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         private bool _isSelect;
 
         public MainPageUrlBuilder()
@@ -165,7 +168,11 @@ namespace Nat.Web.Controls
             SelectedValues = "";
             FilterQuery = null;
             if (!match.Success)
-                return;
+            {
+                match = _regex2.Match(Url);
+                if (!match.Success)
+                    return;
+            }
 
             Page = match.Groups["page"].Value;
             PageExt = match.Groups["pageExt"].Value;
@@ -193,7 +200,25 @@ namespace Nat.Web.Controls
             }
 
             if (match.Groups["usercontrol"].Success)
-                UserControl = HttpUtility.UrlDecode(match.Groups["usercontrol"].Value);
+            {
+                var setUC = true;
+                if (!match.Groups["type"].Success)
+                {
+                    if (match.Groups["usercontrol"].Value.Equals("download"))
+                    {
+                        IsDownload = true;
+                        setUC = false;
+                    }
+                    else if (match.Groups["usercontrol"].Value.Equals("execute"))
+                    {
+                        IsExecute = true;
+                        setUC = false;
+                    }
+                }
+
+                if (setUC)
+                    UserControl = HttpUtility.UrlDecode(match.Groups["usercontrol"].Value);
+            }
 
             var dic = new Dictionary<string, string>();
             if (IsCustomUserControl)
@@ -843,6 +868,7 @@ namespace Nat.Web.Controls
                 CreateBackUrlByRequest = CreateBackUrlByRequest,
                 HistoryOnDate = HistoryOnDate,
                 BackUrl = BackUrl,
+                ReportPluginName = ReportPluginName,
                 ParameterConverter = new Dictionary<string, string>(ParameterConverter),
                 QueryParameters = new Dictionary<string, string>(QueryParameters),
                 CustomQueryParameters = new CustomQueryParametersDic(CustomQueryParameters),
@@ -884,6 +910,7 @@ namespace Nat.Web.Controls
                 CreateBackUrlByRequest = CreateBackUrlByRequest,
                 BackUrl = BackUrl,
                 HistoryOnDate = HistoryOnDate,
+                ReportPluginName = ReportPluginName,
                 ParameterConverter = new Dictionary<string, string>(ParameterConverter),
                 QueryParameters = new Dictionary<string, string>(QueryParameters),
                 CustomQueryParameters = new CustomQueryParametersDic(CustomQueryParameters),
@@ -925,6 +952,7 @@ namespace Nat.Web.Controls
                 CreateBackUrlByRequest = CreateBackUrlByRequest,
                 HistoryOnDate = HistoryOnDate,
                 BackUrl = BackUrl,
+                ReportPluginName = ReportPluginName,
                 ParameterConverter = new Dictionary<string, string>(ParameterConverter),
                 QueryParameters = new Dictionary<string, string>(QueryParameters),
                 CustomQueryParameters = new CustomQueryParametersDic(CustomQueryParameters),

@@ -264,7 +264,7 @@ namespace Nat.Web.ReportManager.UserControls
                                        webReportManager.Plugin.GetType().FullName,
                                        string.Empty,
                                        string.Empty,
-                                       false) + "&open=false";
+                                       false) + "&open=false&setDefaultParams=true";
                     }
 
                     if (string.IsNullOrEmpty(backText))
@@ -505,17 +505,15 @@ namespace Nat.Web.ReportManager.UserControls
             var sb = new StringBuilder();
             sb.Append("var list = [");
             var listExists = false;
-            foreach (var condition in this.WebReportManager.Plugin.Conditions)
+            var inputElements = WebReportManager.Plugin.Conditions
+                .Where(r => r.Visible)
+                .Select(r => r.ColumnFilter)
+                .OfType<IDefaultFilterValues>()
+                .SelectMany(r => r.GetInputElements());
+            foreach (var inputElement in inputElements)
             {
-                var d = condition.ColumnFilter as IDefaultFilterValues;
-                if (d != null)
-                {
-                    foreach (var inputElement in d.GetInputElements())
-                    {
-                        sb.Append("{id:'").Append(inputElement.ClientId).Append("', value:'").Append(inputElement.Value).Append("'}, ");
-                        listExists = true;
-                    }
-                }
+                sb.Append("{id:'").Append(inputElement.ClientId).Append("', value:'").Append(inputElement.Value).Append("'}, ");
+                listExists = true;
             }
 
             if (!listExists)

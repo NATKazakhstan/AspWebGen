@@ -219,7 +219,7 @@
   <data name="TreeView1Resource2.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="SClearValueConditions" xml:space="preserve">
+  <data name="SClearValueConditions.Text" xml:space="preserve">
     <value>Очистить форму</value>
   </data>
 </root>

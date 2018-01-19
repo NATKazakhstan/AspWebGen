@@ -1725,7 +1725,7 @@ function initIDDivTopDetecter() {
     var div2 = $('#idDivTopDetecter2');
     var div3 = $('#idDivTopDetecter3');
     if (div.length == 1) {
-        var top = div.offset().top + 45 + div3.offset().top - div2.offset().top;
+        var top = div.offset().top + 10 + div3.offset().top - div2.offset().top;
         if (window.Ext != null || top < 0)
             top = '';
         else
@@ -1734,7 +1734,7 @@ function initIDDivTopDetecter() {
 
         $(window).resize(function () {
             if (div.length == 1) {
-                top = div.offset().top + 45 + div3.offset().top - div2.offset().top;
+                top = div.offset().top + 10 + div3.offset().top - div2.offset().top;
 
                 if (window.Ext != null || top < 0)
                     top = '';
@@ -1759,8 +1759,11 @@ function _resizeCrossTable(newHeight) {
         $('#PlaceHolderMain_item_Journal').parent().height(120);
 }
 
-Ext.onReady(function () {
-    $(window).resize(function () { _resizeCrossTable(null); });
-    App.PlaceHolderMain_item_filter_FiltersPanel.addListener('resize', function (ctrl, newWidth, newHeight) { _resizeCrossTable(newHeight); });
-    _resizeCrossTable();
-});
+if (window.Ext) {
+    Ext.onReady(function() {
+        $(window).resize(function() { _resizeCrossTable(null); });
+        App.PlaceHolderMain_item_filter_FiltersPanel.addListener('resize',
+            function(ctrl, newWidth, newHeight) { _resizeCrossTable(newHeight); });
+        _resizeCrossTable();
+    });
+}

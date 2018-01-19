@@ -147,7 +147,7 @@
   <data name="btnSubscriptionsSaveParamsResource1.Text" xml:space="preserve">
     <value>Параметрлер сақтау</value>
   </data>
-  <data name="SClearValueConditions" xml:space="preserve">
+  <data name="SClearValueConditions.Text" xml:space="preserve">
     <value>Форманы тазарту</value>
   </data>
 </root>

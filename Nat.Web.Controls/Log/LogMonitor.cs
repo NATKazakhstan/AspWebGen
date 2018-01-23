@@ -310,7 +310,10 @@ namespace Nat.Web.Controls
                 {
                     _cmdLog.Parameters["@ClientIPAddress"].Value = "local";
                 }
-
+                catch (ArgumentException e)
+                {
+                    _cmdLog.Parameters["@ClientIPAddress"].Value = "local";
+                }
                 _cmdLog.Parameters["@refRVSProperties"].Value = logMessageEntry.RefRVSProperties;
                 
                 var value = _cmdLog.ExecuteScalar();

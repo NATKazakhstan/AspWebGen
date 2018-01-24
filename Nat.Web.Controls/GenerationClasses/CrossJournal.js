@@ -1725,7 +1725,13 @@ function initIDDivTopDetecter() {
     var div2 = $('#idDivTopDetecter2');
     var div3 = $('#idDivTopDetecter3');
     if (div.length == 1) {
-        var top = div.offset().top + 10 + div3.offset().top - div2.offset().top;
+        var top = div.offset().top
+            // занимаемое место дополнительными кнопками и сообщениями
+            + div3.offset().top - div2.offset().top
+            // позиция родителя
+            - div.parent().offset().top
+            // размер отступа для панели группировки
+            + 40;
         if (window.Ext != null || top < 0)
             top = '';
         else
@@ -1734,7 +1740,13 @@ function initIDDivTopDetecter() {
 
         $(window).resize(function () {
             if (div.length == 1) {
-                top = div.offset().top + 10 + div3.offset().top - div2.offset().top;
+                top = div.offset().top
+                    // занимаемое место дополнительными кнопками и сообщениями
+                    + div3.offset().top - div2.offset().top
+                    // позиция родителя
+                    - div.parent().offset().top
+                    // размер отступа для панели группировки
+                    + 40;
 
                 if (window.Ext != null || top < 0)
                     top = '';

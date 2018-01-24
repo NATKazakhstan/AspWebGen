@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Web;
 
+    using Nat.Web.Tools;
     using Ext.Net;
 
     public abstract class AbstractUserControl : GenerationClasses.AbstractUserControl
@@ -90,6 +91,14 @@
         {
             NotifyErrorMessage(Web.Controls.Properties.Resources.SErrorMessageTitle, message);
         }
+
+        protected override void OnPreRenderExt()
+        {
+            base.OnPreRenderExt();
+
+            if (LocalizationHelper.IsCultureKZ)
+                ResourceManager.AddInstanceScript(Properties.ResourceFiles.ExtLocaleKz);
+        }
     }
 
     public abstract class AbstractUserControl<TKey> : GenerationClasses.AbstractUserControl<TKey>
@@ -125,6 +134,15 @@
             }
 
             return addErrors;
+        }
+
+        protected override void OnPreRenderExt()
+        {
+            base.OnPreRenderExt();
+
+            if (LocalizationHelper.IsCultureKZ) {
+                ResourceManager.AddInstanceScript(Properties.ResourceFiles.ExtLocaleKz);
+            }
         }
     }
 }

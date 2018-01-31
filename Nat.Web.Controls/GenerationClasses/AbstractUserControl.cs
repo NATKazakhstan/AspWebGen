@@ -730,6 +730,14 @@ namespace Nat.Web.Controls.GenerationClasses
 
             if (Url.CustomQueryParameters.ContainsKey(ErrorMessageCustomParameter))
                 AddErrorMessage(Url.CustomQueryParameters[ErrorMessageCustomParameter].Value);
+
+            OnPreRenderExt();
+        }
+
+        /// <summary>
+        /// Виртуальный метод для возможности выполнения дополнительных операций при рендеринге контрола
+        /// </summary>
+        protected virtual void OnPreRenderExt() {
         }
 
         /// <summary>
@@ -1268,6 +1276,7 @@ namespace Nat.Web.Controls.GenerationClasses
             base.OnPreRender(e);
 
             AddErrorsFromFilter();
+            OnPreRenderExt();
         }
 
         protected override void AddErrorsFromFilter()
@@ -1298,6 +1307,12 @@ namespace Nat.Web.Controls.GenerationClasses
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Виртуальный метод для возможности выполнения дополнительных операций при рендеринге контрола
+        /// </summary>
+        protected virtual void OnPreRenderExt() {
         }
     }
 }

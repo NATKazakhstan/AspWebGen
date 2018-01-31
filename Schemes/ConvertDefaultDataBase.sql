@@ -27,6 +27,9 @@ FROM LOG_TraceTimingRequests ttr
 JOIN LOG_SidIdentification s ON s.id = ttr.refUser
 go
 
+delete from LOG_TraceTimingRequests where UserSid is null
+GO
+
 drop index AutoIndex_LOG_TraceTimingRequests_refUser on LOG_TraceTimingRequests
 go
 
@@ -53,6 +56,7 @@ ALTER TABLE RVS_SavedProperties
 
 ALTER COLUMN UserSID NVARCHAR(200) collate Cyrillic_General_CS_AS NOT NULL
 
+alter table RVS_SavedProperties drop constraint TableRef_RVS_SavedProperties_refSid
 drop index AutoIndex_RVS_SavedProperties_refSid on RVS_SavedProperties
 drop index NDX_JournalTypeName_dateTime on RVS_SavedProperties
 

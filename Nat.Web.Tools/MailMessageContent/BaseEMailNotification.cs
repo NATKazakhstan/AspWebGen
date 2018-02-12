@@ -32,6 +32,8 @@
 
         protected long refPerson { get; set; }
 
+        public bool ThrowException { get; set; }
+
         #endregion
 
         #region Public Methods and Operators

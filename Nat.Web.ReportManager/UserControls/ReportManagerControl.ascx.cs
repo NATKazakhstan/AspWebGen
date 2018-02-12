@@ -27,6 +27,7 @@ namespace Nat.Web.ReportManager.UserControls
 {
     using System.Text;
 
+    using Nat.Tools.Specific;
     using Nat.Web.ReportManager.Properties;
     using Nat.Web.Tools.Security;
 
@@ -48,7 +49,7 @@ namespace Nat.Web.ReportManager.UserControls
         {
             get
             {
-                if (_db == null) _db = new DBDataContext();
+                if (_db == null) _db = new DBDataContext(SpecificInstances.DbFactory.CreateConnection());
                 return _db;
             }
         }

@@ -26,9 +26,10 @@ namespace Nat.Web.Controls
             string subject,
             IEnumerable<string> listEmails,
             IEnumerable<string> listEmailsCopy,
-            IEnumerable<Attachment> attachments)
+            IEnumerable<Attachment> attachments,
+            bool throwException = false)
         {
-            SendMail(currentMailAddress, html, subject, listEmails, listEmailsCopy, attachments, User.GetSID());
+            SendMail(currentMailAddress, html, subject, listEmails, listEmailsCopy, attachments, User.GetSID(), throwException);
         }
 
         public static void SendMail(
@@ -38,7 +39,8 @@ namespace Nat.Web.Controls
             IEnumerable<string> listEmails,
             IEnumerable<string> listEmailsCopy,
             IEnumerable<Attachment> attachments,
-            string sid)
+            string sid,
+            bool throwException = false)
         {
             SmtpSection mailSettings;
             if (SpecificInstances.DbFactory == null)
@@ -131,6 +133,8 @@ namespace Nat.Web.Controls
             {
                 var messageEntry = new LogMessageEntry(sid, LogMessageType.SystemMailSendMailError, e.ToString());
                 monitor.Log(messageEntry);
+                if (throwException)
+                    throw;
             }
         }
     }

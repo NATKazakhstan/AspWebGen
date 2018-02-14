@@ -175,7 +175,7 @@ namespace Nat.Web.Controls.Filters
             {
                 Boolean showColumn = (Boolean)(DataSetResourceManager.GetColumnExtProperty(dc, ColumnExtProperties.VISIBLE) ?? false);
                 string visibleCulture = (string)(DataSetResourceManager.GetColumnExtProperty(dc, ColumnExtProperties.VISIBLE_CULTURE));
-                if (showColumn && (string.IsNullOrEmpty(visibleCulture) || Page.UICulture == visibleCulture))
+                if (showColumn && (string.IsNullOrEmpty(visibleCulture) || System.Threading.Thread.CurrentThread.CurrentUICulture.Name == visibleCulture))
                 {
                     String columnCaption = (String)(DataSetResourceManager.GetColumnExtProperty(dc, ColumnExtProperties.CAPTION) ?? dc.Caption);
                     

@@ -182,12 +182,18 @@ namespace Nat.Web.Controls.Filters
                     BoundField boundField = new BoundField();
                     boundField.DataField = dc.ColumnName;
                     boundField.HeaderText = columnCaption;
+                    boundField.HeaderStyle.Height = new Unit(25, UnitType.Pixel);
                     boundField.SortExpression = dc.ColumnName;
                     Boolean htmlEncode = (Boolean)(DataSetResourceManager.GetColumnExtProperty(dc, ColumnExtProperties.HTML_ENCODED) ?? false);
                     boundField.HtmlEncode = htmlEncode;
                     gridViewExt.Columns.Add(boundField);
                 }
             }
+
+            var boundColumns = gridViewExt.Columns.OfType<BoundField>().Where(r => !string.IsNullOrEmpty(r.DataField)).ToList();
+            if (boundColumns.Count == 1)
+                boundColumns[0].HeaderStyle.Width = new Unit(100, UnitType.Percentage);
+
             table.Rows[0].Cells[1].Controls.Add(GetSearchPanel());
 
             if (gridViewExt.AllowPaging)

@@ -61,24 +61,30 @@ namespace Nat.Web.Controls.ExtNet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ext.onReady(function() {
+        ///   Looks up a localized string similar to ;
         ///
-        ///    if (Ext.Date) {
-        ///        Ext.Date.monthNames = [&quot;Январь&quot;, &quot;Февраль&quot;, &quot;Март&quot;, &quot;Апрель&quot;, &quot;Май&quot;, &quot;Июнь&quot;, &quot;Июль&quot;, &quot;Август&quot;, &quot;Сентябрь&quot;, &quot;Октябрь&quot;, &quot;Ноябрь&quot;, &quot;Декабрь&quot;];
+        ///Ext.define(&quot;Ext.locale.kz.view.AbstractView&quot;, {
+        ///    override: &quot;Ext.view.AbstractView&quot;,
+        ///    loadingText: &quot;Енгізу...&quot;
+        ///});
         ///
-        ///        Ext.Date.shortMonthNames = [&quot;Янв&quot;, &quot;Февр&quot;, &quot;Март&quot;, &quot;Апр&quot;, &quot;Май&quot;, &quot;Июнь&quot;, &quot;Июль&quot;, &quot;Авг&quot;, &quot;Сент&quot;, &quot;Окт&quot;, &quot;Нояб&quot;, &quot;Дек&quot;];
-        ///
-        ///        Ext.Date.getShortMonthName = function(month) {
-        ///            return Ext.Date.shortMonthNames[month];
-        ///        };
-        ///
-        ///        Ext.Date.monthNumbers = {
-        ///            &apos;Янв&apos;: 0,
-        ///  [rest of string was truncated]&quot;;.
+        ///Ext.define(&quot;Ext.locale.kz.form.field.Text&quot;, {
+        ///    override: &quot;Ext.form.field.Text&quot;,
+        ///    blankText: &quot;Жолақты толтыру міндетті&quot;,
+        ///});.
         /// </summary>
         internal static string ExtLocaleKz {
             get {
                 return ResourceManager.GetString("ExtLocaleKz", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string GlobalScripts {
+            get {
+                return ResourceManager.GetString("GlobalScripts", resourceCulture);
             }
         }
     }

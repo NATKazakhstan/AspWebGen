@@ -96,8 +96,14 @@
         {
             base.OnPreRenderExt();
 
-            if (LocalizationHelper.IsCultureKZ)
-                ResourceManager.AddInstanceScript(Properties.ResourceFiles.ExtLocaleKz);
+            if (!IsPostBack)
+            {
+                if (LocalizationHelper.IsCultureKZ)
+                {
+                    ResourceManager.AddInstanceScript(Properties.ResourceFiles.ExtLocaleKz);
+                }
+                ResourceManager.AddInstanceScript(Properties.ResourceFiles.GlobalScripts);
+            }
         }
     }
 
@@ -140,8 +146,13 @@
         {
             base.OnPreRenderExt();
 
-            if (LocalizationHelper.IsCultureKZ) {
-                ResourceManager.AddInstanceScript(Properties.ResourceFiles.ExtLocaleKz);
+            if (!IsPostBack)
+            {
+                if (LocalizationHelper.IsCultureKZ)
+                {
+                    ResourceManager.AddInstanceScript(Properties.ResourceFiles.ExtLocaleKz);
+                }
+                ResourceManager.AddInstanceScript(Properties.ResourceFiles.GlobalScripts);
             }
         }
     }

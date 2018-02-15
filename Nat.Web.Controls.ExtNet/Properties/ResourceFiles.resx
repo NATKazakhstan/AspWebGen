@@ -121,4 +121,7 @@
   <data name="ExtLocaleKz" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>extlocalekz.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="GlobalScripts" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>globalscripts.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
 </root>

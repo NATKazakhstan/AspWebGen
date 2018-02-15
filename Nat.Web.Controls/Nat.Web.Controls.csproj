@@ -29,6 +29,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <UseGlobalApplicationHostFile />
     <RestorePackages>true</RestorePackages>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -66,10 +67,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.JScript" />
-    <Reference Include="Microsoft.SharePoint, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\Microsoft.SharePoint.dll</HintPath>
-    </Reference>
     <Reference Include="Nat.Controls, Version=1.0.14.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Debug\Nat.Controls.dll</HintPath>
@@ -744,7 +741,6 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="GenerationClasses\Navigator\MenuDefaultDestination.cs" />
-    <Compile Include="GenerationClasses\RichTextBox.cs" />
     <Compile Include="GenerationClasses\SavingJournalSettings.ascx.cs">
       <DependentUpon>SavingJournalSettings.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

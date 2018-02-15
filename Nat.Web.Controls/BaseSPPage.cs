@@ -10,11 +10,7 @@ using Nat.Web.Tools.Security;
 
 namespace Nat.Web.Controls
 {
-#if !LOCAL && ForSharepoint
-    public class BaseSPPage : Microsoft.SharePoint.WebPartPages.WebPartPage, IPage
-#else
     public class BaseSPPage : Page, IPage
-#endif
     {
         #region поля
 

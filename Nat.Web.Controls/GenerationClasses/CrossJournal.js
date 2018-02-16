@@ -17,7 +17,7 @@ function CreateFixedHeader(table, fixedHeader, rowsCount, colsCount) {
     }
 
     // todo: подумать, возможно условие нужно только для IE
-    if (!$('#ctl00_PlaceHolderMain_item_Journal').is(":visible") && window.Ext == null)
+    if (!$('#ctl00_PlaceHolderMain_item_Journal').is(":visible") && !$('#PlaceHolderMain_item_Journal').is(":visible") && window.Ext == null)
         return;
 
     var rowsTable = document.createElement("table");

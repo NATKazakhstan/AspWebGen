@@ -1,8 +1,5 @@
 ﻿using System.Web;
 using System.Web.UI;
-#if !LOCAL && ForSharepoint
-using Microsoft.SharePoint;
-#endif
 
 namespace Nat.Web.Controls
 {
@@ -12,9 +9,6 @@ namespace Nat.Web.Controls
         {
             get
             {
-#if !LOCAL && ForSharepoint
-                return SPContext.Current.Web.Theme;
-#endif
                 var page = ((Page)HttpContext.Current.Items["CurrentPage"]);
                 return page != null ? page.Theme : null;
             }
@@ -24,9 +18,6 @@ namespace Nat.Web.Controls
         {
             get
             {
-#if !LOCAL && ForSharepoint
-                return "/_themes/" + SPContext.Current.Web.Theme;
-#endif
                 var theme = Theme;
                 return "/App_Themes/" + (string.IsNullOrEmpty(theme) ? "nat" : theme);
             }

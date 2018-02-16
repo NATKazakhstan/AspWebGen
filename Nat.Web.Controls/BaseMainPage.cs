@@ -23,9 +23,6 @@ using Nat.Web.Tools.Initialization;
 using System.Data.SqlClient;
 using Nat.Web.Controls.Properties;
 using Nat.Web.Tools.Security;
-#if !LOCAL && ForSharepoint
-using Microsoft.SharePoint;
-#endif
 
 [assembly: WebResource("Nat.Web.Controls.GenerationClasses.MainScripts.js", "text/javascript")]
 

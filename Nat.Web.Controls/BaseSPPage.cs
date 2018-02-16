@@ -10,6 +10,8 @@ using Nat.Web.Tools.Security;
 
 namespace Nat.Web.Controls
 {
+    using System.Web;
+
     public class BaseSPPage : Page, IPage
     {
         #region поля
@@ -23,10 +25,15 @@ namespace Nat.Web.Controls
 
         #region Methods
 
-        protected override void OnInit(EventArgs e)
+        protected override void OnPreInit(EventArgs e)
         {
             WebInitializer.Initialize();
-            //ScriptManager.Services.Add(new ServiceReference { Path = "/WebServiceFilters.asmx", });
+            base.OnPreInit(e);
+            HttpContext.Current.Items["CurrentPage"] = this;
+        }
+
+        protected override void OnInit(EventArgs e)
+        {
             _updateProgressBar = new UpdateProgressBar { ID = "modalUpdateProgressBar", ModalPopupBehaviorID = "UpdateProgressBar" };
             Form.Controls.Add(_updateProgressBar);
 

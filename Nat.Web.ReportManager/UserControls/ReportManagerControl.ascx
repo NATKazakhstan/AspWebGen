@@ -31,8 +31,8 @@
             <tr>
                 <td>
                     <cc1:ImageCheckBox runat="server" ID="ImageCheckBox" HideIDControl="pList" 
-                        Checked="True" ImageUrlChecked="/_themes/KVV/open_spr.gif" 
-                        ImageUrlUnchecked="/_themes/KVV/close_spr.gif" 
+                        Checked="True" ImageUrlChecked="/App_Themes/KVV/open_spr.gif" 
+                        ImageUrlUnchecked="/App_Themes/KVV/close_spr.gif" 
                         ToolTipChecked="Скрыть список отчетов" 
                         ToolTipUnchecked="Показать список отчетов" 
                         Text="Показать/скрыть список отчетов" 

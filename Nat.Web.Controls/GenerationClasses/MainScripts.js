@@ -873,11 +873,11 @@ function InitializeFilterFields(filterTable, fieldSet) {
 
     var jfilterTable = $(filterTable);
     if (jfilterTable.attr("iconSmallRemove") == null)
-        jfilterTable.attr("iconSmallRemove", '/_themes/KVV/SmallRemove.png');
+        jfilterTable.attr("iconSmallRemove", '/App_Themes/KVV/SmallRemove.png');
     if (jfilterTable.attr("iconShowMainGroupFilters") == null)
-        jfilterTable.attr("iconShowMainGroupFilters",  '/_themes/KVV/ShowMainGroupFilters.png');
+        jfilterTable.attr("iconShowMainGroupFilters",  '/App_Themes/KVV/ShowMainGroupFilters.png');
     if (jfilterTable.attr("iconShowAllFilters") == null)
-        jfilterTable.attr("iconShowAllFilters", '/_themes/KVV/ShowAllFilters.png');
+        jfilterTable.attr("iconShowAllFilters", '/App_Themes/KVV/ShowAllFilters.png');
 
     var hideTable = true;
     for (var i = 0; i < filterTable.rows.length; i++) {
@@ -2594,7 +2594,7 @@ $(function () {
             var html =
                 "<div id='windowsDialog{0}' style='display: none; overflow: hidden;'><div class='LoadingControl'><div class='LoadingControl-info'><div><span class='text-center' role='text'>" +
                     (IsCultureKz() ? 'Енгізу' : 'Загрузка') +
-                    "...</span><div role='img'><img src='/_themes/KVV/ewr133.gif'></div></div></div><div class='LoadingControl-hide'></div></div><iframe name='windowsDialog{0}Frame' width='100%' style='height: inherit' src='' frameborder='0' scrolling='none' /></div>";
+                    "...</span><div role='img'><img src='/App_Themes/KVV/ewr133.gif'></div></div></div><div class='LoadingControl-hide'></div></div><iframe name='windowsDialog{0}Frame' width='100%' style='height: inherit' src='' frameborder='0' scrolling='none' /></div>";
             html = html.replace("{0}", windowsDialogCacheNextId).replace("{0}", windowsDialogCacheNextId);
             var $dialog = $(html);
             parentWindow.document.body.appendChild($dialog[0]);

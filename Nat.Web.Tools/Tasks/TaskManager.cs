@@ -71,6 +71,13 @@
             return logMonitor;
         }
 
+        public static void Execute<TTask>(int countInIteration = 100)
+            where TTask : ITask
+        {
+            var task = new TaskManager();
+            task.ExecuteTask<TTask>(countInIteration);
+        }
+
         public void ExecuteTask<TTask>(int countInIteration = 100)
             where TTask : ITask
         {

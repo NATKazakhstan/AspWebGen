@@ -36,7 +36,7 @@ namespace Nat.Web.Controls.GenerationClasses.Data
     #endregion
 		
 		public CrossJournalDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnectionString"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnectionString1"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -85,6 +85,13 @@ namespace Nat.Web.Controls.GenerationClasses.Data
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), sID, jorunalName, rowID);
 			return ((ISingleResult<SYS_UpdateCrossJournalEditsResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.SYS_DeleteCrossJournalEdits")]
+		public int SYS_DeleteCrossJournalEdits([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="DateTime")] System.Nullable<System.DateTime> dtStartOlderThen, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="DateTime")] System.Nullable<System.DateTime> dtLastOlderThen)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), dtStartOlderThen, dtLastOlderThen);
+			return ((int)(result.ReturnValue));
 		}
 	}
 	

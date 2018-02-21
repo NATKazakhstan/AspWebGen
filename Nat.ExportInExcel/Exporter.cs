@@ -5,6 +5,7 @@
     using System.Data.Linq;
     using System.Globalization;
     using System.IO;
+    using System.Reflection;
     using System.Text;
     using System.Threading;
     using System.Web;
@@ -140,7 +141,7 @@
                 HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority),
                 Environment.MachineName,
                 true,
-                BuildManager.GetType(properties.ReportPluginName, true, true));
+                BuildManager.GetType(properties.ReportPluginName, false, true) ?? GetTypeByReportManager(properties.ReportPluginName));
 
             logMonitor.Log(
                 new LogMessageEntry(
@@ -150,6 +151,13 @@
                     journalControl.OnExportNewSavedProperties ? RvsSavedProperties.GetFromJournal(journalControl) : properties));
 
             return stream;
+        }
+
+        private static Type GetTypeByReportManager(string pluginName)
+        {
+            var type = BuildManager.GetType("Nat.Web.ReportManager.WebReportManager, Nat.Web.ReportManager, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", true, true);
+            var getPlugin = type.GetMethod("GetPlugin", BindingFlags.Public | BindingFlags.Static);
+            return getPlugin.Invoke(null, new object[] { pluginName })?.GetType();
         }
 
         public string GetFileNameExtension(string format)

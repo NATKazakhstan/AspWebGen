@@ -1229,7 +1229,7 @@ namespace Nat.Web.Controls.GenerationClasses
                 if (exception.Number != -2)
                     throw;
                 returnValue = new List<TRow>(0);
-                AbstractUserControl.ShowWarningMessage(Resources.SInformationText, Resources.STimeOut);
+                AbstractUserControl.ShowWarningMessage?.Invoke(Resources.SInformationText, Resources.STimeOut);
             }
 
             EnsureExistRow(returnValue);

@@ -11,7 +11,7 @@ Ext.onReady(function () {
             if (grid.selModel && grid.selModel.selType == "checkboxmodel" && grid.store)
             {
                 grid.selModel.addListener("beforedeselect", OnGridSelectionModelBeforeDeselect);
-                grid.store.addListener("load", OnGridStoreLoadForSelectionModel);
+                grid.store.addListener("refresh", OnGridStoreRefreshForSelectionModel);
                 grid.store.addListener("update", OnGridStoreUpdateForSelectionModel);
             }
         });
@@ -21,7 +21,7 @@ Ext.onReady(function () {
 var isGSM_CheckBoxCellClicked = false;
 var isGSM_CheckBoxChanged = false;
 
-var OnGridStoreLoadForSelectionModel = function (store) {
+var OnGridStoreRefreshForSelectionModel = function (store) {
     if (store && store.storeId && store.storeId.length > 0)
     {
         var journalGridId = store.storeId.replace("_store", "_grid");

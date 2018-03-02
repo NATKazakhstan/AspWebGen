@@ -582,7 +582,17 @@ namespace Nat.Web.Controls.GenerationClasses
             }
 
             where = filterHandlers.Values.OfType<IBaseFilterParameterContainer>()
-                .Select(filter => filter.GetFilter(QueryParameters))
+                .Select(filter =>
+                    {
+                        var expression = filter.GetFilter(QueryParameters);
+                        if (expression != null)
+                        {
+                            foreach (var containerFilter in filter.GetAppliedFilters().Select(r => r.FilterName).Where(requiredFiltersSeted.ContainsKey))
+                                requiredFiltersSeted[containerFilter] = true;
+                        }
+
+                        return expression;
+                    })
                 .Where(exp => exp != null)
                 .Select(exp => (Expression)Expression.Invoke(exp, upToTable))
                 .Aggregate(where, (current, exp) => current == null ? exp : Expression.And(current, exp));

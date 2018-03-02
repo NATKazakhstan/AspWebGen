@@ -1,6 +1,7 @@
 ﻿namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq.Expressions;
 
     using Nat.Web.Controls.GenerationClasses.Filter;
@@ -18,6 +19,13 @@
             return null;
         }
 
+        public override void ClearState()
+        {
+            base.ClearState();
+
+            AppliedFilters.Clear();
+        }
+
         public abstract void AddFilterValue(
             BaseFilterParameter<TTable> baseFilterParameter,
             Enum filtertype,
@@ -25,5 +33,12 @@
             QueryParameters qParams);
 
         public abstract Expression GetFilter(QueryParameters qParams);
+
+        protected List<BaseFilterParameter> AppliedFilters { get; } = new List<BaseFilterParameter>();
+
+        public virtual IEnumerable<BaseFilterParameter> GetAppliedFilters()
+        {
+            return AppliedFilters;
+        }
     }
 }

@@ -70,8 +70,8 @@
             var filterByChilds = Expression.Lambda(andExpressions, param);
             return this.GetFilterExpressionByChilds(qParams, typeof(TTable), filterByChilds);
         }
-
-        private static void AddExpressions(QueryParameters qParams, List<FilterItem> filterItems, BaseFilterParameter<TTable> filter, List<Expression> expressions)
+        
+        private void AddExpressions(QueryParameters qParams, List<FilterItem> filterItems, BaseFilterParameter<TTable> filter, List<Expression> expressions)
         {
             expressions.AddRange(
                 filterItems.Where(f => f.FilterType == "NotEquals")
@@ -84,13 +84,17 @@
                 .Where(f => f != null)
                 .ToList();
             if (items.Count == 1)
+            {
                 expressions.Add(items[0]);
+                AppliedFilters.Add(filter);
+            }
             else if (items.Count > 1)
             {
                 var param = Expression.Parameter(typeof(TTable), "orRow");
                 var orExpressions =
                     items.Select(e => (Expression)Expression.Invoke(e, param)).Aggregate(Expression.Or);
                 expressions.Add(Expression.Lambda(orExpressions, param));
+                AppliedFilters.Add(filter);
             }
         }
     }

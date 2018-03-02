@@ -11,7 +11,8 @@ Ext.onReady(function () {
             if (grid.selModel && grid.selModel.selType == "checkboxmodel" && grid.store)
             {
                 grid.selModel.addListener("beforedeselect", OnGridSelectionModelBeforeDeselect);
-                grid.store.addListener("load", OnGridStoreLoadForSelectionModel);
+                grid.store.addListener("refresh", OnGridStoreRefreshForSelectionModel);
+                grid.store.addListener("update", OnGridStoreUpdateForSelectionModel);
             }
         });
     }
@@ -20,7 +21,7 @@ Ext.onReady(function () {
 var isGSM_CheckBoxCellClicked = false;
 var isGSM_CheckBoxChanged = false;
 
-var OnGridStoreLoadForSelectionModel = function (store) {
+var OnGridStoreRefreshForSelectionModel = function (store) {
     if (store && store.storeId && store.storeId.length > 0)
     {
         var journalGridId = store.storeId.replace("_store", "_grid");
@@ -40,6 +41,24 @@ var OnGridStoreLoadForSelectionModel = function (store) {
                 }, 10);
             }
         });
+    }
+}
+
+var OnGridStoreUpdateForSelectionModel = function (store, record) {
+    if (store && store.storeId && store.storeId.length > 0) {
+        var journalGridId = store.storeId.replace("_store", "_grid");
+        var updatedRow = $("#" + journalGridId).find("tr.x-grid-row").eq(record.index);
+
+        if (updatedRow)
+        {
+            updatedRow.find(".x-grid-cell-row-checker").mousedown(function () {
+                isGSM_CheckBoxCellClicked = true;
+            });
+
+            updatedRow.find(".x-grid-cell-row-checker").find(".x-grid-row-checker").mousedown(function () {
+                isGSM_CheckBoxChanged = true;
+            });
+        }
     }
 }
 

@@ -252,15 +252,20 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
             foreach (var item in storageValues.GetStorageNames())
             {
                 var columnFilterType = storageValues.GetStorageFilterType(item);
-                if(columnFilterType == null || columnFilterType == ColumnFilterType.None) continue;
+                if (columnFilterType == null || columnFilterType == ColumnFilterType.None) continue;
+                
                 var values = storageValues.GetStorageValues(item);
-                var filterItem = new FilterItem(item, columnFilterType, values);
                 if (!filterValues.ContainsKey(item))
                     filterValues[item] = new List<FilterItem>();
                 else
                     filterValues[item].Clear();
-
-                filterValues[item].Add(filterItem);
+                if (columnFilterType == ColumnFilterType.In || columnFilterType == ColumnFilterType.OutOf)
+                    filterValues[item].AddRange(values.Select(r => new FilterItem(item, columnFilterType, new[] { r })));
+                else
+                {
+                    var filterItem = new FilterItem(item, columnFilterType, values);
+                    filterValues[item].Add(filterItem);
+                }
             }
             for (int i = 0; i < storageValues.CountListValues; i++)
             {

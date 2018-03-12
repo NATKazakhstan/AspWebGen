@@ -1,6 +1,7 @@
 ﻿namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 {
     using System;
+    using System.Data.Linq.SqlClient;
     using System.Linq.Expressions;
 
     using Nat.Web.Controls.GenerationClasses.Filter;
@@ -8,6 +9,8 @@
     public class BaseFilterParameterString<TTable> : BaseFilterParameter<TTable>
         where TTable : class
     {
+        public bool AllowEqualsOperations { get; set; } = true;
+
         public BaseFilterParameterString()
         {
         }
@@ -50,7 +53,14 @@
             var param = Expression.Parameter(tableType, "bFilter");
             var field = InvokeValueExpression(param);
             var expression = Expression.NotEqual(field, Expression.Constant(null, field.Type));
-            expression = Expression.And(expression, Expression.NotEqual(field, Expression.Constant("", field.Type)));
+            if (AllowEqualsOperations)
+                expression = Expression.And(expression, Expression.NotEqual(field, Expression.Constant("", field.Type)));
+            else
+            {
+                expression = Expression.And(
+                    expression,
+                    Expression.Not(Expression.Call(typeof(SqlMethods), "Like", new Type[0], field, Expression.Constant(""))));
+            }
             QueryParameters.RegisterExpression(expression);
             SetWhereExpression(expression, param);
         }
@@ -60,9 +70,45 @@
             var param = Expression.Parameter(tableType, "bFilter");
             var field = InvokeValueExpression(param);
             var expression = Expression.Equal(field, Expression.Constant(null, field.Type));
-            expression = Expression.Or(expression, Expression.Equal(field, Expression.Constant("", field.Type)));
+            if (AllowEqualsOperations)
+                expression = Expression.Or(expression, Expression.Equal(field, Expression.Constant("", field.Type)));
+            else
+            {
+                expression = Expression.Or(
+                    expression,
+                    Expression.Call(typeof(SqlMethods), "Like", new Type[0], field, Expression.Constant("")));
+            }
+
             QueryParameters.RegisterExpression(expression);
             SetWhereExpression(expression, param);
+        }
+
+        protected override void EqualsExpression(string strValue, Type tableType)
+        {
+            if (AllowEqualsOperations)
+                base.EqualsExpression(strValue, tableType);
+            else if (!string.IsNullOrEmpty(strValue))
+            {
+                var param = Expression.Parameter(tableType, "bFilter");
+                var value = ConvertToFieldType(strValue);
+                var field = InvokeValueExpression(param);
+                var valueExp = QueryParameters.GetExpression(field + ".Equals", value, field.Type);
+                SetWhereExpression(Expression.Call(typeof(SqlMethods), "Like", new Type[0], field, valueExp), param);
+            }
+        }
+
+        protected override void NotEqualsExpression(string strValue, Type tableType)
+        {
+            if (AllowEqualsOperations)
+                base.NotEqualsExpression(strValue, tableType);
+            else if (!string.IsNullOrEmpty(strValue))
+            {
+                var param = Expression.Parameter(tableType, "bFilter");
+                var value = ConvertToFieldType(strValue);
+                var field = InvokeValueExpression(param);
+                var valueExp = QueryParameters.GetExpression(field + ".Equals", value, field.Type);
+                SetWhereExpression(Expression.Not(Expression.Call(typeof(SqlMethods), "Like", new Type[0], field, valueExp)), param);
+            }
         }
     }
 }

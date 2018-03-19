@@ -145,6 +145,8 @@
             }
         }
 
+        protected virtual bool CustomHtml => false;
+
         #endregion
 
         #region Methods
@@ -181,6 +183,13 @@
             using (var email = new EmailMessage(htmlWriter))
             {
                 email.BeginMessage();
+                if (CustomHtml)
+                {
+                    RenderEMail(email, row);
+                    email.EndMessage();
+                    return;
+                }
+
                 email.BeginTable(
                     subject,
                     AddAttributesForMainTable, 

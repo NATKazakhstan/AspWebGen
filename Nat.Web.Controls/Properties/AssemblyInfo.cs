@@ -37,7 +37,7 @@ using System.Security;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.4.0.0")]
 [assembly: InternalsVisibleTo("Nat.Web.WorkFlow, PublicKey="
                               + "0024000004800000940000000602000000240000525341310004000001000100ff7decb6867d38"
                               + "3c8eb36482ddaf68b78b68ab81b05197aa3f9cf4c65bc63717c8650932d77f24e05cd0e7be1521"

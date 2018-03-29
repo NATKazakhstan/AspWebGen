@@ -47,16 +47,16 @@ namespace Nat.Web.Tools.Initialization
         {
             _propInitializerClasses = new ConfigurationProperty("initializerClasses", typeof(InitializerSectionCollection), null, ConfigurationPropertyOptions.IsDefaultCollection);
             //_propReprotPlugins = new ConfigurationProperty("reportPlugins", typeof(ReportPluginCollection), null, ConfigurationPropertyOptions.IsDefaultCollection);
-            _propFilterNamesResourcesType = new ConfigurationProperty("filterNamesResourcesType", typeof(string), "Nat.Web.Controls.DefaultFilterNamesResources, Nat.Web.Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", ConfigurationPropertyOptions.None);
-            _propLogMonitorType = new ConfigurationProperty("logMonitorType", typeof(string), "Nat.Web.Controls.LogMonitor, Nat.Web.Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", ConfigurationPropertyOptions.None);
-            _propExporterType = new ConfigurationProperty("excelExporterType", typeof(string), "Nat.ExportInExcel.Exporter, Nat.ExportInExcel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", ConfigurationPropertyOptions.None);
+            _propFilterNamesResourcesType = new ConfigurationProperty("filterNamesResourcesType", typeof(string), "Nat.Web.Controls.DefaultFilterNamesResources, Nat.Web.Controls, Version=1.4.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", ConfigurationPropertyOptions.None);
+            _propLogMonitorType = new ConfigurationProperty("logMonitorType", typeof(string), "Nat.Web.Controls.LogMonitor, Nat.Web.Controls, Version=1.4.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", ConfigurationPropertyOptions.None);
+            _propExporterType = new ConfigurationProperty("excelExporterType", typeof(string), "Nat.ExportInExcel.Exporter, Nat.ExportInExcel, Version=1.4.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", ConfigurationPropertyOptions.None);
             _propSiteUrl = new ConfigurationProperty("siteUrl", typeof(string), "", ConfigurationPropertyOptions.None);
             _propSecurityRoles = new ConfigurationProperty("securityRoles", typeof(string), "", ConfigurationPropertyOptions.None);
             _propUseMainPageExtension = new ConfigurationProperty("useMainPageExtension", typeof(bool), false, ConfigurationPropertyOptions.None);
             _propRegisterMainScripts = new ConfigurationProperty("registerMainScripts", typeof(bool), false, ConfigurationPropertyOptions.None);
             _propRedirectOnSQLTimeout = new ConfigurationProperty("redirectOnSQLTimeout", typeof(bool), false, ConfigurationPropertyOptions.None);
             _propAddFilterInMainPage = new ConfigurationProperty("addFilterInMainPage", typeof(bool), false, ConfigurationPropertyOptions.None);
-            _propReportAccess = new ConfigurationProperty("reportAccess", typeof(string), "Nat.Web.ReportManager.WebReportManager, Nat.Web.ReportManager, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", ConfigurationPropertyOptions.None);
+            _propReportAccess = new ConfigurationProperty("reportAccess", typeof(string), "Nat.Web.ReportManager.WebReportManager, Nat.Web.ReportManager, Version=1.4.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", ConfigurationPropertyOptions.None);
 
             _propTypeOfMethodGetSubdivisionKSP = new ConfigurationProperty("typeOfMethodGetSubdivisionKSP", typeof(string), "", ConfigurationPropertyOptions.None);
             _propTypeOfMethodEnsurePersonInfoCorrect = new ConfigurationProperty("typeOfMethodEnsurePersonInfoCorrect", typeof(string), "", ConfigurationPropertyOptions.None);
@@ -119,19 +119,19 @@ namespace Nat.Web.Tools.Initialization
             return section;
         }
 
-        [ConfigurationProperty("filterNamesResourcesType", DefaultValue = @"Nat.Web.Controls.DefaultFilterNamesResources, Nat.Web.Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415")]
+        [ConfigurationProperty("filterNamesResourcesType", DefaultValue = @"Nat.Web.Controls.DefaultFilterNamesResources, Nat.Web.Controls, Version=1.4.0.0, Culture=neutral, PublicKeyToken=11c252a207597415")]
         public string FilterNamesResourcesType
         {
             get { return (string)base[_propFilterNamesResourcesType]; }
         }
 
-        [ConfigurationProperty("logMonitorType", DefaultValue = @"Nat.Web.Controls.LogMonitor, Nat.Web.Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415")]
+        [ConfigurationProperty("logMonitorType", DefaultValue = @"Nat.Web.Controls.LogMonitor, Nat.Web.Controls, Version=1.4.0.0, Culture=neutral, PublicKeyToken=11c252a207597415")]
         public string LogMonitorType
         {
             get { return (string)base[_propLogMonitorType]; }
         }
 
-        [ConfigurationProperty("excelExporterType", DefaultValue = @"Nat.ExportInExcel.Exporter, Nat.ExportInExcel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415")]
+        [ConfigurationProperty("excelExporterType", DefaultValue = @"Nat.ExportInExcel.Exporter, Nat.ExportInExcel, Version=1.4.0.0, Culture=neutral, PublicKeyToken=11c252a207597415")]
         public string ExcelExporterType
         {
             get { return (string)base[_propExporterType]; }
@@ -161,7 +161,7 @@ namespace Nat.Web.Tools.Initialization
         [ConfigurationProperty("addFilterInMainPage", DefaultValue = false)]
         public bool AddFilterInMainPage => (bool)base[_propAddFilterInMainPage];
 
-        [ConfigurationProperty("reportAccess", DefaultValue = @"Nat.Web.ReportManager.WebReportManager, Nat.Web.ReportManager, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415")]
+        [ConfigurationProperty("reportAccess", DefaultValue = @"Nat.Web.ReportManager.WebReportManager, Nat.Web.ReportManager, Version=1.4.0.0, Culture=neutral, PublicKeyToken=11c252a207597415")]
         public string ReportAccess
         {
             get { return (string)base[_propReportAccess]; }

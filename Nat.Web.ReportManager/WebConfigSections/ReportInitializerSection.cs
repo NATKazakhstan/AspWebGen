@@ -9,6 +9,8 @@ namespace Nat.Web.ReportManager
     public class ReportInitializerSection : ConfigurationSection
     {
         private static readonly ConfigurationProperty _propColumnFilterFactoryType;
+        private static readonly ConfigurationProperty _propRememberLastReportType;
+        private static readonly ConfigurationProperty _propRememberLastInMenuID;
         private static readonly ConfigurationPropertyCollection _properties;
         private static readonly ConfigurationProperty _propReprotPlugins;
         private static readonly ConfigurationProperty _propReportPageViewer;
@@ -27,7 +29,9 @@ namespace Nat.Web.ReportManager
 
         static ReportInitializerSection()
         {
-            _propColumnFilterFactoryType = new ConfigurationProperty("columnFilterFactoryType", typeof(string), "Nat.Web.Controls.Filters.WebColumnFilterFactory, Nat.Web.Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", ConfigurationPropertyOptions.None);
+            _propColumnFilterFactoryType = new ConfigurationProperty("columnFilterFactoryType", typeof(string), "Nat.Web.Controls.Filters.WebColumnFilterFactory, Nat.Web.Controls, Version=1.4.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", ConfigurationPropertyOptions.None);
+            _propRememberLastReportType = new ConfigurationProperty("rememberLastReportType", typeof(string), "", ConfigurationPropertyOptions.None);
+            _propRememberLastInMenuID = new ConfigurationProperty("rememberLastInMenuID", typeof(string), "", ConfigurationPropertyOptions.None);
             _propReprotPlugins = new ConfigurationProperty("reportPlugins", typeof(ReportPluginCollection), null, ConfigurationPropertyOptions.IsDefaultCollection);
             _propReportPageViewer = new ConfigurationProperty("reportPageViewer", typeof(string), @"/ReportViewer.aspx", ConfigurationPropertyOptions.None);
             _propReportingStiReportResultPage = new ConfigurationProperty("reportingStiPageViewer", typeof(string), @"/ReportResultPage.aspx", ConfigurationPropertyOptions.None);
@@ -46,6 +50,8 @@ namespace Nat.Web.ReportManager
             _properties = new ConfigurationPropertyCollection
                               {
                                   _propColumnFilterFactoryType,
+                                  _propRememberLastReportType,
+                                  _propRememberLastInMenuID,
                                   _propReprotPlugins,
                                   _propReportPageViewer,
                                   _propReportingStiReportResultPage,
@@ -75,7 +81,7 @@ namespace Nat.Web.ReportManager
             return section;
         }
 
-        [ConfigurationProperty("columnFilterFactoryType", DefaultValue = "Nat.Web.Controls.Filters.WebColumnFilterFactory, Nat.Web.Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415")]
+        [ConfigurationProperty("columnFilterFactoryType", DefaultValue = "Nat.Web.Controls.Filters.WebColumnFilterFactory, Nat.Web.Controls, Version=1.4.0.0, Culture=neutral, PublicKeyToken=11c252a207597415")]
         public string ColumnFilterFactoryType
         {
             get
@@ -83,6 +89,12 @@ namespace Nat.Web.ReportManager
                 return (string)base[_propColumnFilterFactoryType];
             }
         }
+
+        [ConfigurationProperty("rememberLastReportType", DefaultValue = "")]
+        public string RememberLastReportType => (string)base[_propRememberLastReportType];
+
+        [ConfigurationProperty("rememberLastInMenuID", DefaultValue = "")]
+        public string RememberLastInMenuID => (string)base[_propRememberLastInMenuID];
 
         protected override ConfigurationPropertyCollection Properties
         {

@@ -324,7 +324,7 @@ namespace Nat.Web.Controls.GenerationClasses
             /// <summary>
             /// Метод заполнения ячейки журнала, если журнал не редактируемый или запись и колонку нельзя редактировать.
             /// </summary>
-            public GetColumnContent ColumnContentHandler { get; set; }
+            public virtual GetColumnContent ColumnContentHandler { get; set; }
 
             /// <summary>
             /// Метод заполнения ячейки журнала, если журнал не редактируемый или запись и колонку нельзя редактировать.
@@ -656,18 +656,11 @@ namespace Nat.Web.Controls.GenerationClasses
                         + (LookVisible ? 1 : 0)
                         + (DeleteVisible ? 1 : 0)
                         + (HasSelectCheckBox ? 1 : 0)
-                        + (AdditionalButtons == null ? 0 : AdditionalButtons.Count);
+                        + (AdditionalButtons?.Count ?? 0);
                 }
             }
 
-            public override string Width
-            {
-                get
-                {
-                    var count = CountIcons < 5 ? CountIcons : (CountIcons < 7 ? 3 : 4);
-                    return (count * 21).ToString() + "px";
-                }
-            }
+            public override string Width => CountIcons * 21 + "px";
 
             public virtual IEnumerable<GetColumnContent> GetAdditionalButtons()
             {
@@ -685,6 +678,19 @@ namespace Nat.Web.Controls.GenerationClasses
                 sb.Append("\"><img style=\"border:0px\" src=\"");
                 sb.Append(Themes.IconUrlDelete);
                 sb.Append("\"/></a>");
+            }
+
+            public override GetColumnContent ColumnContentHandler
+            {
+                set
+                {
+                    base.ColumnContentHandler = sb =>
+                        {
+                            sb.AppendFormat("<div style='width:{0}'>", Width);
+                            value(sb);
+                            sb.Append("</div>");
+                        };
+                }
             }
         }
 

@@ -403,6 +403,8 @@ namespace Nat.Web.Controls
 
             if (UserControl != null && !UserControl.Equals(""))
                 sb.Append("/" + UserControl);
+            else if (IsDownload || IsExecute)
+                sb.Append("/");
             if (ShowHistory) sb.Append("/showhistory");
             if (IsNew) sb.Append("/new");
             if (IsMultipleSelect) sb.Append("/multipleselect");

@@ -537,12 +537,12 @@ function CreateTableRowByColumnHierarchy(container, colH, r, index, dicContols, 
             var verticalHeaderCon = document.createElement("img");
             verticalHeaderCon.style.cursor = "pointer";
             if (col.IsVerticalHeader) {
-                verticalHeaderCon.src = "/_themes/kvv/TextDirectionBU.png";
+                verticalHeaderCon.src = "/App_Themes/KVV/TextDirectionBU.png";
                 //div.style.writingMode = "tb-rl";
                 //div.style.filter = "flipv fliph";
             }
             else {
-                verticalHeaderCon.src = "/_themes/kvv/TextDirectionLR.png";
+                verticalHeaderCon.src = "/App_Themes/KVV/TextDirectionLR.png";
             }
             td.appendChild(verticalHeaderCon);
             dicContols[col.key].verticalHeader = verticalHeaderCon;
@@ -557,13 +557,13 @@ function CreateTableRowByColumnHierarchy(container, colH, r, index, dicContols, 
                 var orderDiv = document.createElement("div");
                 var sortCol = col.OrderByColumn;
                 if (Array.contains(changeOrderOfColumns_sortCols, sortCol))
-                    CreateTableRowByColumnHierarchy_AddOrderButton(container.SOrderByColumnRemove, container.SOrderByColumn, "/_themes/KVV/OrderByColumnAsc", 'Asc', 'Remove', col.OrderByColumn, orderDiv);
+                    CreateTableRowByColumnHierarchy_AddOrderButton(container.SOrderByColumnRemove, container.SOrderByColumn, "/App_Themes/KVV/OrderByColumnAsc", 'Asc', 'Remove', col.OrderByColumn, orderDiv);
                 else
-                    CreateTableRowByColumnHierarchy_AddOrderButton(container.SOrderByColumnRemove, container.SOrderByColumn, "/_themes/KVV/OrderByColumnAsc", 'Asc', 'Asc', col.OrderByColumn, orderDiv);
+                    CreateTableRowByColumnHierarchy_AddOrderButton(container.SOrderByColumnRemove, container.SOrderByColumn, "/App_Themes/KVV/OrderByColumnAsc", 'Asc', 'Asc', col.OrderByColumn, orderDiv);
                 if (Array.contains(changeOrderOfColumns_sortCols, sortCol + " desc"))
-                    CreateTableRowByColumnHierarchy_AddOrderButton(container.SOrderByColumnRemove, container.SOrderByColumnDesc, "/_themes/KVV/OrderByColumnDesc", 'Desc', 'Remove', col.OrderByColumn, orderDiv);
+                    CreateTableRowByColumnHierarchy_AddOrderButton(container.SOrderByColumnRemove, container.SOrderByColumnDesc, "/App_Themes/KVV/OrderByColumnDesc", 'Desc', 'Remove', col.OrderByColumn, orderDiv);
                 else
-                    CreateTableRowByColumnHierarchy_AddOrderButton(container.SOrderByColumnRemove, container.SOrderByColumnDesc, "/_themes/KVV/OrderByColumnDesc", 'Desc', 'Desc', col.OrderByColumn, orderDiv);
+                    CreateTableRowByColumnHierarchy_AddOrderButton(container.SOrderByColumnRemove, container.SOrderByColumnDesc, "/App_Themes/KVV/OrderByColumnDesc", 'Desc', 'Desc', col.OrderByColumn, orderDiv);
                 td.appendChild(orderDiv);
             }
 
@@ -799,12 +799,12 @@ function changeAllVisibleInColumnHierarchy(colH, dicContols, visible) {
 }
 function _changeVerticalStyle(con) {
     if (con.col.IsVerticalHeader) {
-        con.src = "/_themes/kvv/TextDirectionBU.png";
+        con.src = "/App_Themes/KVV/TextDirectionBU.png";
 //        con.parentNode.firstChild.style.writingMode = "tb-rl";
 //        con.parentNode.firstChild.style.filter = "flipv fliph";
     }
     else {
-        con.src = "/_themes/kvv/TextDirectionLR.png";
+        con.src = "/App_Themes/KVV/TextDirectionLR.png";
 //        con.parentNode.firstChild.style.writingMode = "";
 //        con.parentNode.firstChild.style.filter = "";
     }
@@ -1384,17 +1384,17 @@ function fillCellsByColor(table, action, con) {
     con.title = con.cancelTitle;
     con.firstChild.alt = con.cancelTitle;
     if (action == "fillRow")
-        con.firstChild.src = "/_themes/kvv/FillRowS.png";
+        con.firstChild.src = "/App_Themes/KVV/FillRowS.png";
     else if (action == "fillColumn")
-        con.firstChild.src = "/_themes/kvv/FillColumnS.png";
+        con.firstChild.src = "/App_Themes/KVV/FillColumnS.png";
     else if (action == "fillCell")
-        con.firstChild.src = "/_themes/kvv/FillCellS.png";
+        con.firstChild.src = "/App_Themes/KVV/FillCellS.png";
     else if (action == "fillFontRow")
-        con.firstChild.src = "/_themes/kvv/FontRowS.png";
+        con.firstChild.src = "/App_Themes/KVV/FontRowS.png";
     else if (action == "fillFontColumn")
-        con.firstChild.src = "/_themes/kvv/FontColumnS.png";
+        con.firstChild.src = "/App_Themes/KVV/FontColumnS.png";
     else if (action == "fillFontCell")
-        con.firstChild.src = "/_themes/kvv/FontCellS.png";
+        con.firstChild.src = "/App_Themes/KVV/FontCellS.png";
     table.onclick = fillCellsByColorMouseDown;
     table.ondblclick = fillCellsByColorMouseDown;
     var otherTable = $get(table.id + "_cols");

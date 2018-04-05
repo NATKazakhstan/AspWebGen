@@ -9,8 +9,8 @@ namespace Nat.Web.Controls
         {
             get
             {
-                var page = ((Page)HttpContext.Current.Items["CurrentPage"]);
-                return page != null ? page.Theme : null;
+                var page = (Page)HttpContext.Current.Items["CurrentPage"] ?? HttpContext.Current.Handler as Page;
+                return page?.Theme;
             }
         }
 

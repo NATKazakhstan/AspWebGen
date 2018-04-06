@@ -339,7 +339,7 @@
 
             string header = null;
             var type = BuildManager.GetType(
-                string.Format("{1}.Properties.{0}Resources, {1}, Version=1.0.0.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a", tableName, projectCode),
+                string.Format("{1}.Properties.{0}Resources, {1}, Version=1.4.0.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a", tableName, projectCode),
                 false,
                 true);
 

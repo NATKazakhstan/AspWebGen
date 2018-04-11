@@ -703,10 +703,10 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                 @"
 var setFilter{2} = function(value) {{
     {0};
-}}
+}};
 var getFilter{2} = function() {{
     return '{1}';
-}}",
+}};",
                 post,
                 Url.GetFilter(GetTableName()).Replace("\\\"", "\\\\\""),
                 GetTableName());

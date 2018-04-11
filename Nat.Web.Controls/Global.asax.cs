@@ -46,6 +46,11 @@ namespace Nat.Web.Controls
         protected void Application_EndRequest(object sender, EventArgs e)
         {
             OnCustomEndRequest(sender, e);
+            OnEndRequest(sender, e);
+        }
+
+        protected virtual void OnEndRequest(object sender, EventArgs e)
+        {
         }
 
         private void OnCustomEndRequest(object sender, EventArgs e)

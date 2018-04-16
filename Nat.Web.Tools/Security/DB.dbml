@@ -33,4 +33,9 @@
     <Parameter Name="reportTitleKz" Type="System.String" DbType="NVarChar(450)" />
     <Return Type="System.Int32" />
   </Function>
+  <Function Name="dbo.ADM_P_SetUserActivityTime" Method="ADM_P_SetUserActivityTime">
+    <Parameter Name="sid" Type="System.String" DbType="NVarChar(200)" />
+    <Parameter Name="ActivityDateTime" Type="System.DateTime" DbType="DateTime" />
+    <Return Type="System.Int32" />
+  </Function>
 </Database>

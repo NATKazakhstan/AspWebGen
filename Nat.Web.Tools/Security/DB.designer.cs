@@ -75,6 +75,13 @@ namespace Nat.Web.Tools.Security
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), sid, loginName, name, occurredDate, docLocation, siteUrl, hostName, siteID, export, reportPlugin, reportTitleRu, reportTitleKz);
 			return ((int)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.ADM_P_SetUserActivityTime")]
+		public int ADM_P_SetUserActivityTime([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="NVarChar(200)")] string sid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="DateTime")] System.Nullable<System.DateTime> ActivityDateTime)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), sid, ActivityDateTime);
+			return ((int)(result.ReturnValue));
+		}
 	}
 	
 	public partial class GetPersonInfoBySidResult

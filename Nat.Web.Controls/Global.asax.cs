@@ -8,6 +8,8 @@ using Nat.Web.Controls.Data;
 
 namespace Nat.Web.Controls
 {
+    using System.Collections.Generic;
+
     using Nat.Web.Controls.Trace;
 
 #if LOCAL || !ForSharepoint
@@ -40,6 +42,29 @@ namespace Nat.Web.Controls
                 var trace = WebConfigurationManager.AppSettings["NatTraceTimingReqeustsEnableOnBeginRequest"];
                 if (!string.IsNullOrEmpty(trace))
                     Context.Trace.IsEnabled = true;
+            }
+        }
+
+        protected void Application_PreRequestHandlerExecute(object sender, EventArgs e)
+        {
+            try
+            {
+                bool enabled = WebConfigurationManager.AppSettings["ADM.SetUserActivityTime"] != null
+                               && Convert.ToBoolean(WebConfigurationManager.AppSettings["ADM.SetUserActivityTime"]);
+                if (enabled && User.Identity.IsAuthenticated && Context.Session != null && !Session.IsReadOnly)
+                {
+                    Session["Global.LastActivityDateTime"] = DateTime.Now;
+                    Session["Global.LastActivitySID"] = Tools.Security.User.GetSID(false);
+                    var lastTime = (DateTime?)Session["Global.UserActivityTime"];
+                    if (lastTime == null || lastTime.Value.AddMinutes(1) < DateTime.Now)
+                    {
+                        Session["Global.UserActivityTime"] = DateTime.Now;
+                        SetUserActivityTime();
+                    }
+                }
+            }
+            catch (HttpException httpException)
+            {
             }
         }
 
@@ -117,6 +142,17 @@ namespace Nat.Web.Controls
             catch (Exception)
             {
             }
+        }
+
+        protected void Session_OnEnd(object sender, EventArgs e)
+        {
+            SetUserActivityTime();
+        }
+
+        private void SetUserActivityTime()
+        {
+            if (!string.IsNullOrEmpty((string)Session["Global.LastActivitySID"]))
+                Tools.Security.User.SetUserActivityTime((string)Session["Global.LastActivitySID"], (DateTime)Session["Global.LastActivityDateTime"]);
         }
     }
 }

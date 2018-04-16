@@ -262,5 +262,14 @@
             int r = SendARP((int)ip.Address, 0, buffer, ref len);
             return BitConverter.ToString(buffer, 0, 6);
         }
+
+        public static void SetUserActivityTime(string sid, DateTime time)
+        {
+            WebInitializer.Initialize();
+            using (var db = new DBDataContext(SpecificInstances.DbFactory.CreateConnection()))
+            {
+                db.ADM_P_SetUserActivityTime(sid, time);
+            }
+        }
     }
 }

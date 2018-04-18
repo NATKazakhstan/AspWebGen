@@ -252,7 +252,7 @@
         private string GetRowName(DependentTable args)
         {
             var type = BuildManager.GetType(
-               string.Format("{1}.{0}JournalDataSourceView, {1}, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", args.TableCode, args.ProjectCode),
+               string.Format("{1}.{0}JournalDataSourceView, {1}, Version=1.0.0.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a", args.TableCode, args.ProjectCode),
                false,
                true);
 
@@ -268,7 +268,7 @@
         private void SetParametersByCustomCode(TableParametersArgs args, string projectCode)
         {
             var type = BuildManager.GetType(
-              string.Format("{0}.ReferencesConflictResolver, {0}, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", projectCode),
+              string.Format("{0}.ReferencesConflictResolver, {0}, Version=1.0.0.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a", projectCode),
               false,
               true);
 
@@ -305,7 +305,7 @@
 
             string header = null;
             var type = BuildManager.GetType(
-                string.Format("{1}.Properties.{0}Resources, {1}, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", tableName, projectCode),
+                string.Format("{1}.Properties.{0}Resources, {1}, Version=1.0.0.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a", tableName, projectCode),
                 false,
                 true);
 

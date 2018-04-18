@@ -37,6 +37,9 @@ namespace Nat.Web.Tools.Initialization
         private static readonly ConfigurationProperty _propDoesNotHavePermitionsPage;
         private static readonly ConfigurationProperty _propTypeOfMethodCheckPersonInfo;
         private static readonly ConfigurationProperty _propGroupProviderType;
+
+        private static readonly ConfigurationProperty _propDefaultPublicKeyToken;
+        private static readonly ConfigurationProperty _propDefaultVersion;
         
 
         private static readonly ConfigurationProperty _propDatasources;
@@ -63,6 +66,9 @@ namespace Nat.Web.Tools.Initialization
             _propDoesNotHavePermitionsPage = new ConfigurationProperty("noPermitPage", typeof(string), "/NoPermit.aspx", ConfigurationPropertyOptions.None);
             _propTypeOfMethodCheckPersonInfo = new ConfigurationProperty("typeOfMethodCheckPersonInfo", typeof(string), "", ConfigurationPropertyOptions.None);
             _propGroupProviderType = new ConfigurationProperty("groupProviderType", typeof(string), "", ConfigurationPropertyOptions.None);
+
+            _propDefaultVersion = new ConfigurationProperty("defaultVersion", typeof(string), "1.4.0.0", ConfigurationPropertyOptions.None);
+            _propDefaultPublicKeyToken = new ConfigurationProperty("defaultPublicKeyToken", typeof(string), "55f6c56e6ab9709a", ConfigurationPropertyOptions.None);
             
             _propDatasources = new ConfigurationProperty("datasources", typeof(DatasourcesSectionCollection), null, ConfigurationPropertyOptions.IsDefaultCollection);
             _propExternalSystems = new ConfigurationProperty("externalSystems", typeof(ExternalSystemSectionCollection), null, ConfigurationPropertyOptions.IsDefaultCollection);
@@ -85,6 +91,8 @@ namespace Nat.Web.Tools.Initialization
                                   _propDoesNotHavePermitionsPage,
                                   _propTypeOfMethodCheckPersonInfo,
                                   _propGroupProviderType,
+                                  _propDefaultVersion,
+                                  _propDefaultPublicKeyToken,
                                   _propDatasources,
                                   _propExternalSystems,
                                   _isConvertToSSDL
@@ -196,6 +204,12 @@ namespace Nat.Web.Tools.Initialization
         {
             get { return (string)base[_propGroupProviderType]; }
         }
+
+        [ConfigurationProperty("defaultVersion", DefaultValue = @"1.4.0.0")]
+        public string DefaultVersion => (string)base[_propDefaultVersion];
+
+        [ConfigurationProperty("defaultPublicKeyToken", DefaultValue = @"55f6c56e6ab9709a")]
+        public string DefaultPublicKeyToken => (string)base[_propDefaultPublicKeyToken];
 
         public IExporter GetExcelExporter()
         {

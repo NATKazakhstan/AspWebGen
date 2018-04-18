@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Data.SqlClient;
     using System.Linq;
     using System.Reflection;
@@ -14,6 +13,7 @@
     using Nat.Web.Controls.GenerationClasses;
     using Nat.Web.Controls.GenerationClasses.Data;
     using Nat.Web.Tools;
+    using Nat.Web.Tools.Initialization;
 
     using SubsystemReferencesConflictResolver.Properties;
 
@@ -163,7 +163,7 @@
                     Exception = exception,
                     SqlError = error,
                 };
-            SetParametersByCustomCode(args, GetProjectCode(args.ConflictedTableCode));
+            SetParametersByCustomCode(args, GetProjectCode(args.ConflictedTableCode), null, null);
 
             var result = false;
             foreach (var dependentTable in args.DependentTables)
@@ -202,14 +202,14 @@
                             ProjectCode = projectCode,
                             ID = key,
                         });
-                SetParametersByCustomCode(args, projectCode);
+                SetParametersByCustomCode(args, projectCode, null, null);
 
                 foreach (var dependentTable in args.DependentTables)
                 {
                     if (!string.IsNullOrEmpty(dependentTable.ProjectCode))
                     {
                         if (string.IsNullOrEmpty(dependentTable.TableHeader))
-                            dependentTable.TableHeader = GetTableHeader(dependentTable.ProjectCode, dependentTable.TableCode);
+                            dependentTable.TableHeader = GetTableHeader(dependentTable.ProjectCode, dependentTable.TableCode, dependentTable.Version, dependentTable.PublicKeyToken);
 
                         if (string.IsNullOrEmpty(dependentTable.RowName))
                             dependentTable.RowName = GetRowName(dependentTable);
@@ -252,9 +252,14 @@
         private string GetRowName(DependentTable args)
         {
             var type = BuildManager.GetType(
-               string.Format("{1}.{0}JournalDataSourceView, {1}, Version=1.4.0.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a", args.TableCode, args.ProjectCode),
-               false,
-               true);
+                string.Format(
+                    "{1}.{0}JournalDataSourceView, {1}, Version={2}, Culture=neutral, PublicKeyToken={3}",
+                    args.TableCode,
+                    args.ProjectCode,
+                    args.Version ?? InitializerSection.GetSection().DefaultVersion,
+                    args.PublicKeyToken ?? InitializerSection.GetSection().DefaultPublicKeyToken),
+                false,
+                true);
 
             if (type != null)
             {
@@ -265,18 +270,21 @@
             return null;
         }
 
-        private void SetParametersByCustomCode(TableParametersArgs args, string projectCode)
+        private void SetParametersByCustomCode(TableParametersArgs args, string projectCode, string version, string publicKeyToken)
         {
             var type = BuildManager.GetType(
-              string.Format("{0}.ReferencesConflictResolver, {0}, Version=1.4.0.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a", projectCode),
-              false,
-              true);
+                string.Format(
+                    "{0}.ReferencesConflictResolver, {0}, Version={1}, Culture=neutral, PublicKeyToken={2}",
+                    projectCode,
+                    version ?? InitializerSection.GetSection().DefaultVersion,
+                    publicKeyToken ?? InitializerSection.GetSection().DefaultPublicKeyToken),
+                false,
+                true);
 
             if (type == null) return;
 
             var source = Activator.CreateInstance(type) as IReferencesConflictResolver;
-            if (source != null)
-                source.OnReferenceConflictResolving(args);
+            source?.OnReferenceConflictResolving(args);
         }
 
         public static string GetProjectCode(string tableName)
@@ -297,7 +305,7 @@
             return ProjectCodesCache[tableName] = projectCode;
         }
 
-        public static string GetTableHeader(string projectCode, string tableName)
+        public static string GetTableHeader(string projectCode, string tableName, string version, string publicKeyToken)
         {
             var cacheKey = tableName + ":" + LocalizationHelper.IsCultureKZ;
             if (ProjectHeadersCache.ContainsKey(cacheKey))
@@ -305,7 +313,12 @@
 
             string header = null;
             var type = BuildManager.GetType(
-                string.Format("{1}.Properties.{0}Resources, {1}, Version=1.4.0.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a", tableName, projectCode),
+                string.Format(
+                    "{1}.Properties.{0}Resources, {1}, Version={2}, Culture=neutral, PublicKeyToken={3}",
+                    tableName,
+                    projectCode,
+                    version ?? InitializerSection.GetSection().DefaultVersion,
+                    publicKeyToken ?? InitializerSection.GetSection().DefaultPublicKeyToken),
                 false,
                 true);
 
@@ -331,7 +344,7 @@
             return ProjectHeadersCache[cacheKey] = header;
         }
 
-        public static string GetTableFieldHeader(string projectCode, string tableName, string fieldName)
+        public static string GetTableFieldHeader(string projectCode, string tableName, string fieldName, string version, string publicKeyToken)
         {
             var cacheKey = $"{tableName}.{fieldName}:{LocalizationHelper.IsCultureKZ}";
             if (ProjectFieldHeadersCache.ContainsKey(cacheKey))
@@ -339,7 +352,12 @@
 
             string header = null;
             var type = BuildManager.GetType(
-                string.Format("{1}.Properties.{0}Resources, {1}, Version=1.4.0.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a", tableName, projectCode),
+                string.Format(
+                    "{1}.Properties.{0}Resources, {1}, Version={2}, Culture=neutral, PublicKeyToken={3}",
+                    tableName,
+                    projectCode,
+                    version ?? InitializerSection.GetSection().DefaultVersion,
+                    publicKeyToken ?? InitializerSection.GetSection().DefaultPublicKeyToken),
                 false,
                 true);
 

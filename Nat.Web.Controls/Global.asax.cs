@@ -43,6 +43,12 @@ namespace Nat.Web.Controls
                 if (!string.IsNullOrEmpty(trace))
                     Context.Trace.IsEnabled = true;
             }
+
+            OnBeginRequest(sender, e);
+        }
+
+        protected virtual void OnBeginRequest(object sender, EventArgs e)
+        {
         }
 
         protected void Application_PreRequestHandlerExecute(object sender, EventArgs e)

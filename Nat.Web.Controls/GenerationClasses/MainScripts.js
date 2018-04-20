@@ -2687,6 +2687,20 @@ $(function () {
             newWindow.dialog.dialog('close');
         };
 
+        parentWindow.modalDialogSetButtons = function (buttons) {
+            if (IsCultureKz()) {
+                buttons['Болдырмау'] = function() {
+                    newWindow.dialog.dialog('close');
+                };
+            }
+            else {
+                buttons['Отмена'] = function() {
+                    newWindow.dialog.dialog('close');
+                };
+            }
+            newWindow.dialog.dialog('option', 'buttons', buttons);
+        };
+
         newWindow.dialog.dialog({ autoOpen: false, width: width, height: height });
         if (header != null)
             newWindow.dialog.dialog("option", "title", header);

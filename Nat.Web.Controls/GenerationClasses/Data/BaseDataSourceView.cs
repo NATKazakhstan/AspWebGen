@@ -1313,7 +1313,7 @@ namespace Nat.Web.Controls.GenerationClasses
             if (InitConnection != null) DB.Transaction = InitTransaction;
             var qParam = Expression.Parameter(typeof(StructQueryParameters), "qParam");
             var dbParam = Expression.Parameter(typeof(TDataContext), "db_DRP");
-            var qParams = new QueryParameters<TDataContext, TTable>(qParam, dbParam) { SupportParameterExpression = SupportGlobalCache };
+            var qParams = new QueryParameters<TDataContext, TTable>(qParam, dbParam) { SupportParameterExpression = SupportGlobalCache, DB = DB, InternalDB = DB };
             InternalQueryParameters = qParams;
 
             var tableExp = (Expression)Expression.Call(dbParam, "GetTable", new[] { typeof(TTable) });
@@ -1556,7 +1556,7 @@ namespace Nat.Web.Controls.GenerationClasses
             if (InitConnection != null) DB.Transaction = InitTransaction;
             var qParam = Expression.Parameter(typeof(StructQueryParameters), "qParam");
             var dbParam = Expression.Parameter(typeof(TDataContext), "db_FSE");
-            var qParams = new QueryParameters<TDataContext, TTable>(qParam, dbParam) { SupportParameterExpression = SupportGlobalCache };
+            var qParams = new QueryParameters<TDataContext, TTable>(qParam, dbParam) { SupportParameterExpression = SupportGlobalCache, DB = DB, InternalDB = DB };
             InternalQueryParameters = qParams;
 
             tableExp = (Expression)Expression.Call(dbParam, "GetTable", new[] { typeof(TTable) });
@@ -1636,7 +1636,7 @@ namespace Nat.Web.Controls.GenerationClasses
             if (InitConnection != null) DB.Transaction = InitTransaction;
             var qParam = Expression.Parameter(typeof(StructQueryParameters), "qParam");
             var dbParam = Expression.Parameter(typeof(TDataContext), "db_FSE");
-            var qParams = new QueryParameters<TDataContext, TTable>(qParam, dbParam) { SupportParameterExpression = SupportGlobalCache };
+            var qParams = new QueryParameters<TDataContext, TTable>(qParam, dbParam) { SupportParameterExpression = SupportGlobalCache, DB = DB, InternalDB = DB };
             InternalQueryParameters = qParams;
 
             var tableExp = (Expression)Expression.Call(dbParam, "GetTable", new[] { typeof(TTable) });
@@ -1668,7 +1668,7 @@ namespace Nat.Web.Controls.GenerationClasses
             if (InitConnection != null) DB.Transaction = InitTransaction;
             var qParam = Expression.Parameter(typeof(StructQueryParameters), "qParam");
             var dbParam = Expression.Parameter(typeof(TDataContext), "db_FSE");
-            var qParams = new QueryParameters<TDataContext, TTable>(qParam, dbParam) { SupportParameterExpression = SupportGlobalCache };
+            var qParams = new QueryParameters<TDataContext, TTable>(qParam, dbParam) { SupportParameterExpression = SupportGlobalCache, DB = DB, InternalDB = DB };
             InternalQueryParameters = qParams;
 
             var tableExp = (Expression)Expression.Call(dbParam, "GetTable", new[] { typeof(TTable) });

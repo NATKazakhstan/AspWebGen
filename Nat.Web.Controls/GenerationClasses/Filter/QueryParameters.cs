@@ -153,6 +153,7 @@ namespace Nat.Web.Controls.GenerationClasses.Filter
             : base(Expression.Parameter(typeof(StructQueryParameters), "qParam"), Expression.Parameter(typeof(TDataContext), "dbParam"))
         {
             DB = db;
+            InternalDB = db;
         }
 
         public QueryParameters(ParameterExpression parameterExpression, ParameterExpression dbParameterExpression) : base(parameterExpression, dbParameterExpression)

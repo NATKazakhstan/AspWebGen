@@ -140,7 +140,7 @@ namespace Nat.Web.Controls.GenerationClasses
             parameterName = parameterName.Remove(0, parameterName.IndexOf(".", StringComparison.InvariantCulture) + 1)
                             + "."
                             + FilterItem.ConvertToFilterType(filterType);
-            if (value == null || value is IControl || value is Control || value is string) 
+            if (value == null || value is IControl || value is Control || value is string || value is GridHtmlGenerator.Column) 
                 PropertyValues.Add(parameterName, value);
             else
                 PropertyValues.Add(parameterName, value.ToString());

@@ -42,6 +42,8 @@ namespace Nat.Web.Controls.GenerationClasses
         /// </summary>
         public Type TypeOfData { get; set; }
 
+        public bool CancelTreeUse { get; set; }
+
         public Type GetTTable()
         {
             return typeof(TTable);

@@ -407,6 +407,8 @@ namespace Nat.Web.Controls.GenerationClasses
             }
 
             source = filterArgs.FilterData<T>(source, upToTable, param, fieldsToCheckReference);
+            if (filterArgs.CancelTreeUse) CancelTreeUse = true;
+
             if (UseHistoryFilter)
                 source = FilterDataByHistory<T>(source, upToTable, param, fieldsToCheckReference);
             source = FilterDataByFilterValues<T>(source, upToTable, param, fieldsToCheckReference);

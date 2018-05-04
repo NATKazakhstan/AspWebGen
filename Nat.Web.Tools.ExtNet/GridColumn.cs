@@ -295,6 +295,7 @@ namespace Nat.Web.Tools.ExtNet
                         if (!string.IsNullOrEmpty(Format))
                             intColumn.Format = GetIntFormat();
                         intColumn.Align = Alignment.Right;
+                        intColumn.Renderer.Handler = "return record.raw[metadata.column.dataIndex] == null ? '' : value;";
                         column = intColumn;
                         break;
 
@@ -310,6 +311,7 @@ namespace Nat.Web.Tools.ExtNet
                         if (!string.IsNullOrEmpty(Format))
                             floatColumn.Format = GetFloatFormat();
                         floatColumn.Align = Alignment.Right;
+                        floatColumn.Renderer.Handler = "return record.raw[metadata.column.dataIndex] == null ? '' : value;";
                         column = floatColumn;
                         break;
 

@@ -824,7 +824,7 @@
                         resultScript.Append(Tab2).Append("var resVal = ");
                         Visit(prop.ExpressionGetProperty);
                         resultScript.AppendLine(";");
-                        resultScript.Append(Tab2).AppendLine("resVal = typeof myVar === 'string' || myVar instanceof String ? resVal.toLowerCase() === 'true' : resVal;");
+                        resultScript.Append(Tab2).AppendLine("resVal = (typeof resVal === 'string' || resVal instanceof String) ? resVal.toLowerCase() === 'true' : resVal;");
                         resultScript.Append(Tab2).AppendLine("return resVal;");
                     }
                     else

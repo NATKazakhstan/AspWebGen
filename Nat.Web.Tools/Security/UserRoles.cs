@@ -6,6 +6,8 @@
     using System.Reflection;
     using System.Web;
     using System.Web.Compilation;
+    using System.Web.Configuration;
+    using System.Web.Security;
 
     using Nat.Web.Tools.Initialization;
 
@@ -62,6 +64,23 @@
             var type = BuildManager.GetType(config.SecurityRoles, true, true);
             methodIsInRole = type.GetMethod("IsInRole");
             return (bool)methodIsInRole.Invoke(null, new object[] { role });
+        }
+
+        public static bool UserIsInRole(string login, string role)
+        {
+            return RoleProvider().IsUserInRole(login, role);
+        }
+
+        private static RoleProvider _currentRoleProvider;
+
+        private static RoleProvider RoleProvider()
+        {
+            if (_currentRoleProvider != null)
+                return _currentRoleProvider;
+            var roleManager = (RoleManagerSection)WebConfigurationManager.GetSection("system.web/roleManager");
+            var typeStr = roleManager.Providers[roleManager.DefaultProvider].Type;
+            var type = BuildManager.GetType(typeStr, true, true);
+            return _currentRoleProvider = (RoleProvider)Activator.CreateInstance(type);
         }
 
         public static bool IsInAnyRoles(IEnumerable<string> roles)

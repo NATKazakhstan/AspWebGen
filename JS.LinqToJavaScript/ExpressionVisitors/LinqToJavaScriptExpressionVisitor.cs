@@ -819,9 +819,21 @@
                 {
                     var oldContext = context;
                     context = prop.ContextProperty;
-                    resultScript.Append(Tab2).Append("return ");
-                    Visit(prop.ExpressionGetProperty);
-                    resultScript.AppendLine(";");
+                    if (prop.PropertyDescriptor.PropertyType == typeof(bool) || prop.PropertyDescriptor.PropertyType == typeof(bool?))
+                    {
+                        resultScript.Append(Tab2).Append("var resVal = ");
+                        Visit(prop.ExpressionGetProperty);
+                        resultScript.AppendLine(";");
+                        resultScript.Append(Tab2).AppendLine("resVal = (typeof resVal === 'string' || resVal instanceof String) ? resVal.toLowerCase() === 'true' : resVal;");
+                        resultScript.Append(Tab2).AppendLine("return resVal;");
+                    }
+                    else
+                    {
+                        resultScript.Append(Tab2).Append("return ");
+                        Visit(prop.ExpressionGetProperty);
+                        resultScript.AppendLine(";");
+                    }
+
                     context = oldContext;
                 }
 

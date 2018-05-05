@@ -268,6 +268,10 @@ namespace Nat.Web.Controls
             });
         }
 
+        public static bool ExistsFilterType(string filterType)
+        {
+            return filterHandlers.ContainsKey(filterType);
+        }
 
         public static string RegisterFilterName(string filterName, string tableName)
         {

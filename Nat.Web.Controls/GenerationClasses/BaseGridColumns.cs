@@ -546,7 +546,7 @@ namespace Nat.Web.Controls.GenerationClasses
         public static string AddDropDownList(StringBuilder sb, string key, string id, long? value, long? valueNotSet, string textNotSet, IEnumerable<KeyValuePair<long, string>> dataSource, string width)
         {
             var idValue = key + "_" + id;
-            sb.AppendFormat(HtmlGenerator.dropDownListStart, idValue, "", HtmlGenerator.dropDownListScript);
+            sb.AppendFormat(HtmlGenerator.dropDownListStart, idValue, width, HtmlGenerator.dropDownListScript);
             sb.AppendFormat(
                 valueNotSet == value ? HtmlGenerator.dropDownListSelectedOption : HtmlGenerator.dropDownListOption,
                 valueNotSet, textNotSet);

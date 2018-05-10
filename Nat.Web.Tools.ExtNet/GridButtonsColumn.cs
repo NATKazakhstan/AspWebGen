@@ -236,7 +236,7 @@ namespace Nat.Web.Tools.ExtNet
             if (store.tree == null)
                 store.reload();
             else if (refParent != null && store.getNodeById(refParent) != null) {{
-                if (store.getNodeById(newValue).data.refParent == 0){{
+                if (!store.getNodeById(newValue) || store.getNodeById(newValue).data.refParent == 0){{
                     Array.add(needTreeReload, function() {{
                         if (store.getNodeById(refParent) != null)
                             store.getNodeById(refParent).reload();

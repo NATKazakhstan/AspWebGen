@@ -308,7 +308,7 @@ Nat.Web.Controls.EnableControls.EnableControlsBehavior.prototype = {
     _setReadOnly: function (control, readonly) {
 
         for (var i = 0; i < control.children.length; i++) {
-            control.children[i].readOnly = readonly;
+            $(control.children[i]).attr('readOnly', readonly).trigger('ecbReadOnly');
             this._setReadOnly(control.children[i], readonly);
         }
     },
@@ -316,7 +316,7 @@ Nat.Web.Controls.EnableControls.EnableControlsBehavior.prototype = {
     _setDisableFalse: function (control, disabled) {
 
         for (var i = 0; i < control.children.length; i++) {
-            control.children[i].disabled = disabled;
+            $(control.children[i]).attr('disabled', disabled).trigger('ecbDisbled');
             this._setDisableFalse(control.children[i], disabled);
         }
     },

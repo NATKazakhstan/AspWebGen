@@ -22,8 +22,10 @@ Nat.Web.Controls.DateTimeControls.DatePicker.prototype = {
 
         var element = this.get_element();
         this._onPropertyChangedHandler = Function.createDelegate(this, this._onPropertyChanged);
-        $addHandler(element, "propertychange", this._onPropertyChangedHandler)
-
+        $addHandler(element, "propertychange", this._onPropertyChangedHandler);
+        var me = this;
+        $(element).on('ecbReadOnly', function () { me.readOnlyChanged() });
+        $(element).on('ecbDisbled', function () { me.disabledChanged() });
         //this._set_selectedDateHandler = Function.createDelegate(this, this.set_selectedDate);
     },
 
@@ -88,25 +90,35 @@ Nat.Web.Controls.DateTimeControls.DatePicker.prototype = {
         }
     },
 
+    readOnlyChanged: function() {
+        
+        var element = this.get_element();
+        var img = $get(this._imageButtonID);
+        if (img != null) {
+            if (element.readOnly)
+                img.style.visibility = "hidden";
+            else
+                img.style.visibility = "";
+        }
+    },
+
+    disabledChanged: function() {
+
+        var element = this.get_element();
+        var img = $get(this._imageButtonID);
+        if (element.disabled) {
+            img.style.filter = "gray";
+        }
+        else
+            img.style.filter = "";
+    },
+
     _onPropertyChanged: function(source, args) {
         if (source.rawEvent.propertyName == "disabled") {
-            var element = this.get_element();
-            var img = $get(this._imageButtonID);
-            if (element.disabled) {
-                img.style.filter = "gray";
-            }
-            else
-                img.style.filter = "";
+            this.disabledChanged();
         }
         if (source.rawEvent.propertyName == "readonly" || source.rawEvent.propertyName == "readOnly") {
-            var element = this.get_element();
-            var img = $get(this._imageButtonID);
-            if (img != null) {
-                if (element.readOnly)
-                    img.style.visibility = "hidden";
-                else
-                    img.style.visibility = "";
-            }
+            this.readOnlyChanged();
         }
     }
 }

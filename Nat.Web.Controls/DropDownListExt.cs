@@ -355,12 +355,13 @@ namespace Nat.Web.Controls
                 SelectedValue = selectedValue;
             }
 
+            /*
             if (selectedValueBeforDataBinding != null 
                 && selectedValueBeforDataBinding != SelectedValue
                 && Items.Cast<ListItem>().Any(r => r.Value == Convert.ToString(selectedValueBeforDataBinding)))
             {
                 SelectedValue = selectedValueBeforDataBinding;
-            }
+            }*/
         }
 
         private object BeforeOnDataBinding(out bool setValue, out TableDataSourceView data)

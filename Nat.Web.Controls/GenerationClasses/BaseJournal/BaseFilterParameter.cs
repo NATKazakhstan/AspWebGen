@@ -147,6 +147,12 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
             SetStandartHandler();
         }
 
+        public virtual void InsertFilter(IList<FilterHtmlGenerator.Filter> filters, int index)
+        {
+            filters.Insert(index, this);
+            SetStandartHandler();
+        }
+
         public virtual void SetStandartHandler()
         {
             FilterHandler = OnFilter;

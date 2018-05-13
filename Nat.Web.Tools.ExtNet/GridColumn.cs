@@ -377,6 +377,8 @@ namespace Nat.Web.Tools.ExtNet
         /// </summary>
         public int DecimalPrecision { get; set; }
 
+        public int DecimalLength { get; set; }
+
         public virtual GridFilter CreateFilter()
         {
             if (HasChildren || !HasFilter)
@@ -507,9 +509,18 @@ namespace Nat.Web.Tools.ExtNet
                 case ModelFieldType.String:
                     return new TextField { ID = "gridEditorField" + ColumnName };
                 case ModelFieldType.Int:
-                    return new NumberField { ID = "gridEditorField" + ColumnName };
+                    return new NumberField { ID = "gridEditorField" + ColumnName, DecimalPrecision = 0 };
                 case ModelFieldType.Float:
-                    return new NumberField { ID = "gridEditorField" + ColumnName };
+                    var numberField = new NumberField
+                        {
+                            ID = "gridEditorField" + ColumnName,
+                            DecimalPrecision = DecimalPrecision,
+                        };
+
+                    if (DecimalLength > 0)
+                        numberField.MaxValue = Math.Pow(10, DecimalLength - DecimalPrecision) - Math.Pow(0.1, DecimalPrecision);
+
+                    return numberField;
                 case ModelFieldType.Boolean:
                     return new Checkbox { ID = "gridEditorField" + ColumnName };
                 case ModelFieldType.Date:

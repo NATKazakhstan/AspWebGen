@@ -379,6 +379,8 @@ namespace Nat.Web.Tools.ExtNet
 
         public int DecimalLength { get; set; }
 
+        public int StringMaxLength { get; set; }
+
         public virtual GridFilter CreateFilter()
         {
             if (HasChildren || !HasFilter)
@@ -507,7 +509,10 @@ namespace Nat.Web.Tools.ExtNet
                 case ModelFieldType.Auto:
                     return null;
                 case ModelFieldType.String:
-                    return new TextField { ID = "gridEditorField" + ColumnName };
+                    var textField = new TextField { ID = "gridEditorField" + ColumnName };
+                    if (StringMaxLength > 0)
+                        textField.MaxLength = StringMaxLength;
+                    return textField;
                 case ModelFieldType.Int:
                     return new NumberField { ID = "gridEditorField" + ColumnName, DecimalPrecision = 0 };
                 case ModelFieldType.Float:

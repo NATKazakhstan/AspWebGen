@@ -37,6 +37,8 @@ namespace Nat.Web.Tools.ExtNet
 
         public bool DeleteVisible { get; set; }
 
+        public bool EditInJournal { get; set; }
+
         public string EditUrl { get; set; }
 
         public string LookUrl { get; set; }
@@ -316,7 +318,11 @@ namespace Nat.Web.Tools.ExtNet
         private string GetDeleteScript()
         {
             string deleteScript;
-            if (!string.IsNullOrEmpty(DeleteUrl))
+            if (EditInJournal)
+            {
+                deleteScript = "record.store.remove(record);";
+            }
+            else if (!string.IsNullOrEmpty(DeleteUrl))
             {
                 deleteScript = string.Format(@"
 var w = #{{ModalWindow}};

@@ -2642,6 +2642,8 @@ $(function () {
                 newWindow.isLoaded = true;
                 newWindow.loadingControl.removeClass('LoadingControlShow');
                 newWindow.iframe.contentWindow.dialogArguments = parentWindow;
+                if (newWindow.iframe.contentWindow.model && newWindow.iframe.contentWindow.model.Initizlize)
+                    newWindow.iframe.contentWindow.model.Initizlize();
                 if (newWindow.dialog.dialog("option", "title") == '') {
                     var doc = newWindow.iframe.contentDocument;
                     if (doc == null && newWindow.iframe.contentWindow != null)

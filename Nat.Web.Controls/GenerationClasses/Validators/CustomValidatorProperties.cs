@@ -8,6 +8,8 @@ using System.Web.UI.WebControls;
 
 namespace Nat.Web.Controls.GenerationClasses
 {
+    using System.Web.UI;
+
     public class CustomValidatorProperties : ValidatorProperties
     {
         /// <summary>
@@ -57,6 +59,7 @@ namespace Nat.Web.Controls.GenerationClasses
                     ValidateEmptyText = ValidateEmptyText,
                     SetFocusOnError = true,
                 };
+            validator.CssClass = "aspNetValidator";
             validator.ServerValidate += ServerValidate;
             return validator;
         }

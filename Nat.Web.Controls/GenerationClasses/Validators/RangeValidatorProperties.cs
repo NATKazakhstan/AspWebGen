@@ -8,6 +8,8 @@ using System.Web.UI.WebControls;
 
 namespace Nat.Web.Controls.GenerationClasses
 {
+    using System.Web.UI;
+
     public class RangeValidatorProperties : ValidatorProperties
     {
         public string MinimumValue { get; set; }
@@ -16,20 +18,22 @@ namespace Nat.Web.Controls.GenerationClasses
 
         public override BaseValidator CreateValidator(string controlToValidate, string validationGroup)
         {
-            return new RangeValidator
-                       {
-                           ControlToValidate = controlToValidate,
-                           Display = ValidatorDisplay.Dynamic,
-                           EnableViewState = false,
-                           ValidationGroup = validationGroup,
-                           ErrorMessage = ErrorMessageInSummary,
-                           Text = ErrorMessage,
-                           MinimumValue = MinimumValue,
-                           MaximumValue = MaximumValue,
-                           Type = Type,
-                           EnableClientScript = EnableClientScript,
-                           //SetFocusOnError = true,
-                       };
+            var validator = new RangeValidator
+                {
+                    ControlToValidate = controlToValidate,
+                    Display = ValidatorDisplay.Dynamic,
+                    EnableViewState = false,
+                    ValidationGroup = validationGroup,
+                    ErrorMessage = ErrorMessageInSummary,
+                    Text = ErrorMessage,
+                    MinimumValue = MinimumValue,
+                    MaximumValue = MaximumValue,
+                    Type = Type,
+                    EnableClientScript = EnableClientScript,
+                    //SetFocusOnError = true,
+                };
+            validator.CssClass = "aspNetValidator";
+            return validator;
         }
     }
 }

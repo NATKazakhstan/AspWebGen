@@ -18,18 +18,20 @@ namespace Nat.Web.Controls.GenerationClasses
 
         public override BaseValidator CreateValidator(string controlToValidate, string validationGroup)
         {
-            return new RegularExpressionValidator
-                       {
-                           ControlToValidate = controlToValidate,
-                           Display = ValidatorDisplay.Dynamic,
-                           EnableViewState = false,
-                           ValidationGroup = validationGroup,
-                           ErrorMessage = ErrorMessageInSummary,
-                           Text = ErrorMessage,
-                           ValidationExpression = RegularExpression,
-                           EnableClientScript = EnableClientScript,
-                           //SetFocusOnError = true,
-                       };
+            var validator = new RegularExpressionValidator
+                {
+                    ControlToValidate = controlToValidate,
+                    Display = ValidatorDisplay.Dynamic,
+                    EnableViewState = false,
+                    ValidationGroup = validationGroup,
+                    ErrorMessage = ErrorMessageInSummary,
+                    Text = ErrorMessage,
+                    ValidationExpression = RegularExpression,
+                    EnableClientScript = EnableClientScript,
+                    //SetFocusOnError = true,
+                };
+            validator.CssClass = "aspNetValidator";
+            return validator;
         }
 
         /// <summary>

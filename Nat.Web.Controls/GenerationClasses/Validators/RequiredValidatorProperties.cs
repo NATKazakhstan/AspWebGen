@@ -29,19 +29,21 @@ namespace Nat.Web.Controls.GenerationClasses
         /// <returns>Валидатор</returns>
         public override BaseValidator CreateValidator(string controlToValidate, string validationGroup)
         {
-            return new RequiredFieldValidator
-            {
-                ControlToValidate = controlToValidate,
-                Display = ValidatorDisplay.Dynamic,
-                EnableViewState = false,
-                ValidationGroup = validationGroup,
-                ErrorMessage = ErrorMessageInSummary,
-                Text = ErrorMessage,
-                EnableClientScript = EnableClientScript,
-                InitialValue = InitialValue,
-                IsValid = true,
-                //SetFocusOnError = true,
-            };
+            var validator = new RequiredFieldValidator
+                {
+                    ControlToValidate = controlToValidate,
+                    Display = ValidatorDisplay.Dynamic,
+                    EnableViewState = false,
+                    ValidationGroup = validationGroup,
+                    ErrorMessage = ErrorMessageInSummary,
+                    Text = ErrorMessage,
+                    EnableClientScript = EnableClientScript,
+                    InitialValue = InitialValue,
+                    IsValid = true,
+                    //SetFocusOnError = true,
+                };
+            validator.CssClass = "aspNetValidator";
+            return validator;
         }
         
         /// <summary>

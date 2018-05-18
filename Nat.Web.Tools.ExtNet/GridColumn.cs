@@ -511,7 +511,10 @@ namespace Nat.Web.Tools.ExtNet
                 case ModelFieldType.String:
                     var textField = new TextField { ID = "gridEditorField" + ColumnName };
                     if (StringMaxLength > 0)
+                    {
                         textField.MaxLength = StringMaxLength;
+                        textField.MaxLengthText = string.Format(Resources.SMaxLength, StringMaxLength);
+                    }
                     return textField;
                 case ModelFieldType.Int:
                     return new NumberField { ID = "gridEditorField" + ColumnName, DecimalPrecision = 0 };

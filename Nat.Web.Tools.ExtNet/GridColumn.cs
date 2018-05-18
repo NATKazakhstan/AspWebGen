@@ -453,7 +453,8 @@ namespace Nat.Web.Tools.ExtNet
 
             var modelField = new ModelField(ColumnNameIndexOriginal, ModelFieldType)
                 {
-                    ServerMapping = ServerMapping
+                    ServerMapping = ServerMapping,
+                    UseNull = true
                 };
 
             if (string.IsNullOrEmpty(ServerMappingRefValue))
@@ -464,7 +465,8 @@ namespace Nat.Web.Tools.ExtNet
                     modelField,
                     new ModelField(ColumnNameIndexRefValue, ModelFieldTypeRefValue)
                         {
-                            ServerMapping = ServerMappingRefValue
+                            ServerMapping = ServerMappingRefValue,
+                            UseNull = true
                         }
                 };
         }

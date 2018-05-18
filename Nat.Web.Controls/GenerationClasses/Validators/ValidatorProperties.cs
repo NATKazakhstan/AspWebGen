@@ -13,6 +13,8 @@ using System.Web.UI.WebControls;
 
 namespace Nat.Web.Controls.GenerationClasses
 {
+    using System.Linq;
+
     [DefaultProperty("ErrorMessageInSummary")]
     public abstract class ValidatorProperties : IValidator
     {
@@ -24,7 +26,7 @@ namespace Nat.Web.Controls.GenerationClasses
         private bool isAddedToPage;
         private bool _isRegistered;
         private readonly IList<object> controlValues = new List<object>();
-        private readonly IList<clientValidatorInfo> clientValidatorInfos = new List<clientValidatorInfo>();
+        private readonly Dictionary<string, clientValidatorInfo> clientValidatorInfos = new Dictionary<string, clientValidatorInfo>();
 
         public bool IsValid { get; set; }
         public string ErrorMessage { get; set; }
@@ -51,14 +53,15 @@ namespace Nat.Web.Controls.GenerationClasses
         {
             controlValues.Add(controlValue);
             var isValid = ValidateValue((controlValue ?? "").ToString());
-            clientValidatorInfos.Add(new clientValidatorInfo()
-                                         {
-                                             clientID = clientID,
-                                             controlToValidate = controlToValidate,
-                                             display = display,
-                                             isValid = isValid,
-                                             validationGroup = validationGroup,
-                                         });
+            clientValidatorInfos[clientID] =
+                new clientValidatorInfo
+                    {
+                        clientID = clientID,
+                        controlToValidate = controlToValidate,
+                        display = display,
+                        isValid = isValid,
+                        validationGroup = validationGroup,
+                    };
 
             sb.Append("&nbsp;<span id=\"");
             sb.Append(clientID);
@@ -78,11 +81,13 @@ namespace Nat.Web.Controls.GenerationClasses
         {
             if (_isRegistered) return;
             _isRegistered = true;
-            for (int i = 0; i < clientValidatorInfos.Count; i++)
+            var i = 0;
+            foreach (var clientValidatorInfo in clientValidatorInfos.Values)
             {
-                RegisterClientValidator(page, clientValidatorInfos[i], i + 1);
+                RegisterClientValidator(page, clientValidatorInfo, i + 1);
                 RegisterValidatorCommonScript(page);
-                RegisterValidatorDeclaration(page, clientValidatorInfos[i].clientID);
+                RegisterValidatorDeclaration(page, clientValidatorInfo.clientID);
+                i++;
             }
         }
 

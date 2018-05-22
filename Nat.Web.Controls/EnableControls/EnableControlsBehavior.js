@@ -218,6 +218,11 @@ Nat.Web.Controls.EnableControls.EnableControlsBehavior.prototype = {
                 else
                     target.readOnly = null;
                 this._setReadOnly(target, null);
+                
+                if ($(target).is('input'))
+                    $(target).removeClass('m-field-readOnly');
+                else
+                    $(target).find('input').removeClass('m-field-readOnly');
             }
             if ((enableMode & 8) == 8 && window.Page_Validators != null) {
 
@@ -276,6 +281,10 @@ Nat.Web.Controls.EnableControls.EnableControlsBehavior.prototype = {
                 else
                     target.readOnly = -1;
                 this._setReadOnly(target, -1);
+                if ($(target).is('input'))
+                    $(target).addClass('m-field-readOnly');
+                else
+                    $(target).find('input').addClass('m-field-readOnly');
             }
             if ((enableMode & 8) == 8 && window.Page_Validators != null) {
 

@@ -399,7 +399,12 @@ namespace Nat.Web.Controls.GenerationClasses.Data
                        + "#" + typeof(TKey).FullName
                        + "#" + whereExp
                        + "#" + selectExp;
-            keyResult = keyQuery + "#" + value;
+            keyResult = dataContext.GetType().Name
+                        + "#" + typeof(TTableType).Name
+                        + "#" + typeof(TResult).FullName
+                        + "#" + typeof(TKey).FullName
+                        + "#" + whereExp
+                        + "#" + selectExp + "#" + value;
         }
 
         private static TResult GetValue<TDataContext, TTableType, TKey, TResult>(

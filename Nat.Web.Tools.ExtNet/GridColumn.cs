@@ -381,6 +381,8 @@ namespace Nat.Web.Tools.ExtNet
 
         public int StringMaxLength { get; set; }
 
+        public bool UseNull { get; set; }
+
         public virtual GridFilter CreateFilter()
         {
             if (HasChildren || !HasFilter)
@@ -454,7 +456,7 @@ namespace Nat.Web.Tools.ExtNet
             var modelField = new ModelField(ColumnNameIndexOriginal, ModelFieldType)
                 {
                     ServerMapping = ServerMapping,
-                    UseNull = true
+                    UseNull = UseNull
                 };
 
             if (string.IsNullOrEmpty(ServerMappingRefValue))
@@ -466,7 +468,7 @@ namespace Nat.Web.Tools.ExtNet
                     new ModelField(ColumnNameIndexRefValue, ModelFieldTypeRefValue)
                         {
                             ServerMapping = ServerMappingRefValue,
-                            UseNull = true
+                            UseNull = UseNull
                         }
                 };
         }

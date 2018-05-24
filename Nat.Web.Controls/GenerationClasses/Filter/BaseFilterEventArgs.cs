@@ -1030,6 +1030,33 @@ namespace Nat.Web.Controls.GenerationClasses
         }
 
         #endregion
+        
+        public override Expression GetExpression(FilterDataArgs args)
+        {
+            if (args.UpToTable == null) args.UpToTable = args.TableParam;
+            Expression filter = base.GetExpression(args);
+
+            //если фильтр пустой, то его инициализируем первым значением и добавляем через И остальные, иначе все добавляем через И
+            IEnumerable<FilterExpression<TDataContext, TTable>> wheres = _wheres;
+            if (filter == null)
+            {
+                foreach (var item in _wheres.Take(1))
+                    filter = Expression.Invoke(item.Where, DBParameterExpression, args.UpToTable);
+                wheres = _wheres.Skip(1);
+            }
+
+            foreach (var item in wheres)
+                filter = Expression.And(filter, Expression.Invoke(item.Where, DBParameterExpression, args.UpToTable));
+
+            if (Filters != null)
+            {
+                filter = filter == null
+                             ? Filters(args)
+                             : Expression.And(filter, Filters(args));
+            }
+
+            return filter;
+        }
 
         public override void GetExpressionCollection(List<BaseFilterExpression> list, Type getForType, Expression upToTable, IEnumerable<Expression> fieldsToCheckReference)
         {

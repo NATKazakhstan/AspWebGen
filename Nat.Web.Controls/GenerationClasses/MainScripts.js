@@ -2363,6 +2363,60 @@ if (window.Ext != null) {
             }
         });
     }
+    Ext.override(Ext.Component,
+        {
+            setLoading: function(load, targetEl) {
+                var me = this,
+                    config;
+
+                if (me.rendered) {
+                    Ext.destroy(me.loadMask);
+                    me.loadMask = null;
+
+                    if (load !== false && !me.collapsed) {
+                        if (Ext.isObject(load)) {
+                            config = Ext.apply({}, load);
+                        } else if (Ext.isString(load)) {
+                            config = { msg: load };
+                        } else {
+                            config = {};
+                        }
+
+                        if (targetEl)
+                            me.loadMask = new Ext.LoadMask(me.getTargetEl(), config);
+                        else
+                            me.loadMask = new Ext.LoadMask(me.el, config);
+
+                        me.loadMask.show();
+                    }
+                }
+                return me.loadMask;
+            }
+        });
+    Ext.define('overrides.AbstractView',
+        {
+            override: 'Ext.view.AbstractView',
+
+            // Force load mask target to be an inner DOM Element of a owner panel instead of current view
+            // in order to fix load mask positioning when scrolling
+            onRender: function() {
+                var me = this, targetEl, cfg, mask = me.loadMask, owner = me.ownerCt;
+
+                if ((mask) && (owner)) {
+                    targetEl = owner.getEl();
+                    targetEl.componentLayoutCounter = 1;
+                    targetEl.rendered = true;
+
+                    cfg = {
+                        target: targetEl
+                    };
+
+                    me.loadMask = (Ext.isObject(mask)) ? Ext.applyIf(me.loadMask, cfg) : cfg;
+                }
+
+                me.callParent(arguments);
+            }
+        });
 }
 
 var GridStoreLoadHandler = function(grid, store, selectIDHidden) {

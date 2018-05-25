@@ -15,6 +15,7 @@ namespace Nat.Web.Tools.ExtNet
 
     using Ext.Net;
 
+    using Nat.Web.Controls.DataBinding.Tools;
     using Nat.Web.Controls.Properties;
 
     public class GridButtonsColumn : GridColumn
@@ -36,6 +37,8 @@ namespace Nat.Web.Tools.ExtNet
 
         public bool DeleteVisible { get; set; }
 
+        public bool EditInJournal { get; set; }
+
         public string EditUrl { get; set; }
 
         public string LookUrl { get; set; }
@@ -45,6 +48,8 @@ namespace Nat.Web.Tools.ExtNet
         public string ControlIDWithDirectMethod { get; set; }
 
         public Control JournalControl { get; set; }
+
+        public string StoreClientID { get; set; }
 
         /// <summary>
         /// Необходимо создавать ActionItem. И инициализировать Icon, Tooltip, Handler = "function(view, rowIndex, colIndex, item, eArgs, record){sctipt}".
@@ -229,11 +234,11 @@ namespace Nat.Web.Tools.ExtNet
         frame.CloseOnSaveSuccessfull = function (newValue, refParent) {{
             #{{Window}}.hide();
             #{{SelectIDHidden}}.setValue(newValue);
-            var store = #{{store}};
+            var store = {3};
             if (store.tree == null)
                 store.reload();
             else if (refParent != null && store.getNodeById(refParent) != null) {{
-                if (store.getNodeById(newValue).data.refParent == 0){{
+                if (!store.getNodeById(newValue) || store.getNodeById(newValue).data.refParent == 0){{
                     Array.add(needTreeReload, function() {{
                         if (store.getNodeById(refParent) != null)
                             store.getNodeById(refParent).reload();
@@ -258,7 +263,8 @@ namespace Nat.Web.Tools.ExtNet
     }}",
                 EditUrlJavaScript(EditUrl),
                 EditWindowTitleJavaScript(Resources.SEdit),
-                Resources.ECanNotEditRecord);
+                Resources.ECanNotEditRecord, 
+                StoreClientID ?? "#{store}");
         }
 
         protected virtual void AddLookButton(StringBuilder listener, CommandColumn commandColumn)
@@ -312,7 +318,11 @@ namespace Nat.Web.Tools.ExtNet
         private string GetDeleteScript()
         {
             string deleteScript;
-            if (!string.IsNullOrEmpty(DeleteUrl))
+            if (EditInJournal)
+            {
+                deleteScript = "record.store.remove(record);";
+            }
+            else if (!string.IsNullOrEmpty(DeleteUrl))
             {
                 deleteScript = string.Format(@"
 var w = #{{ModalWindow}};
@@ -369,6 +379,11 @@ if (!w.collapsed)
 
         public static string AddButtonHandler(string addUrl)
         {
+            return AddButtonHandler(addUrl, null);
+        }
+
+        public static string AddButtonHandler(string addUrl, string storeID)
+        {
             return string.Format(
                 @"
     var w = #{{Window}};
@@ -381,7 +396,7 @@ if (!w.collapsed)
     frame.CloseOnSaveSuccessfull = function (newValue, refParent) {{
         #{{Window}}.hide();
         #{{SelectIDHidden}}.setValue(newValue);
-        var store = #{{store}};
+        var store = {2};
         if (store.tree == null)
             store.reload();
         else if (refParent != null && store.getNodeById(refParent) != null) {{
@@ -392,7 +407,8 @@ if (!w.collapsed)
             store.getNodeById('Root').reload();
     }}",
                 addUrl,
-                Resources.SAddingText);
+                Resources.SAddingText, 
+                storeID ?? "#{store}");
         }
     }
 }

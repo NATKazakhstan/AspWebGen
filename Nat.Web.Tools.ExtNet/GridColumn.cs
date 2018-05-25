@@ -295,7 +295,7 @@ namespace Nat.Web.Tools.ExtNet
                         if (!string.IsNullOrEmpty(Format))
                             intColumn.Format = GetIntFormat();
                         intColumn.Align = Alignment.Right;
-                        intColumn.Renderer.Handler = "return record.raw[metadata.column.dataIndex] == null ? '' : value;";
+                        //intColumn.Renderer.Handler = "debugger;return record.raw[metadata.column.dataIndex] == null && !value ? '' : value;";
                         column = intColumn;
                         break;
 
@@ -311,7 +311,7 @@ namespace Nat.Web.Tools.ExtNet
                         if (!string.IsNullOrEmpty(Format))
                             floatColumn.Format = GetFloatFormat();
                         floatColumn.Align = Alignment.Right;
-                        floatColumn.Renderer.Handler = "return record.raw[metadata.column.dataIndex] == null ? '' : value;";
+                        //floatColumn.Renderer.Handler = "debugger;return record.raw[metadata.column.dataIndex] == null && !value ? '' : value;";
                         column = floatColumn;
                         break;
 
@@ -376,6 +376,12 @@ namespace Nat.Web.Tools.ExtNet
         /// Для FilterType.Numeric, настраевает  максимальное количество символов на дробную часть
         /// </summary>
         public int DecimalPrecision { get; set; }
+
+        public int DecimalLength { get; set; }
+
+        public int StringMaxLength { get; set; }
+
+        public bool UseNull { get; set; }
 
         public virtual GridFilter CreateFilter()
         {
@@ -449,7 +455,8 @@ namespace Nat.Web.Tools.ExtNet
 
             var modelField = new ModelField(ColumnNameIndexOriginal, ModelFieldType)
                 {
-                    ServerMapping = ServerMapping
+                    ServerMapping = ServerMapping,
+                    UseNull = UseNull
                 };
 
             if (string.IsNullOrEmpty(ServerMappingRefValue))
@@ -460,7 +467,8 @@ namespace Nat.Web.Tools.ExtNet
                     modelField,
                     new ModelField(ColumnNameIndexRefValue, ModelFieldTypeRefValue)
                         {
-                            ServerMapping = ServerMappingRefValue
+                            ServerMapping = ServerMappingRefValue,
+                            UseNull = UseNull
                         }
                 };
         }
@@ -505,11 +513,26 @@ namespace Nat.Web.Tools.ExtNet
                 case ModelFieldType.Auto:
                     return null;
                 case ModelFieldType.String:
-                    return new TextField { ID = "gridEditorField" + ColumnName };
+                    var textField = new TextField { ID = "gridEditorField" + ColumnName };
+                    if (StringMaxLength > 0)
+                    {
+                        textField.MaxLength = StringMaxLength;
+                        textField.MaxLengthText = string.Format(Resources.SMaxLength, StringMaxLength);
+                    }
+                    return textField;
                 case ModelFieldType.Int:
-                    return new NumberField { ID = "gridEditorField" + ColumnName };
+                    return new NumberField { ID = "gridEditorField" + ColumnName, DecimalPrecision = 0 };
                 case ModelFieldType.Float:
-                    return new NumberField { ID = "gridEditorField" + ColumnName };
+                    var numberField = new NumberField
+                        {
+                            ID = "gridEditorField" + ColumnName,
+                            DecimalPrecision = DecimalPrecision,
+                        };
+
+                    if (DecimalLength > 0)
+                        numberField.MaxValue = Math.Pow(10, DecimalLength - DecimalPrecision) - Math.Pow(0.1, DecimalPrecision);
+
+                    return numberField;
                 case ModelFieldType.Boolean:
                     return new Checkbox { ID = "gridEditorField" + ColumnName };
                 case ModelFieldType.Date:

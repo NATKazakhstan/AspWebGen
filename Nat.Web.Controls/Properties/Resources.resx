@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SAdd" xml:space="preserve">
     <value>Добавить</value>
@@ -974,5 +974,8 @@
   </data>
   <data name="STimeOut" xml:space="preserve">
     <value>Необходимо изменить фильтр, т.к. за отведенное время не удалось выбрать необходимые данные.</value>
+  </data>
+  <data name="SErrorForTable" xml:space="preserve">
+    <value>Таблица "{0}". </value>
   </data>
 </root>

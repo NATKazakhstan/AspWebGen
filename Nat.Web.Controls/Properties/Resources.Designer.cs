@@ -19,7 +19,7 @@ namespace Nat.Web.Controls.Properties {
     // с помощью такого средства, как ResGen или Visual Studio.
     // Чтобы добавить или удалить член, измените файл .ResX и снова запустите ResGen
     // с параметром /str или перестройте свой проект VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -1110,6 +1110,15 @@ namespace Nat.Web.Controls.Properties {
         public static string SError {
             get {
                 return ResourceManager.GetString("SError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Таблица &quot;{0}&quot;. .
+        /// </summary>
+        public static string SErrorForTable {
+            get {
+                return ResourceManager.GetString("SErrorForTable", resourceCulture);
             }
         }
         

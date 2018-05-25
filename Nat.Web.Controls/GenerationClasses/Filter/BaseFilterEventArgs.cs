@@ -465,7 +465,7 @@ namespace Nat.Web.Controls.GenerationClasses
         public BaseFilterEventArgs(MainPageUrlBuilder url, QueryParameters qParams)
             : base(url)
         {
-            DBParameterExpression = qParams.GetDBExpression(qParams.InternalDB);
+            DBParameterExpression = qParams.GetDBExpression<TDataContext>();
             QueryParameters = qParams;
         }
 

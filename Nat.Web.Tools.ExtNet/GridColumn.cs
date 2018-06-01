@@ -528,9 +528,13 @@ namespace Nat.Web.Tools.ExtNet
                             ID = "gridEditorField" + ColumnName,
                             DecimalPrecision = DecimalPrecision,
                         };
-
-                    if (DecimalLength > 0)
+                    if (MaxValue != null)
+                        numberField.MaxValue = MaxValue.Value;
+                    else if (DecimalLength > 0)
                         numberField.MaxValue = Math.Pow(10, DecimalLength - DecimalPrecision) - Math.Pow(0.1, DecimalPrecision);
+                    
+                    if (MinValue != null)
+                        numberField.MinValue = MinValue.Value;
 
                     return numberField;
                 case ModelFieldType.Boolean:

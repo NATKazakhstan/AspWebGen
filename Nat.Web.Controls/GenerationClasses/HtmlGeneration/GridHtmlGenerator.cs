@@ -385,6 +385,9 @@ namespace Nat.Web.Controls.GenerationClasses
             /// </summary>
             public int ColSpan { get; set; }
 
+            public double? MaxValue { get; set; }
+            public double? MinValue { get; set; }
+
             public Func<int> GetRowSpan { get; set; } = () => 1;
             public Func<string> GetStyle { get; set; } = () => string.Empty;
 

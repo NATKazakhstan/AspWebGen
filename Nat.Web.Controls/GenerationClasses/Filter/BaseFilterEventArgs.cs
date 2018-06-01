@@ -465,12 +465,11 @@ namespace Nat.Web.Controls.GenerationClasses
         public BaseFilterEventArgs(MainPageUrlBuilder url, QueryParameters qParams)
             : base(url)
         {
-            if (qParams != null)
-                DBParameterExpression = qParams.DBParameterExpression;
+            DBParameterExpression = qParams.GetDBExpression<TDataContext>();
             QueryParameters = qParams;
         }
 
-        public ParameterExpression DBParameterExpression { get; private set; }
+        public Expression DBParameterExpression { get; private set; }
 
         #region добавление фильтров по лямбда выражению
 

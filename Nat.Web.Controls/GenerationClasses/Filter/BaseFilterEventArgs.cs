@@ -49,7 +49,7 @@ namespace Nat.Web.Controls.GenerationClasses
             return typeof(TTable);
         }
 
-        public bool HasFilter()
+        public virtual bool HasFilter()
         {
             return _where != null || _wheres.Count > 0 || _joinFilters.Count > 0 || Filters != null;
         }
@@ -1057,6 +1057,11 @@ namespace Nat.Web.Controls.GenerationClasses
             }
 
             return filter;
+        }
+
+        public override bool HasFilter()
+        {
+            return base.HasFilter() || _wheres.Count > 0;
         }
 
         public override void GetExpressionCollection(List<BaseFilterExpression> list, Type getForType, Expression upToTable, IEnumerable<Expression> fieldsToCheckReference)

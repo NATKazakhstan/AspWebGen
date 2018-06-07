@@ -75,7 +75,7 @@ namespace Nat.Web.Tools.ExtNet.Extenders
                         if (fieldType == typeof(DateTime) || fieldType == typeof(DateTime?))
                         {
                             values[0] = ((DateTime)values[0]).Date;
-                            dateEnd = ((DateTime)values[0]).AddDays(1).AddMilliseconds(-1);
+                            dateEnd = ((DateTime)values[0]).AddDays(1).AddSeconds(-1);
                         }
 
                         Expression expression = null;

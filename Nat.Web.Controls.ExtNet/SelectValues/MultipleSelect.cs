@@ -31,12 +31,11 @@ namespace Nat.Web.Controls.ExtNet.SelectValues
 
         public Label LabelErrorText { get; protected set; }
 
+        public new string ClientID => GridPanel.ClientID;
+
         public override bool ReadOnly
         {
-            get
-            {
-                return base.ReadOnly;
-            }
+            get => base.ReadOnly;
 
             set
             {
@@ -51,6 +50,16 @@ namespace Nat.Web.Controls.ExtNet.SelectValues
                     if (ReadOnly)
                         store.Filters.Add(new DataFilter { Property = "Selected", Value = "true" });
                 }
+            }
+        }
+
+        public override bool Disabled
+        {
+            get => base.Disabled;
+            set
+            {
+                base.Disabled = value;
+                GridPanel.Disabled = value;
             }
         }
 
@@ -164,7 +173,7 @@ namespace Nat.Web.Controls.ExtNet.SelectValues
             else
             {
                 rowSelectionModel.Listeners.SelectionChange.Handler =
-                    string.Format("{1}.{0}({1}.getValue())", ScriptFunctionConstant.OnChangedValues, ClientID);
+                    string.Format("{1}.{0}({1}.getValue())", ScriptFunctionConstant.OnChangedValues, base.ClientID);
             }
         }
 
@@ -290,7 +299,7 @@ var PrepareMultipleLookupSelect_{4} = function() {{
 return isValid; }}; ",
                 GridPanel.GetStore().ClientID,
                 string.Empty, // todo: add control
-                ClientID,
+                base.ClientID,
                 LabelErrorText.ClientID,
                 ID);
 

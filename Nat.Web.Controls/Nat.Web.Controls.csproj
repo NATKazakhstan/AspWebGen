@@ -451,6 +451,7 @@
     <Compile Include="GenerationClasses\BaseClientManagmentControlExtensions.cs" />
     <Compile Include="GenerationClasses\BaseJournal\BaseFilterParameterContainer.cs" />
     <Compile Include="GenerationClasses\BaseJournal\BaseFilterParameterContent.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseFilterParameterFake.cs" />
     <Compile Include="GenerationClasses\BaseJournal\BaseFilterParameterStringSearch.cs" />
     <Compile Include="GenerationClasses\BaseJournal\BaseFilterParameterStructSearch.cs" />
     <Compile Include="GenerationClasses\BaseJournal\BaseJoinFilterParameterContainer.cs" />

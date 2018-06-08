@@ -545,7 +545,7 @@ namespace Nat.Web.Controls.GenerationClasses.Navigator
             return oldParameters;
         }
 
-        public bool RenderLogInformation(StringBuilder sb, IDictionary<string, string> queryParameters, string referenceKey, bool allowGetTableKey)
+        public virtual bool RenderLogInformation(StringBuilder sb, IDictionary<string, string> queryParameters, string referenceKey, bool allowGetTableKey)
         {
             string value = GetKeyValue(queryParameters, referenceKey, allowGetTableKey);
             string name;

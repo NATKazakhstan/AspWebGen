@@ -2864,10 +2864,11 @@ function GetFiltersParameter(tableName, filterValues) {
     return '__filters=' + encodeURIComponent(filters);
 }
 
-function ShowHistoryButtonClick(showHistoryHidden, store, isTree) {
+function ShowHistoryButtonClick(showHistoryHidden, store, dirty, isTree) {
+    debugger;
     var isdirty;
     store.data.items.forEach(function(item) {
-        if (item.dirty) {
+        if (item.dirty || item.data.dirty || (dirty && dirty.getValue() === "true")) {
             isdirty = true;
             return;
         };

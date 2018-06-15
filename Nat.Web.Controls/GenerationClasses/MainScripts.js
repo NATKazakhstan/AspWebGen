@@ -2866,9 +2866,9 @@ function GetFiltersParameter(tableName, filterValues) {
 
 function ShowHistoryButtonClick(showHistoryHidden, store, dirty, isTree) {
     debugger;
-    var isdirty;
+    var isdirty = dirty && dirty.getValue() === "true";
     store.data.items.forEach(function(item) {
-        if (item.dirty || item.data.dirty || (dirty && dirty.getValue() === "true")) {
+        if (item.dirty || item.data.dirty) {
             isdirty = true;
             return;
         };

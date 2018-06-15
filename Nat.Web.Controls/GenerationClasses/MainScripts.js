@@ -2863,3 +2863,26 @@ function GetFiltersParameter(tableName, filterValues) {
     var filters = Sys.Serialization.JavaScriptSerializer.serialize(filtersObj);
     return '__filters=' + encodeURIComponent(filters);
 }
+
+function ShowHistoryButtonClick(showHistoryHidden, store, isTree) {
+    var isdirty;
+    store.data.items.forEach(function(item) {
+        if (item.dirty) {
+            isdirty = true;
+            return;
+        };
+    });
+    if (!isdirty) {
+        var c = showHistoryHidden;
+        c.setValue(c.getValue() === 'true' ? 'false' : 'true');
+        if (isTree) store.getNodeById('Root').reload();
+        else
+            store.reload();
+    } else {
+        window.Ext.Msg.show({
+            title: window.CoreLocalization.Information,
+            msg: window.CoreLocalization.InformationShowHistory,
+            buttons: window.Ext.MessageBox.OK
+        });
+    }
+}

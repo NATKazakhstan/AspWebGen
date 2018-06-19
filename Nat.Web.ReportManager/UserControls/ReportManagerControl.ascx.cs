@@ -271,14 +271,17 @@ namespace Nat.Web.ReportManager.UserControls
                     if (string.IsNullOrEmpty(backText))
                         backText = Resources.SBack;
 
-                    RememberReports(
-                        WebReportManager.GetReportUrl(
-                            string.Empty,
-                            webReportManager.Plugin.GetType().FullName,
-                            string.Empty,
-                            string.Empty,
-                            false) + "&open=false&setDefaultParams=true",
-                        webReportManager.Plugin);
+                    if (webReportManager.Plugin.Visible)
+                    {
+                        RememberReports(
+                            WebReportManager.GetReportUrl(
+                                string.Empty,
+                                webReportManager.Plugin.GetType().FullName,
+                                string.Empty,
+                                string.Empty,
+                                false) + "&open=false&setDefaultParams=true",
+                            webReportManager.Plugin);
+                    }
 
                     if (redirectReportPlugin != null)
                     {

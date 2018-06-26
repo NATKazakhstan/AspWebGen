@@ -271,6 +271,8 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
             }
         }
 
+        public InitHierarchyDelegate CrossColumnInitHierarchyHandler { get; set; }
+
         #endregion
 
         #region properties of handlers
@@ -376,6 +378,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                                                     BaseColumnName = ColumnName + "_" + crossColumnName,
                                                     HeaderControl = control.BaseInnerHeader,
                                                     Filter = control.Filter,
+                                                    CrossColumnInitHierarchyHandler = CrossColumnInitHierarchyHandler,
                                                 };
                 DetectedCrossColumn?.Invoke(this, EventArgs.Empty);
             }
@@ -1368,7 +1371,8 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
         private class BaseColumnDS : CrossTreeColumnDataSource<DataItemKey, BaseRow, DataItem>
         {
             public BaseColumn BaseColumn { get; set; }
-            
+            public InitHierarchyDelegate CrossColumnInitHierarchyHandler { get; set; }
+
             protected override IQueryable<DataItem> GetData()
             {
                 List<DataItem> data = null;
@@ -1510,6 +1514,8 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                     if(newItem.ColumnName != null)
                         newItem.ColumnName += "_" + newItem.Parent.CrossColumnID;
                 }*/
+
+                CrossColumnInitHierarchyHandler?.Invoke(newItem, item, existsColumns, columnsDic);
                 base.InitHierarchy(newItem, item, existsColumns, columnsDic);
             }
 
@@ -1739,4 +1745,10 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 
         #endregion
     }
+
+    public delegate void InitHierarchyDelegate(
+        HierarchyFields.ColumnHierarchy newItem,
+        CrossColumnDataSourceItem item,
+        Dictionary<string, HierarchyFields.ColumnHierarchy> existsColumns,
+        Dictionary<string, BaseColumn> columnsDic);
 }

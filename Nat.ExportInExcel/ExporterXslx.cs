@@ -120,7 +120,10 @@ namespace Nat.ExportInExcel
         {
             var header = _journalControl.Journal.InnerHeader;
             _writer.WriteStartElement("cols");
-            var columns = header.GetAllDataColumns().Where(r => r.IsVisibleColumn(header.ColumnsDic)).ToList();
+            var columns = header.GetAllDataColumns()
+                .Where(r => r.IsVisibleColumn(header.ColumnsDic))
+                .Where(r => r.Childs.Count == 0 || string.IsNullOrEmpty(r.CrossColumnKey))
+                .ToList();
             for (int i = 0; i < columns.Count;)
             {
                 var item = columns[i];

@@ -1319,7 +1319,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                 ParentUserControl.LogMonitor,
                 true,
                 out extention);
-            PageHelper.DownloadFile(stream, ParentUserControl.Header + "." + extention, Page.Response);
+            PageHelper.DownloadFile(stream, ParentUserControl.TableHeader.Replace("\r\n", " ") + "." + extention, Page.Response);
         }
 
         #region Groups, Totals

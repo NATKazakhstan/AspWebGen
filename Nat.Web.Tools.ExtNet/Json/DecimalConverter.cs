@@ -26,7 +26,7 @@
                 else if (CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator == ",")
                     str = str.Replace(".", ",");*/
 
-                return Convert.ToDecimal(str);
+                return !string.IsNullOrEmpty(str) ? Convert.ToDecimal(str) : (object) null;
             }
 
             if (token.Type == JTokenType.Null && objectType == typeof(decimal?))

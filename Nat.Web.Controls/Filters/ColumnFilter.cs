@@ -128,7 +128,7 @@ namespace Nat.Web.Controls
 
             controls = new WebControl[2];
 
-            for(int i = 0; i != countItems; i++)
+            for (int i = 0; i != countItems; i++)
             {
                 if(ColumnFilterStorage.IsRefBound)
                 {
@@ -227,6 +227,10 @@ namespace Nat.Web.Controls
                 {
                     var textBox = new TextBox();
                     controls[i] = textBox;
+                    if (new Type[] { typeof(Int64), typeof(Int32), typeof(Int16) }.Contains(ColumnFilterStorage.DataType))
+                    {
+                        textBox.Attributes["type"] = "number";
+                    }
                     if (TextBoxHeight != null)
                     {
                         textBox.Height = TextBoxHeight.Value;

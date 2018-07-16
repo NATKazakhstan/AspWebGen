@@ -407,9 +407,20 @@ namespace Nat.Web.ReportManager.UserControls
                 IWebReportPlugin webReportPlugin = (IWebReportPlugin)webReportManager.Plugin;
                 if (webReportPlugin != null && webReportPlugin.AllowSaveValuesConditions)
                 {
-                    byte[] sid = new byte[((WindowsIdentity)Context.User.Identity).User.BinaryLength];
-                    ((WindowsIdentity)Context.User.Identity).User.GetBinaryForm(sid, 0);
-                    values = StorageValues.GetStorageValues(webReportManager.Plugin.GetType().FullName, sid);
+                    byte[] sid = new byte[] { };
+                    switch (this.Context.User.Identity.AuthenticationType)
+                    {
+                        case "Windows":
+                            var windowsIdentity = (WindowsIdentity)this.Context.User.Identity;
+                            sid = new byte[windowsIdentity.User.BinaryLength];
+                            windowsIdentity.User.GetBinaryForm(sid, 0);
+                            break;
+                        case "Forms": // note: Получение сида при идентификации по формам. 
+                            sid = Encoding.Default.GetBytes(User.GetSID());
+                            break;
+                    }
+                    if (sid != null && sid.Length > 0)
+                        values = StorageValues.GetStorageValues(webReportManager.Plugin.GetType().FullName, sid);
                     if (values != null && values.CountListValues > 0)
                         _countModelFillConditions = values.CountListValues;
                 }

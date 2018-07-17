@@ -23,6 +23,11 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
         /// </summary>
         public bool FirstColumns { get; set; }
 
+        /// <summary>
+        /// При нахождении дубликатов в дереве, просто пропустить.
+        /// </summary>
+        public bool SkipCircleInTree { get; set; }
+
         protected override void AddItems(THeaderTable row)
         {
             AddItems(row, ListItems, 1);
@@ -40,15 +45,18 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                                Row = row,
                                BaseColumnName = BaseColumnName,
                            };
-            listItems.Add(item);
             if (DicItems.ContainsKey(row.Id.ToString()))
             {
+                if (SkipCircleInTree)
+                    return;
+
                 throw new Exception(
                     "Detect circle in cross header datasource. Exists: "
                     + string.Join(";", DicItems.Keys.Select(r => r.ToString()).ToArray()) + " try to add: "
                     + row.Id);
             }
 
+            listItems.Add(item);
             DicItems[row.Id.ToString()] = item;
 
             if (FirstColumns)

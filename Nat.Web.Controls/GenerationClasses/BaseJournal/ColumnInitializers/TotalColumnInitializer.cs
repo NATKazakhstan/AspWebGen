@@ -20,6 +20,8 @@
             this.columns = columns;
         }
 
+        public CrossColumnDataSource CrossColumnDataSource { get; set; }
+
         public void Initialize(Func<RenderContext, BaseColumn, bool> where)
         {
             whereForSum = where;
@@ -146,12 +148,19 @@
             return columns.Select(c => GetRowsCount(context, c, whereForSum)).Max();
         }
 
-        private static int GetRowsCount(RenderContext context, BaseColumn c, Func<RenderContext, BaseColumn, bool> where)
+        private int GetRowsCount(RenderContext context, BaseColumn c, Func<RenderContext, BaseColumn, bool> where)
         {
+            if (CrossColumnDataSource != null)
+                return CrossColumnDataSource.GetRowsCount(context);
+
             if (!c.IsCrossColumn)
             {
                 if (where == null || where(context, c))
-                    return c.GetRowsCount(context.OtherColumns[c.ColumnName]);
+                {
+                    var columnName = c.ColumnName;
+                    return c.GetRowsCount(context.OtherColumns[columnName]);
+                }
+
                 return 0;
             }
 

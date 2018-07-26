@@ -484,7 +484,7 @@ function OpenFilterPostBack(hl, filterUrl, url) {
         filterValue = value;
 
         if (filterValue != null) {
-            window.location = hl.href.replace('SetFilters:', 'SetFilters:' + filterValue.replace(/\\"/g, '\\\\"'));
+            window.location = hl.href.replace('SetFilters:', 'SetFilters:' + filterValue.replace(/\\/g, '\\\\'));
             return true;
         }
 

@@ -55,6 +55,7 @@ namespace Nat.Web.Tools
         /// <param name="Request">Page.Request</param>
         public static void DownloadFile(string fileName, HttpResponse Response)
         {
+            fileName = fileName.Replace("\r\n", " ");
             Response.Clear();
             Response.ClearContent();
             var request = HttpContext.Current.Request;
@@ -87,6 +88,7 @@ namespace Nat.Web.Tools
 
         public static void DownloadFile(byte[] buffer, string fileName, HttpResponse Response)
         {
+            fileName = fileName.Replace("\r\n", " ");
             //Изменение размеров изображения и рисование уголка для фотографий на документы
             buffer = ImageUtils.ResizingGraphicsFile(buffer, HttpContext.Current.Request);
             //
@@ -120,6 +122,7 @@ namespace Nat.Web.Tools
         {
             try
             {
+                fileName = fileName.Replace("\r\n", " ");
 
                 Response.Clear();
                 Response.ClearContent();

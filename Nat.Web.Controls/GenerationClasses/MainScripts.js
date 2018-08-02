@@ -2220,12 +2220,13 @@ var LookupBoxSearchClick = function (el, trigger, tag, auto, lookupAddFields, lo
             dialogwindow.show();
             dialogwindow.focus();
 
+            var frame;
             if (urlChanged) {
                 if (windowTitle != '' && windowTitle != null)
                     dialogwindow.setTitle(windowTitle);
                 
                 dialogwindow.loader.load();
-                var frame = dialogwindow.getFrame();
+                frame = dialogwindow.getFrame();
 
                 if (initValueInField != null)
                     eval('frame.' + initValueInField + ' = valueID == null ? null : valueID');
@@ -2240,42 +2241,14 @@ var LookupBoxSearchClick = function (el, trigger, tag, auto, lookupAddFields, lo
                 if (valueID != null) frame.tryLoadPage = true;
                 if (frameInitialization != null) frameInitialization(frame, valueID, store, el, true);
 
-                frame.addSelectedValues = function (record) {
-                    dialogwindow.hide();
-                    
-                    if (record.length != null && record.length > 0) {
-                        for (var i = 0; i < record.length; i++) {
-                            var item = record[i].data;
-                            var newValue = item.id;
-                            store.add({ id: item.id, RowName: item.RecordName });
-                            el.setValue(newValue);
-                            if (lookupAddFields != null)
-                                ChangeExtNetLookupValue(store, newValue, lookupAddFields);
-                        }
-                    } else {
-                        var newValue = record.id;
-                        store.add(record);
-                        el.setValue(newValue);
-                        if (lookupAddFields != null)
-                            ChangeExtNetLookupValue(store, newValue, lookupAddFields);
-                    }
-                };
-
                 frame.closeModalWindow = function () {
                     dialogwindow.hide();
                 };
 
-                frame.removeSelectedValues = function(record) {
-                    el.removeByValue(record.id);
-                    el.clearValue();
-                    if (lookupAddFields != null)
-                        NullValuesExtNetAdditionalFields(lookupAddFields);
-                };
-                
                 window.modalframe = frame;
             } else {
 
-                var frame = dialogwindow.getFrame();
+                frame = dialogwindow.getFrame();
                 if (valueID == null)
                     frame.selectedRecords = [];
                 else {
@@ -2288,6 +2261,38 @@ var LookupBoxSearchClick = function (el, trigger, tag, auto, lookupAddFields, lo
                     frame.selectRecords(frame.selectedRecords);
                 if (frameInitialization != null) frameInitialization(frame, valueID, store, el, false);
             }
+
+            frame.addSelectedValues = function (record) {
+                dialogwindow.hide();
+                    
+                if (record.length != null && record.length > 0) {
+                    for (var i = 0; i < record.length; i++) {
+                        var item = record[i].data;
+                        var newValue = item.id;
+                        store.add({ id: item.id, RowName: item.RecordName });
+                        el.setValue(newValue);
+                        if (lookupAddFields != null)
+                            ChangeExtNetLookupValue(store, newValue, lookupAddFields);
+                    }
+                } else {
+                    var newValue = record.id;
+                    store.add(record);
+                    el.setValue(newValue);
+                    if (lookupAddFields != null)
+                        ChangeExtNetLookupValue(store, newValue, lookupAddFields);
+                }
+            };
+
+            frame.closeModalWindow = function () {
+                dialogwindow.hide();
+            };
+
+            frame.removeSelectedValues = function(record) {
+                el.removeByValue(record.id);
+                el.clearValue();
+            if (lookupAddFields != null)
+                NullValuesExtNetAdditionalFields(lookupAddFields);
+            };
 
             break;
         case "remove":

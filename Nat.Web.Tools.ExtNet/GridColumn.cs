@@ -484,6 +484,17 @@ namespace Nat.Web.Tools.ExtNet
                 Expression exp = Expression.Convert(param, row.GetType());
                 for (int i = 0; i < split.Length; i++)
                     exp = Expression.PropertyOrField(exp, split[i]);
+                if (ModelFieldType == ModelFieldType.Boolean)
+                {
+                    if (exp.Type == typeof(bool?))
+                        exp = Expression.Condition(Expression.Equal(exp, Expression.Constant(null, typeof(bool?))),
+                            Expression.Constant(""),
+                            Expression.Condition(Expression.Property(exp, "Value"),
+                                Expression.Constant(TrueText),
+                                Expression.Constant(FalseText)));
+                    else
+                        exp = Expression.Condition(exp, Expression.Constant(TrueText), Expression.Constant(FalseText));
+                }
                 exp = Expression.Convert(exp, typeof(object));
 
                 var lambda = Expression.Lambda<Func<object, object>>(exp, param);

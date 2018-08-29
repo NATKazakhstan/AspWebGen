@@ -85,7 +85,10 @@ function UpdateAdditionalFields(addtionalInfo) {
 
         var setValueScript = addtionalInfo.UserControls[uc].SetValueScript;
         if (setValueScript != null && setValueScript != '') {
-            setValueScript = String.format(setValueScript, '\'' + valueAddtionalInfo[i].replace('\'','\\\'') + '\'');
+            if(typeof (valueAddtionalInfo[i]) === 'string')
+                setValueScript = String.format(setValueScript, '\'' + valueAddtionalInfo[i].replace('\'','\\\'') + '\'');
+            else
+                setValueScript = String.format(setValueScript, valueAddtionalInfo[i]);
             eval(setValueScript);
         }
         
@@ -103,7 +106,10 @@ function UpdateAdditionalFields(addtionalInfo) {
 
         var setLabelScript = addtionalInfo.UserControls[uc].SetLabelScript;
         if (setLabelScript != null && setLabelScript != '') {
-            setLabelScript = String.format(setLabelScript, '\'' + valueAddtionalInfo[i].replace('\'', '\\\'') + '\'');
+            if (typeof (valueAddtionalInfo[i]) === 'string')
+                setLabelScript = String.format(setLabelScript, '\'' + valueAddtionalInfo[i].replace('\'', '\\\'') + '\'');
+            else
+                setLabelScript = String.format(setLabelScript, valueAddtionalInfo[i]);
             eval(setLabelScript);
         }
         
@@ -2269,14 +2275,16 @@ var LookupBoxSearchClick = function (el, trigger, tag, auto, lookupAddFields, lo
                     for (var i = 0; i < record.length; i++) {
                         var item = record[i].data;
                         var newValue = item.id;
-                        store.add({ id: item.id, RowName: item.RecordName });
+                        if (!store.getById(record.id))
+                            store.add({ id: item.id, RowName: item.RecordName, AdditionalValues: item.AdditionalValues });
                         el.setValue(newValue);
                         if (lookupAddFields != null)
                             ChangeExtNetLookupValue(store, newValue, lookupAddFields);
                     }
                 } else {
                     var newValue = record.id;
-                    store.add(record);
+                    if (!store.getById(record.id))
+                        store.add(record);
                     el.setValue(newValue);
                     if (lookupAddFields != null)
                         ChangeExtNetLookupValue(store, newValue, lookupAddFields);

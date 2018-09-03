@@ -116,6 +116,11 @@ namespace Nat.Web.Controls
             logMonitor.WriteFieldChanged(refMessage, rowEntity, fieldName, oldValue, newValue);
         }
 
+        public void WriteFieldChanged(Int64 refMessage)
+        {
+            logMonitor.WriteFieldChanged(refMessage);
+        }
+
         public void ClearChangedFieldList()
         {
             logMonitor.ClearChangedFieldList();

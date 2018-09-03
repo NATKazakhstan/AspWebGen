@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DS" targetNamespace="http://tempuri.org/DS.xsd" xmlns:mstns="http://tempuri.org/DS.xsd" xmlns="http://tempuri.org/DS.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DS" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DS" msprop:Generator_UserDSName="DS">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="LogFieldChanged" msprop:Generator_TableClassName="LogFieldChangedDataTable" msprop:Generator_TableVarName="tableLogFieldChanged" msprop:Generator_TablePropName="LogFieldChanged" msprop:Generator_RowDeletingName="LogFieldChangedRowDeleting" msprop:Generator_RowChangingName="LogFieldChangedRowChanging" msprop:Generator_RowEvHandlerName="LogFieldChangedRowChangeEventHandler" msprop:Generator_RowDeletedName="LogFieldChangedRowDeleted" msprop:Generator_UserTableName="LogFieldChanged" msprop:Generator_RowChangedName="LogFieldChangedRowChanged" msprop:Generator_RowEvArgName="LogFieldChangedRowChangeEvent" msprop:Generator_RowClassName="LogFieldChangedRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="refMessage" msprop:Generator_ColumnVarNameInTable="columnrefMessage" msprop:Generator_ColumnPropNameInRow="refMessage" msprop:Generator_ColumnPropNameInTable="refMessageColumn" msprop:Generator_UserColumnName="refMessage" type="xs:long" />
+              <xs:element name="tableName" msprop:Generator_ColumnVarNameInTable="columntableName" msprop:Generator_ColumnPropNameInRow="tableName" msprop:Generator_ColumnPropNameInTable="tableNameColumn" msprop:Generator_UserColumnName="tableName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fieldName" msprop:Generator_ColumnVarNameInTable="columnfieldName" msprop:Generator_ColumnPropNameInRow="fieldName" msprop:Generator_ColumnPropNameInTable="fieldNameColumn" msprop:Generator_UserColumnName="fieldName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="oldValue" msprop:Generator_ColumnVarNameInTable="columnoldValue" msprop:Generator_ColumnPropNameInRow="oldValue" msprop:Generator_ColumnPropNameInTable="oldValueColumn" msprop:Generator_UserColumnName="oldValue" type="xs:string" minOccurs="0" />
+              <xs:element name="newValue" msprop:Generator_ColumnVarNameInTable="columnnewValue" msprop:Generator_ColumnPropNameInRow="newValue" msprop:Generator_ColumnPropNameInTable="newValueColumn" msprop:Generator_UserColumnName="newValue" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

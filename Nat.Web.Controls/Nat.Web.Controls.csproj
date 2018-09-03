@@ -403,6 +403,17 @@
     <EmbeddedResource Include="Lookup\control_fastforward_blue.png" />
     <EmbeddedResource Include="Lookup\control_rewind_blue.png" />
     <EmbeddedResource Include="CopyValue.js" />
+    <Content Include="Log\DS.xsc">
+      <DependentUpon>DS.xsd</DependentUpon>
+    </Content>
+    <None Include="Log\DS.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DS.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Log\DS.xss">
+      <DependentUpon>DS.xsd</DependentUpon>
+    </Content>
     <None Include="MainPage.aspx" />
     <Content Include="WebServiceUploadFiles.asmx" />
     <Content Include="Trace\TimeOfDestinationUser.ascx" />
@@ -500,6 +511,11 @@
     <Compile Include="GenerationClasses\Validators\ValidateInformationForm.cs" />
     <Compile Include="GenerationClasses\Validators\ValidateInformationFormApplyArgsInfo.cs" />
     <Compile Include="HistoryFilters\DateStartEndHistory.cs" />
+    <Compile Include="Log\DS.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DS.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Log\LogChangedFieldEntry.cs" />
     <Compile Include="Log\LogMessageEntry.cs" />
     <Compile Include="Log\LogMessageType.cs" />

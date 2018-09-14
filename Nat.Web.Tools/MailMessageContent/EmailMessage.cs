@@ -135,35 +135,47 @@ namespace Nat.Web.Tools.MailMessageContent
                 {
                     var value1 = getValue1(source);
                     var value2 = getValue2(source);
-                    if (value1.HasValue && value2.HasValue && value1.Value.Equals(value2.Value))
-                    {
-                        textWriter.Write(value1.Value);
-                    }
-                    else if (value1.HasValue || value2.HasValue)
-                    {
-                        if (value1 != null)
-                        {
-                            textWriter.AddStyleAttribute(HtmlTextWriterStyle.PaddingRight, "5px");
-                            textWriter.RenderBeginTag(HtmlTextWriterTag.Strike);
-                            textWriter.Write(value1.Value);
-                            textWriter.RenderEndTag();
-                        }
-
-                        if (value2 != null)
-                        {
-                            if (value1 == null)
-                            {
-                                textWriter.AddStyleAttribute(
-                                    HtmlTextWriterStyle.BackgroundColor, ColorTranslator.ToHtml(Color.LightGreen));
-                            }
-                            else
-                                textWriter.WriteBreak();
-                            textWriter.RenderBeginTag(HtmlTextWriterTag.Span);
-                            textWriter.Write(value2.Value);
-                            textWriter.RenderEndTag();
-                        }
-                    }
+                    Write(value1, value2, textWriter);
                 };
+        }
+
+        public static void Write<TValue>(TValue value1, TValue value2, HtmlTextWriter textWriter, string format = "{0}")
+        {
+            Write(value1, value2, value1, value2, textWriter, format);
+        }
+
+        public static void Write(object value1, object value2, object name1, object name2, HtmlTextWriter textWriter, string format = "{0}")
+        {
+            if (value1 != null && value2 != null && value1.Equals(value2))
+            {
+                textWriter.Write(format, name1);
+            }
+            else if (value1 != null || value2 != null)
+            {
+                if (value1 != null)
+                {
+                    textWriter.AddStyleAttribute(HtmlTextWriterStyle.PaddingRight, "5px");
+                    textWriter.RenderBeginTag(HtmlTextWriterTag.Strike);
+                    textWriter.Write(format, name1);
+                    textWriter.RenderEndTag();
+                }
+
+                if (value2 != null)
+                {
+                    if (value1 == null)
+                    {
+                        textWriter.AddStyleAttribute(
+                            HtmlTextWriterStyle.BackgroundColor,
+                            ColorTranslator.ToHtml(Color.LightGreen));
+                    }
+                    else
+                        textWriter.WriteBreak();
+
+                    textWriter.RenderBeginTag(HtmlTextWriterTag.Span);
+                    textWriter.Write(format, name2);
+                    textWriter.RenderEndTag();
+                }
+            }
         }
 
         public static Action<TSource, HtmlTextWriter> Write<TSource>(Func<TSource, string> getValue1, Func<TSource, string> getValue2)
@@ -421,6 +433,13 @@ namespace Nat.Web.Tools.MailMessageContent
         public void Dispose()
         {
             HtmlWriter.Dispose();
+        }
+
+        public int ColsCount()
+        {
+            if (tableColumns.Count == 0)
+                return 1;
+            return tableColumns.Peek();
         }
     }
 }

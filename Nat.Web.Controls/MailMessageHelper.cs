@@ -15,11 +15,14 @@ using Nat.Web.Tools.Security;
 
 namespace Nat.Web.Controls
 {
+    using System.ComponentModel;
+
     using Nat.Tools.Specific;
     using Nat.Web.Tools;
 
     public static class MailMessageHelper
     {
+        [DisplayName("Общии задачи. Отправка уведомлений на почту.")]
         public static void SendMail(
             string currentMailAddress,
             HtmlTextWriter html,
@@ -31,6 +34,7 @@ namespace Nat.Web.Controls
             SendMail(currentMailAddress, html, subject, listEmails, listEmailsCopy, attachments, User.GetSID(), false);
         }
 
+        [DisplayName("Общии задачи. Отправка уведомлений на почту.")]
         public static void SendMail(
             string currentMailAddress,
             HtmlTextWriter html,
@@ -43,6 +47,7 @@ namespace Nat.Web.Controls
             SendMail(currentMailAddress, html, subject, listEmails, listEmailsCopy, attachments, User.GetSID(), throwException);
         }
 
+        [DisplayName("Общии задачи. Отправка уведомлений на почту.")]
         public static void SendMail(
             string currentMailAddress,
             HtmlTextWriter html,
@@ -55,9 +60,32 @@ namespace Nat.Web.Controls
             SendMail(currentMailAddress, html, subject, listEmails, listEmailsCopy, attachments, sid, false);
         }
 
+        [DisplayName("Общии задачи. Отправка уведомлений на почту.")]
         public static void SendMail(
             string currentMailAddress,
             HtmlTextWriter html,
+            string subject,
+            IEnumerable<string> listEmails,
+            IEnumerable<string> listEmailsCopy,
+            IEnumerable<Attachment> attachments,
+            string sid,
+            bool throwException)
+        {
+            SendMail(
+                currentMailAddress,
+                html.InnerWriter.ToString(),
+                subject,
+                listEmails,
+                listEmailsCopy,
+                attachments,
+                sid,
+                throwException);
+        }
+
+        [DisplayName("Общии задачи. Отправка уведомлений на почту.")]
+        public static void SendMail(
+            string currentMailAddress,
+            string html,
             string subject,
             IEnumerable<string> listEmails,
             IEnumerable<string> listEmailsCopy,
@@ -90,7 +118,7 @@ namespace Nat.Web.Controls
                              From = new MailAddress(emailFrom),
                              Subject = subject,
                              //SubjectEncoding = Encoding.UTF8,
-                             Body = html.InnerWriter.ToString(),
+                             Body = html,
                              IsBodyHtml = true,
                          };
 

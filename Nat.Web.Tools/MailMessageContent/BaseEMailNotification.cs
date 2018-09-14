@@ -1,7 +1,11 @@
 ﻿namespace Nat.Web.Tools.MailMessageContent
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.IO.Packaging;
+    using System.Linq;
+    using System.Linq.Expressions;
     using System.Net.Mail;
     using System.Web.UI;
 
@@ -59,7 +63,7 @@
             IEnumerable<string> listEmails, 
             IEnumerable<string> listEmailsCopy, 
             IEnumerable<Attachment> attachments);
-
+        
         #endregion
 
         protected class Changes

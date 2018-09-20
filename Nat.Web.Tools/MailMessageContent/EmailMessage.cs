@@ -148,10 +148,16 @@ namespace Nat.Web.Tools.MailMessageContent
         {
             if (value1 != null && value2 != null && value1.Equals(value2))
             {
+                if (name1 is string str)
+                    name1 = HttpUtility.HtmlEncode(str).Replace("\n", "<br/>");
                 textWriter.Write(format, name1);
             }
             else if (value1 != null || value2 != null)
             {
+                if (name1 is string str1)
+                    name1 = HttpUtility.HtmlEncode(str1).Replace("\n", "<br/>");
+                if (name2 is string str2)
+                    name2 = HttpUtility.HtmlEncode(str2).Replace("\n", "<br/>");
                 if (value1 != null)
                 {
                     textWriter.AddStyleAttribute(HtmlTextWriterStyle.PaddingRight, "5px");

@@ -16,9 +16,12 @@ using Nat.Web.Tools.Security;
 namespace Nat.Web.Controls
 {
     using System.ComponentModel;
+    using System.IO;
 
+    using Nat.Tools;
     using Nat.Tools.Specific;
     using Nat.Web.Tools;
+    using Nat.Web.Tools.MailMessageContent;
 
     public static class MailMessageHelper
     {
@@ -186,6 +189,40 @@ namespace Nat.Web.Controls
                 monitor.Log(messageEntry);
                 if (throwException)
                     throw;
+            }
+        }
+
+        [DisplayName("Общии задачи. Отправка уведомлений на почту.")]
+        public static void SendMail(
+            string currentMailAddress,
+            string html,
+            string subject,
+            IEnumerable<string> listEmails,
+            IEnumerable<string> listEmailsCopy,
+            IEnumerable<BaseEMailNotification.MyAttachment> attachments,
+            string sid,
+            bool throwException)
+        {
+            var list = new List<Attachment>();
+            var streams = new List<FileStream>();
+            try
+            {
+                attachments.ForEach(
+                    a =>
+                        {
+                            var stream = new FileStream(a.FilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                            streams.Add(stream);
+                            var attachment = string.IsNullOrEmpty(a.MediaType)
+                                                 ? new Attachment(stream, a.FileName)
+                                                 : new Attachment(stream, a.FileName, a.MediaType);
+                            list.Add(attachment);
+                        });
+                
+                SendMail(currentMailAddress, html, subject, listEmails, listEmailsCopy, list, sid, throwException);
+            }
+            finally
+            {
+                streams.ForEach(f => f.Dispose());
             }
         }
     }

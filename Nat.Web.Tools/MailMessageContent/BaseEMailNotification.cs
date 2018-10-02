@@ -38,6 +38,8 @@
 
         public bool ThrowException { get; set; }
 
+        public List<MyAttachment> Attachments { get; } = new List<MyAttachment>();
+
         #endregion
 
         #region Public Methods and Operators
@@ -62,7 +64,7 @@
             string subject, 
             IEnumerable<string> listEmails, 
             IEnumerable<string> listEmailsCopy, 
-            IEnumerable<Attachment> attachments);
+            IEnumerable<MyAttachment> attachments);
         
         #endregion
 
@@ -99,6 +101,23 @@
             public string Rank { get; set; }
 
             #endregion
+        }
+        
+        public class MyAttachment
+        {
+            public MyAttachment()
+            {
+            }
+
+            public MyAttachment(string filePath, string fileName)
+            {
+                FileName = fileName;
+                FilePath = filePath;
+            }
+
+            public string FileName { get; set; }
+            public string FilePath { get; set; }
+            public string MediaType { get; set; }
         }
     }
 
@@ -145,7 +164,7 @@
                     subject, 
                     mailsDetector.EMailsTo, 
                     mailsDetector.EMailsCopy, 
-                    new List<Attachment>());
+                    Attachments);
             }
         }
 

@@ -268,9 +268,9 @@ namespace Nat.Web.Controls.ExtNet.SelectValues
 
             // Локализация значений
             if (LocalizationHelper.IsCultureKZ)
-            foreach (var field in store.Model.Primary.Fields.Where(field => field.ServerMapping.EndsWith("NameRu")))
             {
-                field.ServerMapping = field.ServerMapping.Replace("NameRu", "NameKz");
+                foreach (var field in store.Model.Primary.Fields.Where(field => field.ServerMapping.EndsWith("Ru")))
+                    field.ServerMapping = field.ServerMapping.Substring(0, field.ServerMapping.Length - 2) + "Kz";
             }
         }
 

@@ -180,6 +180,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
         private bool[] _isInlineGroup;
 
         private Table exportFooter;
+        private Table exportHeader;
 
         public bool[] IsInlineGroup
         {
@@ -283,7 +284,17 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                 EnsureInitializedExportFooter();
                 return exportFooter;
             }
-            protected set { exportFooter = value; }
+            protected set => exportFooter = value;
+        }
+
+        public Table ExportHeader
+        {
+            get
+            {
+                EnsureInitializedExportFooter();
+                return exportHeader;
+            }
+            protected set => exportHeader = value;
         }
 
         protected bool InitializedExportFooter { get; set; }
@@ -294,9 +305,14 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 
             InitializedExportFooter = true;
             InitializeExportFooter();
+            InitializeExportHeader();
         }
 
         protected virtual void InitializeExportFooter()
+        {
+        }
+
+        protected virtual void InitializeExportHeader()
         {
         }
 

@@ -17,6 +17,8 @@ namespace Nat.ExportInExcel
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Web;
+    using System.Web.UI;
+    using System.Web.UI.WebControls;
     using System.Xml;
 
     using DocumentFormat.OpenXml.Packaging;
@@ -399,6 +401,8 @@ namespace Nat.ExportInExcel
             }
 
             AddRowsStyles();
+            if (RenderFooterTable != null) AddStyles(RenderFooterTable);
+            if (RenderFirstHeaderTable != null) AddStyles(RenderFirstHeaderTable);
 
             #endregion
 
@@ -596,6 +600,7 @@ namespace Nat.ExportInExcel
             RenderColumnsSettings();
 
             _writer.WriteStartElement("sheetData");
+            RenderFirstHeader();
             RenderSheetHeader(fullColSpan);
             RenderFilter();
             RenderHeader();
@@ -646,7 +651,8 @@ namespace Nat.ExportInExcel
 
         protected abstract void RenderData();
 
-        protected abstract void RenderFooter();
+        protected abstract Table RenderFooterTable { get; }
+        protected abstract Table RenderFirstHeaderTable { get; }
 
         protected abstract void RenderHeader();
 
@@ -662,6 +668,50 @@ namespace Nat.ExportInExcel
             _addedRowSpans.Clear();
         }
         
+        #endregion
+
+        #region RenderFooter RenderFirstHeader
+        
+        protected void RenderFooter()
+        {
+            if (RenderFooterTable == null)
+                return;
+
+            RenderTable(RenderFooterTable);
+        }
+
+        protected void RenderFirstHeader()
+        {
+            if (RenderFirstHeaderTable == null)
+                return;
+
+            RenderTable(RenderFirstHeaderTable);
+        }
+
+        protected void RenderTable(Table table)
+        {
+            foreach (TableRow row in table.Rows)
+            {
+                WriteStartRow(row.Height.IsEmpty || row.Height.Type != UnitType.Pixel ? null : (int?)row.Height.Value);
+                MoveRowIndex();
+
+                foreach (TableCell cell in row.Cells)
+                {
+                    RenderCell(
+                        _writer,
+                        cell.Text,
+                        cell.RowSpan == 0 ? 1 : cell.RowSpan,
+                        cell.ColumnSpan == 0 ? 1 : cell.ColumnSpan,
+                        cell.Attributes["StyleID"],
+                        ColumnType.Other,
+                        string.Empty);
+                }
+
+                _writer.WriteEndElement();
+            }
+            _addedRowSpans.Clear();
+        }
+
         #endregion
 
         #region Render Filter
@@ -807,6 +857,32 @@ namespace Nat.ExportInExcel
         #endregion
 
         #region help functions, properties
+
+        protected void AddStyles(Table table)
+        {
+            foreach (TableRow tableRow in table.Rows)
+            {
+                foreach (TableCell tableCell in tableRow.Cells)
+                {
+                    tableCell.Attributes["StyleID"] = AddStyle(
+                        null,
+                        null,
+                        string.IsNullOrEmpty(tableCell.Style[HtmlTextWriterStyle.FontSize])
+                            ? (int?)null
+                            : Convert.ToInt32(tableCell.Style[HtmlTextWriterStyle.FontSize]),
+                        "bold".Equals(tableCell.Style[HtmlTextWriterStyle.FontWeight], StringComparison.OrdinalIgnoreCase),
+                        "italic".Equals(tableCell.Style[HtmlTextWriterStyle.FontStyle], StringComparison.OrdinalIgnoreCase),
+                        string.IsNullOrEmpty(tableCell.Style[HtmlTextWriterStyle.TextAlign])
+                            ? (Aligment?)null
+                            : (Aligment)Enum.Parse(typeof(Aligment), tableCell.Style[HtmlTextWriterStyle.TextAlign]),
+                        string.IsNullOrEmpty(tableCell.Style[HtmlTextWriterStyle.VerticalAlign])
+                            ? (Aligment?)null
+                            : (Aligment)Enum.Parse(typeof(Aligment), tableCell.Style[HtmlTextWriterStyle.VerticalAlign]),
+                        DefaultStyleId,
+                        "solid").ToString();
+                }
+            }
+        }
 
         protected void WriteStartRow(int? height)
         {

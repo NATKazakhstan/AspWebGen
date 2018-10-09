@@ -13,6 +13,9 @@ using Convert=System.Convert;
 
 namespace Nat.Web.Controls
 {
+    using System.Collections;
+    using System.Reflection;
+
     using Nat.Tools;
     using Nat.Web.Tools;
     using Nat.Web.Tools.Initialization;
@@ -39,7 +42,24 @@ namespace Nat.Web.Controls
 
             bool isKz = string.IsNullOrEmpty(split[0]) ? false : Convert.ToBoolean(split[0]);
             bool isCode = string.IsNullOrEmpty(split[1]) ? false : Convert.ToBoolean(split[1]);
-            var sourceObj = Activator.CreateInstance(BuildManager.GetType(split[2], true, true), null);
+            var type = BuildManager.GetType(split[2], false, true);
+            if (type == null)
+            {
+                if (split[2].EndsWith("JournalDataSourceView"))
+                {
+                    var tableType = BuildManager.GetType(split[2].Substring(0, split[2].Length - "JournalDataSourceView".Length), false, true);
+                    var getListType = BuildManager.GetType("Nat.Web.Core.Controls.DataAdapters.LegacyAdapter", false, true);
+                    var methodGetList = getListType?.GetMethod("GetCompletionList", BindingFlags.Public | BindingFlags.Static);
+                    if (tableType != null && methodGetList != null)
+                    {
+                        var jss = new JavaScriptSerializer();
+                        var data = (IEnumerable<Pair>)methodGetList.Invoke(null, new object[] { tableType, HttpContext.Current, prefixText, count });
+                        return data?.Select(r => jss.Serialize(r)).ToArray();
+                    }
+                }
+                return null;
+            }
+            var sourceObj = Activator.CreateInstance(type, null);
             string value = split[3];
 
             //todo: переключение языка потока

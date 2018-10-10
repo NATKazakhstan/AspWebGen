@@ -165,6 +165,11 @@ namespace Nat.ExportInExcel
             return _journalControl.TableHeader;
         }
 
+        protected override string GetSheetName()
+        {
+            return _journalControl.Journal.GetExportSheetName() ?? base.GetSheetName();
+        }
+
         protected override List<ConditionalFormatting> GetConditionalFormatting()
         {
             return _journalControl.Journal.GetConditionalFormatting();
@@ -246,6 +251,7 @@ namespace Nat.ExportInExcel
 
         protected override Table RenderFooterTable => _journalControl.Journal.ExportFooter;
         protected override Table RenderFirstHeaderTable => _journalControl.Journal.ExportHeader;
+        protected override Table[] RenderAdditionalSheetsTable => _journalControl.Journal.AdditionalSheetsTable;
 
         #endregion
 
@@ -330,10 +336,8 @@ namespace Nat.ExportInExcel
 
         protected override int GetCountColumns()
         {
-            var footerCount = _journalControl.Journal.ExportFooter?.Rows.Cast<TableRow>()
-                                  .Max(r => r.Cells.Cast<TableCell>().Max(c => c.ColumnSpan == 0 ? 1 : c.ColumnSpan)) ?? 0;
-            var headerCount = _journalControl.Journal.ExportHeader?.Rows.Cast<TableRow>()
-                                  .Max(r => r.Cells.Cast<TableCell>().Max(c => c.ColumnSpan == 0 ? 1 : c.ColumnSpan)) ?? 0;
+            var footerCount = GetCountColumns(_journalControl.Journal.ExportFooter);
+            var headerCount = GetCountColumns(_journalControl.Journal.ExportHeader);
             return Math.Max(Math.Max(_journalControl.Journal.InnerHeader.GetFullColSpan(), footerCount), headerCount);
         }
 

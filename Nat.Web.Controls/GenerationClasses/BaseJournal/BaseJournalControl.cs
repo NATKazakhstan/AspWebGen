@@ -181,6 +181,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 
         private Table exportFooter;
         private Table exportHeader;
+        private Table[] additionalSheetsTable;
 
         public bool[] IsInlineGroup
         {
@@ -297,6 +298,16 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
             protected set => exportHeader = value;
         }
 
+        public Table[] AdditionalSheetsTable
+        {
+            get
+            {
+                EnsureInitializedExportFooter();
+                return additionalSheetsTable;
+            }
+            protected set => additionalSheetsTable = value;
+        }
+
         protected bool InitializedExportFooter { get; set; }
 
         private void EnsureInitializedExportFooter()
@@ -306,6 +317,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
             InitializedExportFooter = true;
             InitializeExportFooter();
             InitializeExportHeader();
+            InitializeAdditionalSheetsTable();
         }
 
         protected virtual void InitializeExportFooter()
@@ -314,6 +326,15 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 
         protected virtual void InitializeExportHeader()
         {
+        }
+
+        protected virtual void InitializeAdditionalSheetsTable()
+        {
+        }
+
+        public virtual string GetExportSheetName()
+        {
+            return null;
         }
 
         #endregion

@@ -192,6 +192,7 @@ namespace Nat.ExportInExcel
 
         protected override Table RenderFooterTable { get; }
         protected override Table RenderFirstHeaderTable { get; }
+        protected override Table[] RenderAdditionalSheetsTable { get; }
 
         private void RenderHeader(IEnumerable<IExportColumn> columns, int renderLevel, int currentLevel, int maxRowSpan)
         {

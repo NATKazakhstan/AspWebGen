@@ -84,7 +84,7 @@ namespace Nat.ExportInExcel
 
         protected override int GetFixedRowsCount()
         {
-            return _journalControl.FixedHeader ? _journalControl.FixedRowsCount + GetCountRowsBeforeData() : 0;
+            return _journalControl.FixedHeader ? _journalControl.FixedRowsCount + GetCountRowsBeforeData() + (RenderFirstHeaderTable?.Rows.Count ?? 0) : 0;
         }
 
         #region Render Header

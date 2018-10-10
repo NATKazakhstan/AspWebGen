@@ -41,13 +41,15 @@ namespace Nat.ExportInExcel
 
         protected override int GetFixedRowsCount()
         {
-            return _args.FixedRowsCount;
+            if (_args.FixedRowsCount > 0)
+                return _args.FixedRowsCount + (RenderFirstHeaderTable?.Rows.Count ?? 0);
+            return 0;
         }
 
         protected override int GetCountRows()
         {
             return _args.Data.Count // количество данных
-                + _args.Columns.Max((Func<IExportColumn, int>)GetLevel) // количество строк в заголовке таблицы
+                + _args.Columns.Max(GetLevel) // количество строк в заголовке таблицы
                 + (_args.FilterValues?.Count ?? 0) + 1 // количество фильтров + пустая строка
                    + (RenderFooterTable?.Rows.Count ?? 0)
                    + (RenderFirstHeaderTable?.Rows.Count ?? 0)

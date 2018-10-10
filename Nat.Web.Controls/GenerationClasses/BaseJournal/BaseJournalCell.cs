@@ -198,7 +198,13 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                 var rowProps = Row?.RowKey != null && Row.JournalControl.RowsPropertiesDic.ContainsKey(Row.RowKey)
                                 ? Row.JournalControl.RowsPropertiesDic[Row.RowKey]
                                 : null;
-                if (rowProps?.HAligment != null)
+                var cellKey = GetCellKey();
+                var cellProps = Row?.JournalControl.CellsPropertiesDic.ContainsKey(cellKey) ?? false
+                                    ? Row.JournalControl.CellsPropertiesDic[cellKey]
+                                    : null;
+                if (cellProps?.HAligment != null)
+                    writer.AddStyleAttribute(HtmlTextWriterStyle.TextAlign, cellProps.HAligment.ToString().ToLower());
+                else if (rowProps?.HAligment != null)
                     writer.AddStyleAttribute(HtmlTextWriterStyle.TextAlign, rowProps.HAligment.ToString().ToLower());
                 else if (Column.ColumnType == ColumnType.Numeric && (Row == null || !Row.JournalControl.DetailsRender))
                     writer.AddStyleAttribute(HtmlTextWriterStyle.TextAlign, "center");

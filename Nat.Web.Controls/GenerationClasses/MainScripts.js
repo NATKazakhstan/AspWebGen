@@ -2900,3 +2900,20 @@ function ShowHistoryButtonClick(showHistoryHidden, store, dirty, isTree) {
         });
     }
 }
+
+
+function PageSizeComboBoxSelect(evt, t, o) {
+    var store = this.findParentByType().store;
+    store.pageSize = this.getValue();
+    setTimeout(function() { store.reload({ start: 0, page: 1, limit: store.pageSize }); });
+    localStorage["PageSize." + store.storeId + ":" + window.location.pathname] = store.pageSize;
+}
+
+function PageSizeComboBoxReady(evt, t, o) {
+    var store = this.findParentByType().store;
+    var pageSize = parseInt(localStorage["PageSize." + store.storeId + ":" + window.location.pathname]);
+    if (!isNaN(pageSize)) {
+        store.pageSize = pageSize;
+    }
+    this.setValue(store.pageSize);
+}

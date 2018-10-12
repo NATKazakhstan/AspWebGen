@@ -126,4 +126,7 @@
   <data name="SSelectedItems" xml:space="preserve">
     <value>Таңдалып алынған</value>
   </data>
+  <data name="SPageSizeLabel" xml:space="preserve">
+    <value>дейін</value>
+  </data>
 </root>

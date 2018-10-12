@@ -98,6 +98,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Generation\SelectedRowsGrid.cs" />
+    <Compile Include="Generation\PageSizeComboBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\ResourceFiles.Designer.cs">
       <AutoGen>True</AutoGen>

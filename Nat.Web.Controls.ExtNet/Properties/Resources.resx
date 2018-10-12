@@ -132,4 +132,7 @@
   <data name="SMinDateText" xml:space="preserve">
     <value>Дата в этом поле должна быть позже или равна {0}</value>
   </data>
+  <data name="SPageSizeLabel" xml:space="preserve">
+    <value>по</value>
+  </data>
 </root>

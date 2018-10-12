@@ -2901,17 +2901,32 @@ function ShowHistoryButtonClick(showHistoryHidden, store, dirty, isTree) {
     }
 }
 
+function PageSizeComboBoxStorageKey(store) {
+    var params = location.search.substring(1).split('&');
+    var key = '';
+    params.forEach(function(param) {
+        var s = param.split('=');
+        if (s[0] === 'refIndicator' || s[0] === 'refMeasure') {
+            if (key)
+                key = key + '&' + s;
+            else
+                key = '?' + s;
+        }
+    });
+
+    return "PageSize." + store.storeId + ":" + window.location.pathname + key;
+}
 
 function PageSizeComboBoxSelect(evt, t, o) {
     var store = this.findParentByType().store;
     store.pageSize = this.getValue();
     setTimeout(function() { store.reload({ start: 0, page: 1, limit: store.pageSize }); });
-    localStorage["PageSize." + store.storeId + ":" + window.location.pathname] = store.pageSize;
+    localStorage[PageSizeComboBoxStorageKey(store)] = store.pageSize;
 }
 
 function PageSizeComboBoxReady(evt, t, o) {
     var store = this.findParentByType().store;
-    var pageSize = parseInt(localStorage["PageSize." + store.storeId + ":" + window.location.pathname]);
+    var pageSize = parseInt(localStorage[PageSizeComboBoxStorageKey(store)]);
     if (!isNaN(pageSize)) {
         store.pageSize = pageSize;
     }

@@ -2914,7 +2914,7 @@ function PageSizeComboBoxStorageKey(store) {
         }
     });
 
-    return "PageSize." + store.storeId + ":" + window.location.pathname + key;
+    return "PageSize." + store.storeId + "/" + ($.cookie ? $.cookie('ESEDOUserName') : '') + ":" + window.location.pathname + key;
 }
 
 function PageSizeComboBoxSelect(evt, t, o) {

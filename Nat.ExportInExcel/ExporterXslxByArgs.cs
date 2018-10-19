@@ -134,6 +134,7 @@ namespace Nat.ExportInExcel
         {
             foreach (var row in _args.Data)
                 RenderData(row);
+            _addedRowSpans.Clear();
         }
 
         private void RenderData(object row)

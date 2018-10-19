@@ -183,6 +183,7 @@ namespace Nat.ExportInExcel
         {
             foreach (var row in _journalControl.Journal.Rows.Where(r => r.Visible))
                 RenderData(row);
+            _addedRowSpans.Clear();
         }
 
         private void RenderData(BaseJournalRow<TRow> row)

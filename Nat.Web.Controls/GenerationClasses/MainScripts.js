@@ -2920,7 +2920,7 @@ function PageSizeComboBoxStorageKey(store) {
 function PageSizeComboBoxSelect(evt, t, o) {
     var store = this.findParentByType().store;
     store.pageSize = this.getValue();
-    setTimeout(function() { store.reload({ start: 0, page: 1, limit: store.pageSize }); });
+    setTimeout(function() { store.loadPage(1); });
     localStorage[PageSizeComboBoxStorageKey(store)] = store.pageSize;
 }
 

@@ -2932,3 +2932,45 @@ function PageSizeComboBoxReady(evt, t, o) {
     }
     this.setValue(store.pageSize);
 }
+
+// Fix for defaultFont
+Ext.form.field.HtmlEditor.override({
+    initDefaultFont: function () {
+        var me = this,
+            selIdx = 0,
+            fonts, font, select,
+            option, i, len, lower;
+
+        font = me.textareaEl.getStyle('font-family');
+        font = Ext.String.capitalize(font.split(',')[0]);
+        fonts = Ext.Array.clone(me.fontFamilies);
+        Ext.Array.include(fonts, font);
+        fonts.sort();
+
+        if (!me.defaultFont) {
+            me.defaultFont = font;
+        }
+
+        select = me.down('#fontSelect').selectEl.dom;
+        for (i = 0, len = fonts.length; i < len; ++i) {
+            font = fonts[i];
+            lower = font.toLowerCase();
+            option = new Option(font, lower);
+            if (font == me.defaultFont) {
+                selIdx = i;
+            }
+            option.style.fontFamily = lower;
+
+            if (Ext.isIE) {
+                select.add(option);
+            } else {
+                select.options.add(option);
+            }
+        }
+
+        //select.options[selIdx].selected = true;
+        setTimeout(function () {
+            select.options[selIdx].selected = true;
+        }, 500);
+    }
+});

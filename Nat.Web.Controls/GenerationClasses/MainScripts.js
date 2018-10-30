@@ -2935,6 +2935,74 @@ function PageSizeComboBoxReady(evt, t, o) {
 
 // Fix for defaultFont
 Ext.form.field.HtmlEditor.override({
+
+    reStripQuotes: /^['"]*|['"]*$/g,
+
+    updateToolbar: function () {
+        var me = this,
+            i, l, btns, doc, name, queriedName, fontSelect,
+            toolbarSubmenus;
+
+        if (me.readOnly) {
+            return;
+        }
+
+        if (!me.activated) {
+            me.onFirstFocus();
+            return;
+        }
+
+        btns = me.getToolbar().items.map;
+        doc = me.getDoc();
+
+        if (me.enableFont && !Ext.isSafari2) {
+
+
+            queriedName = doc.queryCommandValue('fontName');
+            name = (queriedName ? queriedName.split(",")[0].replace(reStripQuotes, '') : me.defaultFont).toLowerCase();
+            fontSelect = me.fontSelect.dom;
+            if (name !== fontSelect.value || name != queriedName) {
+                fontSelect.value = name;
+            }
+        }
+
+        function updateButtons() {
+            var state;
+
+            for (i = 0, l = arguments.length, name; i < l; i++) {
+                name = arguments[i];
+
+
+
+                try {
+                    state = doc.queryCommandState(name);
+                }
+                catch (e) {
+                    state = false;
+                }
+
+                btns[name].toggle(state);
+            }
+        }
+        if (me.enableFormat) {
+            updateButtons('bold', 'italic', 'underline');
+        }
+        if (me.enableAlignments) {
+            updateButtons('justifyleft', 'justifycenter', 'justifyright');
+        }
+        if (!Ext.isSafari2 && me.enableLists) {
+            updateButtons('insertorderedlist', 'insertunorderedlist');
+        }
+
+
+
+        toolbarSubmenus = me.toolbar.query('menu');
+        for (i = 0; i < toolbarSubmenus.length; i++) {
+            toolbarSubmenus[i].hide();
+        }
+        me.syncValue();
+    },
+
     initDefaultFont: function () {
         var me = this,
             selIdx = 0,

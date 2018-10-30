@@ -2936,12 +2936,11 @@ function PageSizeComboBoxReady(evt, t, o) {
 // Fix for defaultFont
 Ext.form.field.HtmlEditor.override({
 
-    reStripQuotes: /^['"]*|['"]*$/g,
-
     updateToolbar: function () {
         var me = this,
             i, l, btns, doc, name, queriedName, fontSelect,
             toolbarSubmenus;
+        var reStripQuotes = /^['"]*|['"]*$/g;
 
         if (me.readOnly) {
             return;
@@ -2956,7 +2955,6 @@ Ext.form.field.HtmlEditor.override({
         doc = me.getDoc();
 
         if (me.enableFont && !Ext.isSafari2) {
-
 
             queriedName = doc.queryCommandValue('fontName');
             name = (queriedName ? queriedName.split(",")[0].replace(reStripQuotes, '') : me.defaultFont).toLowerCase();

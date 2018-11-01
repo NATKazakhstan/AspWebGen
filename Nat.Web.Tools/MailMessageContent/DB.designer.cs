@@ -39,6 +39,33 @@ namespace Nat.Web.Tools.MailMessageContent
     partial void InsertMSC_Module_ConfigurationField(MSC_Module_ConfigurationField instance);
     partial void UpdateMSC_Module_ConfigurationField(MSC_Module_ConfigurationField instance);
     partial void DeleteMSC_Module_ConfigurationField(MSC_Module_ConfigurationField instance);
+    partial void InsertMSC_Module_Event(MSC_Module_Event instance);
+    partial void UpdateMSC_Module_Event(MSC_Module_Event instance);
+    partial void DeleteMSC_Module_Event(MSC_Module_Event instance);
+    partial void InsertMSC_Module_Send(MSC_Module_Send instance);
+    partial void UpdateMSC_Module_Send(MSC_Module_Send instance);
+    partial void DeleteMSC_Module_Send(MSC_Module_Send instance);
+    partial void InsertMSC_Module_SendEvent(MSC_Module_SendEvent instance);
+    partial void UpdateMSC_Module_SendEvent(MSC_Module_SendEvent instance);
+    partial void DeleteMSC_Module_SendEvent(MSC_Module_SendEvent instance);
+    partial void InsertULS_VSharedPerson(ULS_VSharedPerson instance);
+    partial void UpdateULS_VSharedPerson(ULS_VSharedPerson instance);
+    partial void DeleteULS_VSharedPerson(ULS_VSharedPerson instance);
+    partial void InsertMSC_Module_Send_User(MSC_Module_Send_User instance);
+    partial void UpdateMSC_Module_Send_User(MSC_Module_Send_User instance);
+    partial void DeleteMSC_Module_Send_User(MSC_Module_Send_User instance);
+    partial void InsertULS_VSharedPosition(ULS_VSharedPosition instance);
+    partial void UpdateULS_VSharedPosition(ULS_VSharedPosition instance);
+    partial void DeleteULS_VSharedPosition(ULS_VSharedPosition instance);
+    partial void InsertMSC_Module_Send_Position(MSC_Module_Send_Position instance);
+    partial void UpdateMSC_Module_Send_Position(MSC_Module_Send_Position instance);
+    partial void DeleteMSC_Module_Send_Position(MSC_Module_Send_Position instance);
+    partial void InsertMSC_Condition(MSC_Condition instance);
+    partial void UpdateMSC_Condition(MSC_Condition instance);
+    partial void DeleteMSC_Condition(MSC_Condition instance);
+    partial void InsertMSC_Module_Send_Condition(MSC_Module_Send_Condition instance);
+    partial void UpdateMSC_Module_Send_Condition(MSC_Module_Send_Condition instance);
+    partial void DeleteMSC_Module_Send_Condition(MSC_Module_Send_Condition instance);
     #endregion
 		
 		public DBDataContext() : 
@@ -94,6 +121,78 @@ namespace Nat.Web.Tools.MailMessageContent
 				return this.GetTable<MSC_Module_ConfigurationField>();
 			}
 		}
+		
+		public System.Data.Linq.Table<MSC_Module_Event> MSC_Module_Events
+		{
+			get
+			{
+				return this.GetTable<MSC_Module_Event>();
+			}
+		}
+		
+		public System.Data.Linq.Table<MSC_Module_Send> MSC_Module_Sends
+		{
+			get
+			{
+				return this.GetTable<MSC_Module_Send>();
+			}
+		}
+		
+		public System.Data.Linq.Table<MSC_Module_SendEvent> MSC_Module_SendEvents
+		{
+			get
+			{
+				return this.GetTable<MSC_Module_SendEvent>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ULS_VSharedPerson> ULS_VSharedPersons
+		{
+			get
+			{
+				return this.GetTable<ULS_VSharedPerson>();
+			}
+		}
+		
+		public System.Data.Linq.Table<MSC_Module_Send_User> MSC_Module_Send_Users
+		{
+			get
+			{
+				return this.GetTable<MSC_Module_Send_User>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ULS_VSharedPosition> ULS_VSharedPositions
+		{
+			get
+			{
+				return this.GetTable<ULS_VSharedPosition>();
+			}
+		}
+		
+		public System.Data.Linq.Table<MSC_Module_Send_Position> MSC_Module_Send_Positions
+		{
+			get
+			{
+				return this.GetTable<MSC_Module_Send_Position>();
+			}
+		}
+		
+		public System.Data.Linq.Table<MSC_Condition> MSC_Conditions
+		{
+			get
+			{
+				return this.GetTable<MSC_Condition>();
+			}
+		}
+		
+		public System.Data.Linq.Table<MSC_Module_Send_Condition> MSC_Module_Send_Conditions
+		{
+			get
+			{
+				return this.GetTable<MSC_Module_Send_Condition>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.MSC_Modules")]
@@ -114,6 +213,10 @@ namespace Nat.Web.Tools.MailMessageContent
 		
 		private EntitySet<MSC_Module_ConfigurationField> _MSC_Module_ConfigurationFields_refModule;
 		
+		private EntitySet<MSC_Module_Event> _MSC_Module_Events_refModule;
+		
+		private EntitySet<MSC_Module_Send> _MSC_Module_Sends_refModule;
+		
     #region Определения метода расширяемости
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -132,6 +235,8 @@ namespace Nat.Web.Tools.MailMessageContent
 		{
 			this._MSC_Module_Configurations_refModule = new EntitySet<MSC_Module_Configuration>(new Action<MSC_Module_Configuration>(this.attach_MSC_Module_Configurations_refModule), new Action<MSC_Module_Configuration>(this.detach_MSC_Module_Configurations_refModule));
 			this._MSC_Module_ConfigurationFields_refModule = new EntitySet<MSC_Module_ConfigurationField>(new Action<MSC_Module_ConfigurationField>(this.attach_MSC_Module_ConfigurationFields_refModule), new Action<MSC_Module_ConfigurationField>(this.detach_MSC_Module_ConfigurationFields_refModule));
+			this._MSC_Module_Events_refModule = new EntitySet<MSC_Module_Event>(new Action<MSC_Module_Event>(this.attach_MSC_Module_Events_refModule), new Action<MSC_Module_Event>(this.detach_MSC_Module_Events_refModule));
+			this._MSC_Module_Sends_refModule = new EntitySet<MSC_Module_Send>(new Action<MSC_Module_Send>(this.attach_MSC_Module_Sends_refModule), new Action<MSC_Module_Send>(this.detach_MSC_Module_Sends_refModule));
 			OnCreated();
 		}
 		
@@ -241,6 +346,32 @@ namespace Nat.Web.Tools.MailMessageContent
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MSC_Module_MSC_Module_Event", Storage="_MSC_Module_Events_refModule", ThisKey="id", OtherKey="refModule")]
+		public EntitySet<MSC_Module_Event> MSC_Module_Events_refModule
+		{
+			get
+			{
+				return this._MSC_Module_Events_refModule;
+			}
+			set
+			{
+				this._MSC_Module_Events_refModule.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MSC_Module_MSC_Module_Send", Storage="_MSC_Module_Sends_refModule", ThisKey="id", OtherKey="refModule")]
+		public EntitySet<MSC_Module_Send> MSC_Module_Sends_refModule
+		{
+			get
+			{
+				return this._MSC_Module_Sends_refModule;
+			}
+			set
+			{
+				this._MSC_Module_Sends_refModule.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -280,6 +411,30 @@ namespace Nat.Web.Tools.MailMessageContent
 		}
 		
 		private void detach_MSC_Module_ConfigurationFields_refModule(MSC_Module_ConfigurationField entity)
+		{
+			this.SendPropertyChanging();
+			entity.MSC_Module_refModule = null;
+		}
+		
+		private void attach_MSC_Module_Events_refModule(MSC_Module_Event entity)
+		{
+			this.SendPropertyChanging();
+			entity.MSC_Module_refModule = this;
+		}
+		
+		private void detach_MSC_Module_Events_refModule(MSC_Module_Event entity)
+		{
+			this.SendPropertyChanging();
+			entity.MSC_Module_refModule = null;
+		}
+		
+		private void attach_MSC_Module_Sends_refModule(MSC_Module_Send entity)
+		{
+			this.SendPropertyChanging();
+			entity.MSC_Module_refModule = this;
+		}
+		
+		private void detach_MSC_Module_Sends_refModule(MSC_Module_Send entity)
 		{
 			this.SendPropertyChanging();
 			entity.MSC_Module_refModule = null;
@@ -798,6 +953,2230 @@ namespace Nat.Web.Tools.MailMessageContent
 		{
 			this.SendPropertyChanging();
 			entity.MSC_Module_ConfigurationField_refField = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.MSC_Module_Events")]
+	public partial class MSC_Module_Event : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _id;
+		
+		private long _refModule;
+		
+		private string _Code;
+		
+		private string _NameKz;
+		
+		private string _NameRu;
+		
+		private bool _isDel;
+		
+		private EntitySet<MSC_Module_SendEvent> _MSC_Module_SendEvents_refModuleEvent;
+		
+		private EntityRef<MSC_Module> _MSC_Module_refModule;
+		
+    #region Определения метода расширяемости
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(long value);
+    partial void OnidChanged();
+    partial void OnrefModuleChanging(long value);
+    partial void OnrefModuleChanged();
+    partial void OnCodeChanging(string value);
+    partial void OnCodeChanged();
+    partial void OnNameKzChanging(string value);
+    partial void OnNameKzChanged();
+    partial void OnNameRuChanging(string value);
+    partial void OnNameRuChanged();
+    partial void OnisDelChanging(bool value);
+    partial void OnisDelChanged();
+    #endregion
+		
+		public MSC_Module_Event()
+		{
+			this._MSC_Module_SendEvents_refModuleEvent = new EntitySet<MSC_Module_SendEvent>(new Action<MSC_Module_SendEvent>(this.attach_MSC_Module_SendEvents_refModuleEvent), new Action<MSC_Module_SendEvent>(this.detach_MSC_Module_SendEvents_refModuleEvent));
+			this._MSC_Module_refModule = default(EntityRef<MSC_Module>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="bigint", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refModule", DbType="bigint")]
+		public long refModule
+		{
+			get
+			{
+				return this._refModule;
+			}
+			set
+			{
+				if ((this._refModule != value))
+				{
+					if (this._MSC_Module_refModule.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnrefModuleChanging(value);
+					this.SendPropertyChanging();
+					this._refModule = value;
+					this.SendPropertyChanged("refModule");
+					this.OnrefModuleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Code", DbType="nvarchar(50)", CanBeNull=false)]
+		public string Code
+		{
+			get
+			{
+				return this._Code;
+			}
+			set
+			{
+				if ((this._Code != value))
+				{
+					this.OnCodeChanging(value);
+					this.SendPropertyChanging();
+					this._Code = value;
+					this.SendPropertyChanged("Code");
+					this.OnCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NameKz", DbType="nvarchar(200)", CanBeNull=false)]
+		public string NameKz
+		{
+			get
+			{
+				return this._NameKz;
+			}
+			set
+			{
+				if ((this._NameKz != value))
+				{
+					this.OnNameKzChanging(value);
+					this.SendPropertyChanging();
+					this._NameKz = value;
+					this.SendPropertyChanged("NameKz");
+					this.OnNameKzChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NameRu", DbType="nvarchar(200)", CanBeNull=false)]
+		public string NameRu
+		{
+			get
+			{
+				return this._NameRu;
+			}
+			set
+			{
+				if ((this._NameRu != value))
+				{
+					this.OnNameRuChanging(value);
+					this.SendPropertyChanging();
+					this._NameRu = value;
+					this.SendPropertyChanged("NameRu");
+					this.OnNameRuChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_isDel", DbType="bit")]
+		public bool isDel
+		{
+			get
+			{
+				return this._isDel;
+			}
+			set
+			{
+				if ((this._isDel != value))
+				{
+					this.OnisDelChanging(value);
+					this.SendPropertyChanging();
+					this._isDel = value;
+					this.SendPropertyChanged("isDel");
+					this.OnisDelChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MSC_Module_Event_MSC_Module_SendEvent", Storage="_MSC_Module_SendEvents_refModuleEvent", ThisKey="id", OtherKey="refModuleEvent")]
+		public EntitySet<MSC_Module_SendEvent> MSC_Module_SendEvents_refModuleEvent
+		{
+			get
+			{
+				return this._MSC_Module_SendEvents_refModuleEvent;
+			}
+			set
+			{
+				this._MSC_Module_SendEvents_refModuleEvent.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MSC_Module_MSC_Module_Event", Storage="_MSC_Module_refModule", ThisKey="refModule", OtherKey="id", IsForeignKey=true)]
+		public MSC_Module MSC_Module_refModule
+		{
+			get
+			{
+				return this._MSC_Module_refModule.Entity;
+			}
+			set
+			{
+				MSC_Module previousValue = this._MSC_Module_refModule.Entity;
+				if (((previousValue != value) 
+							|| (this._MSC_Module_refModule.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MSC_Module_refModule.Entity = null;
+						previousValue.MSC_Module_Events_refModule.Remove(this);
+					}
+					this._MSC_Module_refModule.Entity = value;
+					if ((value != null))
+					{
+						value.MSC_Module_Events_refModule.Add(this);
+						this._refModule = value.id;
+					}
+					else
+					{
+						this._refModule = default(long);
+					}
+					this.SendPropertyChanged("MSC_Module_refModule");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_MSC_Module_SendEvents_refModuleEvent(MSC_Module_SendEvent entity)
+		{
+			this.SendPropertyChanging();
+			entity.MSC_Module_Event_refModuleEvent = this;
+		}
+		
+		private void detach_MSC_Module_SendEvents_refModuleEvent(MSC_Module_SendEvent entity)
+		{
+			this.SendPropertyChanging();
+			entity.MSC_Module_Event_refModuleEvent = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.MSC_Module_Sends")]
+	public partial class MSC_Module_Send : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _id;
+		
+		private long _refModule;
+		
+		private string _Name;
+		
+		private bool _Enabled;
+		
+		private bool _OnAdd;
+		
+		private bool _OnChange;
+		
+		private bool _OnDelete;
+		
+		private string _OnEvents;
+		
+		private EntitySet<MSC_Module_SendEvent> _MSC_Module_SendEvents_refModuleSend;
+		
+		private EntitySet<MSC_Module_Send_User> _MSC_Module_Send_Users_refModuleSend;
+		
+		private EntitySet<MSC_Module_Send_Position> _MSC_Module_Send_Positions_refModuleSend;
+		
+		private EntitySet<MSC_Module_Send_Condition> _MSC_Module_Send_Conditions_refModuleSend;
+		
+		private EntityRef<MSC_Module> _MSC_Module_refModule;
+		
+    #region Определения метода расширяемости
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(long value);
+    partial void OnidChanged();
+    partial void OnrefModuleChanging(long value);
+    partial void OnrefModuleChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnEnabledChanging(bool value);
+    partial void OnEnabledChanged();
+    partial void OnOnAddChanging(bool value);
+    partial void OnOnAddChanged();
+    partial void OnOnChangeChanging(bool value);
+    partial void OnOnChangeChanged();
+    partial void OnOnDeleteChanging(bool value);
+    partial void OnOnDeleteChanged();
+    partial void OnOnEventsChanging(string value);
+    partial void OnOnEventsChanged();
+    #endregion
+		
+		public MSC_Module_Send()
+		{
+			this._MSC_Module_SendEvents_refModuleSend = new EntitySet<MSC_Module_SendEvent>(new Action<MSC_Module_SendEvent>(this.attach_MSC_Module_SendEvents_refModuleSend), new Action<MSC_Module_SendEvent>(this.detach_MSC_Module_SendEvents_refModuleSend));
+			this._MSC_Module_Send_Users_refModuleSend = new EntitySet<MSC_Module_Send_User>(new Action<MSC_Module_Send_User>(this.attach_MSC_Module_Send_Users_refModuleSend), new Action<MSC_Module_Send_User>(this.detach_MSC_Module_Send_Users_refModuleSend));
+			this._MSC_Module_Send_Positions_refModuleSend = new EntitySet<MSC_Module_Send_Position>(new Action<MSC_Module_Send_Position>(this.attach_MSC_Module_Send_Positions_refModuleSend), new Action<MSC_Module_Send_Position>(this.detach_MSC_Module_Send_Positions_refModuleSend));
+			this._MSC_Module_Send_Conditions_refModuleSend = new EntitySet<MSC_Module_Send_Condition>(new Action<MSC_Module_Send_Condition>(this.attach_MSC_Module_Send_Conditions_refModuleSend), new Action<MSC_Module_Send_Condition>(this.detach_MSC_Module_Send_Conditions_refModuleSend));
+			this._MSC_Module_refModule = default(EntityRef<MSC_Module>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="bigint", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refModule", DbType="bigint")]
+		public long refModule
+		{
+			get
+			{
+				return this._refModule;
+			}
+			set
+			{
+				if ((this._refModule != value))
+				{
+					if (this._MSC_Module_refModule.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnrefModuleChanging(value);
+					this.SendPropertyChanging();
+					this._refModule = value;
+					this.SendPropertyChanged("refModule");
+					this.OnrefModuleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="nvarchar(255)", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Enabled", DbType="bit")]
+		public bool Enabled
+		{
+			get
+			{
+				return this._Enabled;
+			}
+			set
+			{
+				if ((this._Enabled != value))
+				{
+					this.OnEnabledChanging(value);
+					this.SendPropertyChanging();
+					this._Enabled = value;
+					this.SendPropertyChanged("Enabled");
+					this.OnEnabledChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OnAdd", DbType="bit")]
+		public bool OnAdd
+		{
+			get
+			{
+				return this._OnAdd;
+			}
+			set
+			{
+				if ((this._OnAdd != value))
+				{
+					this.OnOnAddChanging(value);
+					this.SendPropertyChanging();
+					this._OnAdd = value;
+					this.SendPropertyChanged("OnAdd");
+					this.OnOnAddChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OnChange", DbType="bit")]
+		public bool OnChange
+		{
+			get
+			{
+				return this._OnChange;
+			}
+			set
+			{
+				if ((this._OnChange != value))
+				{
+					this.OnOnChangeChanging(value);
+					this.SendPropertyChanging();
+					this._OnChange = value;
+					this.SendPropertyChanged("OnChange");
+					this.OnOnChangeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OnDelete", DbType="bit")]
+		public bool OnDelete
+		{
+			get
+			{
+				return this._OnDelete;
+			}
+			set
+			{
+				if ((this._OnDelete != value))
+				{
+					this.OnOnDeleteChanging(value);
+					this.SendPropertyChanging();
+					this._OnDelete = value;
+					this.SendPropertyChanged("OnDelete");
+					this.OnOnDeleteChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OnEvents", DbType="nvarchar(MAX)")]
+		public string OnEvents
+		{
+			get
+			{
+				return this._OnEvents;
+			}
+			set
+			{
+				if ((this._OnEvents != value))
+				{
+					this.OnOnEventsChanging(value);
+					this.SendPropertyChanging();
+					this._OnEvents = value;
+					this.SendPropertyChanged("OnEvents");
+					this.OnOnEventsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MSC_Module_Send_MSC_Module_SendEvent", Storage="_MSC_Module_SendEvents_refModuleSend", ThisKey="id", OtherKey="refModuleSend")]
+		public EntitySet<MSC_Module_SendEvent> MSC_Module_SendEvents_refModuleSend
+		{
+			get
+			{
+				return this._MSC_Module_SendEvents_refModuleSend;
+			}
+			set
+			{
+				this._MSC_Module_SendEvents_refModuleSend.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MSC_Module_Send_MSC_Module_Send_User", Storage="_MSC_Module_Send_Users_refModuleSend", ThisKey="id", OtherKey="refModuleSend")]
+		public EntitySet<MSC_Module_Send_User> MSC_Module_Send_Users_refModuleSend
+		{
+			get
+			{
+				return this._MSC_Module_Send_Users_refModuleSend;
+			}
+			set
+			{
+				this._MSC_Module_Send_Users_refModuleSend.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MSC_Module_Send_MSC_Module_Send_Position", Storage="_MSC_Module_Send_Positions_refModuleSend", ThisKey="id", OtherKey="refModuleSend")]
+		public EntitySet<MSC_Module_Send_Position> MSC_Module_Send_Positions_refModuleSend
+		{
+			get
+			{
+				return this._MSC_Module_Send_Positions_refModuleSend;
+			}
+			set
+			{
+				this._MSC_Module_Send_Positions_refModuleSend.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MSC_Module_Send_MSC_Module_Send_Condition", Storage="_MSC_Module_Send_Conditions_refModuleSend", ThisKey="id", OtherKey="refModuleSend")]
+		public EntitySet<MSC_Module_Send_Condition> MSC_Module_Send_Conditions_refModuleSend
+		{
+			get
+			{
+				return this._MSC_Module_Send_Conditions_refModuleSend;
+			}
+			set
+			{
+				this._MSC_Module_Send_Conditions_refModuleSend.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MSC_Module_MSC_Module_Send", Storage="_MSC_Module_refModule", ThisKey="refModule", OtherKey="id", IsForeignKey=true)]
+		public MSC_Module MSC_Module_refModule
+		{
+			get
+			{
+				return this._MSC_Module_refModule.Entity;
+			}
+			set
+			{
+				MSC_Module previousValue = this._MSC_Module_refModule.Entity;
+				if (((previousValue != value) 
+							|| (this._MSC_Module_refModule.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MSC_Module_refModule.Entity = null;
+						previousValue.MSC_Module_Sends_refModule.Remove(this);
+					}
+					this._MSC_Module_refModule.Entity = value;
+					if ((value != null))
+					{
+						value.MSC_Module_Sends_refModule.Add(this);
+						this._refModule = value.id;
+					}
+					else
+					{
+						this._refModule = default(long);
+					}
+					this.SendPropertyChanged("MSC_Module_refModule");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_MSC_Module_SendEvents_refModuleSend(MSC_Module_SendEvent entity)
+		{
+			this.SendPropertyChanging();
+			entity.MSC_Module_Send_refModuleSend = this;
+		}
+		
+		private void detach_MSC_Module_SendEvents_refModuleSend(MSC_Module_SendEvent entity)
+		{
+			this.SendPropertyChanging();
+			entity.MSC_Module_Send_refModuleSend = null;
+		}
+		
+		private void attach_MSC_Module_Send_Users_refModuleSend(MSC_Module_Send_User entity)
+		{
+			this.SendPropertyChanging();
+			entity.MSC_Module_Send_refModuleSend = this;
+		}
+		
+		private void detach_MSC_Module_Send_Users_refModuleSend(MSC_Module_Send_User entity)
+		{
+			this.SendPropertyChanging();
+			entity.MSC_Module_Send_refModuleSend = null;
+		}
+		
+		private void attach_MSC_Module_Send_Positions_refModuleSend(MSC_Module_Send_Position entity)
+		{
+			this.SendPropertyChanging();
+			entity.MSC_Module_Send_refModuleSend = this;
+		}
+		
+		private void detach_MSC_Module_Send_Positions_refModuleSend(MSC_Module_Send_Position entity)
+		{
+			this.SendPropertyChanging();
+			entity.MSC_Module_Send_refModuleSend = null;
+		}
+		
+		private void attach_MSC_Module_Send_Conditions_refModuleSend(MSC_Module_Send_Condition entity)
+		{
+			this.SendPropertyChanging();
+			entity.MSC_Module_Send_refModuleSend = this;
+		}
+		
+		private void detach_MSC_Module_Send_Conditions_refModuleSend(MSC_Module_Send_Condition entity)
+		{
+			this.SendPropertyChanging();
+			entity.MSC_Module_Send_refModuleSend = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.MSC_Module_SendEvents")]
+	public partial class MSC_Module_SendEvent : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _id;
+		
+		private long _refModuleSend;
+		
+		private long _refModuleEvent;
+		
+		private EntityRef<MSC_Module_Send> _MSC_Module_Send_refModuleSend;
+		
+		private EntityRef<MSC_Module_Event> _MSC_Module_Event_refModuleEvent;
+		
+    #region Определения метода расширяемости
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(long value);
+    partial void OnidChanged();
+    partial void OnrefModuleSendChanging(long value);
+    partial void OnrefModuleSendChanged();
+    partial void OnrefModuleEventChanging(long value);
+    partial void OnrefModuleEventChanged();
+    #endregion
+		
+		public MSC_Module_SendEvent()
+		{
+			this._MSC_Module_Send_refModuleSend = default(EntityRef<MSC_Module_Send>);
+			this._MSC_Module_Event_refModuleEvent = default(EntityRef<MSC_Module_Event>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="bigint", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refModuleSend", DbType="bigint")]
+		public long refModuleSend
+		{
+			get
+			{
+				return this._refModuleSend;
+			}
+			set
+			{
+				if ((this._refModuleSend != value))
+				{
+					if (this._MSC_Module_Send_refModuleSend.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnrefModuleSendChanging(value);
+					this.SendPropertyChanging();
+					this._refModuleSend = value;
+					this.SendPropertyChanged("refModuleSend");
+					this.OnrefModuleSendChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refModuleEvent", DbType="bigint")]
+		public long refModuleEvent
+		{
+			get
+			{
+				return this._refModuleEvent;
+			}
+			set
+			{
+				if ((this._refModuleEvent != value))
+				{
+					if (this._MSC_Module_Event_refModuleEvent.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnrefModuleEventChanging(value);
+					this.SendPropertyChanging();
+					this._refModuleEvent = value;
+					this.SendPropertyChanged("refModuleEvent");
+					this.OnrefModuleEventChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MSC_Module_Send_MSC_Module_SendEvent", Storage="_MSC_Module_Send_refModuleSend", ThisKey="refModuleSend", OtherKey="id", IsForeignKey=true)]
+		public MSC_Module_Send MSC_Module_Send_refModuleSend
+		{
+			get
+			{
+				return this._MSC_Module_Send_refModuleSend.Entity;
+			}
+			set
+			{
+				MSC_Module_Send previousValue = this._MSC_Module_Send_refModuleSend.Entity;
+				if (((previousValue != value) 
+							|| (this._MSC_Module_Send_refModuleSend.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MSC_Module_Send_refModuleSend.Entity = null;
+						previousValue.MSC_Module_SendEvents_refModuleSend.Remove(this);
+					}
+					this._MSC_Module_Send_refModuleSend.Entity = value;
+					if ((value != null))
+					{
+						value.MSC_Module_SendEvents_refModuleSend.Add(this);
+						this._refModuleSend = value.id;
+					}
+					else
+					{
+						this._refModuleSend = default(long);
+					}
+					this.SendPropertyChanged("MSC_Module_Send_refModuleSend");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MSC_Module_Event_MSC_Module_SendEvent", Storage="_MSC_Module_Event_refModuleEvent", ThisKey="refModuleEvent", OtherKey="id", IsForeignKey=true)]
+		public MSC_Module_Event MSC_Module_Event_refModuleEvent
+		{
+			get
+			{
+				return this._MSC_Module_Event_refModuleEvent.Entity;
+			}
+			set
+			{
+				MSC_Module_Event previousValue = this._MSC_Module_Event_refModuleEvent.Entity;
+				if (((previousValue != value) 
+							|| (this._MSC_Module_Event_refModuleEvent.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MSC_Module_Event_refModuleEvent.Entity = null;
+						previousValue.MSC_Module_SendEvents_refModuleEvent.Remove(this);
+					}
+					this._MSC_Module_Event_refModuleEvent.Entity = value;
+					if ((value != null))
+					{
+						value.MSC_Module_SendEvents_refModuleEvent.Add(this);
+						this._refModuleEvent = value.id;
+					}
+					else
+					{
+						this._refModuleEvent = default(long);
+					}
+					this.SendPropertyChanged("MSC_Module_Event_refModuleEvent");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ULS_VSharedPersons")]
+	public partial class ULS_VSharedPerson : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _id;
+		
+		private string _FioRu;
+		
+		private string _FioKz;
+		
+		private System.Nullable<long> _refSid;
+		
+		private System.Nullable<long> _refPosition;
+		
+		private System.Nullable<long> _refSubdivision;
+		
+		private System.Nullable<long> _refMilitaryUnit;
+		
+		private string _codeStructure;
+		
+		private EntitySet<MSC_Module_Send_User> _MSC_Module_Send_Users_refUser;
+		
+    #region Определения метода расширяемости
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(long value);
+    partial void OnidChanged();
+    partial void OnFioRuChanging(string value);
+    partial void OnFioRuChanged();
+    partial void OnFioKzChanging(string value);
+    partial void OnFioKzChanged();
+    partial void OnrefSidChanging(System.Nullable<long> value);
+    partial void OnrefSidChanged();
+    partial void OnrefPositionChanging(System.Nullable<long> value);
+    partial void OnrefPositionChanged();
+    partial void OnrefSubdivisionChanging(System.Nullable<long> value);
+    partial void OnrefSubdivisionChanged();
+    partial void OnrefMilitaryUnitChanging(System.Nullable<long> value);
+    partial void OnrefMilitaryUnitChanged();
+    partial void OncodeStructureChanging(string value);
+    partial void OncodeStructureChanged();
+    #endregion
+		
+		public ULS_VSharedPerson()
+		{
+			this._MSC_Module_Send_Users_refUser = new EntitySet<MSC_Module_Send_User>(new Action<MSC_Module_Send_User>(this.attach_MSC_Module_Send_Users_refUser), new Action<MSC_Module_Send_User>(this.detach_MSC_Module_Send_Users_refUser));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="bigint", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FioRu", DbType="nvarchar(255)", CanBeNull=false)]
+		public string FioRu
+		{
+			get
+			{
+				return this._FioRu;
+			}
+			set
+			{
+				if ((this._FioRu != value))
+				{
+					this.OnFioRuChanging(value);
+					this.SendPropertyChanging();
+					this._FioRu = value;
+					this.SendPropertyChanged("FioRu");
+					this.OnFioRuChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FioKz", DbType="nvarchar(255)", CanBeNull=false)]
+		public string FioKz
+		{
+			get
+			{
+				return this._FioKz;
+			}
+			set
+			{
+				if ((this._FioKz != value))
+				{
+					this.OnFioKzChanging(value);
+					this.SendPropertyChanging();
+					this._FioKz = value;
+					this.SendPropertyChanged("FioKz");
+					this.OnFioKzChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refSid", DbType="bigint")]
+		public System.Nullable<long> refSid
+		{
+			get
+			{
+				return this._refSid;
+			}
+			set
+			{
+				if ((this._refSid != value))
+				{
+					this.OnrefSidChanging(value);
+					this.SendPropertyChanging();
+					this._refSid = value;
+					this.SendPropertyChanged("refSid");
+					this.OnrefSidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refPosition", DbType="bigint")]
+		public System.Nullable<long> refPosition
+		{
+			get
+			{
+				return this._refPosition;
+			}
+			set
+			{
+				if ((this._refPosition != value))
+				{
+					this.OnrefPositionChanging(value);
+					this.SendPropertyChanging();
+					this._refPosition = value;
+					this.SendPropertyChanged("refPosition");
+					this.OnrefPositionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refSubdivision", DbType="bigint")]
+		public System.Nullable<long> refSubdivision
+		{
+			get
+			{
+				return this._refSubdivision;
+			}
+			set
+			{
+				if ((this._refSubdivision != value))
+				{
+					this.OnrefSubdivisionChanging(value);
+					this.SendPropertyChanging();
+					this._refSubdivision = value;
+					this.SendPropertyChanged("refSubdivision");
+					this.OnrefSubdivisionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refMilitaryUnit", DbType="bigint")]
+		public System.Nullable<long> refMilitaryUnit
+		{
+			get
+			{
+				return this._refMilitaryUnit;
+			}
+			set
+			{
+				if ((this._refMilitaryUnit != value))
+				{
+					this.OnrefMilitaryUnitChanging(value);
+					this.SendPropertyChanging();
+					this._refMilitaryUnit = value;
+					this.SendPropertyChanged("refMilitaryUnit");
+					this.OnrefMilitaryUnitChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_codeStructure", DbType="varchar(16)")]
+		public string codeStructure
+		{
+			get
+			{
+				return this._codeStructure;
+			}
+			set
+			{
+				if ((this._codeStructure != value))
+				{
+					this.OncodeStructureChanging(value);
+					this.SendPropertyChanging();
+					this._codeStructure = value;
+					this.SendPropertyChanged("codeStructure");
+					this.OncodeStructureChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ULS_VSharedPerson_MSC_Module_Send_User", Storage="_MSC_Module_Send_Users_refUser", ThisKey="id", OtherKey="refUser")]
+		public EntitySet<MSC_Module_Send_User> MSC_Module_Send_Users_refUser
+		{
+			get
+			{
+				return this._MSC_Module_Send_Users_refUser;
+			}
+			set
+			{
+				this._MSC_Module_Send_Users_refUser.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_MSC_Module_Send_Users_refUser(MSC_Module_Send_User entity)
+		{
+			this.SendPropertyChanging();
+			entity.ULS_VSharedPerson_refUser = this;
+		}
+		
+		private void detach_MSC_Module_Send_Users_refUser(MSC_Module_Send_User entity)
+		{
+			this.SendPropertyChanging();
+			entity.ULS_VSharedPerson_refUser = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.MSC_Module_Send_Users")]
+	public partial class MSC_Module_Send_User : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _id;
+		
+		private long _refModuleSend;
+		
+		private bool _ToOrCopy;
+		
+		private long _refUser;
+		
+		private EntityRef<ULS_VSharedPerson> _ULS_VSharedPerson_refUser;
+		
+		private EntityRef<MSC_Module_Send> _MSC_Module_Send_refModuleSend;
+		
+    #region Определения метода расширяемости
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(long value);
+    partial void OnidChanged();
+    partial void OnrefModuleSendChanging(long value);
+    partial void OnrefModuleSendChanged();
+    partial void OnToOrCopyChanging(bool value);
+    partial void OnToOrCopyChanged();
+    partial void OnrefUserChanging(long value);
+    partial void OnrefUserChanged();
+    #endregion
+		
+		public MSC_Module_Send_User()
+		{
+			this._ULS_VSharedPerson_refUser = default(EntityRef<ULS_VSharedPerson>);
+			this._MSC_Module_Send_refModuleSend = default(EntityRef<MSC_Module_Send>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="bigint", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refModuleSend", DbType="bigint")]
+		public long refModuleSend
+		{
+			get
+			{
+				return this._refModuleSend;
+			}
+			set
+			{
+				if ((this._refModuleSend != value))
+				{
+					if (this._MSC_Module_Send_refModuleSend.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnrefModuleSendChanging(value);
+					this.SendPropertyChanging();
+					this._refModuleSend = value;
+					this.SendPropertyChanged("refModuleSend");
+					this.OnrefModuleSendChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ToOrCopy", DbType="bit")]
+		public bool ToOrCopy
+		{
+			get
+			{
+				return this._ToOrCopy;
+			}
+			set
+			{
+				if ((this._ToOrCopy != value))
+				{
+					this.OnToOrCopyChanging(value);
+					this.SendPropertyChanging();
+					this._ToOrCopy = value;
+					this.SendPropertyChanged("ToOrCopy");
+					this.OnToOrCopyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refUser", DbType="bigint")]
+		public long refUser
+		{
+			get
+			{
+				return this._refUser;
+			}
+			set
+			{
+				if ((this._refUser != value))
+				{
+					if (this._ULS_VSharedPerson_refUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnrefUserChanging(value);
+					this.SendPropertyChanging();
+					this._refUser = value;
+					this.SendPropertyChanged("refUser");
+					this.OnrefUserChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ULS_VSharedPerson_MSC_Module_Send_User", Storage="_ULS_VSharedPerson_refUser", ThisKey="refUser", OtherKey="id", IsForeignKey=true)]
+		public ULS_VSharedPerson ULS_VSharedPerson_refUser
+		{
+			get
+			{
+				return this._ULS_VSharedPerson_refUser.Entity;
+			}
+			set
+			{
+				ULS_VSharedPerson previousValue = this._ULS_VSharedPerson_refUser.Entity;
+				if (((previousValue != value) 
+							|| (this._ULS_VSharedPerson_refUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._ULS_VSharedPerson_refUser.Entity = null;
+						previousValue.MSC_Module_Send_Users_refUser.Remove(this);
+					}
+					this._ULS_VSharedPerson_refUser.Entity = value;
+					if ((value != null))
+					{
+						value.MSC_Module_Send_Users_refUser.Add(this);
+						this._refUser = value.id;
+					}
+					else
+					{
+						this._refUser = default(long);
+					}
+					this.SendPropertyChanged("ULS_VSharedPerson_refUser");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MSC_Module_Send_MSC_Module_Send_User", Storage="_MSC_Module_Send_refModuleSend", ThisKey="refModuleSend", OtherKey="id", IsForeignKey=true)]
+		public MSC_Module_Send MSC_Module_Send_refModuleSend
+		{
+			get
+			{
+				return this._MSC_Module_Send_refModuleSend.Entity;
+			}
+			set
+			{
+				MSC_Module_Send previousValue = this._MSC_Module_Send_refModuleSend.Entity;
+				if (((previousValue != value) 
+							|| (this._MSC_Module_Send_refModuleSend.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MSC_Module_Send_refModuleSend.Entity = null;
+						previousValue.MSC_Module_Send_Users_refModuleSend.Remove(this);
+					}
+					this._MSC_Module_Send_refModuleSend.Entity = value;
+					if ((value != null))
+					{
+						value.MSC_Module_Send_Users_refModuleSend.Add(this);
+						this._refModuleSend = value.id;
+					}
+					else
+					{
+						this._refModuleSend = default(long);
+					}
+					this.SendPropertyChanged("MSC_Module_Send_refModuleSend");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ULS_VSharedPositions")]
+	public partial class ULS_VSharedPosition : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _id;
+		
+		private string _FullNameRu;
+		
+		private string _FullNameKz;
+		
+		private string _codeStructure;
+		
+		private System.Nullable<long> _refMilitaryUnit;
+		
+		private string _FullWeight;
+		
+		private EntitySet<MSC_Module_Send_Position> _MSC_Module_Send_Positions_refPosition;
+		
+    #region Определения метода расширяемости
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(long value);
+    partial void OnidChanged();
+    partial void OnFullNameRuChanging(string value);
+    partial void OnFullNameRuChanged();
+    partial void OnFullNameKzChanging(string value);
+    partial void OnFullNameKzChanged();
+    partial void OncodeStructureChanging(string value);
+    partial void OncodeStructureChanged();
+    partial void OnrefMilitaryUnitChanging(System.Nullable<long> value);
+    partial void OnrefMilitaryUnitChanged();
+    partial void OnFullWeightChanging(string value);
+    partial void OnFullWeightChanged();
+    #endregion
+		
+		public ULS_VSharedPosition()
+		{
+			this._MSC_Module_Send_Positions_refPosition = new EntitySet<MSC_Module_Send_Position>(new Action<MSC_Module_Send_Position>(this.attach_MSC_Module_Send_Positions_refPosition), new Action<MSC_Module_Send_Position>(this.detach_MSC_Module_Send_Positions_refPosition));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="bigint", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FullNameRu", DbType="nvarchar(MAX)", CanBeNull=false)]
+		public string FullNameRu
+		{
+			get
+			{
+				return this._FullNameRu;
+			}
+			set
+			{
+				if ((this._FullNameRu != value))
+				{
+					this.OnFullNameRuChanging(value);
+					this.SendPropertyChanging();
+					this._FullNameRu = value;
+					this.SendPropertyChanged("FullNameRu");
+					this.OnFullNameRuChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FullNameKz", DbType="nvarchar(MAX)", CanBeNull=false)]
+		public string FullNameKz
+		{
+			get
+			{
+				return this._FullNameKz;
+			}
+			set
+			{
+				if ((this._FullNameKz != value))
+				{
+					this.OnFullNameKzChanging(value);
+					this.SendPropertyChanging();
+					this._FullNameKz = value;
+					this.SendPropertyChanged("FullNameKz");
+					this.OnFullNameKzChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_codeStructure", DbType="nvarchar(MAX)", CanBeNull=false)]
+		public string codeStructure
+		{
+			get
+			{
+				return this._codeStructure;
+			}
+			set
+			{
+				if ((this._codeStructure != value))
+				{
+					this.OncodeStructureChanging(value);
+					this.SendPropertyChanging();
+					this._codeStructure = value;
+					this.SendPropertyChanged("codeStructure");
+					this.OncodeStructureChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refMilitaryUnit", DbType="bigint")]
+		public System.Nullable<long> refMilitaryUnit
+		{
+			get
+			{
+				return this._refMilitaryUnit;
+			}
+			set
+			{
+				if ((this._refMilitaryUnit != value))
+				{
+					this.OnrefMilitaryUnitChanging(value);
+					this.SendPropertyChanging();
+					this._refMilitaryUnit = value;
+					this.SendPropertyChanged("refMilitaryUnit");
+					this.OnrefMilitaryUnitChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FullWeight", DbType="varchar(40)")]
+		public string FullWeight
+		{
+			get
+			{
+				return this._FullWeight;
+			}
+			set
+			{
+				if ((this._FullWeight != value))
+				{
+					this.OnFullWeightChanging(value);
+					this.SendPropertyChanging();
+					this._FullWeight = value;
+					this.SendPropertyChanged("FullWeight");
+					this.OnFullWeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ULS_VSharedPosition_MSC_Module_Send_Position", Storage="_MSC_Module_Send_Positions_refPosition", ThisKey="id", OtherKey="refPosition")]
+		public EntitySet<MSC_Module_Send_Position> MSC_Module_Send_Positions_refPosition
+		{
+			get
+			{
+				return this._MSC_Module_Send_Positions_refPosition;
+			}
+			set
+			{
+				this._MSC_Module_Send_Positions_refPosition.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_MSC_Module_Send_Positions_refPosition(MSC_Module_Send_Position entity)
+		{
+			this.SendPropertyChanging();
+			entity.ULS_VSharedPosition_refPosition = this;
+		}
+		
+		private void detach_MSC_Module_Send_Positions_refPosition(MSC_Module_Send_Position entity)
+		{
+			this.SendPropertyChanging();
+			entity.ULS_VSharedPosition_refPosition = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.MSC_Module_Send_Positions")]
+	public partial class MSC_Module_Send_Position : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _id;
+		
+		private long _refModuleSend;
+		
+		private bool _ToOrCopy;
+		
+		private long _refPosition;
+		
+		private bool _SameSubdivision;
+		
+		private bool _SameMilitaryUnit;
+		
+		private bool _SameFormationUnit;
+		
+		private bool _SameRegionalUnit;
+		
+		private bool _AnySubdivision;
+		
+		private EntityRef<MSC_Module_Send> _MSC_Module_Send_refModuleSend;
+		
+		private EntityRef<ULS_VSharedPosition> _ULS_VSharedPosition_refPosition;
+		
+    #region Определения метода расширяемости
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(long value);
+    partial void OnidChanged();
+    partial void OnrefModuleSendChanging(long value);
+    partial void OnrefModuleSendChanged();
+    partial void OnToOrCopyChanging(bool value);
+    partial void OnToOrCopyChanged();
+    partial void OnrefPositionChanging(long value);
+    partial void OnrefPositionChanged();
+    partial void OnSameSubdivisionChanging(bool value);
+    partial void OnSameSubdivisionChanged();
+    partial void OnSameMilitaryUnitChanging(bool value);
+    partial void OnSameMilitaryUnitChanged();
+    partial void OnSameFormationUnitChanging(bool value);
+    partial void OnSameFormationUnitChanged();
+    partial void OnSameRegionalUnitChanging(bool value);
+    partial void OnSameRegionalUnitChanged();
+    partial void OnAnySubdivisionChanging(bool value);
+    partial void OnAnySubdivisionChanged();
+    #endregion
+		
+		public MSC_Module_Send_Position()
+		{
+			this._MSC_Module_Send_refModuleSend = default(EntityRef<MSC_Module_Send>);
+			this._ULS_VSharedPosition_refPosition = default(EntityRef<ULS_VSharedPosition>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="bigint", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refModuleSend", DbType="bigint")]
+		public long refModuleSend
+		{
+			get
+			{
+				return this._refModuleSend;
+			}
+			set
+			{
+				if ((this._refModuleSend != value))
+				{
+					if (this._MSC_Module_Send_refModuleSend.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnrefModuleSendChanging(value);
+					this.SendPropertyChanging();
+					this._refModuleSend = value;
+					this.SendPropertyChanged("refModuleSend");
+					this.OnrefModuleSendChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ToOrCopy", DbType="bit")]
+		public bool ToOrCopy
+		{
+			get
+			{
+				return this._ToOrCopy;
+			}
+			set
+			{
+				if ((this._ToOrCopy != value))
+				{
+					this.OnToOrCopyChanging(value);
+					this.SendPropertyChanging();
+					this._ToOrCopy = value;
+					this.SendPropertyChanged("ToOrCopy");
+					this.OnToOrCopyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refPosition", DbType="bigint")]
+		public long refPosition
+		{
+			get
+			{
+				return this._refPosition;
+			}
+			set
+			{
+				if ((this._refPosition != value))
+				{
+					if (this._ULS_VSharedPosition_refPosition.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnrefPositionChanging(value);
+					this.SendPropertyChanging();
+					this._refPosition = value;
+					this.SendPropertyChanged("refPosition");
+					this.OnrefPositionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SameSubdivision", DbType="bit")]
+		public bool SameSubdivision
+		{
+			get
+			{
+				return this._SameSubdivision;
+			}
+			set
+			{
+				if ((this._SameSubdivision != value))
+				{
+					this.OnSameSubdivisionChanging(value);
+					this.SendPropertyChanging();
+					this._SameSubdivision = value;
+					this.SendPropertyChanged("SameSubdivision");
+					this.OnSameSubdivisionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SameMilitaryUnit", DbType="bit")]
+		public bool SameMilitaryUnit
+		{
+			get
+			{
+				return this._SameMilitaryUnit;
+			}
+			set
+			{
+				if ((this._SameMilitaryUnit != value))
+				{
+					this.OnSameMilitaryUnitChanging(value);
+					this.SendPropertyChanging();
+					this._SameMilitaryUnit = value;
+					this.SendPropertyChanged("SameMilitaryUnit");
+					this.OnSameMilitaryUnitChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SameFormationUnit", DbType="bit")]
+		public bool SameFormationUnit
+		{
+			get
+			{
+				return this._SameFormationUnit;
+			}
+			set
+			{
+				if ((this._SameFormationUnit != value))
+				{
+					this.OnSameFormationUnitChanging(value);
+					this.SendPropertyChanging();
+					this._SameFormationUnit = value;
+					this.SendPropertyChanged("SameFormationUnit");
+					this.OnSameFormationUnitChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SameRegionalUnit", DbType="bit")]
+		public bool SameRegionalUnit
+		{
+			get
+			{
+				return this._SameRegionalUnit;
+			}
+			set
+			{
+				if ((this._SameRegionalUnit != value))
+				{
+					this.OnSameRegionalUnitChanging(value);
+					this.SendPropertyChanging();
+					this._SameRegionalUnit = value;
+					this.SendPropertyChanged("SameRegionalUnit");
+					this.OnSameRegionalUnitChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AnySubdivision", DbType="bit")]
+		public bool AnySubdivision
+		{
+			get
+			{
+				return this._AnySubdivision;
+			}
+			set
+			{
+				if ((this._AnySubdivision != value))
+				{
+					this.OnAnySubdivisionChanging(value);
+					this.SendPropertyChanging();
+					this._AnySubdivision = value;
+					this.SendPropertyChanged("AnySubdivision");
+					this.OnAnySubdivisionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MSC_Module_Send_MSC_Module_Send_Position", Storage="_MSC_Module_Send_refModuleSend", ThisKey="refModuleSend", OtherKey="id", IsForeignKey=true)]
+		public MSC_Module_Send MSC_Module_Send_refModuleSend
+		{
+			get
+			{
+				return this._MSC_Module_Send_refModuleSend.Entity;
+			}
+			set
+			{
+				MSC_Module_Send previousValue = this._MSC_Module_Send_refModuleSend.Entity;
+				if (((previousValue != value) 
+							|| (this._MSC_Module_Send_refModuleSend.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MSC_Module_Send_refModuleSend.Entity = null;
+						previousValue.MSC_Module_Send_Positions_refModuleSend.Remove(this);
+					}
+					this._MSC_Module_Send_refModuleSend.Entity = value;
+					if ((value != null))
+					{
+						value.MSC_Module_Send_Positions_refModuleSend.Add(this);
+						this._refModuleSend = value.id;
+					}
+					else
+					{
+						this._refModuleSend = default(long);
+					}
+					this.SendPropertyChanged("MSC_Module_Send_refModuleSend");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ULS_VSharedPosition_MSC_Module_Send_Position", Storage="_ULS_VSharedPosition_refPosition", ThisKey="refPosition", OtherKey="id", IsForeignKey=true)]
+		public ULS_VSharedPosition ULS_VSharedPosition_refPosition
+		{
+			get
+			{
+				return this._ULS_VSharedPosition_refPosition.Entity;
+			}
+			set
+			{
+				ULS_VSharedPosition previousValue = this._ULS_VSharedPosition_refPosition.Entity;
+				if (((previousValue != value) 
+							|| (this._ULS_VSharedPosition_refPosition.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._ULS_VSharedPosition_refPosition.Entity = null;
+						previousValue.MSC_Module_Send_Positions_refPosition.Remove(this);
+					}
+					this._ULS_VSharedPosition_refPosition.Entity = value;
+					if ((value != null))
+					{
+						value.MSC_Module_Send_Positions_refPosition.Add(this);
+						this._refPosition = value.id;
+					}
+					else
+					{
+						this._refPosition = default(long);
+					}
+					this.SendPropertyChanged("ULS_VSharedPosition_refPosition");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.MSC_Conditions")]
+	public partial class MSC_Condition : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _id;
+		
+		private string _Code;
+		
+		private string _Name;
+		
+		private string _Description;
+		
+		private EntitySet<MSC_Module_Send_Condition> _MSC_Module_Send_Conditions_refCondition;
+		
+    #region Определения метода расширяемости
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(long value);
+    partial void OnidChanged();
+    partial void OnCodeChanging(string value);
+    partial void OnCodeChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    #endregion
+		
+		public MSC_Condition()
+		{
+			this._MSC_Module_Send_Conditions_refCondition = new EntitySet<MSC_Module_Send_Condition>(new Action<MSC_Module_Send_Condition>(this.attach_MSC_Module_Send_Conditions_refCondition), new Action<MSC_Module_Send_Condition>(this.detach_MSC_Module_Send_Conditions_refCondition));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="bigint", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Code", DbType="nvarchar(255)", CanBeNull=false)]
+		public string Code
+		{
+			get
+			{
+				return this._Code;
+			}
+			set
+			{
+				if ((this._Code != value))
+				{
+					this.OnCodeChanging(value);
+					this.SendPropertyChanging();
+					this._Code = value;
+					this.SendPropertyChanged("Code");
+					this.OnCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="nvarchar(255)", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="nvarchar(MAX)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MSC_Condition_MSC_Module_Send_Condition", Storage="_MSC_Module_Send_Conditions_refCondition", ThisKey="id", OtherKey="refCondition")]
+		public EntitySet<MSC_Module_Send_Condition> MSC_Module_Send_Conditions_refCondition
+		{
+			get
+			{
+				return this._MSC_Module_Send_Conditions_refCondition;
+			}
+			set
+			{
+				this._MSC_Module_Send_Conditions_refCondition.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_MSC_Module_Send_Conditions_refCondition(MSC_Module_Send_Condition entity)
+		{
+			this.SendPropertyChanging();
+			entity.MSC_Condition_refCondition = this;
+		}
+		
+		private void detach_MSC_Module_Send_Conditions_refCondition(MSC_Module_Send_Condition entity)
+		{
+			this.SendPropertyChanging();
+			entity.MSC_Condition_refCondition = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.MSC_Module_Send_Conditions")]
+	public partial class MSC_Module_Send_Condition : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _id;
+		
+		private long _refModuleSend;
+		
+		private bool _ToOrCopy;
+		
+		private long _refCondition;
+		
+		private EntityRef<MSC_Module_Send> _MSC_Module_Send_refModuleSend;
+		
+		private EntityRef<MSC_Condition> _MSC_Condition_refCondition;
+		
+    #region Определения метода расширяемости
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(long value);
+    partial void OnidChanged();
+    partial void OnrefModuleSendChanging(long value);
+    partial void OnrefModuleSendChanged();
+    partial void OnToOrCopyChanging(bool value);
+    partial void OnToOrCopyChanged();
+    partial void OnrefConditionChanging(long value);
+    partial void OnrefConditionChanged();
+    #endregion
+		
+		public MSC_Module_Send_Condition()
+		{
+			this._MSC_Module_Send_refModuleSend = default(EntityRef<MSC_Module_Send>);
+			this._MSC_Condition_refCondition = default(EntityRef<MSC_Condition>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="bigint", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refModuleSend", DbType="bigint")]
+		public long refModuleSend
+		{
+			get
+			{
+				return this._refModuleSend;
+			}
+			set
+			{
+				if ((this._refModuleSend != value))
+				{
+					if (this._MSC_Module_Send_refModuleSend.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnrefModuleSendChanging(value);
+					this.SendPropertyChanging();
+					this._refModuleSend = value;
+					this.SendPropertyChanged("refModuleSend");
+					this.OnrefModuleSendChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ToOrCopy", DbType="bit")]
+		public bool ToOrCopy
+		{
+			get
+			{
+				return this._ToOrCopy;
+			}
+			set
+			{
+				if ((this._ToOrCopy != value))
+				{
+					this.OnToOrCopyChanging(value);
+					this.SendPropertyChanging();
+					this._ToOrCopy = value;
+					this.SendPropertyChanged("ToOrCopy");
+					this.OnToOrCopyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refCondition", DbType="bigint")]
+		public long refCondition
+		{
+			get
+			{
+				return this._refCondition;
+			}
+			set
+			{
+				if ((this._refCondition != value))
+				{
+					if (this._MSC_Condition_refCondition.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnrefConditionChanging(value);
+					this.SendPropertyChanging();
+					this._refCondition = value;
+					this.SendPropertyChanged("refCondition");
+					this.OnrefConditionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MSC_Module_Send_MSC_Module_Send_Condition", Storage="_MSC_Module_Send_refModuleSend", ThisKey="refModuleSend", OtherKey="id", IsForeignKey=true)]
+		public MSC_Module_Send MSC_Module_Send_refModuleSend
+		{
+			get
+			{
+				return this._MSC_Module_Send_refModuleSend.Entity;
+			}
+			set
+			{
+				MSC_Module_Send previousValue = this._MSC_Module_Send_refModuleSend.Entity;
+				if (((previousValue != value) 
+							|| (this._MSC_Module_Send_refModuleSend.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MSC_Module_Send_refModuleSend.Entity = null;
+						previousValue.MSC_Module_Send_Conditions_refModuleSend.Remove(this);
+					}
+					this._MSC_Module_Send_refModuleSend.Entity = value;
+					if ((value != null))
+					{
+						value.MSC_Module_Send_Conditions_refModuleSend.Add(this);
+						this._refModuleSend = value.id;
+					}
+					else
+					{
+						this._refModuleSend = default(long);
+					}
+					this.SendPropertyChanged("MSC_Module_Send_refModuleSend");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MSC_Condition_MSC_Module_Send_Condition", Storage="_MSC_Condition_refCondition", ThisKey="refCondition", OtherKey="id", IsForeignKey=true)]
+		public MSC_Condition MSC_Condition_refCondition
+		{
+			get
+			{
+				return this._MSC_Condition_refCondition.Entity;
+			}
+			set
+			{
+				MSC_Condition previousValue = this._MSC_Condition_refCondition.Entity;
+				if (((previousValue != value) 
+							|| (this._MSC_Condition_refCondition.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MSC_Condition_refCondition.Entity = null;
+						previousValue.MSC_Module_Send_Conditions_refCondition.Remove(this);
+					}
+					this._MSC_Condition_refCondition.Entity = value;
+					if ((value != null))
+					{
+						value.MSC_Module_Send_Conditions_refCondition.Add(this);
+						this._refCondition = value.id;
+					}
+					else
+					{
+						this._refCondition = default(long);
+					}
+					this.SendPropertyChanged("MSC_Condition_refCondition");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }

@@ -41,6 +41,145 @@
             }
         }
 
+        private static Dictionary<string, long> InitializedConfigurationModule = new Dictionary<string, long>();
+
+        public static void InitializeConfigurationModule(string moduleCode, string name)
+        {
+            lock (InitializedConfigurationModule)
+            {
+                if (InitializedConfigurationModule.ContainsKey(moduleCode))
+                    return;
+            }
+
+            using (var connection = SpecificInstances.DbFactory.CreateConnection())
+            using (var db = new DBDataContext(connection))
+            {
+                var id = db.MSC_Modules.Where(r => r.Code == moduleCode).Select(r => r.id).FirstOrDefault();
+                lock (InitializedConfigurationModule)
+                {
+                    if (id == 0)
+                    {
+                        var module = new MSC_Module
+                            {
+                                Code = moduleCode,
+                                Name = name,
+                                Enabled = true
+                            };
+                        db.MSC_Modules.InsertOnSubmit(module);
+                        db.SubmitChanges();
+
+                        db.MSC_Module_Sends.InsertOnSubmit(
+                            new MSC_Module_Send
+                                {
+                                    refModule = module.id,
+                                    Enabled = true,
+                                    Name = name,
+                                    OnAdd = true,
+                                    OnChange = true,
+                                    OnDelete = true
+                                });
+                        db.SubmitChanges();
+
+                        id = module.id;
+                    }
+
+                    InitializedConfigurationModule[moduleCode] = id;
+                }
+            }
+        }
+
+        private static Dictionary<string, Dictionary<string, bool>> InitializedConfigurationEventName = new Dictionary<string, Dictionary<string, bool>>();
+
+        public static void InitializeConfigurationEventName(string moduleCode, string eventName, string name)
+        {
+            lock (InitializedConfigurationEventName)
+            {
+                if (!InitializedConfigurationEventName.ContainsKey(moduleCode))
+                    InitializedConfigurationEventName[moduleCode] = new Dictionary<string, bool>();
+
+                if (InitializedConfigurationEventName[moduleCode].ContainsKey(eventName))
+                    return;
+            }
+
+            using (var connection = SpecificInstances.DbFactory.CreateConnection())
+            using (var db = new DBDataContext(connection))
+            {
+                var exists = db.MSC_Module_Events.Any(r => r.Code == eventName && r.MSC_Module_refModule.Code == moduleCode);
+                lock (InitializedConfigurationEventName)
+                {
+                    if (!exists)
+                    {
+                        var moduleEvent = new MSC_Module_Event
+                            {
+                                Code = eventName,
+                                NameRu = name,
+                                NameKz = name,
+                                refModule = InitializedConfigurationModule[moduleCode],
+                            };
+                        db.MSC_Module_Events.InsertOnSubmit(moduleEvent);
+                        db.SubmitChanges();
+
+                        var moduleSend = new MSC_Module_Send
+                            {
+                                refModule = moduleEvent.refModule,
+                                Enabled = true,
+                                Name = name,
+                                OnEvents = "<" + eventName + ">"
+                            };
+                        db.MSC_Module_Sends.InsertOnSubmit(moduleSend);
+                        db.SubmitChanges();
+
+                        db.MSC_Module_SendEvents.InsertOnSubmit(
+                            new MSC_Module_SendEvent
+                                {
+                                    refModuleEvent = moduleEvent.id,
+                                    refModuleSend = moduleSend.id
+                                });
+                        db.SubmitChanges();
+                    }
+
+                    InitializedConfigurationEventName[moduleCode][eventName] = true;
+                }
+            }
+        }
+
+        private static Dictionary<string, Dictionary<string, bool>> InitializedConfigurationConfigField = new Dictionary<string, Dictionary<string, bool>>();
+
+        public static void InitializeConfigurationConfigField(string moduleCode, string configField)
+        {
+            lock (InitializedConfigurationConfigField)
+            {
+                if (!InitializedConfigurationConfigField.ContainsKey(moduleCode))
+                    InitializedConfigurationConfigField[moduleCode] = new Dictionary<string, bool>();
+
+                if (InitializedConfigurationConfigField[moduleCode].ContainsKey(configField))
+                    return;
+            }
+
+            using (var connection = SpecificInstances.DbFactory.CreateConnection())
+            using (var db = new DBDataContext(connection))
+            {
+                var exists = db.MSC_Module_ConfigurationFields.Any(r => r.Code == configField && r.MSC_Module_refModule.Code == moduleCode);
+                lock (InitializedConfigurationConfigField)
+                {
+                    if (!exists)
+                    {
+                        db.MSC_Module_ConfigurationFields.InsertOnSubmit(
+                            new MSC_Module_ConfigurationField
+                                {
+                                    Code = configField,
+                                    NameRu = configField,
+                                    NameKz = configField,
+                                    refModule = InitializedConfigurationModule[moduleCode],
+                                });
+                        db.SubmitChanges();
+                    }
+
+                    InitializedConfigurationConfigField[moduleCode][configField] = true;
+                }
+            }
+        }
+
         public enum EventType
         {
             Non,

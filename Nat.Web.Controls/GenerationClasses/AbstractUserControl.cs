@@ -29,6 +29,7 @@ using Nat.Web.Tools.WorkFlow;
 namespace Nat.Web.Controls.GenerationClasses
 {
     using System.Collections;
+    using System.Data;
 
     using Microsoft.JScript;
     using Nat.Tools.Filtering;
@@ -412,15 +413,18 @@ namespace Nat.Web.Controls.GenerationClasses
             var command = db.GetCommand(data);
             var format = "select top 1 RowNumber from (select *, ROW_NUMBER() over(order by {1}) as RowNumber from ({0}) as MyT) as MyT where {2}";
             command.CommandText = string.Format(format, command.CommandText, orderBy, where);
+            var requireOpenConnection = command.Connection.State != ConnectionState.Open;
             try
             {
-                command.Connection.Open();
+                if (requireOpenConnection)
+                    command.Connection.Open();
                 var value = (long?)command.ExecuteScalar();
                 return value == null ? null : (long?)(value.Value - 1);
             }
             finally
             {
-                command.Connection.Close();
+                if (requireOpenConnection)
+                    command.Connection.Close();
             }
         }
 

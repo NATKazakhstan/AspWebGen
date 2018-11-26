@@ -330,10 +330,14 @@ namespace Nat.Web.Controls.GenerationClasses.Filter
                 // что бы не было частого обхода по колекции
                 if (LastExecution.AddMinutes(2) > DateTime.Now)
                     return;
+
                 var datetime = DateTime.Now.AddMinutes(-20);
                 LastExecution = datetime;
                 foreach (var item in Cache.Where(r => r.Value.LastExecution < datetime).ToArray())
+                {
                     Cache.Remove(item.Key);
+                    item.Value.SetNull();
+                }
             }
 
             public void AddCache<TResult>(string key, Func<TDataContext, StructQueryParameters, TResult> func)
@@ -365,11 +369,20 @@ namespace Nat.Web.Controls.GenerationClasses.Filter
         private class CacheParameter
         {
             public DateTime LastExecution { get; set; }
+
+            internal virtual void SetNull()
+            {
+            }
         }
 
         private class CacheParameter<TResult> : CacheParameter
         {
             public Func<TDataContext, StructQueryParameters, TResult> Func { get; set; }
+
+            internal override void SetNull()
+            {
+                Func = null;
+            }
         }
     }
 

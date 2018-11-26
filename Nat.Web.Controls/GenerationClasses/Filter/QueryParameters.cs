@@ -97,6 +97,7 @@ namespace Nat.Web.Controls.GenerationClasses.Filter
         public Expression CurrentExpression { get; set; }
 
         public DataContext InternalDB { get; set; }
+        public bool NoCache { get; set; }
 
         public abstract string GetCacheKey<TResult>();
 
@@ -278,7 +279,8 @@ namespace Nat.Web.Controls.GenerationClasses.Filter
         {
             var key = parameters.GetCacheKey<TResult>();
             var cacheParameters = allowGlobalCache ? CurrentGlobalCacheParameters : CurrentCacheParameters;
-            cacheParameters.AddCache(key, func);
+            if (!parameters.NoCache)
+                cacheParameters.AddCache(key, func);
         }
 
         private static CacheParameters CurrentCacheParameters

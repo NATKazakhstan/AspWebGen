@@ -303,7 +303,7 @@ namespace Nat.ExportInExcel
 
                     if (cellProps != null)
                     {
-                        if (hierarchyItem != null)
+                        if (hierarchyItem != null && bCell.ColSpan <= 1)
                         {
                             if (hierarchyItem.BColor != null && cellProps.BColor == null)
                                 cellProps.BColor = hierarchyItem.BColor;

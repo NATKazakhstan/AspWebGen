@@ -1598,10 +1598,10 @@ function fillCellsSetColorForColumn(table, columnIndex, colHItem) {
             var cellProps = cellsProps[$cell.attr('cellKey')];
             if (cell.columnIndex == columnIndex) {
                 if (_fillCells_SFont) {
-                    if (cellProps == null || cellProps.PColor == null || cellProps.PColor == "")
+                    if ((cellProps == null || cellProps.PColor == null || cellProps.PColor == "") && cell.colSpan === 1)
                         cell.style.color = colHItem.PColor;
                 }
-                else if (cellProps == null || cellProps.BColor == null || cellProps.BColor == "")
+                else if ((cellProps == null || cellProps.BColor == null || cellProps.BColor == "") && cell.colSpan === 1)
                     cell.style.backgroundColor = colHItem.BColor;
             }
         }

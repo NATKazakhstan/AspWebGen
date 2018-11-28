@@ -336,14 +336,14 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                 var props = Row.JournalControl.CellsPropertiesDic[cellKey];
                 if (!string.IsNullOrEmpty(bcolor ?? props.BColor))
                     writer.AddStyleAttribute(HtmlTextWriterStyle.BackgroundColor, bcolor ?? props.BColor);
-                else if (ColumnHierarchy != null && !string.IsNullOrEmpty(ColumnHierarchy.BColor))
+                else if (ColumnHierarchy != null && !string.IsNullOrEmpty(ColumnHierarchy.BColor) && ColSpan <= 1)
                     writer.AddStyleAttribute(HtmlTextWriterStyle.BackgroundColor, ColumnHierarchy.BColor);
                 if (!string.IsNullOrEmpty(props.PColor))
                     writer.AddStyleAttribute(HtmlTextWriterStyle.Color, props.PColor);
-                else if (ColumnHierarchy != null && !string.IsNullOrEmpty(ColumnHierarchy.PColor))
+                else if (ColumnHierarchy != null && !string.IsNullOrEmpty(ColumnHierarchy.PColor) && ColSpan <= 1)
                     writer.AddStyleAttribute(HtmlTextWriterStyle.Color, ColumnHierarchy.PColor);
             }
-            else if (ColumnHierarchy != null)
+            else if (ColumnHierarchy != null && ColSpan <= 1)
             {
                 if (!string.IsNullOrEmpty(bcolor ?? ColumnHierarchy.BColor))
                     writer.AddStyleAttribute(HtmlTextWriterStyle.BackgroundColor, bcolor ?? ColumnHierarchy.BColor);

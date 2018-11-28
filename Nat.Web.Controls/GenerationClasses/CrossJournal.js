@@ -314,6 +314,7 @@ function initTHAttributes(newCell, cell, overflow, colSpan) {
     var content = newCell.appendChild(document.createElement("div"));
     initStyleAttributes(content, cell, newCell);
     newCell.title = cell.innerText;
+    newCell.style["background-color"] = cell.style["background-color"];
     cell.title = cell.innerText;
     if (overflow != "") {
         //content.style.cssText = content.style.cssText;  //+ "; white-space: nowrap; ";

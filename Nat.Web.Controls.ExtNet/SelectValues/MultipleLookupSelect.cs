@@ -9,6 +9,7 @@ using System.Linq;
 namespace Nat.Web.Controls.ExtNet.SelectValues
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Text;
     using System.Web;
@@ -20,6 +21,7 @@ namespace Nat.Web.Controls.ExtNet.SelectValues
     using Ext.Net;
 
     using Nat.Web.Controls.GenerationClasses;
+    using Nat.Web.Controls.GenerationClasses.Data;
     using Nat.Web.Tools;
     using Nat.Web.Tools.ExtNet;
     using Nat.Web.Tools.ExtNet.Extenders;
@@ -374,13 +376,35 @@ return isValid; }}; ",
         {
             get
             {
+                var dataSource = (EditableListDataSource)GridPanel.FindControl(GridPanel.GetStore().DataSourceID);
+                IEnumerable<EditableListDataSourceView.SelectedItems> result = null;
+                dataSource.BaseView.Select(new DataSourceSelectArguments(),
+                    delegate (IEnumerable data)
+                    {
+                        result = data.Cast<EditableListDataSourceView.SelectedItems>();
+                    }
+                );
 
-                if (string.IsNullOrEmpty((string)HiddenInsertedValues.Value))
-                    return new string[0];
+                var deletedValues = !string.IsNullOrEmpty((string)HiddenDeletedValues.Value)
+                    ? JsonConvert
+                        .DeserializeObject<List<Dictionary<string, object>>>((string)HiddenDeletedValues.Value)
+                        .SelectMany(r => r.Values.Select(q => q.ToString()))
+                        .ToArray()
+                    : new string[0];
 
-                return JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(
-                    (string) HiddenInsertedValues.Value).Select(r => Convert.ToString(r[DataValueField]))
-                    .ToArray();
+                var selectedValues = result.Where(r =>
+                        !string.IsNullOrEmpty(r.SelectedKey) && r.Selected && !deletedValues.Contains(r.SelectedKey))
+                    .Select(r => r.Value).ToList();
+
+                var insertedValues = !string.IsNullOrEmpty((string)HiddenInsertedValues.Value) ?
+                    JsonConvert.DeserializeObject<List<Dictionary<string, object>>>((string)HiddenInsertedValues.Value)
+                        .SelectMany(r => r.Values.Select(q => q.ToString()))
+                        .ToArray()
+                    : new string[0];
+
+                selectedValues.AddRange(insertedValues);
+
+                return selectedValues;
             }
         }
 

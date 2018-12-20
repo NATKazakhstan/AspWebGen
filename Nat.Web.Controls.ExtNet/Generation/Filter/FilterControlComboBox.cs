@@ -88,8 +88,8 @@ namespace Nat.Web.Controls.ExtNet.Generation.Filter
                 {
                     browseUrl = GetSerializeBrowseFilterParameters(filterData),
                     tableName = filterData.TableName,
-                    header = filterData.Header
-                };
+                    header = filterData.TableHeader
+            };
         }
 
         #region Методы реализации

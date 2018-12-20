@@ -840,6 +840,15 @@ namespace Nat.Web.Controls.GenerationClasses
             public string TableName { get; set; }
 
             /// <summary>
+            /// Для FilterType.Reference и Lookup, определяет заголовок таблицы открыть журнал.
+            /// </summary>
+            public string TableHeader
+            {
+                get => _tableHeader ?? Header;
+                set => _tableHeader = value;
+            }
+
+            /// <summary>
             /// Для FilterType.Reference и !Lookup, данные для выбора в выподающем списке.
             /// </summary>
             public IDataSource DataSource { get; set; }
@@ -1081,6 +1090,7 @@ namespace Nat.Web.Controls.GenerationClasses
             }
 
             private string _dataSourceViewTypeName;
+            private string _tableHeader;
 
             public string DataSourceViewTypeName
             {

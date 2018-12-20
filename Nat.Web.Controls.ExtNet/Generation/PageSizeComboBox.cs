@@ -12,7 +12,7 @@
             : base (GetConfig())
         {
             Listeners.Select.Fn = "PageSizeComboBoxSelect";
-            Listeners.BoxReady.Fn = "PageSizeComboBoxReady";
+            Listeners.AfterRender.Fn = "PageSizeComboBoxReady";
         }
 
         private static Config GetConfig()

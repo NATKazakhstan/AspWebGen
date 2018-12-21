@@ -1120,7 +1120,7 @@ namespace Nat.Web.Controls.GenerationClasses
 
         protected override IEnumerable ExecuteSelect(DataSourceSelectArguments arguments)
         {
-            if (InitConnection != null) DB.Transaction = InitTransaction;
+            if (InitConnection != null && InitTransaction?.Connection == InitConnection) DB.Transaction = InitTransaction;
             WriteTrace(TypeName + ".ExecuteSelect.Begin");
             if (AllowCustomCache)
             {
@@ -1310,7 +1310,7 @@ namespace Nat.Web.Controls.GenerationClasses
 
         public virtual IQueryable<TRow> GetDataByRefParent(TKey? refParent)
         {
-            if (InitConnection != null) DB.Transaction = InitTransaction;
+            if (InitConnection != null && InitTransaction?.Connection == InitConnection) DB.Transaction = InitTransaction;
             var qParam = Expression.Parameter(typeof(StructQueryParameters), "qParam");
             var dbParam = Expression.Parameter(typeof(TDataContext), "db_DRP");
             var qParams = new QueryParameters<TDataContext, TTable>(qParam, dbParam) { SupportParameterExpression = SupportGlobalCache, DB = DB, InternalDB = DB };
@@ -1515,7 +1515,7 @@ namespace Nat.Web.Controls.GenerationClasses
 
         public IQueryable<TRow> GetSelect(string selectColumnName, string sortExpression, bool isKz, bool useTreeFilter)
         {
-            if (InitConnection != null) DB.Transaction = InitTransaction;
+            if (InitConnection != null && InitTransaction?.Connection == InitConnection) DB.Transaction = InitTransaction;
             Expression tableExp;
             var qParams = CreateQuery(selectColumnName, sortExpression, isKz, useTreeFilter, null, out tableExp);
             var lambda = Expression.Lambda<Func<TDataContext, StructQueryParameters, IQueryable<TRow>>>(
@@ -1529,7 +1529,7 @@ namespace Nat.Web.Controls.GenerationClasses
 
         public TRow GetCacheSelect(TKey id)
         {
-            if (InitConnection != null) DB.Transaction = InitTransaction;
+            if (InitConnection != null && InitTransaction?.Connection == InitConnection) DB.Transaction = InitTransaction;
             Expression tableExp;
             var qParams = CreateQuery(
                 string.Empty,
@@ -1553,7 +1553,7 @@ namespace Nat.Web.Controls.GenerationClasses
 
         protected QueryParameters<TDataContext, TTable> CreateQuery(string selectColumnName, string sortExpression, bool isKz, bool useTreeFilter, Func<QueryParameters<TDataContext, TTable>, Expression<Func<TTable, bool>>> getWhere, out Expression tableExp)
         {
-            if (InitConnection != null) DB.Transaction = InitTransaction;
+            if (InitConnection != null && InitTransaction?.Connection == InitConnection) DB.Transaction = InitTransaction;
             var qParam = Expression.Parameter(typeof(StructQueryParameters), "qParam");
             var dbParam = Expression.Parameter(typeof(TDataContext), "db_FSE");
             var qParams = new QueryParameters<TDataContext, TTable>(qParam, dbParam) { SupportParameterExpression = SupportGlobalCache, DB = DB, InternalDB = DB };
@@ -1594,7 +1594,7 @@ namespace Nat.Web.Controls.GenerationClasses
         public QueryParameters<TDataContext, TTable> GetQueryParameters(
             string selectColumnName, string sortExpression, bool isKz, bool useTreeFilter)
         {
-            if (InitConnection != null) DB.Transaction = InitTransaction;
+            if (InitConnection != null && InitTransaction?.Connection == InitConnection) DB.Transaction = InitTransaction;
             var qParams = new QueryParameters<TDataContext, TTable>(DB) { SupportParameterExpression = SupportGlobalCache };
             InternalQueryParameters = qParams;
 
@@ -1633,7 +1633,7 @@ namespace Nat.Web.Controls.GenerationClasses
 
         public IQueryable<TRow> GetSelectWithoutFilters(string selectColumnName, string sortExpression, bool isKz)
         {
-            if (InitConnection != null) DB.Transaction = InitTransaction;
+            if (InitConnection != null && InitTransaction?.Connection == InitConnection) DB.Transaction = InitTransaction;
             var qParam = Expression.Parameter(typeof(StructQueryParameters), "qParam");
             var dbParam = Expression.Parameter(typeof(TDataContext), "db_FSE");
             var qParams = new QueryParameters<TDataContext, TTable>(qParam, dbParam) { SupportParameterExpression = SupportGlobalCache, DB = DB, InternalDB = DB };
@@ -1665,7 +1665,7 @@ namespace Nat.Web.Controls.GenerationClasses
         public IQueryable<TRow> GetSelectWithoutFilters(
             IEnumerable<TKey> selectedValues, string selectColumnName, string sortExpression, bool isKz)
         {
-            if (InitConnection != null) DB.Transaction = InitTransaction;
+            if (InitConnection != null && InitTransaction?.Connection == InitConnection) DB.Transaction = InitTransaction;
             var qParam = Expression.Parameter(typeof(StructQueryParameters), "qParam");
             var dbParam = Expression.Parameter(typeof(TDataContext), "db_FSE");
             var qParams = new QueryParameters<TDataContext, TTable>(qParam, dbParam) { SupportParameterExpression = SupportGlobalCache, DB = DB, InternalDB = DB };

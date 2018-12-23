@@ -265,7 +265,7 @@
                     break;
                 case TypeCode.DateTime:
                     resultScript.Append("new Date");
-                    resultScript.Append(((DateTime)c.Value).ToString("(yyyy, M, d, H, m, s)"));
+                    resultScript.Append(((DateTime)c.Value).ToString("(yyyy, M - 1, d, H, m, s)"));
                     break;
                 case TypeCode.Object:
                     var enumerable = c.Value as IEnumerable;

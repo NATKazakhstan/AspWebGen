@@ -1,4 +1,6 @@
-﻿namespace JS.LinqToJavaScript
+﻿using Nat.Web.Tools;
+
+namespace JS.LinqToJavaScript
 {
     using System;
     using System.Collections.Generic;
@@ -16,6 +18,7 @@
 
         public void ProcessRequest(HttpContext context)
         {
+            LocalizationHelper.SetThreadCulture();
             var typeStr = context.Request["type"];
             if (typeStr == null)
                 throw new ArgumentNullException(string.Empty, "Необходимо передать параметр type");

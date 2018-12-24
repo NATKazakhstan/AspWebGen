@@ -17,7 +17,7 @@
                 throw new ArgumentNullException("tableName");
 
             var typeName = string.Format(
-                "{0}.{1}NavigatorInfo, {0}, Version=1.0.0.0, Culture=neutral, PublicKeyToken={2}",
+                "{0}.{1}NavigatorInfo, {0}, Version=1.4.0.0, Culture=neutral, PublicKeyToken={2}",
                 projectName,
                 tableName,
                 publicKeyToken);
@@ -25,7 +25,7 @@
             if (type == null && projectName.Contains("."))
             {
                 typeName = string.Format(
-                    "{0}.{1}NavigatorInfo, {3}, Version=1.0.0.0, Culture=neutral, PublicKeyToken={2}",
+                    "{0}.{1}NavigatorInfo, {3}, Version=1.4.0.0, Culture=neutral, PublicKeyToken={2}",
                     projectName.Substring(0, projectName.LastIndexOf('.')),
                     tableName,
                     publicKeyToken,
@@ -36,7 +36,7 @@
             if (type == null && projectName.Contains("_"))
             {
                 typeName = string.Format(
-                    "{0}.{1}NavigatorInfo, {3}, Version=1.0.0.0, Culture=neutral, PublicKeyToken={2}",
+                    "{0}.{1}NavigatorInfo, {3}, Version=1.4.0.0, Culture=neutral, PublicKeyToken={2}",
                     projectName.Substring(0, projectName.LastIndexOf('_')),
                     tableName,
                     publicKeyToken,

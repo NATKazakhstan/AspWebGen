@@ -20,7 +20,7 @@ namespace Nat.Web.Controls.GenerationClasses
         public override object Value
         {
             get { return Checked; }
-            set { Checked = true.Equals(value); }
+            set { Checked = true.Equals(value) || "on".Equals(value); }
         }
 
         public override string Text

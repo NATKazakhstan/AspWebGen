@@ -52,11 +52,17 @@
             rvsProp.Culture = culture;
             rvsProp.StorageValues = storageValues;
             journalType = journalType ?? rvsProp.JournalTypeName;
-            var type = Type.GetType(journalType) ?? BuildManager.GetType(journalType, false, true);
+            var type = Type(journalType);
             return GetExcelByType(type, rvsProp, logMonitor, checkPermit, out fileNameExtention);
         }
+        private static Type Type(string journalType)
+        {
+            if (journalType.Contains("1.0.0.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a"))
+                journalType = journalType.Replace("1.0.0.0", "1.4.0.0");
+            return System.Type.GetType(journalType) ?? BuildManager.GetType(journalType, false, true);
+        }
 
-     /* public Stream GetExcelByTypeName(string journalType, string format, long idProperties, ILogMonitor logMonitor, bool checkPermit)
+        /* public Stream GetExcelByTypeName(string journalType, string format, long idProperties, ILogMonitor logMonitor, bool checkPermit)
         {
             var properties = RvsSavedProperties.LoadFrom(idProperties);
             return GetExcelByTypeName(journalType, properties, logMonitor, checkPermit);

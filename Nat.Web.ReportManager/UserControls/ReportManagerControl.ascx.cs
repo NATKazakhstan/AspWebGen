@@ -271,6 +271,18 @@ namespace Nat.Web.ReportManager.UserControls
                     if (string.IsNullOrEmpty(backText))
                         backText = Resources.SBack;
 
+                    if (webReportManager.Plugin.Visible)
+                    {
+                        RememberReports(
+                            WebReportManager.GetReportUrl(
+                                string.Empty,
+                                webReportManager.Plugin.GetType().FullName,
+                                string.Empty,
+                                string.Empty,
+                                false) + "&open=false&setDefaultParams=true",
+                            webReportManager.Plugin);
+                    }
+
                     if (redirectReportPlugin != null)
                     {
                         if (redirectReportPlugin.LogViewReport)
@@ -353,6 +365,17 @@ namespace Nat.Web.ReportManager.UserControls
                     Page.Response.Redirect(url.CreateUrl(false, true));
                 }
             }
+        }
+
+        private void RememberReports(string path, IReportPlugin plugin)
+        {
+            var typeStr = ReportInitializerSection.GetReportInitializerSection().RememberLastReportType;
+            if (string.IsNullOrEmpty(typeStr))
+                return;
+
+            var type = BuildManager.GetType(typeStr, true, true);
+            var obj = (IRememberReports)Activator.CreateInstance(type);
+            obj.CreateReport(path, plugin);
         }
 
         internal static string SetSession(StorageValues values, WebReportManager webReportManager)

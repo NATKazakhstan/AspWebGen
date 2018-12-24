@@ -198,7 +198,13 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                 var rowProps = Row?.RowKey != null && Row.JournalControl.RowsPropertiesDic.ContainsKey(Row.RowKey)
                                 ? Row.JournalControl.RowsPropertiesDic[Row.RowKey]
                                 : null;
-                if (rowProps?.HAligment != null)
+                var cellKey = GetCellKey();
+                var cellProps = Row?.JournalControl.CellsPropertiesDic.ContainsKey(cellKey) ?? false
+                                    ? Row.JournalControl.CellsPropertiesDic[cellKey]
+                                    : null;
+                if (cellProps?.HAligment != null)
+                    writer.AddStyleAttribute(HtmlTextWriterStyle.TextAlign, cellProps.HAligment.ToString().ToLower());
+                else if (rowProps?.HAligment != null)
                     writer.AddStyleAttribute(HtmlTextWriterStyle.TextAlign, rowProps.HAligment.ToString().ToLower());
                 else if (Column.ColumnType == ColumnType.Numeric && (Row == null || !Row.JournalControl.DetailsRender))
                     writer.AddStyleAttribute(HtmlTextWriterStyle.TextAlign, "center");
@@ -330,14 +336,14 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                 var props = Row.JournalControl.CellsPropertiesDic[cellKey];
                 if (!string.IsNullOrEmpty(bcolor ?? props.BColor))
                     writer.AddStyleAttribute(HtmlTextWriterStyle.BackgroundColor, bcolor ?? props.BColor);
-                else if (ColumnHierarchy != null && !string.IsNullOrEmpty(ColumnHierarchy.BColor))
+                else if (ColumnHierarchy != null && !string.IsNullOrEmpty(ColumnHierarchy.BColor) && ColSpan <= 1)
                     writer.AddStyleAttribute(HtmlTextWriterStyle.BackgroundColor, ColumnHierarchy.BColor);
                 if (!string.IsNullOrEmpty(props.PColor))
                     writer.AddStyleAttribute(HtmlTextWriterStyle.Color, props.PColor);
-                else if (ColumnHierarchy != null && !string.IsNullOrEmpty(ColumnHierarchy.PColor))
+                else if (ColumnHierarchy != null && !string.IsNullOrEmpty(ColumnHierarchy.PColor) && ColSpan <= 1)
                     writer.AddStyleAttribute(HtmlTextWriterStyle.Color, ColumnHierarchy.PColor);
             }
-            else if (ColumnHierarchy != null)
+            else if (ColumnHierarchy != null && ColSpan <= 1)
             {
                 if (!string.IsNullOrEmpty(bcolor ?? ColumnHierarchy.BColor))
                     writer.AddStyleAttribute(HtmlTextWriterStyle.BackgroundColor, bcolor ?? ColumnHierarchy.BColor);

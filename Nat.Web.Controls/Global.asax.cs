@@ -29,6 +29,10 @@ namespace Nat.Web.Controls
         {
         }
 
+        protected virtual void OnApplication_AuthenticateRequest()
+        {
+        }
+
         protected void Application_Start(object sender, EventArgs e)
         {
             Initialize();
@@ -95,6 +99,7 @@ namespace Nat.Web.Controls
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
         {
+            OnApplication_AuthenticateRequest();
         }
 
         protected void Application_Error(object sender, EventArgs e)

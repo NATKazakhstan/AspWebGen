@@ -17,6 +17,8 @@ namespace Nat.ExportInExcel
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Web;
+    using System.Web.UI;
+    using System.Web.UI.WebControls;
     using System.Xml;
 
     using DocumentFormat.OpenXml.Packaging;
@@ -84,6 +86,11 @@ namespace Nat.ExportInExcel
 
         protected abstract string GetHeader();
 
+        protected virtual string GetSheetName()
+        {
+            return "Лист";
+        }
+
         protected abstract IEnumerable<string> GetFilterStrings();
 
         public Stream GetExcel()
@@ -97,6 +104,14 @@ namespace Nat.ExportInExcel
                 WriteWorkBook();
                 RenderStyles();
                 RenderWorksheet();
+                
+                if (RenderAdditionalSheetsTable != null)
+                {
+                    var rId = 5;
+                    foreach (var table in RenderAdditionalSheetsTable)
+                        RenderWorksheets(table, rId++);
+                }
+
                 RenderSharedStrings();
                 using (var themeStream = Assembly.GetAssembly(GetType()).GetManifestResourceStream("Nat.ExportInExcel.theme1.xml"))
                 {
@@ -301,9 +316,21 @@ namespace Nat.ExportInExcel
 
             _writer.WriteStartElement("sheets");
             _writer.WriteElementStringExt("sheet", "",
-                                          "name", "Data",
+                                          "name", GetSheetName(),
                                           "sheetId", "1",
                                           "r:id", "rId1");
+            if (RenderAdditionalSheetsTable != null)
+            {
+                var rId = 5;
+                foreach (var sheet in RenderAdditionalSheetsTable)
+                {
+                    _writer.WriteElementStringExt("sheet", "",
+                        "name", sheet.Caption ?? "Лист " + (rId - 4),
+                        "sheetId", rId.ToString(),
+                        "r:id", "rId" + rId++);
+                }
+            }
+
             _writer.WriteEndElement(); // sheets
             _writer.WriteElementStringExt("calcPr", "", "calcId", "125725", "refMode", "R1C1");
 
@@ -399,6 +426,13 @@ namespace Nat.ExportInExcel
             }
 
             AddRowsStyles();
+            if (RenderFooterTable != null) AddStyles(RenderFooterTable);
+            if (RenderFirstHeaderTable != null) AddStyles(RenderFirstHeaderTable);
+            if (RenderAdditionalSheetsTable != null)
+            {
+                foreach (var item in RenderAdditionalSheetsTable)
+                    AddStyles(item);
+            }
 
             #endregion
 
@@ -596,6 +630,7 @@ namespace Nat.ExportInExcel
             RenderColumnsSettings();
 
             _writer.WriteStartElement("sheetData");
+            RenderFirstHeader();
             RenderSheetHeader(fullColSpan);
             RenderFilter();
             RenderHeader();
@@ -642,11 +677,137 @@ namespace Nat.ExportInExcel
                                           string.Empty, string.Empty, string.Empty, string.Empty);
         }
 
+        private void RenderWorksheets(Table table, int rId)
+        {
+            _worksheetPart = _doc.WorkbookPart.AddNewPart<WorksheetPart>("rId" + rId);
+            StartWrtie(_worksheetPart);
+            _writer.WriteProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"");
+            _writer.WriteWhitespace("\r\n");
+
+            _writer.WriteStartElementExt("worksheet",
+                                         "xmlns", "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+                                         "xmlns:r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+
+            _writer.WriteStartElement("sheetPr");
+            _writer.WriteElementStringExt("pageSetUpPr", string.Empty, "fitToPage", "1");
+            _writer.WriteEndElement(); // sheetPr
+            
+            _writer.WriteElementStringExt("dimension", string.Empty, "ref", "A1:" + GetLaterByInt(GetCountColumns(table) - 1) + GetCountRows());
+
+            #region sheetViews
+
+            _writer.WriteStartElement("sheetViews");
+            _writer.WriteStartElementExt("sheetView", "tabSelected", "1", "zoomScale", "70", "workbookViewId", "0");
+            var fixedRowsCount = Convert.ToInt32(table.Attributes["fixedRowsCount"] ?? "0");
+            var fixedColumnsCount = Convert.ToInt32(table.Attributes["fixedColumnsCount"] ?? "0");
+            if (fixedRowsCount > 0 || fixedColumnsCount > 0)
+            {
+                _writer.WriteElementStringExt("pane", string.Empty,
+                                              "xSplit", fixedColumnsCount.ToString(),
+                                              "ySplit", fixedRowsCount.ToString(),
+                                              "state", "frozen",
+                                              "topLeftCell", GetLaterByInt(fixedColumnsCount) + (fixedRowsCount + 1));
+            }
+
+            _writer.WriteElementStringExt("selection", string.Empty, "activeCell", "A1", "sqref", "A1");
+            _writer.WriteEndElement(); // sheetView
+            _writer.WriteEndElement(); // sheetViews
+            _writer.WriteElementStringExt("sheetFormatPr", string.Empty, "defaultRowHeight", "30");
+            #endregion
+
+            RenderContentTable(table);
+
+            _writer.WriteElementStringExt("pageSetup", string.Empty, "fitToHeight", "0", "orientation", "landscape");
+            _writer.WriteEndElement(); // worksheet
+            
+            PutInFile();
+        }
+
+        private void RenderContentTable(Table table)
+        {
+            var fullColSpan = GetCountColumns(table);
+            _rowSpans = new int[fullColSpan];
+            _rowStyles = new string[fullColSpan];
+            _mergedCells.Clear();
+            _rowIndex = 0;
+
+            RenderColumnsSettings(table);
+
+            _writer.WriteStartElement("sheetData");
+            RenderTable(table);
+            _writer.WriteEndElement();
+
+            if (_mergedCells.Count > 0)
+            {
+                _writer.WriteStartElementExt("mergeCells", "count", _mergedCells.Count.ToString());
+                var mergedCellsData = _mergedCells
+                    .Select(r => GetLaterByInt(r.Key.X) + r.Key.Y + ":" + GetLaterByInt(r.Value.X) + r.Value.Y)
+                    .OrderBy(r => r);
+                foreach (var mergedCell in mergedCellsData)
+                    _writer.WriteElementStringExt("mergeCell", string.Empty, "ref", mergedCell);
+                _writer.WriteEndElement();
+            }
+            /*
+            var formating = GetConditionalFormatting();
+            if (formating != null && formating.Count > 0)
+                RenderConditionalFormatting(formating);
+            */
+            #region hyperlinks
+            if (_hyperlinkRanges.Count > 0)
+            {
+                _writer.WriteStartElement("hyperlinks");
+                foreach (var hyperlinkRange in _hyperlinkRanges)
+                {
+                    _writer.WriteElementStringExt("hyperlink", string.Empty,
+                                                  "ref", hyperlinkRange.Key,
+                                                  "r:id", hyperlinkRange.Value.First,
+                                                  "display", hyperlinkRange.Value.Second);
+                }
+
+                _writer.WriteEndElement();
+            }
+            #endregion
+
+            _writer.WriteElementStringExt("pageMargins", string.Empty,
+                                          "left", "0.7", "right", "0.7",
+                                          "top", "0.75", "bottom", "0.75",
+                                          "header", "0.3", "footer", "0.3",
+                                          string.Empty, string.Empty, string.Empty, string.Empty,
+                                          string.Empty, string.Empty, string.Empty, string.Empty);
+        }
+        
+        protected void RenderColumnsSettings(Table table)
+        {
+            _writer.WriteStartElement("cols");
+            var columns = table.Rows[0].Cells.Cast<TableCell>().ToList();
+            for (int i = 0; i < columns.Count;)
+            {
+                var item = columns[i];
+                var maxI = ++i;
+                var width = (decimal)item.Width.Value;
+                while (columns.Count > maxI && (decimal)columns[maxI].Width.Value == width)
+                    maxI++;
+                _writer.WriteStartElementExt("col", "min", i.ToString(), "max", maxI.ToString());
+                if (width > 0)
+                {
+                    _writer.WriteAttributeString("width", width.ToString().Replace(',', '.'));
+                    _writer.WriteAttributeString("customWidth", "1");
+                }
+
+                _writer.WriteEndElement();
+                i = maxI;
+            }
+
+            _writer.WriteEndElement();
+        }
+
         protected abstract List<ConditionalFormatting> GetConditionalFormatting();
 
         protected abstract void RenderData();
 
-        protected abstract void RenderFooter();
+        protected abstract Table RenderFooterTable { get; }
+        protected abstract Table RenderFirstHeaderTable { get; }
+        protected abstract Table[] RenderAdditionalSheetsTable { get; }
 
         protected abstract void RenderHeader();
 
@@ -662,6 +823,53 @@ namespace Nat.ExportInExcel
             _addedRowSpans.Clear();
         }
         
+        #endregion
+
+        #region RenderFooter RenderFirstHeader
+        
+        protected void RenderFooter()
+        {
+            if (RenderFooterTable == null)
+                return;
+
+            RenderTable(RenderFooterTable);
+        }
+
+        protected void RenderFirstHeader()
+        {
+            if (RenderFirstHeaderTable == null)
+                return;
+
+            RenderTable(RenderFirstHeaderTable);
+        }
+
+        protected void RenderTable(Table table)
+        {
+            foreach (TableRow row in table.Rows)
+            {
+                if (!row.Visible)
+                    continue;
+
+                WriteStartRow(row.Height.IsEmpty || row.Height.Type != UnitType.Pixel ? null : (int?)row.Height.Value);
+                MoveRowIndex();
+
+                foreach (TableCell cell in row.Cells)
+                {
+                    RenderCell(
+                        _writer,
+                        cell.Text,
+                        cell.RowSpan == 0 ? 1 : cell.RowSpan,
+                        cell.ColumnSpan == 0 ? 1 : cell.ColumnSpan,
+                        cell.Attributes["StyleID"],
+                        ColumnType.Other,
+                        string.Empty);
+                }
+
+                _writer.WriteEndElement();
+            }
+            _addedRowSpans.Clear();
+        }
+
         #endregion
 
         #region Render Filter
@@ -807,6 +1015,32 @@ namespace Nat.ExportInExcel
         #endregion
 
         #region help functions, properties
+
+        protected void AddStyles(Table table)
+        {
+            foreach (TableRow tableRow in table.Rows)
+            {
+                foreach (TableCell tableCell in tableRow.Cells)
+                {
+                    tableCell.Attributes["StyleID"] = AddStyle(
+                        null,
+                        null,
+                        string.IsNullOrEmpty(tableCell.Style[HtmlTextWriterStyle.FontSize])
+                            ? (int?)null
+                            : Convert.ToInt32(tableCell.Style[HtmlTextWriterStyle.FontSize]),
+                        "bold".Equals(tableCell.Style[HtmlTextWriterStyle.FontWeight], StringComparison.OrdinalIgnoreCase),
+                        "italic".Equals(tableCell.Style[HtmlTextWriterStyle.FontStyle], StringComparison.OrdinalIgnoreCase),
+                        string.IsNullOrEmpty(tableCell.Style[HtmlTextWriterStyle.TextAlign])
+                            ? (Aligment?)null
+                            : (Aligment)Enum.Parse(typeof(Aligment), tableCell.Style[HtmlTextWriterStyle.TextAlign]),
+                        string.IsNullOrEmpty(tableCell.Style[HtmlTextWriterStyle.VerticalAlign])
+                            ? (Aligment?)null
+                            : (Aligment)Enum.Parse(typeof(Aligment), tableCell.Style[HtmlTextWriterStyle.VerticalAlign]),
+                        DefaultStyleId,
+                        "solid").ToString();
+                }
+            }
+        }
 
         protected void WriteStartRow(int? height)
         {
@@ -987,6 +1221,14 @@ namespace Nat.ExportInExcel
             }
 
             _hyperlinkRanges[rangeOfCell] = new Pair<string, string>(keyHref, cellData);
+        }
+
+        protected int GetCountColumns(Table table)
+        {
+            if (table == null || table.Rows.Count == 0)
+                return 0;
+            return table.Rows.Cast<TableRow>()
+                .Max(r => r.Cells.Cast<TableCell>().Max(c => c.ColumnSpan == 0 ? 1 : c.ColumnSpan));
         }
 
         #endregion

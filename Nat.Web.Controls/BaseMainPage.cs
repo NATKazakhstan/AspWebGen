@@ -23,26 +23,17 @@ using Nat.Web.Tools.Initialization;
 using System.Data.SqlClient;
 using Nat.Web.Controls.Properties;
 using Nat.Web.Tools.Security;
-#if !LOCAL && ForSharepoint
-using Microsoft.SharePoint;
-#endif
 
 [assembly: WebResource("Nat.Web.Controls.GenerationClasses.MainScripts.js", "text/javascript")]
 
 namespace Nat.Web.Controls
 {
-    
- //todo: попробовать заюзать Microsoft.SharePoint.Portal.WebControls.PersonalWebPartPage
     using System.Text.RegularExpressions;
 
     using Nat.Web.Controls.GenerationClasses.BaseJournal;
     using Nat.Web.Controls.GenerationClasses.Navigator;
-
-#if !LOCAL && ForSharepoint
-    public abstract class BaseMainPage : Microsoft.SharePoint.WebPartPages.WebPartPage
-#else
+    
     public abstract class BaseMainPage : Page
-#endif
     {
         private Control _control;
         private Control _filterControl;

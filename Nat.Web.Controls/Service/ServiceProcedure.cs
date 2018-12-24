@@ -9,9 +9,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Security.Principal;
 using System.Web;
-using Microsoft.SharePoint;
 using Nat.Web.Controls.Properties;
-using System.Xml.Serialization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Nat.Web.Tools;
@@ -402,14 +400,10 @@ namespace Nat.Web.Controls.Service
 
         public void SaveUsersMayWork()
         {
-            SPSecurity.RunWithElevatedPrivileges(
-                delegate
-                {
-                    var ser = new BinaryFormatter();
-                    string path = HttpContext.Current.Request.MapPath("ServiceProcedureUsersMayWork.xml");
-                    using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write))
-                        ser.Serialize(stream, UsersMayWork);
-                });
+            var ser = new BinaryFormatter();
+            string path = HttpContext.Current.Request.MapPath("ServiceProcedureUsersMayWork.xml");
+            using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write))
+                ser.Serialize(stream, UsersMayWork);
         }
 
         protected static Dictionary<string, string> LoadUsersMayWork()

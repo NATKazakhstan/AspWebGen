@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Nat.Web.Controls.GenerationClasses.BaseJournal
+﻿namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 {
-    using Microsoft.SharePoint.WebControls;
-
     public interface IMultipleKey
     {
         bool Equals(IMultipleKey secondObj);

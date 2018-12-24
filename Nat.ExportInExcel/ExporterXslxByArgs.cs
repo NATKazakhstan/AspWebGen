@@ -12,6 +12,7 @@ namespace Nat.ExportInExcel
     using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Web.UI.WebControls;
 
     using Nat.Web.Controls.GenerationClasses.BaseJournal;
     using Nat.Web.Tools.Export;
@@ -40,20 +41,28 @@ namespace Nat.ExportInExcel
 
         protected override int GetFixedRowsCount()
         {
-            return _args.FixedRowsCount;
+            if (_args.FixedRowsCount > 0)
+                return _args.FixedRowsCount + (RenderFirstHeaderTable?.Rows.Count ?? 0);
+            return 0;
         }
 
         protected override int GetCountRows()
         {
             return _args.Data.Count // количество данных
-                + _args.Columns.Max((Func<IExportColumn, int>)GetLevel) // количество строк в заголовке таблицы
+                + _args.Columns.Max(GetLevel) // количество строк в заголовке таблицы
                 + (_args.FilterValues?.Count ?? 0) + 1 // количество фильтров + пустая строка
+                   + (RenderFooterTable?.Rows.Count ?? 0)
+                   + (RenderFirstHeaderTable?.Rows.Count ?? 0)
                 + 1; // строка заголовка
         }
 
         protected override int GetCountColumns()
         {
-            return _args.Columns.Sum((Func<IExportColumn, int>)CountColumns);
+            var footerCount = RenderFooterTable?.Rows.Cast<TableRow>()
+                                  .Max(r => r.Cells.Cast<TableCell>().Max(c => c.ColumnSpan == 0 ? 1 : c.ColumnSpan)) ?? 0;
+            var headerCount = RenderFirstHeaderTable?.Rows.Cast<TableRow>()
+                                  .Max(r => r.Cells.Cast<TableCell>().Max(c => c.ColumnSpan == 0 ? 1 : c.ColumnSpan)) ?? 0;
+            return Math.Max(Math.Max(_args.Columns.Sum((Func<IExportColumn, int>)CountColumns), footerCount), headerCount);
         }
 
         protected int GetRowsInHeader()
@@ -125,6 +134,7 @@ namespace Nat.ExportInExcel
         {
             foreach (var row in _args.Data)
                 RenderData(row);
+            _addedRowSpans.Clear();
         }
 
         private void RenderData(object row)
@@ -166,10 +176,6 @@ namespace Nat.ExportInExcel
             _writer.WriteEndElement();
         }
 
-        protected override void RenderFooter()
-        {
-        }
-
         protected override void RenderHeader()
         {
             int maxRowSpan = GetRowsInHeader();
@@ -184,6 +190,10 @@ namespace Nat.ExportInExcel
             }
             while (++level < maxRowSpan);
         }
+
+        protected override Table RenderFooterTable { get; }
+        protected override Table RenderFirstHeaderTable { get; }
+        protected override Table[] RenderAdditionalSheetsTable { get; }
 
         private void RenderHeader(IEnumerable<IExportColumn> columns, int renderLevel, int currentLevel, int maxRowSpan)
         {

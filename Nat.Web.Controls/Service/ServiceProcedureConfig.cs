@@ -8,8 +8,6 @@ using System;
 using System.IO;
 using System.Web;
 using System.Xml.Serialization;
-using System.Collections.Generic;
-using Microsoft.SharePoint;
 
 namespace Nat.Web.Controls.Service
 {
@@ -40,13 +38,10 @@ namespace Nat.Web.Controls.Service
             else
                 _TimeBetweenRequest = TimeBetweenRequest.Value.Ticks;
             var ser = new XmlSerializer(typeof(ServiceProcedureConfig));
-            SPSecurity.RunWithElevatedPrivileges(
-                delegate
-                    {
-                        var fileName = HttpContext.Current.Request.MapPath("ServiceProcedureConfig.xml");
-                        using (var stream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
-                            ser.Serialize(stream, this);
-                    });
+
+            var fileName = HttpContext.Current.Request.MapPath("ServiceProcedureConfig.xml");
+            using (var stream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+                ser.Serialize(stream, this);
         }
 
         /// <summary>

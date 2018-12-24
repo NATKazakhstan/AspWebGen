@@ -23,14 +23,4 @@
 
         public IList<DependentTable> DependentTables { get; private set; }
     }
-
-    public class DependentTable
-    {
-        public string ProjectCode { get; set; }
-        public string TableCode { get; set; }
-        public string TableHeader { get; set; }
-        public long? ID { get; set; }
-        public string RowName { get; set; }
-        public string Url { get; set; }
-    }
 }

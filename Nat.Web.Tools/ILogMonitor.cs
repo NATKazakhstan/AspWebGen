@@ -20,6 +20,7 @@ namespace Nat.Web.Tools
         long? WriteLog(ILogMessageEntry logMessageEntry);
         long? WriteLog(long messageCode, Func<ILogMessageEntry> log);
         void WriteFieldChanged(long refMessage, string rowEntity, string fieldName, object oldValue, object newValue);
+        void WriteFieldChanged(long refMessage);
 
         /// <summary>
         /// Результат логирования ссылка на лог в журнале событий.

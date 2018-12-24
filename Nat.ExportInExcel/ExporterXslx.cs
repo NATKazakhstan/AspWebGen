@@ -75,33 +75,6 @@ namespace Nat.ExportInExcel
                         columnHierarchy.IsVerticalHeader ? HeaderVertiacalStyleId : HeaderStyleId,
                         "solid").ToString();
             }
-
-            var footer = _journalControl.Journal.ExportFooter;
-            if (footer != null)
-            {
-                foreach (TableRow tableRow in footer.Rows)
-                {
-                    foreach (TableCell tableCell in tableRow.Cells)
-                    {
-                        tableCell.Attributes["StyleID"] = AddStyle(
-                            null,
-                            null,
-                            string.IsNullOrEmpty(tableCell.Style[HtmlTextWriterStyle.FontSize])
-                                ? (int?)null
-                                : Convert.ToInt32(tableCell.Style[HtmlTextWriterStyle.FontSize]),
-                            "bold".Equals(tableCell.Style[HtmlTextWriterStyle.FontWeight], StringComparison.OrdinalIgnoreCase),
-                            "italic".Equals(tableCell.Style[HtmlTextWriterStyle.FontStyle], StringComparison.OrdinalIgnoreCase),
-                            string.IsNullOrEmpty(tableCell.Style[HtmlTextWriterStyle.TextAlign])
-                                ? (Aligment?)null
-                                : (Aligment)Enum.Parse(typeof(Aligment), tableCell.Style[HtmlTextWriterStyle.TextAlign]),
-                            string.IsNullOrEmpty(tableCell.Style[HtmlTextWriterStyle.VerticalAlign])
-                                ? (Aligment?)null
-                                : (Aligment)Enum.Parse(typeof(Aligment), tableCell.Style[HtmlTextWriterStyle.VerticalAlign]),
-                            DefaultStyleId,
-                            "solid").ToString();
-                    }
-                }
-            }
         }
 
         protected override int GetFixedColumnsCount()
@@ -111,7 +84,7 @@ namespace Nat.ExportInExcel
 
         protected override int GetFixedRowsCount()
         {
-            return _journalControl.FixedHeader ? _journalControl.FixedRowsCount + GetCountRowsBeforeData() : 0;
+            return _journalControl.FixedHeader ? _journalControl.FixedRowsCount + GetCountRowsBeforeData() + (RenderFirstHeaderTable?.Rows.Count ?? 0) : 0;
         }
 
         #region Render Header
@@ -120,7 +93,10 @@ namespace Nat.ExportInExcel
         {
             var header = _journalControl.Journal.InnerHeader;
             _writer.WriteStartElement("cols");
-            var columns = header.GetAllDataColumns().Where(r => r.IsVisibleColumn(header.ColumnsDic)).ToList();
+            var columns = header.GetAllDataColumns()
+                .Where(r => r.IsVisibleColumn(header.ColumnsDic))
+                .Where(r => r.Childs.Count == 0 || string.IsNullOrEmpty(r.CrossColumnKey))
+                .ToList();
             for (int i = 0; i < columns.Count;)
             {
                 var item = columns[i];
@@ -189,6 +165,11 @@ namespace Nat.ExportInExcel
             return _journalControl.TableHeader;
         }
 
+        protected override string GetSheetName()
+        {
+            return _journalControl.Journal.GetExportSheetName() ?? base.GetSheetName();
+        }
+
         protected override List<ConditionalFormatting> GetConditionalFormatting()
         {
             return _journalControl.Journal.GetConditionalFormatting();
@@ -202,6 +183,7 @@ namespace Nat.ExportInExcel
         {
             foreach (var row in _journalControl.Journal.Rows.Where(r => r.Visible))
                 RenderData(row);
+            _addedRowSpans.Clear();
         }
 
         private void RenderData(BaseJournalRow<TRow> row)
@@ -268,31 +250,9 @@ namespace Nat.ExportInExcel
 
         #region Render Footer
 
-        protected override void RenderFooter()
-        {
-            if (_journalControl.Journal.ExportFooter == null)
-                return;
-
-            foreach (TableRow row in _journalControl.Journal.ExportFooter.Rows)
-            {
-                WriteStartRow(row.Height.IsEmpty || row.Height.Type != UnitType.Pixel ? null : (int?)row.Height.Value);
-                MoveRowIndex();
-
-                foreach (TableCell cell in row.Cells)
-                {
-                    RenderCell(
-                        _writer,
-                        cell.Text,
-                        cell.RowSpan == 0 ? 1 : cell.RowSpan,
-                        cell.ColumnSpan == 0 ? 1 : cell.ColumnSpan,
-                        cell.Attributes["StyleID"],
-                        ColumnType.Other,
-                        string.Empty);
-                }
-
-                _writer.WriteEndElement();
-            }
-        }
+        protected override Table RenderFooterTable => _journalControl.Journal.ExportFooter;
+        protected override Table RenderFirstHeaderTable => _journalControl.Journal.ExportHeader;
+        protected override Table[] RenderAdditionalSheetsTable => _journalControl.Journal.AdditionalSheetsTable;
 
         #endregion
 
@@ -343,7 +303,7 @@ namespace Nat.ExportInExcel
 
                     if (cellProps != null)
                     {
-                        if (hierarchyItem != null)
+                        if (hierarchyItem != null && bCell.ColSpan <= 1)
                         {
                             if (hierarchyItem.BColor != null && cellProps.BColor == null)
                                 cellProps.BColor = hierarchyItem.BColor;
@@ -377,11 +337,9 @@ namespace Nat.ExportInExcel
 
         protected override int GetCountColumns()
         {
-            return Math.Max(
-                _journalControl.Journal.InnerHeader.GetFullColSpan(),
-                _journalControl.Journal.ExportFooter != null
-                    ? _journalControl.Journal.ExportFooter.Rows.Cast<TableRow>().Max(r => r.Cells.Cast<TableCell>().Max(c => c.ColumnSpan == 0 ? 1 : c.ColumnSpan))
-                    : 0);
+            var footerCount = GetCountColumns(_journalControl.Journal.ExportFooter);
+            var headerCount = GetCountColumns(_journalControl.Journal.ExportHeader);
+            return Math.Max(Math.Max(_journalControl.Journal.InnerHeader.GetFullColSpan(), footerCount), headerCount);
         }
 
         protected override int GetCountRows()
@@ -389,7 +347,8 @@ namespace Nat.ExportInExcel
             // количество строк журнала RenderData
             return _journalControl.Journal.Rows.Count(r => r.Visible)
                    + GetCountRowsBeforeData()
-                   + (_journalControl.Journal.ExportFooter != null ? _journalControl.Journal.ExportFooter.Rows.Count : 0);
+                   + (_journalControl.Journal.ExportFooter?.Rows.Count ?? 0)
+                   + (_journalControl.Journal.ExportHeader?.Rows.Count ?? 0);
         }
 
         private int GetCountRowsBeforeData()

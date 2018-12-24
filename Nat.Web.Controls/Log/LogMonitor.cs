@@ -22,7 +22,10 @@ using Nat.Web.Tools.Security;
 namespace Nat.Web.Controls
 {
     using System.Data.Linq;
+    using System.IO;
     using System.Xml.Linq;
+
+    using Nat.Web.Controls.Log;
 
     public delegate LogMessageEntry LogDelegate();
 
@@ -365,6 +368,53 @@ namespace Nat.Web.Controls
                 _cmdLogFields.Parameters["@newValue"].Value = GetValue(newValue);
                 _cmdLogFields.Parameters["@refMessage"].Value = refMessage;
                 _cmdLogFields.ExecuteNonQuery();
+            }
+            finally
+            {
+                if (openConnection)
+                    _cmdLogFields.Connection.Close();
+            }
+        }
+
+        public void WriteFieldChanged(long refMessage)
+        {
+            var openConnection = false;
+            try
+            {
+                if (_cmdLogFields.Connection.State != ConnectionState.Open)
+                {
+                    openConnection = true;
+                    _cmdLogFields.Connection.Open();
+                }
+                
+                var data = new DS.LogFieldChangedDataTable();
+                var table = new DataTable(data.TableName);
+                using (var stream = new MemoryStream())
+                {
+                    data.WriteXmlSchema(stream);
+                    stream.Flush();
+                    stream.Position = 0;
+                    table.ReadXmlSchema(stream);
+                }
+
+                foreach (var row in ChangedFieldList)
+                    data.AddLogFieldChangedRow(refMessage, row.RowEntity, row.FieldName, (string)GetValue(row.OldValue), (string)GetValue(row.NewValue));
+
+                foreach (var row in data)
+                    table.Rows.Add(row.ItemArray);
+
+                using (var command = _cmdLogFields.Connection.CreateCommand())
+                {
+                    var parameter = command.CreateParameter();
+                    parameter.ParameterName = "@data";
+                    parameter.Value = table;
+                    command.Parameters.Add(parameter);
+                    command.CommandText = "LOG_P_BulkInsertLogFieldChanged";
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.ExecuteNonQuery();
+                }
+
+                ChangedFieldList.Clear();
             }
             finally
             {

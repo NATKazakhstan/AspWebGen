@@ -9,6 +9,8 @@
       <Column Name="Enabled" Type="System.Boolean" DbType="bit" CanBeNull="false" />
       <Association Name="MSC_Modules_MSC_Module_Configurations_refModule" Member="MSC_Module_Configurations_refModule" ThisKey="id" OtherKey="refModule" Type="MSC_Module_Configuration" />
       <Association Name="MSC_Modules_MSC_Module_ConfigurationFields_refModule" ThisKey="id" OtherKey="refModule" Type="MSC_Module_ConfigurationField" Member="MSC_Module_ConfigurationFields_refModule" />
+      <Association Name="MSC_Modules_MSC_Module_Events_refModule" ThisKey="id" OtherKey="refModule" Type="MSC_Module_Event" Member="MSC_Module_Events_refModule" />
+      <Association Name="MSC_Modules_MSC_Module_Sends_refModule" ThisKey="id" OtherKey="refModule" Type="MSC_Module_Send" Member="MSC_Module_Sends_refModule" />
     </Type>
   </Table>
   <Table Name="dbo.MSC_Module_Configurations" Member="MSC_Module_Configurations">
@@ -33,6 +35,112 @@
       <Column Name="isDel" Type="System.Boolean" DbType="bit" CanBeNull="false" />
       <Association Name="MSC_Modules_MSC_Module_ConfigurationFields_refModule" ThisKey="refModule" OtherKey="id" Type="MSC_Module" IsForeignKey="true" Member="MSC_Module_refModule" />
       <Association Name="MSC_Module_ConfigurationFields_MSC_Module_Configurations_refField" ThisKey="id" OtherKey="refField" Type="MSC_Module_Configuration" Member="MSC_Module_Configurations_refField" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MSC_Module_Events" Member="MSC_Module_Events">
+    <Type Name="MSC_Module_Event">
+      <Column Name="id" Type="System.Int64" DbType="bigint" CanBeNull="false" IsDbGenerated="true" IsPrimaryKey="true" />
+      <Column Name="refModule" Type="System.Int64" DbType="bigint" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="nvarchar(50)" CanBeNull="false" />
+      <Column Name="NameKz" Type="System.String" DbType="nvarchar(200)" CanBeNull="false" />
+      <Column Name="NameRu" Type="System.String" DbType="nvarchar(200)" CanBeNull="false" />
+      <Column Name="isDel" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+      <Association Name="MSC_Modules_MSC_Module_Events_refModule" ThisKey="refModule" OtherKey="id" Type="MSC_Module" IsForeignKey="true" Member="MSC_Module_refModule" />
+      <Association Name="MSC_Module_Events_MSC_Module_SendEvents_refModuleEvent" ThisKey="id" OtherKey="refModuleEvent" Type="MSC_Module_SendEvent" Member="MSC_Module_SendEvents_refModuleEvent" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MSC_Module_Sends" Member="MSC_Module_Sends">
+    <Type Name="MSC_Module_Send">
+      <Column Name="id" Type="System.Int64" DbType="bigint" CanBeNull="false" IsDbGenerated="true" IsPrimaryKey="true" />
+      <Column Name="refModule" Type="System.Int64" DbType="bigint" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="nvarchar(255)" CanBeNull="false" />
+      <Column Name="Enabled" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+      <Column Name="OnAdd" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+      <Column Name="OnChange" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+      <Column Name="OnDelete" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+      <Column Name="OnEvents" Type="System.String" DbType="nvarchar(MAX)" CanBeNull="true" />
+      <Association Name="MSC_Module_Sends_MSC_Module_SendEvents_refModuleSend" ThisKey="id" OtherKey="refModuleSend" Type="MSC_Module_SendEvent" Member="MSC_Module_SendEvents_refModuleSend" />
+      <Association Name="MSC_Module_Sends_MSC_Module_Send_Users_refModuleSend" ThisKey="id" OtherKey="refModuleSend" Type="MSC_Module_Send_User" Member="MSC_Module_Send_Users_refModuleSend" />
+      <Association Name="MSC_Module_Sends_MSC_Module_Send_Positions_refModuleSend" ThisKey="id" OtherKey="refModuleSend" Type="MSC_Module_Send_Position" Member="MSC_Module_Send_Positions_refModuleSend" />
+      <Association Name="MSC_Module_Sends_MSC_Module_Send_Conditions_refModuleSend" ThisKey="id" OtherKey="refModuleSend" Type="MSC_Module_Send_Condition" Member="MSC_Module_Send_Conditions_refModuleSend" />
+      <Association Name="MSC_Modules_MSC_Module_Sends_refModule" ThisKey="refModule" OtherKey="id" Type="MSC_Module" IsForeignKey="true" Member="MSC_Module_refModule" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MSC_Module_SendEvents" Member="MSC_Module_SendEvents">
+    <Type Name="MSC_Module_SendEvent">
+      <Column Name="id" Type="System.Int64" DbType="bigint" CanBeNull="false" IsDbGenerated="true" IsPrimaryKey="true" />
+      <Column Name="refModuleSend" Type="System.Int64" DbType="bigint" CanBeNull="false" />
+      <Column Name="refModuleEvent" Type="System.Int64" DbType="bigint" CanBeNull="false" />
+      <Association Name="MSC_Module_Sends_MSC_Module_SendEvents_refModuleSend" ThisKey="refModuleSend" OtherKey="id" Type="MSC_Module_Send" IsForeignKey="true" Member="MSC_Module_Send_refModuleSend" />
+      <Association Name="MSC_Module_Events_MSC_Module_SendEvents_refModuleEvent" ThisKey="refModuleEvent" OtherKey="id" Type="MSC_Module_Event" IsForeignKey="true" Member="MSC_Module_Event_refModuleEvent" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ULS_VSharedPersons" Member="ULS_VSharedPersons">
+    <Type Name="ULS_VSharedPerson">
+      <Column Name="id" Type="System.Int64" DbType="bigint" CanBeNull="false" IsDbGenerated="true" IsPrimaryKey="true" />
+      <Column Name="FioRu" Type="System.String" DbType="nvarchar(255)" CanBeNull="false" />
+      <Column Name="FioKz" Type="System.String" DbType="nvarchar(255)" CanBeNull="false" />
+      <Column Name="refSid" Type="System.Int64" DbType="bigint" CanBeNull="true" />
+      <Column Name="refPosition" Type="System.Int64" DbType="bigint" CanBeNull="true" />
+      <Column Name="refSubdivision" Type="System.Int64" DbType="bigint" CanBeNull="true" />
+      <Column Name="refMilitaryUnit" Type="System.Int64" DbType="bigint" CanBeNull="true" />
+      <Column Name="codeStructure" Type="System.String" DbType="varchar(16)" CanBeNull="true" />
+      <Association Name="ULS_VSharedPersons_MSC_Module_Send_Users_refUser" ThisKey="id" OtherKey="refUser" Type="MSC_Module_Send_User" Member="MSC_Module_Send_Users_refUser" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MSC_Module_Send_Users" Member="MSC_Module_Send_Users">
+    <Type Name="MSC_Module_Send_User">
+      <Column Name="id" Type="System.Int64" DbType="bigint" CanBeNull="false" IsDbGenerated="true" IsPrimaryKey="true" />
+      <Column Name="refModuleSend" Type="System.Int64" DbType="bigint" CanBeNull="false" />
+      <Column Name="ToOrCopy" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+      <Column Name="refUser" Type="System.Int64" DbType="bigint" CanBeNull="false" />
+      <Association Name="ULS_VSharedPersons_MSC_Module_Send_Users_refUser" ThisKey="refUser" OtherKey="id" Type="ULS_VSharedPerson" IsForeignKey="true" Member="ULS_VSharedPerson_refUser" />
+      <Association Name="MSC_Module_Sends_MSC_Module_Send_Users_refModuleSend" ThisKey="refModuleSend" OtherKey="id" Type="MSC_Module_Send" IsForeignKey="true" Member="MSC_Module_Send_refModuleSend" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ULS_VSharedPositions" Member="ULS_VSharedPositions">
+    <Type Name="ULS_VSharedPosition">
+      <Column Name="id" Type="System.Int64" DbType="bigint" CanBeNull="false" IsDbGenerated="true" IsPrimaryKey="true" />
+      <Column Name="FullNameRu" Type="System.String" DbType="nvarchar(MAX)" CanBeNull="false" />
+      <Column Name="FullNameKz" Type="System.String" DbType="nvarchar(MAX)" CanBeNull="false" />
+      <Column Name="codeStructure" Type="System.String" DbType="nvarchar(MAX)" CanBeNull="false" />
+      <Column Name="refMilitaryUnit" Type="System.Int64" DbType="bigint" CanBeNull="true" />
+      <Column Name="FullWeight" Type="System.String" DbType="varchar(40)" CanBeNull="true" />
+      <Association Name="ULS_VSharedPositions_MSC_Module_Send_Positions_refPosition" ThisKey="id" OtherKey="refPosition" Type="MSC_Module_Send_Position" Member="MSC_Module_Send_Positions_refPosition" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MSC_Module_Send_Positions" Member="MSC_Module_Send_Positions">
+    <Type Name="MSC_Module_Send_Position">
+      <Column Name="id" Type="System.Int64" DbType="bigint" CanBeNull="false" IsDbGenerated="true" IsPrimaryKey="true" />
+      <Column Name="refModuleSend" Type="System.Int64" DbType="bigint" CanBeNull="false" />
+      <Column Name="ToOrCopy" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+      <Column Name="refPosition" Type="System.Int64" DbType="bigint" CanBeNull="false" />
+      <Column Name="SameSubdivision" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+      <Column Name="SameMilitaryUnit" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+      <Column Name="SameFormationUnit" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+      <Column Name="SameRegionalUnit" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+      <Column Name="AnySubdivision" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+      <Association Name="MSC_Module_Sends_MSC_Module_Send_Positions_refModuleSend" ThisKey="refModuleSend" OtherKey="id" Type="MSC_Module_Send" IsForeignKey="true" Member="MSC_Module_Send_refModuleSend" />
+      <Association Name="ULS_VSharedPositions_MSC_Module_Send_Positions_refPosition" ThisKey="refPosition" OtherKey="id" Type="ULS_VSharedPosition" IsForeignKey="true" Member="ULS_VSharedPosition_refPosition" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MSC_Conditions" Member="MSC_Conditions">
+    <Type Name="MSC_Condition">
+      <Column Name="id" Type="System.Int64" DbType="bigint" CanBeNull="false" IsDbGenerated="true" IsPrimaryKey="true" />
+      <Column Name="Code" Type="System.String" DbType="nvarchar(255)" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="nvarchar(255)" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="nvarchar(MAX)" CanBeNull="true" />
+      <Association Name="MSC_Conditions_MSC_Module_Send_Conditions_refCondition" ThisKey="id" OtherKey="refCondition" Type="MSC_Module_Send_Condition" Member="MSC_Module_Send_Conditions_refCondition" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MSC_Module_Send_Conditions" Member="MSC_Module_Send_Conditions">
+    <Type Name="MSC_Module_Send_Condition">
+      <Column Name="id" Type="System.Int64" DbType="bigint" CanBeNull="false" IsDbGenerated="true" IsPrimaryKey="true" />
+      <Column Name="refModuleSend" Type="System.Int64" DbType="bigint" CanBeNull="false" />
+      <Column Name="ToOrCopy" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+      <Column Name="refCondition" Type="System.Int64" DbType="bigint" CanBeNull="false" />
+      <Association Name="MSC_Module_Sends_MSC_Module_Send_Conditions_refModuleSend" ThisKey="refModuleSend" OtherKey="id" Type="MSC_Module_Send" IsForeignKey="true" Member="MSC_Module_Send_refModuleSend" />
+      <Association Name="MSC_Conditions_MSC_Module_Send_Conditions_refCondition" ThisKey="refCondition" OtherKey="id" Type="MSC_Condition" IsForeignKey="true" Member="MSC_Condition_refCondition" />
     </Type>
   </Table>
 </Database>

@@ -222,6 +222,7 @@ namespace Nat.Web.Controls
                          ColumnFilterStorage.DataType == typeof(Int16) ||
                          ColumnFilterStorage.DataType == typeof(Byte) ||
                          ColumnFilterStorage.DataType == typeof(Double) ||
+                         ColumnFilterStorage.DataType == typeof(Decimal) ||
                          ColumnFilterStorage.DataType == typeof(Single) ||
                          ColumnFilterStorage.DataType == typeof(String))
                 {
@@ -474,6 +475,7 @@ namespace Nat.Web.Controls
                     ColumnFilterStorage.DataType == typeof(Int16) ||
                     ColumnFilterStorage.DataType == typeof(Byte) ||
                     ColumnFilterStorage.DataType == typeof(Double) ||
+                    ColumnFilterStorage.DataType == typeof(Decimal) ||
                     ColumnFilterStorage.DataType == typeof(Single) ||
                     ColumnFilterStorage.DataType == typeof(String))
             {
@@ -562,6 +564,7 @@ namespace Nat.Web.Controls
                     ColumnFilterStorage.DataType == typeof(Int16) ||
                     ColumnFilterStorage.DataType == typeof(Byte) ||
                     ColumnFilterStorage.DataType == typeof(Double) ||
+                    ColumnFilterStorage.DataType == typeof(Decimal) ||
                     ColumnFilterStorage.DataType == typeof(Single) ||
                     ColumnFilterStorage.DataType == typeof(String))
             {
@@ -678,6 +681,7 @@ namespace Nat.Web.Controls
                     ColumnFilterStorage.DataType == typeof(Int16) ||
                     ColumnFilterStorage.DataType == typeof(Byte) ||
                     ColumnFilterStorage.DataType == typeof(Double) ||
+                    ColumnFilterStorage.DataType == typeof(Decimal) ||
                     ColumnFilterStorage.DataType == typeof(Single) ||
                     ColumnFilterStorage.DataType == typeof(String))
             {

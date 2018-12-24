@@ -21,13 +21,16 @@ using Nat.Web.Tools.Security;
 
 namespace Nat.Web.Controls.GenerationClasses
 {
+    using System.Data.Linq;
     using System.Web;
 
     using System.Globalization;
+    using System.Reflection;
     using System.Windows.Forms;
 
     using AjaxControlToolkit;
 
+    using Nat.Tools.Specific;
     using Nat.Web.Controls.DateTimeControls;
     using Nat.Web.Tools.Initialization;
 
@@ -1084,6 +1087,20 @@ namespace Nat.Web.Controls.GenerationClasses
 
                         var view = dataSourceView as IDataSourceViewGetName;
                         if (view != null) return new[] { view.GetName(value) };
+                    }
+                    else
+                    {
+                        var tableType = BuildManager.GetType(ProjectName + "." + TableName, false, true);
+                        var getNameType = BuildManager.GetType("Nat.Web.Core.Controls.DataAdapters.LegacyAdapter", false, true);
+                        var methodGetName = getNameType?.GetMethod("GetName", BindingFlags.Public | BindingFlags.Static);
+                        if (tableType != null && methodGetName != null)
+                        {
+                            //using (var connection = SpecificInstances.DbFactory.CreateConnection())
+                            //using (var db = new DataContext(connection))
+                            //{
+                            return (IEnumerable<string>)methodGetName.Invoke(null, new object[] { tableType, HttpContext.Current, value });
+                            //}
+                        }
                     }
                 }
                 return null;

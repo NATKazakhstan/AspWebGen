@@ -29,6 +29,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <UseGlobalApplicationHostFile />
     <RestorePackages>true</RestorePackages>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -66,10 +67,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.JScript" />
-    <Reference Include="Microsoft.SharePoint, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\Microsoft.SharePoint.dll</HintPath>
-    </Reference>
     <Reference Include="Nat.Controls, Version=1.0.14.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Debug\Nat.Controls.dll</HintPath>
@@ -406,6 +403,17 @@
     <EmbeddedResource Include="Lookup\control_fastforward_blue.png" />
     <EmbeddedResource Include="Lookup\control_rewind_blue.png" />
     <EmbeddedResource Include="CopyValue.js" />
+    <Content Include="Log\DS.xsc">
+      <DependentUpon>DS.xsd</DependentUpon>
+    </Content>
+    <None Include="Log\DS.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DS.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Log\DS.xss">
+      <DependentUpon>DS.xsd</DependentUpon>
+    </Content>
     <None Include="MainPage.aspx" />
     <Content Include="WebServiceUploadFiles.asmx" />
     <Content Include="Trace\TimeOfDestinationUser.ascx" />
@@ -454,6 +462,7 @@
     <Compile Include="GenerationClasses\BaseClientManagmentControlExtensions.cs" />
     <Compile Include="GenerationClasses\BaseJournal\BaseFilterParameterContainer.cs" />
     <Compile Include="GenerationClasses\BaseJournal\BaseFilterParameterContent.cs" />
+    <Compile Include="GenerationClasses\BaseJournal\BaseFilterParameterFake.cs" />
     <Compile Include="GenerationClasses\BaseJournal\BaseFilterParameterStringSearch.cs" />
     <Compile Include="GenerationClasses\BaseJournal\BaseFilterParameterStructSearch.cs" />
     <Compile Include="GenerationClasses\BaseJournal\BaseJoinFilterParameterContainer.cs" />
@@ -502,6 +511,11 @@
     <Compile Include="GenerationClasses\Validators\ValidateInformationForm.cs" />
     <Compile Include="GenerationClasses\Validators\ValidateInformationFormApplyArgsInfo.cs" />
     <Compile Include="HistoryFilters\DateStartEndHistory.cs" />
+    <Compile Include="Log\DS.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DS.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Log\LogChangedFieldEntry.cs" />
     <Compile Include="Log\LogMessageEntry.cs" />
     <Compile Include="Log\LogMessageType.cs" />
@@ -744,7 +758,6 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="GenerationClasses\Navigator\MenuDefaultDestination.cs" />
-    <Compile Include="GenerationClasses\RichTextBox.cs" />
     <Compile Include="GenerationClasses\SavingJournalSettings.ascx.cs">
       <DependentUpon>SavingJournalSettings.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -47,7 +47,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
             var filters = new List<string>();
             foreach (var filter in allFilters)
             {
-                if (string.IsNullOrEmpty(filter.FilterName))
+                if (string.IsNullOrEmpty(filter.FilterName) || !filter.Visible)
                     continue;
 
                 var filterName = LinqFilterGenerator.GetFilterName(filter.FilterName);

@@ -1214,14 +1214,10 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                 var postBackDataHandler = control as IPostBackDataHandler;
                 try
                 {
-                    if (control != null && postBackDataHandler != null)
-                        postBackDataHandler.LoadPostData(control.UniqueID, postData);
-                    else
-                    {
-                        var editComponent = control as IRenderComponent;
-                        if (editComponent != null)
-                            editComponent.Value = postData[editComponent.UniqueID];
-                    }
+                    if (control is IRenderComponent editComponent)
+                        editComponent.Value = postData[editComponent.UniqueID];
+                    else if (control != null)
+                        postBackDataHandler?.LoadPostData(control.UniqueID, postData);
                 }
                 catch (Exception e)
                 {

@@ -201,9 +201,10 @@ namespace Nat.ExportInExcel
             {
                 if (renderLevel == currentLevel)
                 {
+                    var header = column.Header?.Replace("<br>", "\r\n").Replace("<br/>", "\r\n").Replace("<br />", "\r\n").Replace("</br>", "\r\n");
                     RenderCell(
                         _writer,
-                        column.Header,
+                        header,
                         column.HasChild ? 1 : maxRowSpan - currentLevel,
                         column.HasChild ? column.GetChilds().Sum((Func<IExportColumn, int>)GetColSpan) : 1,
                         column.IsVerticalHeaderText ? HeaderVertiacalStyleId : HeaderStyleId,

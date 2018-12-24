@@ -132,6 +132,10 @@
       <Project>{e2720d82-a9ca-4dae-925a-d91334b1b0b1}</Project>
       <Name>AjaxControlToolkit</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Nat.Web.Tools\Nat.Web.Tools.csproj">
+      <Project>{E2F1C772-023D-49FC-B1C8-45C407A300BD}</Project>
+      <Name>Nat.Web.Tools</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

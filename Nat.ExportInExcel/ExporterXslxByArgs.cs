@@ -132,18 +132,85 @@ namespace Nat.ExportInExcel
 
         protected override void RenderData()
         {
-            foreach (var row in _args.Data)
-                RenderData(row);
+            var columns = _args.Columns.SelectMany(GetColumns).ToArray();
+            if (_args.GetGroupText == null)
+                foreach (var row in _args.Data)
+                    RenderData(row, columns);
+            else
+            {
+                var groupText = string.Empty;
+                var rowIndex = -1;
+                foreach (var row in _args.Data)
+                {
+                    rowIndex++;
+                    var newGroupText = _args.GetGroupText(row);
+                    if (rowIndex != 0 && _args.GetTotalValue != null && newGroupText != groupText)
+                        RenderTotalRow(columns, groupText);
+
+                    if (rowIndex == 0 || newGroupText != groupText)
+                    {
+                        _args.StartRenderRow?.Invoke(row);
+                        WriteStartRow(null);
+                        MoveRowIndex();
+                        RenderCell(_writer, newGroupText, 1, columns.Length, DataGroupStyleId, ColumnType.Other, null);
+                        _writer.WriteEndElement();
+                    }
+
+                    RenderData(row, columns);
+
+                    if (_args.ComputeTotalValue != null)
+                    {
+                        foreach (var column in columns)
+                            _args.ComputeTotalValue(row, newGroupText, column);
+                    }
+
+                    groupText = newGroupText;
+                }
+
+                if (rowIndex != 0 && _args.GetTotalValue != null)
+                    RenderTotalRow(columns, groupText);
+
+                if (rowIndex != 0 && _args.GetTotalValue != null)
+                    RenderTotalRow(columns, null);
+            }
+
             _addedRowSpans.Clear();
         }
 
-        private void RenderData(object row)
+        private void RenderTotalRow(IExportColumn[] columns, string groupText)
         {
-            if (_args.StartRenderRow != null) _args.StartRenderRow(row);
+            _args.StartRenderRow?.Invoke(null);
             WriteStartRow(null);
 
             MoveRowIndex();
-            foreach (var column in _args.Columns.SelectMany(GetColumns))
+            foreach (var column in columns)
+            {
+                string styleId;
+                if (column.IsVerticalDataText) styleId = DataGroupVerticalStyleId;
+                else if (column.IsNumericColumn) styleId = DataGroupStyleCenterId;
+                else styleId = DataGroupStyleId;
+
+                var totalValue = _args.GetTotalValue(groupText, column);
+                RenderCell(
+                    _writer,
+                    totalValue,
+                    column.RowSpan,
+                    column.ColSpan,
+                    styleId,
+                    column.IsNumericColumn ? ColumnType.Numeric : ColumnType.Other,
+                    null);
+            }
+         
+            _writer.WriteEndElement();
+        }
+
+        private void RenderData(object row, IEnumerable<IExportColumn> columns)
+        {
+            _args.StartRenderRow?.Invoke(row);
+            WriteStartRow(null);
+
+            MoveRowIndex();
+            foreach (var column in columns)
             {
                 string styleId;
 

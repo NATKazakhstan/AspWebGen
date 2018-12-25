@@ -111,5 +111,23 @@ namespace Nat.Web.Tools.Export
                 FilterValues = new List<string>();
             FilterValues.Add(filterValue);
         }
+
+        /// <summary>
+        /// Текст для группировки строк (выводится одна строка на всю таблицу с текстом).
+        /// Первый параметр строка, вернуть текст группы.
+        /// </summary>
+        public Func<object, string> GetGroupText;
+
+        /// <summary>
+        /// Необходимо выполнить расчет данных по колонкам.
+        /// Первый параметр строка, второй текст группы, третий колнка.
+        /// </summary>
+        public Action<object, string, IExportColumn> ComputeTotalValue;
+
+        /// <summary>
+        /// Получение значения для ячейки строки итога.
+        /// Первый параметр текст группы, второй колнка, вернуть текст ячейки Excel.
+        /// </summary>
+        public Func<string, IExportColumn, string> GetTotalValue;
     }
 }

@@ -89,6 +89,7 @@
     <Compile Include="Extenders\AbstractContainerExtender.cs" />
     <Compile Include="Extenders\ChartExtender.cs" />
     <Compile Include="Extenders\ComboBoxBaseExtender.cs" />
+    <Compile Include="Extenders\ExportExtender.cs" />
     <Compile Include="ExtNetBrowseFilterParameters.cs" />
     <Compile Include="Extenders\BaseDataSourceViewExtender.cs" />
     <Compile Include="Extenders\BaseGridColumnsExtender.cs" />

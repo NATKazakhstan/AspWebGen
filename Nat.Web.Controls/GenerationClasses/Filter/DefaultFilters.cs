@@ -155,9 +155,18 @@ namespace Nat.Web.Controls.GenerationClasses
             /// «начени€ не начинаетс€ с
             /// </summary>
             NotStartsWithCode,
+            /// <summary>
             /// “екст пол€ по ссылке содержит любые слова.
             /// </summary>
-            ContainsAnyWordByRef
+            ContainsAnyWordByRef,
+            /// <summary>
+            /// «начение пол€ больше или равно параметра
+            /// </summary>
+            MoreOrEqual,
+            /// <summary>
+            /// «начение пол€ меньше или равно параметра
+            /// </summary>
+            LessOrEqual
         }
 
         #endregion

@@ -1252,6 +1252,16 @@ namespace Nat.Web.Controls.GenerationClasses
                                 }
 
                                 break;
+                            case DefaultFilters.ReferenceFilter.LessOrEqual:
+                                if (string.IsNullOrEmpty(filterItem.Value1)) break;
+                                yield return InitializerSection.StaticFilterNamesResources.SLess.ToFilterTypeString() + filterItem.Value1;
+
+                                break;
+                            case DefaultFilters.ReferenceFilter.MoreOrEqual:
+                                if (string.IsNullOrEmpty(filterItem.Value1)) break;
+                                yield return InitializerSection.StaticFilterNamesResources.SMore.ToFilterTypeString() + filterItem.Value1;
+
+                                break;
                             default:
                                 throw new ArgumentOutOfRangeException();
                         }

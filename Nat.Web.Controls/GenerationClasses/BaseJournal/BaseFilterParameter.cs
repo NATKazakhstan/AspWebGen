@@ -1024,6 +1024,12 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                 case DefaultFilters.ReferenceFilter.NotStartsWithCode:
                     NotStartsWithCodeExpression(value1, dataType);
                     break;
+                case DefaultFilters.ReferenceFilter.MoreOrEqual:
+                    MoreOrEqualExpression(value1, dataType);
+                    break;
+                case DefaultFilters.ReferenceFilter.LessOrEqual:
+                    LessOrEqualExpression(value1, dataType);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException("filterType");
             }
@@ -1210,6 +1216,12 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                     break;
                 case DefaultFilters.ReferenceFilter.NotStartsWithCode:
                     NotStartsWithCodeExpression(filterItem.Value1, dataType);
+                    break;
+                case DefaultFilters.ReferenceFilter.MoreOrEqual:
+                    MoreOrEqualExpression(filterItem.Value1, dataType);
+                    break;
+                case DefaultFilters.ReferenceFilter.LessOrEqual:
+                    LessOrEqualExpression(filterItem.Value1, dataType);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("filterType");

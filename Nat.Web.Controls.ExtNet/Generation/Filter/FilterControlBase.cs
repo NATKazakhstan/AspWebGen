@@ -410,24 +410,25 @@ namespace Nat.Web.Controls.ExtNet.Generation.Filter
             switch (filterData.Type)
             {
                 case FilterHtmlGenerator.FilterType.Reference:
-                    {
-                        list = filterData.FilterByStartsWithCode
-                                   ? InitializerSection.StaticFilterNamesResources
-                                                       .ReferenceListWithTextFilterForCodeTypes
-                                   : InitializerSection.StaticFilterNamesResources.ReferencesFilterTypes;
+                {
+                    list = filterData.FilterByStartsWithCode
+                        ? InitializerSection.StaticFilterNamesResources
+                            .ReferenceListWithTextFilterForCodeTypes
+                        : InitializerSection.StaticFilterNamesResources.ReferencesFilterTypes;
 
-                        var bfilter = filterData as BaseFilterParameter;
-                        if (bfilter != null && bfilter.OTextValueExpressionRu == null)
-                            list = list.Where(r => !((string)r.Key).EndsWith("ByRef")).ToList();
-                            
-                        break;
-                    }
+                    var bfilter = filterData as BaseFilterParameter;
+                    if (bfilter != null && bfilter.OTextValueExpressionRu == null)
+                        list = list.Where(r => !((string) r.Key).EndsWith("ByRef")).ToList();
+
+                    break;
+                }
                 case FilterHtmlGenerator.FilterType.Numeric:
-                    {
-                        list = filterData.IsDateTime ? InitializerSection.StaticFilterNamesResources.DatetimeFilterTypes 
-                                                     : InitializerSection.StaticFilterNamesResources.NumericFilterTypes;
-                        break;
-                    }
+                {
+                    list = filterData.IsDateTime
+                        ? InitializerSection.StaticFilterNamesResources.DatetimeFilterTypes
+                        : InitializerSection.StaticFilterNamesResources.NumericFilterTypes;
+                    break;
+                }
                 case FilterHtmlGenerator.FilterType.Boolean:
                 {
                     var filterList = new List<KeyValuePair<object, object>>();
@@ -440,14 +441,15 @@ namespace Nat.Web.Controls.ExtNet.Generation.Filter
                             filterList.Add(new KeyValuePair<object, object>("NotEquals", filterData.FalseBooleanText));
                         else filterList.Add(referenceFilterType);
                     }
+
                     list = filterList;
                     break;
                 }
                 case FilterHtmlGenerator.FilterType.Text:
-                    {
-                        list = InitializerSection.StaticFilterNamesResources.TextFilterTypes;
-                        break;
-                    }
+                {
+                    list = InitializerSection.StaticFilterNamesResources.TextFilterTypes;
+                    break;
+                }
                 case FilterHtmlGenerator.FilterType.FullTextSearch:
                 {
                     var filterList = new List<KeyValuePair<object, object>>();
@@ -459,7 +461,33 @@ namespace Nat.Web.Controls.ExtNet.Generation.Filter
             }
 
             if (filterData.AllowedFilterTypes != null)
+            {
                 list = list.Where(r => filterData.AllowedFilterTypes.Contains(r.Key));
+                var add = filterData.AllowedFilterTypes.Where(r => list.All(f => (string) f.Key != r));
+                var newList = list.ToList();
+                foreach (var item in add)
+                {
+                    var referenceType =
+                        (DefaultFilters.ReferenceFilter) Enum.Parse(typeof(DefaultFilters.ReferenceFilter), item);
+                    switch (referenceType)
+                    {
+                        case DefaultFilters.ReferenceFilter.MoreOrEqual:
+                            newList.Add(new KeyValuePair<object, object>(item,
+                                InitializerSection.StaticFilterNamesResources.SMore));
+
+                            break;
+                        case DefaultFilters.ReferenceFilter.LessOrEqual:
+                            newList.Add(new KeyValuePair<object, object>(item,
+                                InitializerSection.StaticFilterNamesResources.SLess));
+
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
+
+                list = newList;
+            }
 
             return ConvertToObjectsArray(list);
         }

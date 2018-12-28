@@ -7,9 +7,11 @@
 namespace Nat.Web.Tools.ExtNet
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
+    using System.Web.UI;
     using System.Web.UI.WebControls;
 
     using Ext.Net;
@@ -399,6 +401,18 @@ namespace Nat.Web.Tools.ExtNet
                     {
                         DataIndex = ColumnNameIndex,
                         Options = DataSourceOther.Select(r => r.Value).ToArray(),
+                        LoadingText = Resources.SLoading,
+                    };
+            }
+
+            if (IsForeignKey && DataSource != null && !IsLookup)
+            {
+                IEnumerable data = null;
+                DataSource.GetView("").Select(new DataSourceSelectArguments(), c => data = c);
+                return new ListFilter
+                    {
+                        DataIndex = ColumnNameIndex,
+                        Options = data.Cast<IDataRow>().Select(r => r.Name).ToArray(),
                         LoadingText = Resources.SLoading,
                     };
             }

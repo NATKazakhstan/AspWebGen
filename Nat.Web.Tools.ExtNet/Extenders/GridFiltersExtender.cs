@@ -9,11 +9,13 @@ using System.Threading;
 namespace Nat.Web.Tools.ExtNet.Extenders
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Data.Linq;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Web;
+    using System.Web.UI;
 
     using Ext.Net;
 
@@ -76,6 +78,19 @@ namespace Nat.Web.Tools.ExtNet.Extenders
                         {
                             values[0] = ((DateTime)values[0]).Date;
                             dateEnd = ((DateTime)values[0]).AddDays(1).AddSeconds(-1);
+                        }
+
+                        if (filterColumn.IsForeignKey && filterColumn.DataSource != null && !filterColumn.IsLookup
+                            && (fieldType == typeof(long) || fieldType == typeof(long?))
+                            && condition.Type == FilterType.List)
+                        {
+                            IEnumerable data = null;
+                            var strValues = values.Cast<string>().ToDictionary(r => r.ToLower());
+                            filterColumn.DataSource.GetView("").Select(new DataSourceSelectArguments(), c => data = c);
+                            values = data.Cast<IDataRow>()
+                                .Where(r => strValues.ContainsKey(r.Name.ToLower()))
+                                .Select(r => Convert.ChangeType(r.Value, fieldType))
+                                .ToArray();
                         }
 
                         Expression expression = null;

@@ -146,6 +146,22 @@ namespace Nat.Web.Controls.GenerationClasses
                 PropertyValues.Add(parameterName, value.ToString());
         }
 
+        public void AddControlParamerter<TSource, TResult>(
+            Expression<Func<TSource, TResult?>> getValueExpression,
+            ColumnFilterType filterType,
+            object value)
+            where TResult : struct
+        {
+            var parameterName = getValueExpression.Body.ToString();
+            parameterName = parameterName.Remove(0, parameterName.IndexOf(".", StringComparison.InvariantCulture) + 1)
+                            + "."
+                            + FilterItem.ConvertToFilterType(filterType);
+            if (value == null || value is IControl || value is Control || value is string || value is GridHtmlGenerator.Column)
+                PropertyValues.Add(parameterName, value);
+            else
+                PropertyValues.Add(parameterName, value.ToString());
+        }
+
         public void RemoveParameter(string propertyFilter)
         {
             PropertyValues.Remove(propertyFilter);

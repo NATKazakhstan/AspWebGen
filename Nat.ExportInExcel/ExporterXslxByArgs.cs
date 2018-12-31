@@ -133,7 +133,7 @@ namespace Nat.ExportInExcel
         protected override void RenderData()
         {
             var columns = _args.Columns.SelectMany(GetColumns).ToArray();
-            if (_args.GetGroupText == null)
+            if (_args.GetGroupText == null && _args.GetTotalValue == null)
                 foreach (var row in _args.Data)
                     RenderData(row, columns);
             else
@@ -143,11 +143,11 @@ namespace Nat.ExportInExcel
                 foreach (var row in _args.Data)
                 {
                     rowIndex++;
-                    var newGroupText = _args.GetGroupText(row);
+                    var newGroupText = _args.GetGroupText?.Invoke(row);
                     if (rowIndex != 0 && _args.GetTotalValue != null && newGroupText != groupText)
                         RenderTotalRow(columns, groupText);
 
-                    if (rowIndex == 0 || newGroupText != groupText)
+                    if (_args.GetGroupText != null && (rowIndex == 0 || newGroupText != groupText))
                     {
                         _args.StartRenderRow?.Invoke(row);
                         WriteStartRow(null);
@@ -167,7 +167,7 @@ namespace Nat.ExportInExcel
                     groupText = newGroupText;
                 }
 
-                if (rowIndex != 0 && _args.GetTotalValue != null)
+                if (rowIndex != 0 && _args.GetTotalValue != null && _args.GetGroupText != null)
                     RenderTotalRow(columns, groupText);
 
                 if (rowIndex != 0 && _args.GetTotalValue != null)

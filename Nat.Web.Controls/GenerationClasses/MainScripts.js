@@ -368,6 +368,28 @@ function GetExtNetLookupFilters(hidden, record) {
     return GetLookupFiltersByValues(values, record);
 }
 
+// динамическое изменение значения параметра фильтрации
+function ChangeLookupFiltersPropertyValue(hidden, propertyName, propertyValue) {
+    var filterObject = Sys.Serialization.JavaScriptSerializer.deserialize(hidden.getValue());
+    if (filterObject && filterObject.Second) {
+        var secondObject = Sys.Serialization.JavaScriptSerializer.deserialize(filterObject.Second);
+        if (secondObject.length > 0) {
+            var changed = false;
+            $.each(secondObject, function (index, value) {
+                if (value.Property == propertyName) {
+                    value.Value = propertyValue;
+                    changed = true;
+                    return false;
+                }
+            });
+            if (changed) {
+                filterObject.Second = Sys.Serialization.JavaScriptSerializer.serialize(secondObject);
+                hidden.setValue(Sys.Serialization.JavaScriptSerializer.serialize(filterObject));
+            }
+        }
+    }
+}
+
 // record используется в Ext.Net, для получения значений из строки
 function GetLookupFiltersByValues(values, record) {
     if (values == null || values == '') return '';

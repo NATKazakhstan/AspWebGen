@@ -502,7 +502,7 @@ namespace Nat.Web.Tools.ExtNet
                     if (field.EndsWith("]"))
                     {
                         var startIndex = field.IndexOf("[", StringComparison.Ordinal);
-                        var index = Convert.ToInt32(field.Substring(startIndex - 1, field.Length - startIndex - 2));
+                        var index = Convert.ToInt32(field.Substring(startIndex + 1, field.Length - startIndex - 2));
                         exp = Expression.PropertyOrField(exp, field.Substring(0, startIndex));
                         exp = Expression.ArrayIndex(exp, Expression.Constant(index));
                     }

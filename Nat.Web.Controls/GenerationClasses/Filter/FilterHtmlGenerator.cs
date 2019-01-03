@@ -1253,13 +1253,33 @@ namespace Nat.Web.Controls.GenerationClasses
 
                                 break;
                             case DefaultFilters.ReferenceFilter.LessOrEqual:
-                                if (string.IsNullOrEmpty(filterItem.Value1)) break;
-                                yield return InitializerSection.StaticFilterNamesResources.SLess.ToFilterTypeString() + filterItem.Value1;
+                                if (string.IsNullOrEmpty(value1)) break;
+                                values = GetNamesByValue(value1).ToList();
+                                if (values.Count == 0)
+                                {
+                                    yield return InitializerSection.StaticFilterNamesResources.SLess.ToFilterTypeString();
+                                    yield return value2;
+                                }
+                                else
+                                {
+                                    yield return InitializerSection.StaticFilterNamesResources.SLess.ToFilterTypeString();
+                                    foreach (var value in values) yield return value;
+                                }
 
                                 break;
                             case DefaultFilters.ReferenceFilter.MoreOrEqual:
-                                if (string.IsNullOrEmpty(filterItem.Value1)) break;
-                                yield return InitializerSection.StaticFilterNamesResources.SMore.ToFilterTypeString() + filterItem.Value1;
+                                if (string.IsNullOrEmpty(value1)) break;
+                                values = GetNamesByValue(value1).ToList();
+                                if (values.Count == 0)
+                                {
+                                    yield return InitializerSection.StaticFilterNamesResources.SMore.ToFilterTypeString();
+                                    yield return value2;
+                                }
+                                else
+                                {
+                                    yield return InitializerSection.StaticFilterNamesResources.SMore.ToFilterTypeString();
+                                    foreach (var value in values) yield return value;
+                                }
 
                                 break;
                             default:

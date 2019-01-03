@@ -496,8 +496,19 @@ namespace Nat.Web.Tools.ExtNet
                 var param = Expression.Parameter(typeof(object), "row");
                 string[] split = ServerMapping.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
                 Expression exp = Expression.Convert(param, row.GetType());
-                for (int i = 0; i < split.Length; i++)
-                    exp = Expression.PropertyOrField(exp, split[i]);
+                foreach (var field in split)
+                {
+                    // обработка массива
+                    if (field.EndsWith("]"))
+                    {
+                        var startIndex = field.IndexOf("[", StringComparison.Ordinal);
+                        exp = Expression.PropertyOrField(exp, field.Substring(0, startIndex));
+                        exp = Expression.ArrayIndex(exp, Expression.Constant(field.Substring(startIndex - 1, field.Length - startIndex - 2)));
+                    }
+                    else
+                        exp = Expression.PropertyOrField(exp, field);
+                }
+
                 if (ModelFieldType == ModelFieldType.Boolean)
                 {
                     if (exp.Type == typeof(bool?))

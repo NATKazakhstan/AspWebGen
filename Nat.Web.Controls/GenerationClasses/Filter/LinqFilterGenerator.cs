@@ -82,7 +82,9 @@ namespace Nat.Web.Controls
                     }
                     else
                     {
-                        if (left1.Type.IsGenericType && left1.Type.GetGenericTypeDefinition().IsAssignableFrom(typeof(Nullable<>)))
+                        if (left1.Type.IsGenericType && left1.Type.GetGenericTypeDefinition().IsAssignableFrom(typeof(Nullable<>))
+                                                     && !(right1.Type.IsGenericType
+                                                          && right1.Type.GetGenericTypeDefinition().IsAssignableFrom(typeof(Nullable<>))))
                             left1 = Expression.Property(left1, "Value");
                         filter = Expression.Equal(left1, right1);
                     }

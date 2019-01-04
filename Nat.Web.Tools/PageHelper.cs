@@ -88,6 +88,11 @@ namespace Nat.Web.Tools
 
         public static void DownloadFile(byte[] buffer, string fileName, HttpResponse Response)
         {
+            DownloadFile(buffer, fileName, Response, "application/octet-stream");
+        }
+
+        public static void DownloadFile(byte[] buffer, string fileName, HttpResponse Response, string contentType)
+        {
             fileName = fileName.Replace("\r\n", " ");
             //Изменение размеров изображения и рисование уголка для фотографий на документы
             buffer = ImageUtils.ResizingGraphicsFile(buffer, HttpContext.Current.Request);
@@ -106,7 +111,7 @@ namespace Nat.Web.Tools
 
             try
             {
-                Response.ContentType = "application/octet-stream";
+                Response.ContentType = contentType;
                 Response.AppendHeader("Connection", "keep-alive");
                 Response.AppendHeader("Content-Length", buffer.Length.ToString());
                 Response.OutputStream.Write(buffer, 0, buffer.Length);

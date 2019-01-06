@@ -167,10 +167,10 @@ namespace Nat.ExportInExcel
                     groupText = newGroupText;
                 }
 
-                if (rowIndex != 0 && _args.GetTotalValue != null && _args.GetGroupText != null)
+                if (rowIndex != -1 && _args.GetTotalValue != null && _args.GetGroupText != null)
                     RenderTotalRow(columns, groupText);
 
-                if (rowIndex != 0 && _args.GetTotalValue != null)
+                if (rowIndex != -1 && _args.GetTotalValue != null)
                     RenderTotalRow(columns, null);
             }
 

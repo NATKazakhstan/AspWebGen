@@ -105,11 +105,12 @@ namespace Nat.Web.Tools.ExtNet.Extenders
             var sortExpression = string.Join(
                 ",",
                 sort
-                    .Where(r => dictionary.ContainsKey(r.Property))
                     .Select(
-                        r => (string.IsNullOrEmpty(dictionary[r.Property].Sort)
-                                  ? dictionary[r.Property].ServerMapping
-                                  : "Item." + dictionary[r.Property].Sort)
+                        r => (dictionary.ContainsKey(r.Property)
+                                  ? (string.IsNullOrEmpty(dictionary[r.Property].Sort)
+                                         ? dictionary[r.Property].ServerMapping
+                                         : dictionary[r.Property].Sort)
+                                  : r.Property)
                              + (r.Direction == SortDirection.DESC ? " desc" : string.Empty)));
 
             if (string.IsNullOrEmpty(sortExpression))

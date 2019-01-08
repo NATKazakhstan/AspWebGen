@@ -777,7 +777,12 @@ namespace Nat.Web.Controls
 
         public static Expression GetProperty(Type type, string fieldName, Expression expression, out Type fieldType)
         {
-            return GetProperty(type, fieldName, expression, true, out fieldType);
+            return GetProperty(
+                type,
+                fieldName,
+                expression,
+                !fieldName.StartsWith("Information.") && !fieldName.StartsWith("Item.") && !fieldName.StartsWith("Lookup."),
+                out fieldType);
         }
 
         public static Expression GetProperty(Type type, string fieldName, Expression expression, bool detectItem, out Type fieldType)

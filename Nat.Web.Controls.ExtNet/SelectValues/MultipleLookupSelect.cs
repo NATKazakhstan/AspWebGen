@@ -199,6 +199,7 @@ if (newValue != null && newValue != '') {{
         if (fn != null)
             fn(field.getValue());
         #{{{4}}}.setValue(null);
+        field.fireEvent('change', field);
     }}
 }}",
                     ValuesStoreID,
@@ -346,7 +347,7 @@ return isValid; }}; ",
             deleteCommand.Commands.Add(editCommand);
             deleteCommand.Listeners.Command.Handler =
                 string.Format(
-                    "#{{{0}}}.remove(record); var field = #{{{1}}}; var fn = field.{2}; if (fn != null) fn(field.getValue());",
+                    "#{{{0}}}.remove(record); var field = #{{{1}}}; var fn = field.{2}; if (fn != null) fn(field.getValue()); field.fireEvent('change', field);",
                     ValuesStoreID,
                     ID,
                     ScriptFunctionConstant.OnChangedValues);

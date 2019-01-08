@@ -524,6 +524,28 @@
                 return m;
             }
 
+            if (typeof(Enumerable) == m.Method.DeclaringType && m.Method.Name == "Any")
+            {
+                // $.inArray(5, [1,2,3])
+                resultScript.Append("(");
+                Visit(m.Arguments[0]);
+                resultScript.Append(" && ");
+                Visit(m.Arguments[0]);
+                resultScript.Append(".length > 0)");
+                return m;
+            }
+
+            if (typeof(Enumerable) == m.Method.DeclaringType && m.Method.Name == "Count")
+            {
+                // $.inArray(5, [1,2,3])
+                resultScript.Append("((");
+                Visit(m.Arguments[0]);
+                resultScript.Append(") ? (");
+                Visit(m.Arguments[0]);
+                resultScript.Append(").length : 0)");
+                return m;
+            }
+
             if (typeof(LinqToJavaScriptExtender).IsAssignableFrom(m.Method.DeclaringType)
                 && m.Method.Name == "JQueryGetValue")
             {

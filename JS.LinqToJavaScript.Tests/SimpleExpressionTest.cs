@@ -56,6 +56,7 @@ namespace JS.LinqToJavaScript.Tests
             var intValue = 1;
             var listValue = new List<int>(new[] { 1, 2, 3 });
             var arrayValue = new[] { 1, 2, 3 };
+            var enumerate = (IEnumerable<int>)new[] { 1, 2, 3 };
 
             AssertAreEqual(() => intValue < 2, "(1 < 2)");
             AssertAreEqual(() => !(intValue < 2), "!(1 < 2)");
@@ -68,6 +69,8 @@ namespace JS.LinqToJavaScript.Tests
             AssertAreEqual(() => (new List<int>(new[] { 1, 2, 3 })).Contains(intValue), "($.inArray(1, [1,2,3]) > -1)");
             AssertAreEqual(() => listValue.Contains(intValue), "($.inArray(1, [1,2,3]) > -1)");
             AssertAreEqual(() => intValue < 2 ? intValue < 1 : intValue > 2, "((1 < 2) ? (1 < 1) : (1 > 2))");
+            AssertAreEqual(() => enumerate.Any(), "([1,2,3] && [1,2,3].length > 0)");
+            AssertAreEqual(() => enumerate.Count(), "(([1,2,3]) ? ([1,2,3]).length : 0)");
         }
 
         [TestMethod]
@@ -133,6 +136,11 @@ namespace JS.LinqToJavaScript.Tests
         }
 
         private void AssertAreEqual(Expression<Func<bool>> exp, string script)
+        {
+            Assert.AreEqual(Provider.GetQueryText(exp), script);
+        }
+
+        private void AssertAreEqual(Expression<Func<int>> exp, string script)
         {
             Assert.AreEqual(Provider.GetQueryText(exp), script);
         }

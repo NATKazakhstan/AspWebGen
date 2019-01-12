@@ -235,6 +235,13 @@ namespace Nat.Web.Controls.ExtNet.SelectValues
             }
         }
 
+        public bool HasChanges()
+        {
+            var delItems = GetDataForDelete();
+            var insertItems = GetDataForInsert();
+            return delItems?.Count > 0 || insertItems?.Count > 0;
+        }
+
         public void UpdateItems(IDictionary parentValues)
         {
             DeleteValues(parentValues);

@@ -572,6 +572,8 @@ namespace Nat.Web.Tools.ExtNet
                     
                     if (MinValue != null)
                         numberField.MinValue = MinValue.Value;
+                    else if (DecimalLength > 0)
+                        numberField.MinValue = -(Math.Pow(10, DecimalLength - DecimalPrecision) - Math.Pow(0.1, DecimalPrecision));
 
                     return numberField;
                 case ModelFieldType.Boolean:

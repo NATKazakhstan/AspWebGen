@@ -108,16 +108,22 @@ namespace Nat.Web.Controls.ExtNet.SelectValues
         /// <param name="name">Наименование записи справочника.</param>
         public void AddRow(long id, string name)
         {
-            GridPanel.GetStore().Listeners.Load.Handler += string.Format(@"
-                if (window.added{5})
-                    return;
-                var defaultData = {{RowName: '{3}', Value: {4}}};
-                var newRecord = #{{{0}}}.insert(0, defaultData);
-                var field = #{{{1}}}; 
-                var fn = field.{2}; 
-                if (fn != null)
-                    fn(field.getValue());
-                window.added{5} = true;
+            AddRow(id, name, true);
+        }
+
+        public void AddRow(long id, string name, bool onLoad)
+        {
+            var script = string.Format(@"
+                if (!window.added{5})
+                {{
+                    var defaultData = {{RowName: '{3}', Value: {4}}};
+                    var newRecord = #{{{0}}}.insert(0, defaultData);
+                    var field = #{{{1}}}; 
+                    var fn = field.{2}; 
+                    if (fn != null)
+                        fn(field.getValue());
+                    window.added{5} = true;
+                }}
 ",
                 ValuesStoreID,
                 ID,
@@ -125,6 +131,10 @@ namespace Nat.Web.Controls.ExtNet.SelectValues
                 HttpUtility.JavaScriptStringEncode(name),
                 id,
                 Guid.NewGuid().ToString("N"));
+            if (onLoad)
+                GridPanel.GetStore().Listeners.Load.Handler += script;
+            else
+                Ext.Net.X.AddScript(script);
         }
 
         protected override void OnInit(EventArgs e)

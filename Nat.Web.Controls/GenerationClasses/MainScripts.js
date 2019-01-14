@@ -2972,109 +2972,121 @@ function PageSizeComboBoxReady(evt, t, o) {
 }
 
 // Fix for defaultFont
-Ext.form.field.HtmlEditor.override({
+if (window.Ext) {
+    Ext.form.field.HtmlEditor.override({
+        updateToolbar: function() {
+            var me = this,
+                i,
+                l,
+                btns,
+                doc,
+                name,
+                queriedName,
+                fontSelect,
+                toolbarSubmenus;
+            var reStripQuotes = /^['"]*|['"]*$/g;
 
-    updateToolbar: function () {
-        var me = this,
-            i, l, btns, doc, name, queriedName, fontSelect,
-            toolbarSubmenus;
-        var reStripQuotes = /^['"]*|['"]*$/g;
-
-        if (me.readOnly) {
-            return;
-        }
-
-        if (!me.activated) {
-            me.onFirstFocus();
-            return;
-        }
-
-        btns = me.getToolbar().items.map;
-        doc = me.getDoc();
-
-        if (me.enableFont && !Ext.isSafari2) {
-
-            queriedName = doc.queryCommandValue('fontName');
-            name = (queriedName ? queriedName.split(",")[0].replace(reStripQuotes, '') : me.defaultFont).toLowerCase();
-            fontSelect = me.fontSelect.dom;
-            if (name !== fontSelect.value || name != queriedName) {
-                fontSelect.value = name;
+            if (me.readOnly) {
+                return;
             }
-        }
 
-        function updateButtons() {
-            var state;
+            if (!me.activated) {
+                me.onFirstFocus();
+                return;
+            }
 
-            for (i = 0, l = arguments.length, name; i < l; i++) {
-                name = arguments[i];
+            btns = me.getToolbar().items.map;
+            doc = me.getDoc();
 
+            if (me.enableFont && !Ext.isSafari2) {
 
-
-                try {
-                    state = doc.queryCommandState(name);
+                queriedName = doc.queryCommandValue('fontName');
+                name =
+                    (queriedName ? queriedName.split(",")[0].replace(reStripQuotes, '') : me.defaultFont).toLowerCase();
+                fontSelect = me.fontSelect.dom;
+                if (name !== fontSelect.value || name != queriedName) {
+                    fontSelect.value = name;
                 }
-                catch (e) {
-                    state = false;
+            }
+
+            function updateButtons() {
+                var state;
+
+                for (i = 0, l = arguments.length, name; i < l; i++) {
+                    name = arguments[i];
+
+
+                    try {
+                        state = doc.queryCommandState(name);
+                    } catch (e) {
+                        state = false;
+                    }
+
+                    btns[name].toggle(state);
                 }
-
-                btns[name].toggle(state);
             }
-        }
-        if (me.enableFormat) {
-            updateButtons('bold', 'italic', 'underline');
-        }
-        if (me.enableAlignments) {
-            updateButtons('justifyleft', 'justifycenter', 'justifyright');
-        }
-        if (!Ext.isSafari2 && me.enableLists) {
-            updateButtons('insertorderedlist', 'insertunorderedlist');
-        }
 
-
-
-        toolbarSubmenus = me.toolbar.query('menu');
-        for (i = 0; i < toolbarSubmenus.length; i++) {
-            toolbarSubmenus[i].hide();
-        }
-        me.syncValue();
-    },
-
-    initDefaultFont: function () {
-        var me = this,
-            selIdx = 0,
-            fonts, font, select,
-            option, i, len, lower;
-
-        font = me.textareaEl.getStyle('font-family');
-        font = Ext.String.capitalize(font.split(',')[0]);
-        fonts = Ext.Array.clone(me.fontFamilies);
-        Ext.Array.include(fonts, font);
-        fonts.sort();
-
-        if (!me.defaultFont) {
-            me.defaultFont = font;
-        }
-
-        select = me.down('#fontSelect').selectEl.dom;
-        for (i = 0, len = fonts.length; i < len; ++i) {
-            font = fonts[i];
-            lower = font.toLowerCase();
-            option = new Option(font, lower);
-            if (font == me.defaultFont) {
-                selIdx = i;
+            if (me.enableFormat) {
+                updateButtons('bold', 'italic', 'underline');
             }
-            option.style.fontFamily = lower;
-
-            if (Ext.isIE) {
-                select.add(option);
-            } else {
-                select.options.add(option);
+            if (me.enableAlignments) {
+                updateButtons('justifyleft', 'justifycenter', 'justifyright');
             }
-        }
+            if (!Ext.isSafari2 && me.enableLists) {
+                updateButtons('insertorderedlist', 'insertunorderedlist');
+            }
 
-        //select.options[selIdx].selected = true;
-        setTimeout(function () {
-            select.options[selIdx].selected = true;
-        }, 500);
-    }
-});
+
+            toolbarSubmenus = me.toolbar.query('menu');
+            for (i = 0; i < toolbarSubmenus.length; i++) {
+                toolbarSubmenus[i].hide();
+            }
+            me.syncValue();
+        },
+
+        initDefaultFont: function() {
+            var me = this,
+                selIdx = 0,
+                fonts,
+                font,
+                select,
+                option,
+                i,
+                len,
+                lower;
+
+            font = me.textareaEl.getStyle('font-family');
+            font = Ext.String.capitalize(font.split(',')[0]);
+            fonts = Ext.Array.clone(me.fontFamilies);
+            Ext.Array.include(fonts, font);
+            fonts.sort();
+
+            if (!me.defaultFont) {
+                me.defaultFont = font;
+            }
+
+            select = me.down('#fontSelect').selectEl.dom;
+            for (i = 0, len = fonts.length; i < len; ++i) {
+                font = fonts[i];
+                lower = font.toLowerCase();
+                option = new Option(font, lower);
+                if (font == me.defaultFont) {
+                    selIdx = i;
+                }
+                option.style.fontFamily = lower;
+
+                if (Ext.isIE) {
+                    select.add(option);
+                } else {
+                    select.options.add(option);
+                }
+            }
+
+            //select.options[selIdx].selected = true;
+            setTimeout(function() {
+                    select.options[selIdx].selected = true;
+                },
+                500);
+        }
+    });
+}

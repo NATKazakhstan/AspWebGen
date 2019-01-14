@@ -2971,6 +2971,22 @@ function PageSizeComboBoxReady(evt, t, o) {
     this.setValue(store.pageSize);
 }
 
+function DeleteSelectedRowsInExtGrid(grid) {
+    var title = window.CoreLocalization.DeleteSelectedRowsInExtGrid_Title || 'Удалить';
+    var msg = window.CoreLocalization.DeleteSelectedRowsInExtGrid_Msg || 'Вы действительно хотите удалить?';
+    X.Msg.confirm(title,
+        msg,
+        function(res) {
+            if (res !== "yes") return;
+
+            var selection = grid.selModel.getSelection();
+            var store = grid.getStore();
+            for (var i = 0; i < selection.length; i++) {
+                store.remove(selection[0]);
+            }
+        });
+}
+
 // Fix for defaultFont
 if (window.Ext) {
     Ext.form.field.HtmlEditor.override({

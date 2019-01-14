@@ -56,6 +56,11 @@ namespace Nat.Web.Tools.ExtNet
         }
 
         /// <summary>
+        /// Для редактирования boolean значений без фокуса на ячейки, сразу рендерится checkbox.
+        /// </summary>
+        public bool EditModeForBool { get; set; }
+
+        /// <summary>
         /// Текст для битового поля со значением false.
         /// </summary>
         public string FalseText { get; set; }
@@ -318,17 +323,43 @@ namespace Nat.Web.Tools.ExtNet
                         break;
 
                     case ModelFieldType.Boolean:
-                        column = new BooleanColumn
-                            {
-                                DataIndex = ColumnNameIndex,
-                                Text = Header,
-                                TrueText = TrueText,
-                                FalseText = FalseText,
-                                Width = new Unit(Width),
-                                Flex = string.IsNullOrEmpty(Width) ? Flex : 0,
-                                Hidden = DefaultHidden,
-                                Sortable = !string.IsNullOrEmpty(Sort),
-                            };
+                        if (EditModeForBool && CanEdit)
+                        {
+                            column = new CheckColumn
+                                {
+                                    DataIndex = ColumnNameIndex,
+                                    Text = Header,
+                                    StopSelection = false,
+                                    Editable = CanEdit,
+                                    Width = new Unit(Width),
+                                    Flex = string.IsNullOrEmpty(Width) ? Flex : 0,
+                                    Hidden = DefaultHidden,
+                                    Sortable = !string.IsNullOrEmpty(Sort),
+                                };
+                            
+                            if (column.Renderer == null)
+                                column.Renderer = new Renderer();
+                            column.Renderer.Handler = string.Format(
+                                "if (!record.data.CanEdit) return record.data.{0} ? {1} : {2}; return (new Ext.ux.CheckColumn()).renderer(record.data.{0});",
+                                ColumnNameIndex,
+                                JSON.Serialize(TrueText),
+                                JSON.Serialize(FalseText));
+                        }
+                        else
+                        {
+                            column = new BooleanColumn
+                                {
+                                    DataIndex = ColumnNameIndex,
+                                    Text = Header,
+                                    TrueText = TrueText,
+                                    FalseText = FalseText,
+                                    Width = new Unit(Width),
+                                    Flex = string.IsNullOrEmpty(Width) ? Flex : 0,
+                                    Hidden = DefaultHidden,
+                                    Sortable = !string.IsNullOrEmpty(Sort),
+                                };
+                        }
+
                         break;
 
                     case ModelFieldType.Date:
@@ -577,6 +608,8 @@ namespace Nat.Web.Tools.ExtNet
 
                     return numberField;
                 case ModelFieldType.Boolean:
+                    if (EditModeForBool)
+                        return null;
                     return new Checkbox { ID = "gridEditorField" + ColumnName };
                 case ModelFieldType.Date:
                     return new DateField

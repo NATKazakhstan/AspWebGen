@@ -2982,7 +2982,8 @@ function DeleteSelectedRowsInExtGrid(grid) {
             var selection = grid.selModel.getSelection();
             var store = grid.getStore();
             for (var i = 0; i < selection.length; i++) {
-                store.remove(selection[0]);
+                if (selection[0].data.CanDelete)
+                    store.remove(selection[0]);
             }
         });
 }

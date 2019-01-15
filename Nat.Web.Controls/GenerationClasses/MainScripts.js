@@ -2974,6 +2974,7 @@ function PageSizeComboBoxReady(evt, t, o) {
 function DeleteSelectedRowsInExtGrid(grid) {
     var title = window.CoreLocalization.DeleteSelectedRowsInExtGrid_Title || 'Удалить';
     var msg = window.CoreLocalization.DeleteSelectedRowsInExtGrid_Msg || 'Вы действительно хотите удалить?';
+    var cantDelete = window.CoreLocalization.DeleteSelectedRowsInExtGrid_CantDelete || 'Нет прав на удаление записи';
     X.Msg.confirm(title,
         msg,
         function(res) {
@@ -2984,6 +2985,18 @@ function DeleteSelectedRowsInExtGrid(grid) {
             for (var i = 0; i < selection.length; i++) {
                 if (selection[0].data.CanDelete)
                     store.remove(selection[0]);
+                else
+                    X.Msg.notify({
+                        autoHide: false,
+                        resizable: true,
+                        closable: true,
+                        modal: false,
+                        width: 250,
+                        bodyStyle: 'height: auto; padding: 8px',
+                        html: cantDelete,
+                        iconCls: '#Error',
+                        alignToCfg: { position: 'bl-bl', offset: [20, -20] }
+                    });
             }
         });
 }

@@ -9,6 +9,7 @@ using System;
 namespace Nat.Web.Tools.ExtNet
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
     using System.Web.UI;
     using System.Web.UI.WebControls;
@@ -191,7 +192,14 @@ namespace Nat.Web.Tools.ExtNet
                         }
                         else
                             actionItem.IconCls += " CursorPointer";
-                        column.Items.Add(actionItem);
+
+                        if (actionItem.CustomConfig.Contains("insertIndex"))
+                        {
+                            var index = Convert.ToInt32(actionItem.CustomConfig.First(r => r.Name == "insertIndex").Value);
+                            column.Items.Insert(index, actionItem);
+                        }
+                        else
+                            column.Items.Add(actionItem);
                     }
                 }
             }

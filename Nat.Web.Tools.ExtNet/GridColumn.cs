@@ -340,7 +340,7 @@ namespace Nat.Web.Tools.ExtNet
                             if (column.Renderer == null)
                                 column.Renderer = new Renderer();
                             column.Renderer.Handler = string.Format(
-                                "if (!record.data.CanEdit) return record.data.{0} ? {1} : {2}; return (new Ext.ux.CheckColumn()).renderer(record.data.{0});",
+                                "if (!record.data.CanEdit) return '<span style=\"font-size:11px\">' + (record.data.{0} ? {1} : {2}) + '</span>'; return (new Ext.ux.CheckColumn()).renderer(record.data.{0});",
                                 ColumnNameIndex,
                                 JSON.Serialize(TrueText),
                                 JSON.Serialize(FalseText));

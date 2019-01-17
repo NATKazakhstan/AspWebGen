@@ -533,9 +533,15 @@ namespace Nat.Web.Tools.ExtNet
                     if (field.EndsWith("]"))
                     {
                         var startIndex = field.IndexOf("[", StringComparison.Ordinal);
-                        var index = Convert.ToInt32(field.Substring(startIndex + 1, field.Length - startIndex - 2));
+                        var indexStr = field.Substring(startIndex + 1, field.Length - startIndex - 2);
                         exp = Expression.PropertyOrField(exp, field.Substring(0, startIndex));
-                        exp = Expression.ArrayIndex(exp, Expression.Constant(index));
+                        if (typeof(IDictionary).IsAssignableFrom(exp.Type))
+                        {
+                            var itemParams = exp.Type.GetProperty("Item").GetIndexParameters();
+                            exp = Expression.Property(exp, "Item", Expression.Constant(Convert.ChangeType(indexStr, itemParams[0].ParameterType)));
+                        }
+                        else
+                            exp = Expression.ArrayIndex(exp, Expression.Constant(Convert.ToInt32(indexStr)));
                     }
                     else
                         exp = Expression.PropertyOrField(exp, field);

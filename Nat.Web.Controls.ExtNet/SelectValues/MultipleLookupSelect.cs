@@ -46,6 +46,8 @@ namespace Nat.Web.Controls.ExtNet.SelectValues
         public LookupBox LookupBox { get; protected set; }
 
         public CommandColumn DeleteCommand { get; set; }
+        
+        public Column DataColumn { get; private set; }
 
         public Label LabelErrorText { get; protected set; }
 
@@ -221,14 +223,14 @@ if (newValue != null && newValue != '') {{
 
             DeleteCommand = GetDeleteCommand();
             GridPanel.ColumnModel.Add(DeleteCommand);
-            GridPanel.ColumnModel.Add(
-                new Column
-                    {
-                        DataIndex = "RowName", 
-                        Text = Properties.Resources.SSelectedItems, 
-                        Flex = 1, 
-                        Wrap = true,
-                    });
+            DataColumn = new Column
+                {
+                    DataIndex = "RowName", 
+                    Text = Properties.Resources.SSelectedItems, 
+                    Flex = 1, 
+                    Wrap = true,
+                };
+            GridPanel.ColumnModel.Add(DataColumn);
             
             HiddenInsertedValues = new Hidden { ID = "hiddenInsertedValues" + ID };
             HiddenDeletedValues = new Hidden { ID = "hiddenDeletedValues" + ID };

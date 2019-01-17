@@ -175,21 +175,25 @@
 
         public Stream GetExcelStream(JournalExportEventArgs args)
         {
-            var docLocation = args.ViewJournalUrl.ToString();
-            var startIndex = docLocation.IndexOf("?", StringComparison.Ordinal);
-            var pluginName = startIndex > -1 ? docLocation.Substring(0, startIndex) : docLocation;
-            DBDataContext.AddViewReports(
-                User.GetSID(),
-                HttpContext.Current.User.Identity.Name,
-                HttpContext.Current.User.Identity.Name,
-                docLocation,
-                HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority),
-                Environment.MachineName,
-                true,
-                pluginName,
-                LocalizationHelper.IsCultureKZ ? null : args.Header,
-                LocalizationHelper.IsCultureKZ ? args.Header : null);
-            
+            string docLocation = string.Empty;
+            if (args.ViewJournalUrl != null && args.ViewJournalUrl.Length > 0)
+            {
+                docLocation = args.ViewJournalUrl.ToString();
+                var startIndex = docLocation.IndexOf("?", StringComparison.Ordinal);
+                var pluginName = startIndex > -1 ? docLocation.Substring(0, startIndex) : docLocation;
+                DBDataContext.AddViewReports(
+                    User.GetSID(),
+                    HttpContext.Current.User.Identity.Name,
+                    HttpContext.Current.User.Identity.Name,
+                    docLocation,
+                    HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority),
+                    Environment.MachineName,
+                    true,
+                    pluginName,
+                    LocalizationHelper.IsCultureKZ ? null : args.Header,
+                    LocalizationHelper.IsCultureKZ ? args.Header : null);
+            }
+
             var export = new ExporterXslxByArgs();
             var stream = export.GetExcel(args);
             if (args.ExportLog != 0)

@@ -2916,14 +2916,15 @@ function GetFiltersParameter(tableName, filterValues) {
 }
 
 function ShowHistoryButtonClick(showHistoryHidden, store, dirty, isTree) {
-    debugger;
+    
     var isdirty = dirty && dirty.getValue() === "true";
-    store.data.items.forEach(function(item) {
-        if (item.dirty || item.data.dirty) {
-            isdirty = true;
-            return;
-        };
-    });
+    if (store.data && !isdirty) {
+        store.data.items.forEach(function(item) {
+            if (item.dirty || item.data.dirty)
+                isdirty = true;
+        });
+    }
+
     if (!isdirty) {
         var c = showHistoryHidden;
         c.setValue(c.getValue() === 'true' ? 'false' : 'true');

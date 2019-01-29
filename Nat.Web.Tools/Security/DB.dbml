@@ -52,4 +52,19 @@
       <Column Name="SubdivisionNameKz" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
     </ElementType>
   </Function>
+  <Function Name="dbo.ADM_P_GetMyAvailableDelegations" Method="ADM_P_GetMyAvailableDelegations">
+    <Parameter Name="sid" Type="System.String" DbType="NVarChar(255)" />
+    <ElementType Name="ADM_P_GetMyAvailableDelegationsResult">
+      <Column Name="id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Sid" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Fio_Ru" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Fio_Kz" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="refPosition" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="refSubdivision" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="PositionNameRu" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="PositionNameKz" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="SubdivisionNameRu" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="SubdivisionNameKz" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+    </ElementType>
+  </Function>
 </Database>

@@ -89,6 +89,13 @@ namespace Nat.Web.Tools.Security
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), sid);
 			return ((ISingleResult<ADM_P_GetAvailableDelegationsResult>)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.ADM_P_GetMyAvailableDelegations")]
+		public ISingleResult<ADM_P_GetMyAvailableDelegationsResult> ADM_P_GetMyAvailableDelegations([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="NVarChar(255)")] string sid)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), sid);
+			return ((ISingleResult<ADM_P_GetMyAvailableDelegationsResult>)(result.ReturnValue));
+		}
 	}
 	
 	public partial class GetPersonInfoBySidResult
@@ -339,6 +346,194 @@ namespace Nat.Web.Tools.Security
 		private string _SubdivisionNameKz;
 		
 		public ADM_P_GetAvailableDelegationsResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="BigInt NOT NULL")]
+		public long id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this._id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Sid", DbType="NVarChar(200)")]
+		public string Sid
+		{
+			get
+			{
+				return this._Sid;
+			}
+			set
+			{
+				if ((this._Sid != value))
+				{
+					this._Sid = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Fio_Ru", DbType="NVarChar(MAX)")]
+		public string Fio_Ru
+		{
+			get
+			{
+				return this._Fio_Ru;
+			}
+			set
+			{
+				if ((this._Fio_Ru != value))
+				{
+					this._Fio_Ru = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Fio_Kz", DbType="NVarChar(MAX)")]
+		public string Fio_Kz
+		{
+			get
+			{
+				return this._Fio_Kz;
+			}
+			set
+			{
+				if ((this._Fio_Kz != value))
+				{
+					this._Fio_Kz = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refPosition", DbType="BigInt")]
+		public System.Nullable<long> refPosition
+		{
+			get
+			{
+				return this._refPosition;
+			}
+			set
+			{
+				if ((this._refPosition != value))
+				{
+					this._refPosition = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refSubdivision", DbType="BigInt")]
+		public System.Nullable<long> refSubdivision
+		{
+			get
+			{
+				return this._refSubdivision;
+			}
+			set
+			{
+				if ((this._refSubdivision != value))
+				{
+					this._refSubdivision = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PositionNameRu", DbType="NVarChar(MAX)")]
+		public string PositionNameRu
+		{
+			get
+			{
+				return this._PositionNameRu;
+			}
+			set
+			{
+				if ((this._PositionNameRu != value))
+				{
+					this._PositionNameRu = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PositionNameKz", DbType="NVarChar(MAX)")]
+		public string PositionNameKz
+		{
+			get
+			{
+				return this._PositionNameKz;
+			}
+			set
+			{
+				if ((this._PositionNameKz != value))
+				{
+					this._PositionNameKz = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SubdivisionNameRu", DbType="NVarChar(MAX)")]
+		public string SubdivisionNameRu
+		{
+			get
+			{
+				return this._SubdivisionNameRu;
+			}
+			set
+			{
+				if ((this._SubdivisionNameRu != value))
+				{
+					this._SubdivisionNameRu = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SubdivisionNameKz", DbType="NVarChar(MAX)")]
+		public string SubdivisionNameKz
+		{
+			get
+			{
+				return this._SubdivisionNameKz;
+			}
+			set
+			{
+				if ((this._SubdivisionNameKz != value))
+				{
+					this._SubdivisionNameKz = value;
+				}
+			}
+		}
+	}
+	
+	public partial class ADM_P_GetMyAvailableDelegationsResult
+	{
+		
+		private long _id;
+		
+		private string _Sid;
+		
+		private string _Fio_Ru;
+		
+		private string _Fio_Kz;
+		
+		private System.Nullable<long> _refPosition;
+		
+		private System.Nullable<long> _refSubdivision;
+		
+		private string _PositionNameRu;
+		
+		private string _PositionNameKz;
+		
+		private string _SubdivisionNameRu;
+		
+		private string _SubdivisionNameKz;
+		
+		public ADM_P_GetMyAvailableDelegationsResult()
 		{
 		}
 		

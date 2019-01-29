@@ -236,6 +236,23 @@
             }
         }
 
+        public static ADM_P_GetMyAvailableDelegationsResult[] GetMyAvailableDelegations()
+        {
+            if (!InitializerSection.PermissionsDelegationEnabled || HttpContext.Current == null || HttpContext.Current.User == null)
+                return new ADM_P_GetMyAvailableDelegationsResult[0];
+
+            if (HttpContext.Current.Items["myAvailableDelegation"] != null)
+                return (ADM_P_GetMyAvailableDelegationsResult[])HttpContext.Current.Items["myAvailableDelegation"];
+
+            using (var db = new DBDataContext(SpecificInstances.DbFactory.CreateConnection()))
+            using (var query = db.ADM_P_GetMyAvailableDelegations(GetSID()))
+            {
+                var data = query.ToArray();
+                HttpContext.Current.Items["availableDelegation"] = data;
+                return data;
+            }
+        }
+
         public static TResult GetPersonInfo<TResult>()
         {
             return GetPersonInfo<TResult>(GetSID());

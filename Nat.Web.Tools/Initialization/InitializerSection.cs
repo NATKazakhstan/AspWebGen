@@ -15,6 +15,7 @@ namespace Nat.Web.Tools.Initialization
     public class InitializerSection : ConfigurationSection
     {
         private static bool? useMainPageExt;
+        private static bool? permissionsDelegation;
         private static bool? registerMainScripts;
         private static bool? addFilterInMainPageInternal;
         private static bool? redirectOnSQLTimeoutInternal;
@@ -27,6 +28,7 @@ namespace Nat.Web.Tools.Initialization
         private static readonly ConfigurationProperty _propSiteUrl;
         private static readonly ConfigurationProperty _propSecurityRoles;
         private static readonly ConfigurationProperty _propUseMainPageExtension;
+        private static readonly ConfigurationProperty _propPermissionsDelegation;
         private static readonly ConfigurationProperty _propRegisterMainScripts;
         private static readonly ConfigurationProperty _propRedirectOnSQLTimeout;
         private static readonly ConfigurationProperty _propAddFilterInMainPage;
@@ -56,6 +58,7 @@ namespace Nat.Web.Tools.Initialization
             _propSiteUrl = new ConfigurationProperty("siteUrl", typeof(string), "", ConfigurationPropertyOptions.None);
             _propSecurityRoles = new ConfigurationProperty("securityRoles", typeof(string), "", ConfigurationPropertyOptions.None);
             _propUseMainPageExtension = new ConfigurationProperty("useMainPageExtension", typeof(bool), false, ConfigurationPropertyOptions.None);
+            _propPermissionsDelegation = new ConfigurationProperty("permissionsDelegation", typeof(bool), false, ConfigurationPropertyOptions.None);
             _propRegisterMainScripts = new ConfigurationProperty("registerMainScripts", typeof(bool), false, ConfigurationPropertyOptions.None);
             _propRedirectOnSQLTimeout = new ConfigurationProperty("redirectOnSQLTimeout", typeof(bool), false, ConfigurationPropertyOptions.None);
             _propAddFilterInMainPage = new ConfigurationProperty("addFilterInMainPage", typeof(bool), false, ConfigurationPropertyOptions.None);
@@ -82,6 +85,7 @@ namespace Nat.Web.Tools.Initialization
                                   _propLogMonitorType,
                                   _propSecurityRoles,
                                   _propUseMainPageExtension,
+                                  _propPermissionsDelegation,
                                   _propRegisterMainScripts,
                                   _propRedirectOnSQLTimeout,
                                   _propAddFilterInMainPage,
@@ -100,6 +104,7 @@ namespace Nat.Web.Tools.Initialization
         }
 
         public static bool UseMainPageExt => useMainPageExt ?? (useMainPageExt = GetSection().UseMainPageExtension).Value;
+        public static bool PermissionsDelegationEnabled => permissionsDelegation ?? (permissionsDelegation = GetSection().PermissionsDelegation).Value;
         internal static bool RegisterMainScriptsInternal => registerMainScripts ?? (registerMainScripts = GetSection().RegisterMainScripts).Value;
         internal static bool AddFilterInMainPageInternal => addFilterInMainPageInternal ?? (addFilterInMainPageInternal = GetSection().AddFilterInMainPage).Value;
         internal static bool RedirectOnSQLTimeoutInternal => redirectOnSQLTimeoutInternal ?? (redirectOnSQLTimeoutInternal = GetSection().RedirectOnSQLTimeout).Value;
@@ -159,6 +164,9 @@ namespace Nat.Web.Tools.Initialization
 
         [ConfigurationProperty("useMainPageExtension", DefaultValue = false)]
         public bool UseMainPageExtension => (bool)base[_propUseMainPageExtension];
+
+        [ConfigurationProperty("permissionsDelegation", DefaultValue = false)]
+        public bool PermissionsDelegation => (bool)base[_propPermissionsDelegation];
 
         [ConfigurationProperty("registerMainScripts", DefaultValue = false)]
         public bool RegisterMainScripts => (bool)base[_propRegisterMainScripts];

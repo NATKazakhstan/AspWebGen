@@ -55,6 +55,24 @@
             return GetSID(true);
         }
 
+        public static string GetDelegationSID()
+        {
+            if (HttpContext.Current == null || !InitializerSection.PermissionsDelegationEnabled)
+                return null;
+
+            var cookie = HttpContext.Current.Request.Cookies["duser"];
+            if (cookie == null)
+                return null;
+
+            if (!string.IsNullOrEmpty(cookie.Value) && int.TryParse(cookie.Value, out var userId))
+            {
+                var available = GetAvailableDelegations().FirstOrDefault(r => r.id == userId);
+                return available?.Sid;
+            }
+
+            return null;
+        }
+
         internal static string GetSID(bool checkWorkAsOtherUser)
         {
             if (checkWorkAsOtherUser && HttpContext.Current != null && HttpContext.Current.Items["Nat.Web.Tools.Security.UserSIDCheckRoles"] == null)
@@ -191,6 +209,31 @@
         public static GetPersonInfoBySidResult GetPersonInfo()
         {
             return GetPersonInfo(GetSID());
+        }
+
+        public static GetPersonInfoBySidResult GetPersonInfoOnUseDelegation()
+        {
+            var sid = GetDelegationSID();
+            if (string.IsNullOrEmpty(sid))
+                return null;
+            return GetPersonInfo(sid);
+        }
+
+        public static ADM_P_GetAvailableDelegationsResult[] GetAvailableDelegations()
+        {
+            if (!InitializerSection.PermissionsDelegationEnabled || HttpContext.Current == null)
+                return new ADM_P_GetAvailableDelegationsResult[0];
+
+            if (HttpContext.Current.Items["availableDelegation"] != null)
+                return (ADM_P_GetAvailableDelegationsResult[])HttpContext.Current.Items["availableDelegation"];
+
+            using (var db = new DBDataContext(SpecificInstances.DbFactory.CreateConnection()))
+            using (var query = db.ADM_P_GetAvailableDelegations(GetSID()))
+            {
+                var data = query.ToArray();
+                HttpContext.Current.Items["availableDelegation"] = data;
+                return data;
+            }
         }
 
         public static TResult GetPersonInfo<TResult>()

@@ -28,6 +28,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -114,6 +115,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="key.snk" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +171,11 @@
     </Compile>
     <Compile Include="MailMessageContent\ModuleConfiguration.cs" />
     <Compile Include="Modules\UnhandledExceptionModule.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Security\AccessDeniedException.cs" />
     <Compile Include="Security\DB.cs">
       <DependentUpon>DB.dbml</DependentUpon>

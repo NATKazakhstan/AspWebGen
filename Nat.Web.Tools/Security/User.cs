@@ -57,7 +57,7 @@
 
         public static string GetDelegationSID()
         {
-            if (HttpContext.Current == null || !InitializerSection.PermissionsDelegationEnabled)
+            if (!InitializerSection.PermissionsDelegationEnabled || HttpContext.Current == null || HttpContext.Current.User == null)
                 return null;
 
             var cookie = HttpContext.Current.Request.Cookies["duser"];
@@ -221,7 +221,7 @@
 
         public static ADM_P_GetAvailableDelegationsResult[] GetAvailableDelegations()
         {
-            if (!InitializerSection.PermissionsDelegationEnabled || HttpContext.Current == null)
+            if (!InitializerSection.PermissionsDelegationEnabled || HttpContext.Current == null || HttpContext.Current.User == null)
                 return new ADM_P_GetAvailableDelegationsResult[0];
 
             if (HttpContext.Current.Items["availableDelegation"] != null)

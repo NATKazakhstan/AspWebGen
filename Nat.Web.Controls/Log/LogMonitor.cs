@@ -332,10 +332,22 @@ namespace Nat.Web.Controls
 
                 if ((result & LogResult.Succeed) != 0)
                 {
-                    foreach (LogChangedFieldEntry entry in ChangedFieldList)
-                        WriteFieldChanged(Convert.ToInt64(value), entry.RowEntity, entry.FieldName, entry.OldValue, entry.NewValue);
+                    var refLog = Convert.ToInt64(value);
+                    var userDelegation = User.GetPersonInfoOnUseDelegation();
+                    if (userDelegation != null)
+                    {
+                        WriteFieldChanged(
+                            refLog,
+                            "",
+                            "Включено делегирование прав доступа",
+                            "",
+                            userDelegation.id + ", " + userDelegation.Fio_Ru + ", " + userDelegation.PositionNameRu);
+                    }
 
-                    return Convert.ToInt64(value);
+                    foreach (LogChangedFieldEntry entry in ChangedFieldList)
+                        WriteFieldChanged(refLog, entry.RowEntity, entry.FieldName, entry.OldValue, entry.NewValue);
+
+                    return refLog;
                 }
             }
             finally

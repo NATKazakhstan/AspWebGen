@@ -76,8 +76,8 @@ namespace Nat.Web.Tools.ExtNet.Extenders
                         DateTime? dateEnd = null;
                         if (fieldType == typeof(DateTime) || fieldType == typeof(DateTime?))
                         {
-                            values[0] = ((DateTime)values[0]).Date;
-                            dateEnd = ((DateTime)values[0]).AddDays(1).AddSeconds(-1);
+                            dateEnd = ((DateTime)values[0]).Date;
+                            values[0] = ((DateTime)values[0]).Date.AddDays(1).AddSeconds(-1);
                         }
 
                         if (filterColumn.IsForeignKey && filterColumn.DataSource != null && !filterColumn.IsLookup

@@ -248,7 +248,7 @@
             using (var query = db.ADM_P_GetMyAvailableDelegations(GetSID()))
             {
                 var data = query.ToArray();
-                HttpContext.Current.Items["availableDelegation"] = data;
+                HttpContext.Current.Items["myAvailableDelegation"] = data;
                 return data;
             }
         }

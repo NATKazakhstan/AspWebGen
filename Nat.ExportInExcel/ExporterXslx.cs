@@ -294,7 +294,10 @@ namespace Nat.ExportInExcel
                     {
                         cellProps = cellsPropertiesDic[cellKey];
                     }
-                    else if (rowProperties != null || (hierarchyItem != null && (hierarchyItem.BColor != null || hierarchyItem.PColor != null)))
+                    else if (rowProperties != null || (hierarchyItem != null 
+                                                       && (hierarchyItem.BColor != null 
+                                                           || hierarchyItem.PColor != null
+                                                           || hierarchyItem.HAligment != null)))
                     {
                         // созадем свйоства для ячейки, если имеются настройки для строки или колонки
                         cellsPropertiesDic[cellKey] = cellProps = new CellProperties { Key = cellKey };
@@ -309,6 +312,8 @@ namespace Nat.ExportInExcel
                                 cellProps.BColor = hierarchyItem.BColor;
                             if (hierarchyItem.PColor != null && cellProps.PColor == null)
                                 cellProps.PColor = hierarchyItem.PColor;
+                            if (hierarchyItem.HAligment != null && cellProps.HAligment == null)
+                                cellProps.HAligment = hierarchyItem.HAligment;
                         }
 
                         // если есть настройки у строки то передаем их ячейки

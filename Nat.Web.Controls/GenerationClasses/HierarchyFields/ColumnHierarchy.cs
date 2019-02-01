@@ -76,6 +76,7 @@ namespace Nat.Web.Controls.GenerationClasses.HierarchyFields
         public bool IsVerticalHeader { get; set; }
         public ColumnAggregateType AggregateType { get; set; }
         public bool HideInHeader { get; set; }
+        public Aligment? HAligment { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
         public string BColor { get; set; }

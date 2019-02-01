@@ -206,6 +206,8 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                     writer.AddStyleAttribute(HtmlTextWriterStyle.TextAlign, cellProps.HAligment.ToString().ToLower());
                 else if (rowProps?.HAligment != null)
                     writer.AddStyleAttribute(HtmlTextWriterStyle.TextAlign, rowProps.HAligment.ToString().ToLower());
+                else if (RenderContext.ColumnHierarchy?.HAligment != null)
+                    writer.AddStyleAttribute(HtmlTextWriterStyle.TextAlign, RenderContext.ColumnHierarchy.HAligment.ToString().ToLower());
                 else if (Column.ColumnType == ColumnType.Numeric && (Row == null || !Row.JournalControl.DetailsRender))
                     writer.AddStyleAttribute(HtmlTextWriterStyle.TextAlign, "center");
                 else

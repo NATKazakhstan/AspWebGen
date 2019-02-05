@@ -3,31 +3,48 @@
  * Created: 11 θώνÿ 2009 γ.
  * Copyright © JSC New Age Technologies 2009
  */
-using System;
-using System.Linq;
-using System.Text;
 
 namespace Nat.Web.Controls.GenerationClasses
 {
+    using System;
+    using System.Text;
     using System.Web.UI;
 
     public static class GenerationHelper
     {
+        public static string GetHeaderName(string header)
+        {
+            if (string.IsNullOrEmpty(header))
+                return header;
+
+            var split = header.Split(new[] { '#', '/' }, StringSplitOptions.RemoveEmptyEntries);
+            var sb = new StringBuilder(split.Length * 30);
+            foreach (var value in split)
+            {
+                if (value.StartsWith("_") || value.StartsWith("..._"))
+                    continue;
+
+                sb.Append(value.StartsWith("...") ? value.Substring(3) : value);
+                sb.Append("/");
+            }
+
+            return sb.ToString(0, sb.Length - 1);
+        }
+
         public static string GetHeaderName(string groupName, string header)
         {
             if (string.IsNullOrEmpty(groupName)) return header;
-            var split = groupName.Split(new[] {'#'}, StringSplitOptions.RemoveEmptyEntries);
-            var sb = new StringBuilder(split.Length*30);
-            for (int i = 0; i < split.Length; i++)
+            var split = groupName.Split(new[] { '#' }, StringSplitOptions.RemoveEmptyEntries);
+            var sb = new StringBuilder(split.Length * 30);
+            foreach (var value in split)
             {
-                if (split[i].StartsWith("_") || split[i].StartsWith("..._"))
+                if (value.StartsWith("_") || value.StartsWith("..._"))
                     continue;
-                if (split[i].StartsWith("..."))
-                    sb.Append(split[i].Substring(3));
-                else
-                    sb.Append(split[i]);
+                
+                sb.Append(value.StartsWith("...") ? value.Substring(3) : value);
                 sb.Append("/");
             }
+
             sb.Append(header);
             return sb.ToString();
         }
@@ -39,11 +56,10 @@ namespace Nat.Web.Controls.GenerationClasses
             string header = null)
         {
             return sb.AppendFormat(
-               "<a href=\"javascript:{0}\">{1}</a>",
-               control.Page.ClientScript.GetPostBackEventReference(control, "sort:" + column.Sort),
-               header ?? column.Header);
+                "<a href=\"javascript:{0}\">{1}</a>",
+                control.Page.ClientScript.GetPostBackEventReference(control, "sort:" + column.Sort),
+                header ?? column.Header);
         }
-
 
         public static StringBuilder Content(this StringBuilder sb, GridHtmlGenerator.Column column)
         {

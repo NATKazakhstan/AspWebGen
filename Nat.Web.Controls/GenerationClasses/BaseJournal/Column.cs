@@ -187,13 +187,18 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 
         public TRow CurrentRow { get; protected set; }
 
-        protected TResultData GetDataRow(TRow row)
+        protected TResultData GetDataRow(TRow row, int? rowIndex = null)
         {
             CurrentRow = row;
             if (row == null) return null;
+            
             var rowValues = CrossTable.CurrentValues[row];
-            if (rowValues.Count > RowIndex)
-                return rowValues[RowIndex];
+            if (rowIndex == null)
+                rowIndex = RowIndex;
+
+            if (rowValues.Count > rowIndex.Value)
+                return rowValues[rowIndex.Value];
+
             return null;
         }
 
@@ -246,7 +251,8 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
             context.LoadData(BaseJournalCrossTable);
             var row = context.GetDataRow<TResultData>();
             if (row == null)
-                context.CrossDataItemRow = row = GetDataRow(context.GetDataRow<TRow>());
+                context.CrossDataItemRow = row = GetDataRow(context.GetDataRow<TRow>(), context.RowIndex);
+
             if (row == null) return null;
             return base.GetValue(context);
         }
@@ -259,7 +265,8 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
             context.LoadData(BaseJournalCrossTable);
             var row = context.GetDataRow<TResultData>();
             if (row == null)
-                context.CrossDataItemRow = row = GetDataRow(context.GetDataRow<TRow>());
+                context.CrossDataItemRow = row = GetDataRow(context.GetDataRow<TRow>(), context.RowIndex);
+
             if (row == null) return string.Empty;
             return base.GetName(context);
         }

@@ -73,6 +73,24 @@
             return null;
         }
 
+        public static long? GetDelegationID()
+        {
+            if (!InitializerSection.PermissionsDelegationEnabled || HttpContext.Current == null || HttpContext.Current.User == null)
+                return null;
+
+            var cookie = HttpContext.Current.Request.Cookies["duser"];
+            if (cookie == null)
+                return null;
+
+            if (!string.IsNullOrEmpty(cookie.Value) && int.TryParse(cookie.Value, out var userId))
+            {
+                var available = GetAvailableDelegations().FirstOrDefault(r => r.id == userId);
+                return available?.refPermissionDelegation;
+            }
+
+            return null;
+        }
+
         internal static string GetSID(bool checkWorkAsOtherUser)
         {
             if (checkWorkAsOtherUser && HttpContext.Current != null && HttpContext.Current.Items["Nat.Web.Tools.Security.UserSIDCheckRoles"] == null)

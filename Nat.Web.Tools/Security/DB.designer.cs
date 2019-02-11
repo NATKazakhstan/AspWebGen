@@ -345,6 +345,8 @@ namespace Nat.Web.Tools.Security
 		
 		private string _SubdivisionNameKz;
 		
+		private long _refPermissionDelegation;
+		
 		public ADM_P_GetAvailableDelegationsResult()
 		{
 		}
@@ -508,6 +510,22 @@ namespace Nat.Web.Tools.Security
 				}
 			}
 		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refPermissionDelegation", DbType="BigInt NOT NULL")]
+		public long refPermissionDelegation
+		{
+			get
+			{
+				return this._refPermissionDelegation;
+			}
+			set
+			{
+				if ((this._refPermissionDelegation != value))
+				{
+					this._refPermissionDelegation = value;
+				}
+			}
+		}
 	}
 	
 	public partial class ADM_P_GetMyAvailableDelegationsResult
@@ -532,6 +550,8 @@ namespace Nat.Web.Tools.Security
 		private string _SubdivisionNameRu;
 		
 		private string _SubdivisionNameKz;
+		
+		private long _refPermissionDelegation;
 		
 		public ADM_P_GetMyAvailableDelegationsResult()
 		{
@@ -693,6 +713,22 @@ namespace Nat.Web.Tools.Security
 				if ((this._SubdivisionNameKz != value))
 				{
 					this._SubdivisionNameKz = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refPermissionDelegation", DbType="BigInt NOT NULL")]
+		public long refPermissionDelegation
+		{
+			get
+			{
+				return this._refPermissionDelegation;
+			}
+			set
+			{
+				if ((this._refPermissionDelegation != value))
+				{
+					this._refPermissionDelegation = value;
 				}
 			}
 		}

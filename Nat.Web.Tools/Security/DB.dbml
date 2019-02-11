@@ -50,6 +50,7 @@
       <Column Name="PositionNameKz" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="SubdivisionNameRu" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="SubdivisionNameKz" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="refPermissionDelegation" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
     </ElementType>
   </Function>
   <Function Name="dbo.ADM_P_GetMyAvailableDelegations" Method="ADM_P_GetMyAvailableDelegations">
@@ -65,6 +66,7 @@
       <Column Name="PositionNameKz" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="SubdivisionNameRu" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="SubdivisionNameKz" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="refPermissionDelegation" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
     </ElementType>
   </Function>
 </Database>

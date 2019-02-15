@@ -1378,9 +1378,10 @@
             _sw.WriteLine();
             int correctX = 0;
             int correctW = 0;
-            if (component.TagValue == "frame" || component.TagValue == "frameEndPar")
+            if (component.TagValue == "frame" || component.TagValue == "frameEndPar" || component.TagValue == "frameEndPar0")
             {
                 _sw.Write(@"{{\posx{0}", byIndex.X);
+                _sw.Write("\\absh-{0}", byIndex.Height);
                 var border3 = component as IStiBorder;
                 if ((border3 != null) && !(component is IStiIgnoreBorderWhenExport))
                 {
@@ -1400,9 +1401,9 @@
             // _sw.Write(@"{{\posx{0}", byIndex.X <= 1 ? byIndex.X : byIndex.X + _pageLeftMargins);
             _sw.Write(@"{\rtlch\fcs1 \af0 \ltrch\fcs0");
 
-            if (byIndex.X != 0 && (component.TagValue != "frame" && component.TagValue != "frameEndPar"))
+            if (byIndex.X != 0 && (component.TagValue != "frame" && component.TagValue != "frameEndPar" && component.TagValue != "frameEndPar0"))
                 _sw.Write(@"\li{0}\lin{0}", byIndex.X + correctX);
-            if (component.TagValue == "frame" || component.TagValue == "frameEndPar")
+            if (component.TagValue == "frame" || component.TagValue == "frameEndPar" || component.TagValue == "frameEndPar0")
             {
                 _sw.Write(
                     @"\ri{0}\rin0\absw{2}", 
@@ -1445,6 +1446,8 @@
                 _sw.Write(@"}");
             if (component.TagValue == "frameEndPar")
                 _sw.Write(@"}\par ");
+            if (component.TagValue == "frameEndPar0")
+                _sw.Write(@"}{\rtlch\fcs1 \ab0\af0\afs2 \par }");
         }
 
         private void RenderEndDoc()

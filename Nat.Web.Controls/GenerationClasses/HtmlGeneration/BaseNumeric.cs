@@ -189,9 +189,9 @@ namespace Nat.Web.Controls.GenerationClasses
             var format = Length == 0 ? "{0" : "{0:";
             for (int i = 0; i < Length; i++)
             {
-                if (Length > Precision)
+                if (Length - i > Precision)
                     format += "#";
-                else if (Length == Precision)
+                else if (Length - i == Precision)
                     format += ".#";
                 else
                     format += "#";

@@ -199,6 +199,10 @@ namespace Nat.Web.Controls.Filters
             if (gridViewExt.AllowPaging)
             {
                 checkedIds = new HiddenField { ID = "checkedIds" };
+                if (_storage.Values == null || _storage.Values.Length == 0)
+                    checkedIds.Value = "";
+                else
+                    checkedIds.Value = string.Join(",", _storage.Values.Select(Convert.ToString).ToArray());
                 Controls.Add(checkedIds);
             }
 
@@ -539,6 +543,13 @@ function {1} (checkbox){{
         {
             _storage = (ColumnFilterStorage)storage.Clone();
             OnColumnFilterStorageChanged();
+            if (checkedIds != null)
+            {
+                if (_storage.Values == null || _storage.Values.Length == 0)
+                    checkedIds.Value = "";
+                else
+                    checkedIds.Value = string.Join(",", _storage.Values.Select(Convert.ToString).ToArray());
+            }
         }
 
         public DataRow GetRow(int index)

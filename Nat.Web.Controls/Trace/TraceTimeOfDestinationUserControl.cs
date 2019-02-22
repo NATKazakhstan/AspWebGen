@@ -176,7 +176,7 @@ $(document).ready(function()
             foreach (var key in HttpContext.Current.Request.QueryString.AllKeys)
             {
                 parametersXml.Add(
-                    new XElement("Url", new XAttribute("Key", key), new XAttribute("Value", HttpContext.Current.Request.QueryString[key])));
+                    new XElement("Url", new XAttribute("Key", key ?? string.Empty), new XAttribute("Value", HttpContext.Current.Request.QueryString[key] ?? string.Empty)));
             }
 
             if ("POST".Equals(HttpContext.Current.Request.RequestType, StringComparison.OrdinalIgnoreCase))

@@ -22,6 +22,11 @@ namespace Nat.Web.Controls.AggregateConstructions
         protected MainPageUrlBuilder Url { get; set; }
         protected Page Page { get; set; }
 
+        public virtual bool CheckAccess()
+        {
+            return true;
+        }
+
         public virtual object Execute(MainPageUrlBuilder url, Page page)
         {
             Page = page;
@@ -60,7 +65,8 @@ namespace Nat.Web.Controls.AggregateConstructions
         where TRow : BaseRow, new()
     {
         protected TDataContext DB { get; set; }
-        protected IQueryable<TRow> MainData { get; set; }
+
+        protected abstract IQueryable<TRow> MainData { get; }
     }
 
     public abstract class QueryBuilder<TDataContext, TFilterControl, TKey, TTable, TDataSource, TRow, TJournal, TNavigatorControl, TNavigatorValues, TFilter>
@@ -78,6 +84,14 @@ namespace Nat.Web.Controls.AggregateConstructions
     {
         protected TJournal Journal { get; set; }
         protected BaseJournalUserControl<TDataContext, TFilterControl, TKey, TTable, TDataSource, TRow, TJournal, TNavigatorControl, TNavigatorValues, TFilter> InnerParentUserControl { get; set; }
+        IQueryable<TRow> mainData;
+
+        protected override IQueryable<TRow> MainData => mainData ?? (mainData = InnerParentUserControl.DataSource.BaseView2.GetSelect());
+
+        protected void ClearMainData()
+        {
+            mainData = null;
+        }
 
         protected override void InitializeDataSources()
         {
@@ -87,7 +101,6 @@ namespace Nat.Web.Controls.AggregateConstructions
                 InnerParentUserControl.InitializeControls();
                 Journal = InnerParentUserControl.Journal;
                 DB = InnerParentUserControl.DataSource.BaseView2.DB;
-                MainData = InnerParentUserControl.DataSource.BaseView2.GetSelect();
             }
         }
 

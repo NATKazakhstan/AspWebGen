@@ -12,7 +12,11 @@ namespace Nat.Web.Controls.GenerationClasses
 
         public virtual long id 
         {
-            get { return Convert.ToInt64(Value); }
+            get
+            {
+                long result;
+                return long.TryParse(Value, out result) ? result : 0;
+            }
             set { Value = value.ToString(); }
         }
 

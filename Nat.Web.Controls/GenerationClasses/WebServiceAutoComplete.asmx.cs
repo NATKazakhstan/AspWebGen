@@ -107,9 +107,28 @@ namespace Nat.Web.Controls
                 selectParameters = string.IsNullOrEmpty(selectParameters) ? serializedFilter : "&" + serializedFilter;
             }
 
+            if (!string.IsNullOrEmpty(HttpContext.Current.Request.QueryString["__search"]))
+                selectParameters = (string.IsNullOrEmpty(selectParameters) ? "" : "&")
+                                   + "__search=" + GlobalObject.encodeURIComponent(HttpContext.Current.Request.QueryString["__search"]);
+
             var query = source.GetSelectIRow(selectParameters);
-            var total = query.Count();
-            var result = query.Skip(startIndex).Take(count).Cast<BaseRow>().ToArray();
+            int total;
+            BaseRow[] result;
+            if (count == -1)
+            {
+                result = query.Cast<BaseRow>().ToArray();
+                total = result.Length;
+            }
+            else if (startIndex == -1)
+            {
+                result = query.Take(count).Cast<BaseRow>().ToArray();
+                total = result.Length;
+            }
+            else 
+            {
+                total = query.Count();
+                result = query.Skip(startIndex).Take(count).Cast<BaseRow>().ToArray();
+            }
 
             if (source.LogViewData != null)
             {
@@ -229,17 +248,21 @@ namespace Nat.Web.Controls
 
                 if (isKz)
                 {
-                    queryable = isCode
-                                    ? queryable.Where(q => q.code.StartsWith(prefixText)).OrderBy(q => q.code).Take(count)
-                                    : queryable.Where(q => q.nameKz.StartsWith(prefixText)).Take(count);
+                    if (!string.IsNullOrEmpty(prefixText))
+                        queryable = isCode
+                                        ? queryable.Where(q => q.code.StartsWith(prefixText)).OrderBy(q => q.code)
+                                        : queryable.Where(q => q.nameKz.StartsWith(prefixText));
+                    queryable = queryable.Take(count);
                     foreach (var row in queryable)
                         reslut.Add(jss.Serialize(new Pair(isCode ? row.code : row.nameKz, new Triplet(isCode ? row.nameKz : row.code, row.Value, ds3 != null ? row.GetAdditionalValues(ds3.SelectParameters) : null))));
                 }
                 else
                 {
-                    queryable = isCode
-                                    ? queryable.Where(q => q.code.StartsWith(prefixText)).OrderBy(q => q.code).Take(count)
-                                    : queryable.Where(q => q.nameRu.StartsWith(prefixText)).Take(count);
+                    if (!string.IsNullOrEmpty(prefixText))
+                        queryable = isCode
+                                        ? queryable.Where(q => q.code.StartsWith(prefixText)).OrderBy(q => q.code)
+                                        : queryable.Where(q => q.nameRu.StartsWith(prefixText));
+                    queryable = queryable.Take(count);
                     foreach (var row in queryable)
                         reslut.Add(jss.Serialize(new Pair(isCode ? row.code : row.nameRu, new Triplet(isCode ? row.nameRu : row.code, row.Value, ds3 != null ? row.GetAdditionalValues(ds3.SelectParameters) : null))));
                 }
@@ -252,13 +275,17 @@ namespace Nat.Web.Controls
                     queryable = queryable.Where(q => q.CanAddChild);
                 if (isKz)
                 {
-                    queryable = queryable.Where(q => q.nameKz.StartsWith(prefixText)).Take(count);
+                    if (!string.IsNullOrEmpty(prefixText))
+                        queryable = queryable.Where(q => q.nameKz.StartsWith(prefixText));
+                    queryable = queryable.Take(count);
                     foreach (var row in queryable)
                         reslut.Add(jss.Serialize(new Pair(row.nameKz, new Triplet("", row.Value, ds3 != null ? row.GetAdditionalValues(ds3.SelectParameters) : null))));
                 }
                 else
                 {
-                    queryable = queryable.Where(q => q.nameRu.StartsWith(prefixText)).Take(count);
+                    if (!string.IsNullOrEmpty(prefixText))
+                        queryable = queryable.Where(q => q.nameRu.StartsWith(prefixText));
+                    queryable = queryable.Take(count);
                     foreach (var row in queryable)
                         reslut.Add(jss.Serialize(new Pair(row.nameRu, new Triplet("", row.Value, ds3 != null ? row.GetAdditionalValues(ds3.SelectParameters) : null))));
                 }

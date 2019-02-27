@@ -674,7 +674,7 @@ namespace Nat.Web.Controls
             while (ControlFilterParameters.Count > 4) ControlFilterParameters.RemoveAt(0);
             if (filter != null && filter.Length > 100 && string.IsNullOrEmpty(sessionKey) && HttpContext.Current != null && HttpContext.Current.Session != null)
                 sessionKey = Guid.NewGuid().ToString();
-            if (!string.IsNullOrEmpty(sessionKey) && !string.IsNullOrEmpty(filter) && HttpContext.Current != null && HttpContext.Current.Session != null)
+            if (!string.IsNullOrEmpty(sessionKey) && !string.IsNullOrEmpty(filter) && HttpContext.Current != null && HttpContext.Current.Session != null && !HttpContext.Current.Session.IsReadOnly)
             {
                 if (HttpContext.Current.Session[sessionKey] != null && (string)HttpContext.Current.Session[sessionKey] != filter)
                     sessionKey = Guid.NewGuid().ToString();
@@ -692,7 +692,7 @@ namespace Nat.Web.Controls
 
             // note: возмножно вместо удаления параметров нужно использовать сессию
             while (ControlFilterParameters.Count > 2) ControlFilterParameters.RemoveAt(0);
-            if (!string.IsNullOrEmpty(sessionKey) && HttpContext.Current != null && HttpContext.Current.Session != null)
+            if (!string.IsNullOrEmpty(sessionKey) && HttpContext.Current != null && HttpContext.Current.Session != null && !HttpContext.Current.Session.IsReadOnly)
             {
                 HttpContext.Current.Session[sessionKey] = filter;
                 ControlFilterParameters.Add(new FilterParameter { Key = controlName, SessionKey = sessionKey });

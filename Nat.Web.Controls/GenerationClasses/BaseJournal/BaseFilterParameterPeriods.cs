@@ -50,5 +50,18 @@
             var exp2 = Expression.LessThanOrEqual(fieldStart, valueExp);
             SetWhereExpression(Expression.And(exp1, exp2), param);
         }
+
+        protected override void MoreOrEqualExpression(string strValue, Type tableType)
+        {
+            if (string.IsNullOrEmpty(strValue))
+                return;
+
+            var param = Expression.Parameter(tableType, "bFilter");
+            var value = ConvertToFieldType(strValue);
+            var fieldEnd = Expression.Invoke(ValueEndExpression, param);
+            var valueExp = QueryParameters.GetExpression(fieldEnd + ".MoreOrEqual", value, fieldEnd.Type);
+            var exp1 = Expression.GreaterThanOrEqual(fieldEnd, valueExp);
+            SetWhereExpression(exp1, param);
+        }
     }
 }

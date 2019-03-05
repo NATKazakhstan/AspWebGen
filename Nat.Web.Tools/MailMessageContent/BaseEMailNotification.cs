@@ -38,6 +38,8 @@
 
         public bool ThrowException { get; set; }
 
+        public EMailNotificationAggregator EMailAggregator { get; set; }
+
         public List<MyAttachment> Attachments { get; } = new List<MyAttachment>();
 
         #endregion
@@ -58,7 +60,7 @@
 
         protected abstract string GetSubject();
 
-        protected abstract void SendEMail(
+        protected internal abstract void SendEMail(
             string currentMailAddress, 
             HtmlTextWriter html, 
             string subject, 
@@ -155,16 +157,26 @@
             using (var stringWriter = new StringWriter())
             using (var htmlWriter = new HtmlTextWriter(stringWriter))
             {
-                string subject = GetSubject();
+                var subject = GetSubject();
                 var row = GetData();
                 RenderEMail(htmlWriter, subject, row);
-                SendEMail(
-                    GetCurrentUserEMail(), 
-                    htmlWriter, 
-                    subject, 
-                    mailsDetector.EMailsTo, 
-                    mailsDetector.EMailsCopy, 
-                    Attachments);
+                if (EMailAggregator != null)
+                    EMailAggregator.Add(
+                        this,
+                        GetCurrentUserEMail(),
+                        htmlWriter,
+                        subject,
+                        mailsDetector.EMailsTo,
+                        mailsDetector.EMailsCopy,
+                        Attachments);
+                else
+                    SendEMail(
+                        GetCurrentUserEMail(),
+                        htmlWriter,
+                        subject,
+                        mailsDetector.EMailsTo,
+                        mailsDetector.EMailsCopy,
+                        Attachments);
             }
         }
 

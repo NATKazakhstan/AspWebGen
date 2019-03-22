@@ -129,5 +129,10 @@ namespace Nat.Web.Tools.Export
         /// Первый параметр текст группы, второй колнка, вернуть текст ячейки Excel.
         /// </summary>
         public Func<string, IExportColumn, string> GetTotalValue;
+
+        /// <summary>
+        /// Экспорт без обобщающей итоговой строки.
+        /// </summary>
+        public bool WithOutGroupTotalRow { get; set; }
     }
 }

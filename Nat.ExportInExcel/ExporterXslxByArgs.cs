@@ -170,7 +170,7 @@ namespace Nat.ExportInExcel
                 if (rowIndex != -1 && _args.GetTotalValue != null && _args.GetGroupText != null)
                     RenderTotalRow(columns, groupText);
 
-                if (rowIndex != -1 && _args.GetTotalValue != null)
+                if (rowIndex != -1 && _args.GetTotalValue != null && !_args.WithOutGroupTotalRow)
                     RenderTotalRow(columns, null);
             }
 

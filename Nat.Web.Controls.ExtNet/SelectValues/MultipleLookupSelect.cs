@@ -38,6 +38,7 @@ namespace Nat.Web.Controls.ExtNet.SelectValues
         #region Private Properties
 
         private Container _containerLookupBox;
+        private EditableListDataSource dataSource;
 
         #endregion
 
@@ -270,6 +271,7 @@ if (newValue != null && newValue != '') {{
             store.InitializeListConfig(ComboboxViewListConfig);
 
             LookupBox.LookupFiltersID = HiddenFilters.ID;
+            dataSource = (EditableListDataSource)GridPanel.FindControl(GridPanel.GetStore().DataSourceID);
         }
 
         protected override void OnPreRender(EventArgs e)
@@ -389,7 +391,6 @@ return isValid; }}; ",
         {
             get
             {
-                var dataSource = (EditableListDataSource)GridPanel.FindControl(GridPanel.GetStore().DataSourceID);
                 IEnumerable<EditableListDataSourceView.SelectedItems> result = null;
                 dataSource.BaseView.Select(new DataSourceSelectArguments(),
                     delegate (IEnumerable data)

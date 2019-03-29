@@ -2496,7 +2496,7 @@ var setFrameElementSelectedRecords = function(tablePanel) {
             if (!Ext.isEmpty(r)) {
                 Array.add(selected, r);
             }
-            else if (records.length == 1 && window.frameElement.tryLoadPage) {
+            else if (records.length == 1 && window.frameElement.tryLoadPage && !tablePanel.isTree) {
                 window.frameElement.tryLoadPage = false;
                 SelectPageByID(records[i].data.id, store);
                 return false;

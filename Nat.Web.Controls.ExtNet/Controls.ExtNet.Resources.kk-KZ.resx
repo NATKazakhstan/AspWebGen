@@ -118,33 +118,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Clear" xml:space="preserve">
-    <value>Тазарту</value>
+    <value>Tazartý</value>
   </data>
   <data name="ClearFilter" xml:space="preserve">
-    <value>Сүзгіні тазалау</value>
+    <value>Súzgini tazalaý</value>
   </data>
   <data name="Apply" xml:space="preserve">
-    <value>Пайдалану</value>
+    <value>Paıdalaný</value>
   </data>
   <data name="Dictionary" xml:space="preserve">
-    <value>Анықтамалық</value>
+    <value>Anyqtamalyq</value>
   </data>
   <data name="Filter" xml:space="preserve">
-    <value>Сүзгі</value>
+    <value>Fıltr</value>
   </data>
   <data name="EnterValue" xml:space="preserve">
-    <value>Мағынаны енгізу...</value>
+    <value>Maǵynany engizý...</value>
   </data>
   <data name="SelectDate" xml:space="preserve">
-    <value>Мерзімді таңдаңыз ...</value>
+    <value>Merzimdi tańdańyz ...</value>
   </data>
   <data name="SelectValue" xml:space="preserve">
-    <value>Мағынаны таңдаңыз ...</value>
+    <value>Maǵynany tańdańyz ...</value>
   </data>
   <data name="BaseFilters" xml:space="preserve">
-    <value>Негізгі сүзгілер</value>
+    <value>Negizgi súzgiler</value>
   </data>
   <data name="ToogleVisibleAdditionalFilters" xml:space="preserve">
-    <value>Қосымша сүзгілерді көрсету/жасыру</value>
+    <value>Qosymsha súzgilerdi kórsetý/jasyrý</value>
   </data>
 </root>

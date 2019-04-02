@@ -118,36 +118,36 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnCreateReportResource1.Text" xml:space="preserve">
-    <value>Есебі қалыптасу</value>
+    <value>Esebi qalyptasý</value>
   </data>
   <data name="Label1Resource1.Text" xml:space="preserve">
-    <value>Есептер тізілімі:</value>
+    <value>Esepter tizilimi:</value>
   </data>
   <data name="btnCreateReportKzResource1.Text" xml:space="preserve">
-    <value>Есебі қалыптасу</value>
+    <value>Esebi qalyptasý</value>
   </data>
   <data name="btnCreateReportRuResource1.Text" xml:space="preserve">
-    <value>Есебі қалыптасу</value>
+    <value>Esebi qalyptasý</value>
   </data>
   <data name="Label1Resource2.Text" xml:space="preserve">
-    <value>Есептер тізілімі:</value>
+    <value>Esepter tizilimi:</value>
   </data>
   <data name="ImageCheckBoxResource1.ToolTipUnchecked" xml:space="preserve">
-    <value>Есептер тізілімі көрсету</value>
+    <value>Esepter tizilimi kórsetý</value>
   </data>
   <data name="ImageCheckBoxResource1.Text" xml:space="preserve">
-    <value>Есептер тізілімі көрсету/жасыру</value>
+    <value>Esepter tizilimi kórsetý/jasyrý</value>
   </data>
   <data name="ImageCheckBoxResource1.ToolTipChecked" xml:space="preserve">
-    <value>Есептер тізілімі жасыру</value>
+    <value>Esepter tizilimi jasyrý</value>
   </data>
   <data name="btnSubscriptionsJournalResource1.Text" xml:space="preserve">
-    <value>Жазылушы құру</value>
+    <value>Jazylýshy qurý</value>
   </data>
   <data name="btnSubscriptionsSaveParamsResource1.Text" xml:space="preserve">
-    <value>Параметрлер сақтау</value>
+    <value>Parametrler saqtaý</value>
   </data>
   <data name="SClearValueConditions.Text" xml:space="preserve">
-    <value>Форманы тазарту</value>
+    <value>Formany tazartý</value>
   </data>
 </root>

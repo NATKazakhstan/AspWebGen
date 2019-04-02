@@ -118,18 +118,18 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SAddCondition" xml:space="preserve">
-    <value>Шарттары қосу</value>
+    <value>Sharttary qosý</value>
   </data>
   <data name="SDeleteCondition" xml:space="preserve">
-    <value>Шарттары  жою</value>
+    <value>Sharttary  joiý</value>
   </data>
   <data name="SNoInformatinFromRecordCard" xml:space="preserve">
-    <value>Есептемені жайындауға мүмкін емес. Сіз жеке құрам тізімінде жоқсыз</value>
+    <value>Eseptemeni jaıyndaýǵa múmkin emes. Siz jeke quram tiziminde joqsyz</value>
   </data>
   <data name="SReportViewer" xml:space="preserve">
-    <value>Есептер менеджері</value>
+    <value>Esepter menedjeri</value>
   </data>
   <data name="SBack" xml:space="preserve">
-    <value>Артқа</value>
+    <value>Artqa</value>
   </data>
 </root>

@@ -112,33 +112,33 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="setAsDefultFilterResource1.AlternateText" xml:space="preserve">
-    <value>Таңдалған сүзгіні нұсқаусыз сүзгі ету</value>
+    <value>Tańdalǵan súzgini nusqaýsyz súzgi etý</value>
   </data>
   <data name="HyperLinkResource1.Text" xml:space="preserve">
-    <value>сүзгіні таңдау</value>
+    <value>súzgini tańdaý</value>
   </data>
   <data name="Label1Resource1.Text" xml:space="preserve">
-    <value>Сүзгінің атауы:</value>
+    <value>Súzginiń ataýy:</value>
   </data>
   <data name="HyperLink1Resource1.Text" xml:space="preserve">
-    <value>Сүзгінің реттеулерін сақтау</value>
+    <value>Súzginiń retteýlerin saqtaý</value>
   </data>
   <data name="saveSettingsIBResource1.AlternateText" xml:space="preserve">
-    <value>Сүзгінің реттеулерін сақтау</value>
+    <value>Súzginiń retteýlerin saqtaý</value>
   </data>
   <data name="saveSettingsResource1.Text" xml:space="preserve">
-    <value>Сүзгінің реттеулерін сақтау</value>
+    <value>Súzginiń retteýlerin saqtaý</value>
   </data>
   <data name="Label2Resource1.Text" xml:space="preserve">
-    <value>Сақталған сүзгілер тізімі: </value>
+    <value>Saqtalǵan súzgiler tizimi: </value>
   </data>
   <data name="deleteSettingsResource1.AlternateText" xml:space="preserve">
-    <value>Сақталған сүзгіні жою</value>
+    <value>Saqtalǵan súzgini joiý</value>
   </data>
 </root>

@@ -313,7 +313,7 @@
     <value> {0} júıemen jumys múmkin emes.</value>
   </data>
   <data name="EFieldMaxLength" xml:space="preserve">
-    <value>Алаңда '{0}' символдардың максималды саны асып кеткен {0}</value>
+    <value>Alańda '{0}' sımvoldardyń maksımaldy sany asyp ketken {0}</value>
   </data>
   <data name="SFieldHasErrorWithText" xml:space="preserve">
     <value>Alańdaǵy '{0}'tańdap alynǵan  máninde '{1}' qate bar:</value>
@@ -364,7 +364,7 @@
     <value>{0} sımvoldardyń múmkin uzyndyǵynan asyp ketken.</value>
   </data>
   <data name="SServiceProcedure_TimeOfEndService" xml:space="preserve">
-    <value>{0} техникалық жұмыстарды болжамды аяқтау уақыты.</value>
+    <value>{0} tehnıkalyq jumystardy boljamdy aiaqtaý ýaqyty.</value>
   </data>
   <data name="SServiceProcedure" xml:space="preserve">
     <value>Tehnıkalyq jumystar júrgiziledi.</value>
@@ -460,7 +460,7 @@
     <value>{0}' torynan kem bolý kerek.</value>
   </data>
   <data name="SNotSelectRecordOrNotExists" xml:space="preserve">
-    <value>Жазу тандап алынған  жоқ немесе жоқ</value>
+    <value>Jazý tandap alynǵan  joq nemese joq</value>
   </data>
   <data name="SSCFixedHeader" xml:space="preserve">
     <value>Taqyrypty bekitý</value>
@@ -676,7 +676,7 @@
     <value>Ataýyn jáne baǵanany bekitý dáldeýleri</value>
   </data>
   <data name="SAddedGroupColumnLeft" xml:space="preserve">
-    <value>Жолдар тобының  ұяшықтарын біріктіру</value>
+    <value>Joldar tobynyń  uiashyqtaryn biriktirý</value>
   </data>
   <data name="SOrderByColumnRemove" xml:space="preserve">
     <value>Sorttaýdy toqtatý</value>
@@ -841,7 +841,7 @@
     <value>if(confirm("Jazbalar {1} jýrnalynda. Eksporttaý shamaly ýaqytty qajet etedi. Az tizimdi alý úshin súzgileýdi qaraý kerek shyǵar.")) return true; return false;</value>
   </data>
   <data name="SWizardPrevious" xml:space="preserve">
-    <value>Кері қайту</value>
+    <value>Keri qaıtý</value>
   </data>
   <data name="SSelectAllFromAllPages" xml:space="preserve">
     <value>Barlyq paraqtardan jazbalardy tańdaý</value>
@@ -877,7 +877,7 @@
     <value>Jazbany -qa tómen túsirý (joldar sany)</value>
   </data>
   <data name="SWizardNext" xml:space="preserve">
-    <value>Әрі өту</value>
+    <value>Ári ótý</value>
   </data>
   <data name="SMoveUpRecord" xml:space="preserve">
     <value>Jazbany joǵary kóterý</value>
@@ -910,16 +910,16 @@
     <value>Kóp jazbalardy {0} eksporttaýǵa tıym salynǵan. Az tizimdi alý úshin súzgileýdi qoldanyńyz.</value>
   </data>
   <data name="SInvalidFormatInFilter" xml:space="preserve">
-    <value>Енгізілген мән "{0}" сүзгі алаңындағы форматқа сәйкес келмейді.</value>
+    <value>Engizilgen mán "{0}" súzgi alańyndaǵy formatqa sáıkes kelmeıdi.</value>
   </data>
   <data name="SInvalidDateFormatInFilter" xml:space="preserve">
-    <value>"{0}" сүзгі алаңына күн дұрыс енгізілмеген.</value>
+    <value>"{0}" súzgi alańyna kún durys engizilmegen.</value>
   </data>
   <data name="SInvalidNumericFormatInFilter" xml:space="preserve">
-    <value>"{0}" сүзгі алаңына сан дұрыс енгізілмеген.</value>
+    <value>"{0}" súzgi alańyna san durys engizilmegen.</value>
   </data>
   <data name="SToDay" xml:space="preserve">
-    <value>Ағымдағы күн</value>
+    <value>Aǵymdaǵy kún</value>
   </data>
   <data name="SOnKz" xml:space="preserve">
     <value>Qazaq tilinde</value>
@@ -928,22 +928,22 @@
     <value>Orys tilinde</value>
   </data>
   <data name="SExceptionOccurredTryAgainOrReload" xml:space="preserve">
-    <value>Операцияны орындаук езінде қате табылды,  парақты қайта жүктеу және қайталап   көру</value>
+    <value>Operatsıiany oryndaýk ezinde qate tabyldy,  paraqty qaıta júkteý jáne qaıtalap   kórý</value>
   </data>
   <data name="SShowDublicates" xml:space="preserve">
-    <value>Шығару</value>
+    <value>Shyǵarý</value>
   </data>
   <data name="SLengthMore" xml:space="preserve">
-    <value>Ұзындығы  артық</value>
+    <value>Uzyndyǵy  artyq</value>
   </data>
   <data name="SLengthLess" xml:space="preserve">
-    <value>Ұзындығы  төмен</value>
+    <value>Uzyndyǵy  tómen</value>
   </data>
   <data name="SDaysLeftAndMore" xml:space="preserve">
-    <value>N күн қалды </value>
+    <value>N kún qaldy </value>
   </data>
   <data name="SDaysAgoAndMore" xml:space="preserve">
-    <value>N күн өтті </value>
+    <value>N kún ótti </value>
   </data>
   <data name="SQuickSearch" xml:space="preserve">
     <value>Jyldam izdeý</value>

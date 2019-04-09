@@ -161,7 +161,7 @@
 
         private static Type GetTypeByReportManager(string pluginName)
         {
-            var type = BuildManager.GetType("Nat.Web.ReportManager.WebReportManager, Nat.Web.ReportManager, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", true, true);
+            var type = BuildManager.GetType("Nat.Web.ReportManager.WebReportManager, Nat.Web.ReportManager, Version=1.4.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", true, true);
             var getPlugin = type.GetMethod("GetPlugin", BindingFlags.Public | BindingFlags.Static);
             return getPlugin.Invoke(null, new object[] { pluginName })?.GetType();
         }

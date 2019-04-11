@@ -203,7 +203,8 @@ namespace Nat.Web.Controls
                         url.QueryParameters.ContainsKey(MainPageUrlBuilder.NavigateToDestinationParentTableName)
                             ? url.QueryParameters[MainPageUrlBuilder.NavigateToDestinationParentTableName]
                             : string.Empty,
-                        regexPublicKeyToken.Match(baseType.Assembly.FullName).Groups[1].Value);
+                        regexPublicKeyToken.Match(baseType.Assembly.FullName).Groups[1].Value,
+                        url.ShowHistory);
                     Response.Redirect(navigateUrl);
                 }
 

@@ -8,7 +8,13 @@
 
     public class NavigatorManager
     {
-        public static string GetReadUrlForRecord(string projectName, string tableName, string id, string destinationTable, string publicKeyToken = "11c252a207597415")
+        public static string GetReadUrlForRecord(
+            string projectName,
+            string tableName,
+            string id,
+            string destinationTable,
+            string publicKeyToken = "11c252a207597415",
+            bool showHistory = false)
         {
             if (string.IsNullOrEmpty(projectName))
                 throw new ArgumentNullException("projectName");
@@ -53,7 +59,9 @@
             if (!string.IsNullOrEmpty(navigateUrl))
                 return navigateUrl;
 
-            return GetReadUrlForRecord(nav, id, destinationTable).CreateUrl();
+            var resultUrl = GetReadUrlForRecord(nav, id, destinationTable);
+            resultUrl.ShowHistory = showHistory;
+            return resultUrl.CreateUrl();
         }
 
         public static MainPageUrlBuilder GetReadUrlForRecord(BaseNavigatorInfo nav, string id, string destinationTable)

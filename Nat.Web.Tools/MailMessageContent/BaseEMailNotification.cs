@@ -19,7 +19,7 @@
         protected BaseEMailNotification(long refPerson)
         {
             this.refPerson = refPerson;
-            refCurrentPerson = User.GetPersonInfoRequired().id;
+            refCurrentPerson = User.GetPersonInfo()?.id ?? 0;
         }
 
         protected BaseEMailNotification(long currentPerson, long person)

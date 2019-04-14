@@ -278,16 +278,35 @@ namespace Nat.Web.Tools.MailMessageContent
 
         public void BeginTable(string title, Action<HtmlTextWriter> addTableAttributes, Action<HtmlTextWriter> addHeaderThAttributes, params string[] headers)
         {
-            // Если уже была начата таблица, то рендерим заголовок в ней
-            if (tableColumns.Count > 0)
+            BeginTable(title, "", addTableAttributes, addHeaderThAttributes, headers);
+        }
+
+        public void BeginTable(string title, string subsystemName, Action<HtmlTextWriter> addTableAttributes, Action<HtmlTextWriter> addHeaderThAttributes, params string[] headers)
+        {
+            void RenderTitle(int count)
             {
+                // Если текст subsystemName не пустой, то рендерим его в новую строку текущей таблицы
+                if (!string.IsNullOrEmpty(subsystemName))
+                {
+                    HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr); //// tr 3
+
+                    HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "subsystemName");
+                    HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Colspan, count.ToString());
+                    HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Td); //// td 3
+
+                    HtmlWriter.WriteEncodedText(subsystemName);
+
+                    HtmlWriter.RenderEndTag(); //// td 3
+                    HtmlWriter.RenderEndTag(); //// tr 3
+                }
+
                 // Если текст заголовка не пустой, то рендерим его в новую строку текущей таблицы
                 if (!string.IsNullOrEmpty(title))
                 {
                     HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr); //// tr 3
 
                     addHeaderThAttributes(HtmlWriter);
-                    HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Colspan, tableColumns.Peek().ToString());
+                    HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Colspan, count.ToString());
                     HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Td); //// td 3
 
                     HtmlWriter.WriteEncodedText(title);
@@ -295,6 +314,12 @@ namespace Nat.Web.Tools.MailMessageContent
                     HtmlWriter.RenderEndTag(); //// td 3
                     HtmlWriter.RenderEndTag(); //// tr 3
                 }
+            }
+
+            // Если уже была начата таблица, то рендерим заголовок в ней
+            if (tableColumns.Count > 0)
+            {
+                RenderTitle(tableColumns.Peek());
 
                 // Создаем строку и ячейку для таблицы
                 HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr); //// tr for table
@@ -310,20 +335,7 @@ namespace Nat.Web.Tools.MailMessageContent
                 addTableAttributes(HtmlWriter);
                 HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Table); //// table
 
-                // Если текст заголовка не пустой, то рендерим его в новую строку
-                if (!string.IsNullOrEmpty(title))
-                {
-                    HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr); //// tr 1
-
-                    addHeaderThAttributes(HtmlWriter);
-                    HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Colspan, headers.Length.ToString());
-                    HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Td); //// td 1
-
-                    HtmlWriter.WriteEncodedText(title);
-
-                    HtmlWriter.RenderEndTag(); //// td 1
-                    HtmlWriter.RenderEndTag(); //// tr 1
-                }
+                RenderTitle(headers.Length);
             }
 
             // Если есть текст в заголовках тогда рендерим строку с заголовками
@@ -373,9 +385,14 @@ namespace Nat.Web.Tools.MailMessageContent
             }
 
             HtmlWriter.RenderEndTag();
-        } 
-        
+        }
+
         public void AddRow(params string[] renderCellValues)
+        {
+            AddRow(true, renderCellValues);
+        }
+
+        public void AddRow(bool firstBold, params string[] renderCellValues)
         {
             var dif = tableColumns.Peek() - renderCellValues.Length;
             if (dif < 0)
@@ -383,19 +400,29 @@ namespace Nat.Web.Tools.MailMessageContent
                     "renderCellValues", "Длина колекции больше чем количество колонок в таблице");
 
             HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Tr);
+            
+            if (renderCellValues.Length == 1 && dif > 0) 
+                HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Colspan, tableColumns.Peek().ToString());
 
+            var first = firstBold;
             foreach (var renderCellValue in renderCellValues)
             {
+                if (first)
+                {
+                    HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "boldTD");
+                    first = false;
+                }
                 HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Td);
                 HtmlWriter.Write(renderCellValue);
                 HtmlWriter.RenderEndTag();
             }
 
-            for (int i = 0; i < dif; i++)
-            {
-                HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Td);
-                HtmlWriter.RenderEndTag();                
-            }
+            if (renderCellValues.Length != 1 && dif > 0)
+                for (int i = 0; i < dif; i++)
+                {
+                    HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Td);
+                    HtmlWriter.RenderEndTag();
+                }
 
             HtmlWriter.RenderEndTag();
         }

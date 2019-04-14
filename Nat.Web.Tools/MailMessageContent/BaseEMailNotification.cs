@@ -38,6 +38,8 @@
 
         public bool ThrowException { get; set; }
 
+        public string SubsystemName { get; set; }
+
         public EMailNotificationAggregator EMailAggregator { get; set; }
 
         public List<MyAttachment> Attachments { get; } = new List<MyAttachment>();
@@ -227,10 +229,12 @@
 
                 email.BeginTable(
                     subject,
+                    SubsystemName, 
                     AddAttributesForMainTable, 
-                    writer => { }, 
+                    writer => { writer.AddAttribute(HtmlTextWriterAttribute.Class, "boldTD"); }, 
                     string.Empty, 
                     string.Empty);
+                
                 if (row.Person != null)
                 {
                     if (!string.IsNullOrEmpty(row.Person.Rank))
@@ -240,18 +244,27 @@
                         email.AddRow("Должность", row.Person.Position);
                 }
 
-                RenderEMail(email, row);
+                var baseRender = false;
+                if (row.Person != null && row.CurrentPerson != null)
+                {
+                    baseRender = true;
+                    RenderEMail(email, row);
+                }
 
                 if (row.CurrentPerson != null)
                 {
-                    email.AddRow(string.Empty, string.Empty);
-                    email.AddRow("Изменения внес:", string.Empty);
+                    email.AddRow(string.Empty);
+                    email.HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "tableHead");
+                    email.AddRow("Изменения внес:");
                     if (!string.IsNullOrEmpty(row.CurrentPerson.Rank))
                         email.AddRow("В/зв", row.CurrentPerson.Rank);
                     email.AddRow("ФИО", row.CurrentPerson.Fio);
                     if (!string.IsNullOrEmpty(row.CurrentPerson.Position))
                         email.AddRow("Должность", row.CurrentPerson.Position);
                 }
+
+                if (!baseRender)
+                    RenderEMail(email, row);
 
                 email.EndTable();
                 email.EndMessage();

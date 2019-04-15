@@ -530,16 +530,37 @@ namespace Nat.Web.Controls.GenerationClasses
             }
 
             /// <summary>
+            /// Убедиться что список DataSourceOther заполнен.
+            /// </summary>
+            public void EnsureDataSourceOtherFilled(int maximumRows)
+            {
+                if (DataSourceOther == null)
+                    FillDataSourceOther(maximumRows);
+            }
+
+            /// <summary>
             /// Заполнить спсок DataSourceOther.
             /// </summary>
             public void FillDataSourceOther()
+            {
+                FillDataSourceOther(0);
+            }
+
+            /// <summary>
+            /// Заполнить спсок DataSourceOther.
+            /// </summary>
+            public void FillDataSourceOther(int maximumRows)
             {
                 var list = new List<KeyValuePair<long, string>>();
                 DataSourceView view = DataSource.GetView("default");
                 var baseView = view as BaseDataSourceView<long>;
                 if (baseView != null) baseView.CancelTreeUse = true;
                 IEnumerable dataSourceData = null;
-                view.Select(new DataSourceSelectArguments(), delegate(IEnumerable data) { dataSourceData = data; });
+                var arguments = new DataSourceSelectArguments();
+                if (maximumRows > 0)
+                    arguments.MaximumRows = maximumRows;
+
+                view.Select(arguments, delegate(IEnumerable data) { dataSourceData = data; });
                 if (dataSourceData != null)
                 {
                     var enumerator = dataSourceData.GetEnumerator();

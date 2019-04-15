@@ -11,6 +11,7 @@ namespace Nat.Web.Tools.ExtNet
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
+    using System.Web;
     using System.Web.UI;
     using System.Web.UI.WebControls;
 
@@ -424,8 +425,18 @@ namespace Nat.Web.Tools.ExtNet
             if (CreateFilterHandler != null)
                 return CreateFilterHandler(this);
 
+            var isReadArgument = (HttpContext.Current.Request.Form["__EVENTARGUMENT"] ?? "").EndsWith("|postback|read");
+
+            if (IsForeignKey && isReadArgument)
+                return new ListFilter
+                    {
+                        DataIndex = ColumnNameIndex,
+                        Options = new string[0],
+                        LoadingText = Resources.SLoading,
+                    };
+
             if (IsForeignKey && !IsFilterLookup)
-                EnsureDataSourceOtherFilled();
+                EnsureDataSourceOtherFilled(50);
             if (DataSourceOther != null && DataSourceOther.Any())
             {
                 return new ListFilter
@@ -439,7 +450,7 @@ namespace Nat.Web.Tools.ExtNet
             if (IsForeignKey && DataSource != null && !IsLookup)
             {
                 IEnumerable data = null;
-                DataSource.GetView("").Select(new DataSourceSelectArguments(), c => data = c);
+                DataSource.GetView("").Select(new DataSourceSelectArguments { MaximumRows = 50 }, c => data = c);
                 return new ListFilter
                     {
                         DataIndex = ColumnNameIndex,

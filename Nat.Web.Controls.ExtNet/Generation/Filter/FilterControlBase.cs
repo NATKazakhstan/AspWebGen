@@ -219,7 +219,7 @@ namespace Nat.Web.Controls.ExtNet.Generation.Filter
             if (view == null)
                 return null;
 
-            var dataSourceSelectArguments = new DataSourceSelectArguments { StartRowIndex = 0 };
+            var dataSourceSelectArguments = new DataSourceSelectArguments { StartRowIndex = 0, MaximumRows = 100 };
             IEnumerable listValues = null;
             view.Select(dataSourceSelectArguments, r => listValues = r);
             return listValues.Cast<object>().ToArray();

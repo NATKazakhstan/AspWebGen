@@ -118,18 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SActionColumnText" xml:space="preserve">
-    <value>Әрекеттер</value>
+    <value>Óreketter</value>
   </data>
   <data name="SOpen" xml:space="preserve">
-    <value>Ашу</value>
+    <value>Ashý</value>
   </data>
   <data name="SClear" xml:space="preserve">
-    <value>Таңдағанды жою</value>
+    <value>Tańdaǵandy joiý</value>
   </data>
   <data name="SFilterText" xml:space="preserve">
-    <value>Сүзгілер</value>
+    <value>Súzgiler</value>
   </data>
   <data name="SInformation" xml:space="preserve">
-    <value>Ақпарат</value>
+    <value>Aqparat</value>
+  </data>
+  <data name="STimeOut" xml:space="preserve">
+    <value>Fıltrdі ózgertý kerek, óıtkenі berіlgen ýaqyt іshіnde qajettі derekterdі tańdaý múmkіn bolǵan joq.</value>
   </data>
 </root>

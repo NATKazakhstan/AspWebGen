@@ -118,51 +118,51 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SSelect" xml:space="preserve">
-    <value>Таңдау</value>
+    <value>Tańdaý</value>
   </data>
   <data name="STrue" xml:space="preserve">
-    <value>Иә</value>
+    <value>Iá</value>
   </data>
   <data name="SData" xml:space="preserve">
-    <value>Деректер</value>
+    <value>Málimetter</value>
   </data>
   <data name="SFilterCriteria" xml:space="preserve">
-    <value>Таңдау өлшемін</value>
+    <value>Tańdaý ólshemin</value>
   </data>
   <data name="SFalse" xml:space="preserve">
-    <value>Жоқ</value>
+    <value>Joq</value>
   </data>
   <data name="SCancel" xml:space="preserve">
-    <value>Болдырмау</value>
+    <value>Boldyrmaý</value>
   </data>
   <data name="SApplyFilter" xml:space="preserve">
-    <value>Фильтрді қолдану</value>
+    <value>Fıltrdi qoldaný</value>
   </data>
   <data name="SSelectFromDBDirectory" xml:space="preserve">
-    <value>Анықтамалықтан таңдауы</value>
+    <value>Anyqtamalyqtan tańdaýy</value>
   </data>
   <data name="SNoDataByFilterCriteria" xml:space="preserve">
-    <value>Осы фильтрді қанағаттандыратын деректер жоқ</value>
+    <value>Osy fıltrdi qanaǵattandyratyn derekter joq</value>
   </data>
   <data name="SShowFilter" xml:space="preserve">
-    <value>Фильтрді көрсету</value>
+    <value>Fıltrdi kórsetý</value>
   </data>
   <data name="SFilterNotApplied" xml:space="preserve">
-    <value>Фильтрді пайдалау</value>
+    <value>Fıltrdi paıdalaý</value>
   </data>
   <data name="SHideFilter" xml:space="preserve">
-    <value>Сүзбені жасыру</value>
+    <value>Súzbeni jasyrý</value>
   </data>
   <data name="SChangeToBriefView" xml:space="preserve">
-    <value>Фильтрдің қысқа түрін орнату</value>
+    <value>Fıltrdiń qysqa túrin ornatý</value>
   </data>
   <data name="SChangeToFullView" xml:space="preserve">
-    <value>Фильтрдің жайылған түрін орнату</value>
+    <value>Fıltrdiń jaıylǵan túrin ornatý</value>
   </data>
   <data name="SSaveFiltersState" xml:space="preserve">
-    <value>Қазіргі фильтрді сақтау</value>
+    <value>Qazirgi fıltrdi saqtaý</value>
   </data>
   <data name="SFilterApplied" xml:space="preserve">
-    <value>Фильтр орнатылған</value>
+    <value>Fıltr ornatylǵan</value>
   </data>
 </root>

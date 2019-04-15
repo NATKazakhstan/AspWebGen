@@ -118,157 +118,157 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CascadingDropDown_MethodError" xml:space="preserve">
-    <value>[Әдіс қателігі {0}]</value>
+    <value>[Ádis qateligi {0}]</value>
   </data>
   <data name="CascadingDropDown_MethodTimeout" xml:space="preserve">
-    <value>[Әдісте күту уақыты асырылған]</value>
+    <value>[Ádiste kútý ýaqyty asyrylǵan]</value>
   </data>
   <data name="Tabs_PropertySetBeforeInitialization" xml:space="preserve">
-    <value>{0} инициализация алдында өзгертуге жатпайды</value>
+    <value>{0} ınıtsıalızatsıia aldynda ózgertýge jatpaıdy</value>
   </data>
   <data name="Tabs_PropertySetAfterInitialization" xml:space="preserve">
-    <value>{0} инициализациядан соң өзгертуге жатпайды</value>
+    <value>{0} ınıtsıalızatsıiadan soń ózgertýge jatpaıdy</value>
   </data>
   <data name="ResizableControlBehavior_InvalidHandler" xml:space="preserve">
-    <value>{0} өңдеуші функция, функцияның атауы немесе функцияның мәтіні болып табылмайды</value>
+    <value>{0} óńdeýshi fýnktsıia, fýnktsıianyń ataýy nemese fýnktsıianyń mátini bolyp tabylmaıdy</value>
   </data>
   <data name="ExtenderBase_CannotSetClientStateField" xml:space="preserve">
-    <value>clientStateField тек инициализацияның алдында орнатуға болады</value>
+    <value>clientStateField tek ınıtsıalızatsıianyń aldynda ornatýǵa bolady</value>
   </data>
   <data name="ExtenderBase_InvalidClientStateType" xml:space="preserve">
-    <value>saveClientState String түрінің мағынасын қайтару керек</value>
+    <value>saveClientState String túriniń maǵynasyn qaıtarý kerek</value>
   </data>
   <data name="Tabs_OwnerExpected" xml:space="preserve">
-    <value>Иені инициализацияның алдында анықтау керек</value>
+    <value>Ieni ınıtsıalızatsıianyń aldynda anyqtaý kerek</value>
   </data>
   <data name="Rating_CallbackError" xml:space="preserve">
-    <value>Өңделмеген ерекшелік пайда болды:\r\n{0}</value>
+    <value>Óńdelmegen erekshelik paıda boldy:\r\n{0}</value>
   </data>
   <data name="PasswordStrength_Satisfied" xml:space="preserve">
-    <value>Бары ок.</value>
+    <value>Bary ok.</value>
   </data>
   <data name="ValidatorCallout_DefaultErrorMessage" xml:space="preserve">
-    <value>Осы элемент вилидный болып табылмайды</value>
+    <value>Osy element vılıdnyı bolyp tabylmaıdy</value>
   </data>
   <data name="Common_InvalidPaddingUnit" xml:space="preserve">
-    <value>{0} түрі бірлік parsePadding үшін дұрыс деп есептелмейді</value>
+    <value>{0} túri birlik parsePadding úshin durys dep eseptelmeıdi</value>
   </data>
   <data name="PasswordStrength_RemainingCharacters" xml:space="preserve">
-    <value>Тағы {0} әріп(тер)</value>
+    <value>Taǵy {0} árip(ter)</value>
   </data>
   <data name="PasswordStrength_RemainingSymbols" xml:space="preserve">
-    <value>Тағы {0} белгі(лер/ді)</value>
+    <value>Taǵy {0} belgi(ler/di)</value>
   </data>
   <data name="PasswordStrength_RemainingNumbers" xml:space="preserve">
-    <value>Тағы{0} саны(дар)</value>
+    <value>Taǵy{0} sany(dar)</value>
   </data>
   <data name="ResizableControlBehavior_CannotChangeProperty" xml:space="preserve">
-    <value>{0} үшін өзгірістер сақталмайды</value>
+    <value>{0} úshin ózgirister saqtalmaıdy</value>
   </data>
   <data name="PasswordStrength_InvalidWeightingRatios" xml:space="preserve">
-    <value>Парольді қорғау салмақтық еселігінің саны 4 тең болу керек</value>
+    <value>Paroldi qorǵaý salmaqtyq eseliginiń sany 4 teń bolý kerek</value>
   </data>
   <data name="TextCount_DefaultDisplayFormat" xml:space="preserve">
-    <value>Саны: {0} әріптер қалды: {1} ең көп ұзындығы: {2}</value>
+    <value>Sany: {0} áripter qaldy: {1} eń kóp uzyndyǵy: {2}</value>
   </data>
   <data name="TextCount_DefaultAlertFormat" xml:space="preserve">
-    <value>Ең көп ұзындығы: {2}</value>
+    <value>Eń kóp uzyndyǵy: {2}</value>
   </data>
   <data name="Shared_BrowserSecurityPreventsPaste" xml:space="preserve">
-    <value>Сіздің браузердің қауіпсіздік бейімдеу қыстырма операцияны автоматтандырылған орындауын рұқсат етпейді. Ctrl+V комбинацияны пайдаланыңыз.</value>
+    <value>Sizdiń braýzerdiń qaýipsizdik beıimdeý qystyrma operatsıiany avtomattandyrylǵan oryndaýyn ruqsat etpeıdi. Ctrl+V kombınatsıiany paıdalanyńyz.</value>
   </data>
   <data name="Common_DateTime_InvalidFormat" xml:space="preserve">
-    <value>Қате формат</value>
+    <value>Qate format</value>
   </data>
   <data name="ReorderList_DropWatcherBehavior_NoChild" xml:space="preserve">
-    <value>id "{0}" бар парақ баланы табу мүмкін емес.</value>
+    <value>id "{0}" bar paraq balany tabý múmkin emes.</value>
   </data>
   <data name="CascadingDropDown_NoParentElement" xml:space="preserve">
-    <value>{0} элементтің ата-анасын табу мүмкін емес.</value>
+    <value>{0} elementtiń ata-anasyn tabý múmkin emes.</value>
   </data>
   <data name="PopupExtender_NoParentElement" xml:space="preserve">
-    <value>{0} элементтің ата-анасын табу мүмкін емес.</value>
+    <value>{0} elementtiń ata-anasyn tabý múmkin emes.</value>
   </data>
   <data name="CollapsiblePanel_NoControlID" xml:space="preserve">
-    <value>{0} элементті табу мүмкін емес.</value>
+    <value>{0} elementti tabý múmkin emes.</value>
   </data>
   <data name="Common_UnitHasNoDigits" xml:space="preserve">
-    <value>Сандар жоқ</value>
+    <value>Sandar joq</value>
   </data>
   <data name="DynamicPopulate_WebServiceError" xml:space="preserve">
-    <value>Вебсервисті сәтсіз шақыру: {0}</value>
+    <value>Vebservısti sátsiz shaqyrý: {0}</value>
   </data>
   <data name="PasswordStrength_DefaultStrengthDescriptions" xml:space="preserve">
-    <value>Жоқ;Өте нашар;Нашар;Жайсыз;Жақсы дерлік;Шамалас Нормалы;Нормалы; Жақсы; Күшті;Тамаша;Бірінші дәрежелі!</value>
+    <value>Joq;Óte nashar;Nashar;Jaısyz;Jaqsy derlik;Shamalas Normaly;Normaly; Jaqsy; Kúshti;Tamasha;Birinshi dárejeli!</value>
   </data>
   <data name="ReorderList_DropWatcherBehavior_CallbackError" xml:space="preserve">
-    <value>Қайта сорттау қателігі, қосымша ақпарат төменде.\r\n\r\n{0}</value>
+    <value>Qaıta sorttaý qateligi, qosymsha aqparat tómende.\r\n\r\n{0}</value>
   </data>
   <data name="PasswordStrength_StrengthPrompt" xml:space="preserve">
-    <value>Пароль:</value>
+    <value>Parol:</value>
   </data>
   <data name="Slider_NoSizeProvided" xml:space="preserve">
-    <value>CSS ползунок деңгейі үшін еннің және биіктіктін дұрыс мағынасын орнатыңыз.</value>
+    <value>CSS polzýnok deńgeıi úshin enniń jáne bıiktiktin durys maǵynasyn ornatyńyz.</value>
   </data>
   <data name="PasswordStrength_GetHelpRequirements" xml:space="preserve">
-    <value>Парольге талап бойынша көмек алу</value>
+    <value>Parolge talap boıynsha kómek alý</value>
   </data>
   <data name="DynamicPopulate_WebServiceTimeout" xml:space="preserve">
-    <value>Вебсервисті күту уақыты асырылған</value>
+    <value>Vebservısti kútý ýaqyty asyrylǵan</value>
   </data>
   <data name="TextCount_DefaultKeyboardModeFormat" xml:space="preserve">
-    <value>Пернетақтаның жағдайы: {3}</value>
+    <value>Pernetaqtanyń jaǵdaıy: {3}</value>
   </data>
   <data name="PopupControl_NoDefaultProperty" xml:space="preserve">
-    <value>control "{0}" үшін "{1}" түрінің үндеусіз қабілеті сақталмайды.</value>
+    <value>control "{0}" úshin "{1}" túriniń úndeýsiz qabileti saqtalmaıdy.</value>
   </data>
   <data name="Calendar_Today" xml:space="preserve">
-    <value>Бүгін: {0}</value>
+    <value>Búgin: {0}</value>
   </data>
   <data name="ListSearch_DefaultPrompt" xml:space="preserve">
-    <value>Іздеу үшін түрі</value>
+    <value>Izdeý úshin túri</value>
   </data>
   <data name="PasswordStrength_RemainingMixedCase" xml:space="preserve">
-    <value>Әр түрлі тізілімдерде белгілеу(лер) қажет</value>
+    <value>Ór túrli tizilimderde belgileý(ler) qajet</value>
   </data>
   <data name="PasswordStrength_InvalidStrengthDescriptions" xml:space="preserve">
-    <value>Парольді қорғау деңгейлері үшін сипаттамалардың қате саны белгіленген</value>
+    <value>Paroldi qorǵaý deńgeıleri úshin sıpattamalardyń qate sany belgilengen</value>
   </data>
   <data name="ExtenderBase_ControlNotRegisteredForCallbacks" xml:space="preserve">
-    <value>Осы Control кері шақыру үшін тіркелмеген</value>
+    <value>Osy Control keri shaqyrý úshin tirkelmegen</value>
   </data>
   <data name="ExtenderBase_PageNotRegisteredForCallbacks" xml:space="preserve">
-    <value>Осы Page кері шақыру үшін тіркелмеген</value>
+    <value>Osy Page keri shaqyrý úshin tirkelmegen</value>
   </data>
   <data name="Common_DateTime_InvalidTimeSpan" xml:space="preserve">
-    <value>"{0}" дұрыс TimeSpan формат деп табылмайды</value>
+    <value>"{0}" durys TimeSpan format dep tabylmaıdy</value>
   </data>
   <data name="Tabs_ActiveTabArgumentOutOfRange" xml:space="preserve">
-    <value>Дәлел сала бастау жинағының мүшесі деп табылмайды</value>
+    <value>Dálel sala bastaý jınaǵynyń múshesi dep tabylmaıdy</value>
   </data>
   <data name="Common_InvalidBorderWidthUnit" xml:space="preserve">
-    <value>"{0}"' түрі бірлік parseBorderWidth үшін дұрыс деп есептелмейді</value>
+    <value>"{0}"' túri birlik parseBorderWidth úshin durys dep eseptelmeıdi</value>
   </data>
   <data name="TextCount_DefaultOverwriteText" xml:space="preserve">
-    <value>Қайта жазу</value>
+    <value>Qaıta jazý</value>
   </data>
   <data name="Animation_InvalidColor" xml:space="preserve">
-    <value>Түс 7-ті белгілі он алты еселік көрсетуде болу керек (яғни #246ACF), бірақ "{0}" емес)</value>
+    <value>Tús 7-ti belgili on alty eselik kórsetýde bolý kerek (iaǵnı #246ACF), biraq "{0}" emes)</value>
   </data>
   <data name="TextCount_DefaultInsertText" xml:space="preserve">
-    <value>Кірістіру</value>
+    <value>Kiristirý</value>
   </data>
   <data name="AlwaysVisible_ElementRequired" xml:space="preserve">
-    <value>AjaxControlToolkit.AlwaysVisibleControlBehavior: элемент көрсетілуі керек</value>
+    <value>AjaxControlToolkit.AlwaysVisibleControlBehavior: element kórsetilýi kerek</value>
   </data>
   <data name="Animation_MissingAnimationName" xml:space="preserve">
-    <value>AjaxControlToolkit.Animation.createAnimation AnimationName қасиеті бар объектіні қажет етеді</value>
+    <value>AjaxControlToolkit.Animation.createAnimation AnimationName qasıeti bar obektini qajet etedi</value>
   </data>
   <data name="Animation_InvalidBaseType" xml:space="preserve">
-    <value>AjaxControlToolkit.Animation.registerAnimation тек AjaxControlToolkit.Animation.Animation қалатын түрлерді ғана тіркеуі мүмкін </value>
+    <value>AjaxControlToolkit.Animation.registerAnimation tek AjaxControlToolkit.Animation.Animation qalatyn túrlerdi ǵana tirkeýi múmkin </value>
   </data>
   <data name="Animation_CannotNestSequence" xml:space="preserve">
-    <value>AjaxControlToolkit.Animation.SequenceAnimation  AjaxControlToolkit.Animation.ParallelAnimation енгізілуі мүмкін емес</value>
+    <value>AjaxControlToolkit.Animation.SequenceAnimation  AjaxControlToolkit.Animation.ParallelAnimation engizilýi múmkin emes</value>
   </data>
   <data name="Animation_TargetNotFound" xml:space="preserve">
     <value>AjaxControlToolkit.Animation.Animation.set_animationTarget требует ID типа Sys.UI.DomElement or Sys.UI.Control.  Невозможно найти элемент или контрол, соответствующий "{0}"</value>

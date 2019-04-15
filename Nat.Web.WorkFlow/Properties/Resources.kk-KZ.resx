@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SSucessfullAction" xml:space="preserve">
-    <value>'{0}' әрекеті сәтті орындалды</value>
+    <value>Óreket '{0}' sátti oryndaldy </value>
   </data>
   <data name="SAccessDenied" xml:space="preserve">
-    <value>'{0}' әрекеттерді орындауға құқығы жоқ</value>
+    <value>Óreketti oryndaý quqyǵy joq '{0}'</value>
   </data>
   <data name="SFailedAction" xml:space="preserve">
-    <value>'{0}' әрекетін орындау мүмкін болмады</value>
+    <value>Óreketti oryndaý múmkin bolmady '{0}'</value>
   </data>
   <data name="SAddedJob" xml:space="preserve">
-    <value>Әрекет орындалады. Міндет толықтырылды. &lt;a href="{0}" target="_blank"&gt;Орындалуы толығырақ&lt;/a&gt;</value>
+    <value>Óreket oryndalady. Tapsyrma engizildi. &lt;a href="{0}" target="_blank"&gt;Oryndaýdyń egjeı-tegjeıleri&lt;/a&gt;</value>
   </data>
 </root>

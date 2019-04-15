@@ -40,6 +40,9 @@
 
         public string SubsystemName { get; set; }
 
+        public string CurrentPersonText { get; set; } = "Изменения внес:";
+        public string PersonText { get; set; }
+
         public EMailNotificationAggregator EMailAggregator { get; set; }
 
         public List<MyAttachment> Attachments { get; } = new List<MyAttachment>();
@@ -237,6 +240,12 @@
                 
                 if (row.Person != null)
                 {
+                    if (!string.IsNullOrEmpty(PersonText))
+                    {
+                        email.HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "tableHead");
+                        email.AddRow(PersonText);
+                    }
+
                     if (!string.IsNullOrEmpty(row.Person.Rank))
                         email.AddRow("В/зв", row.Person.Rank);
                     email.AddRow("ФИО", row.Person.Fio);
@@ -255,7 +264,7 @@
                 {
                     email.AddRow(string.Empty);
                     email.HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Class, "tableHead");
-                    email.AddRow("Изменения внес:");
+                    email.AddRow(CurrentPersonText);
                     if (!string.IsNullOrEmpty(row.CurrentPerson.Rank))
                         email.AddRow("В/зв", row.CurrentPerson.Rank);
                     email.AddRow("ФИО", row.CurrentPerson.Fio);

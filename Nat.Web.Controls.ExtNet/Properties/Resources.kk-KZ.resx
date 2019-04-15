@@ -129,4 +129,10 @@
   <data name="SPageSizeLabel" xml:space="preserve">
     <value>deıin</value>
   </data>
+  <data name="SMinDateText" xml:space="preserve">
+    <value>Osy joldaǵy kún keıіn nemese teń bolýy tıіs {0}</value>
+  </data>
+  <data name="SMaxDateText" xml:space="preserve">
+    <value>Osy joldaǵy kún erte nemese teń bolýy tıіs {0}</value>
+  </data>
 </root>

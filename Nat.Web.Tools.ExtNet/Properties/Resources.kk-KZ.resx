@@ -132,4 +132,7 @@
   <data name="SInformation" xml:space="preserve">
     <value>Aqparat</value>
   </data>
+  <data name="STimeOut" xml:space="preserve">
+    <value>Fıltrdі ózgertý kerek, óıtkenі berіlgen ýaqyt іshіnde qajettі derekterdі tańdaý múmkіn bolǵan joq.</value>
+  </data>
 </root>

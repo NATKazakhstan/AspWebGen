@@ -131,12 +131,19 @@ namespace Nat.Web.Controls
                         }
                     }
 
-                    foreach (Exception exception in Context.AllErrors)
+                    foreach (var exception in Context.AllErrors)
                     {
                         var message = string.Format("{0}: {1}", Context.Request.Url.PathAndQuery, exception);
                         var entry2 = new LogMessageEntry(LogMessageType.SystemErrorInApp, message) { Sid = str2 };
                         var logMessageEntry = entry2;
-                        monitor.Log(logMessageEntry);
+                        var refLog = monitor.WriteLog(logMessageEntry);
+                        // для ошибок дополнительно залогируем агрументы
+                        if (Context.Request.HttpMethod.ToLower() == "post" && refLog != null)
+                        {
+                            foreach (string key in Context.Request.Form.Keys)
+                                monitor.WriteFieldChanged(refLog.Value, "", key, Context.Request.Form[key], null);
+                        }
+
                         var sqlException = exception as SqlException ?? exception.InnerException as SqlException;
                         if (sqlException != null && refUserFilter != null)
                         {

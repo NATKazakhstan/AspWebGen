@@ -9,6 +9,7 @@ using System.Web.UI.WebControls;
 namespace Nat.Web.Controls.ExtNet.Generation.Filter
 {
     using System.Collections.Generic;
+    using System.Web;
     using System.Web.UI;
     using Ext.Net;
     using GenerationClasses;
@@ -43,6 +44,10 @@ namespace Nat.Web.Controls.ExtNet.Generation.Filter
             string applyFunctionName,
             bool filterPanelCollapsed = false)
         {
+            var isReadArgument = (HttpContext.Current.Request.Form["__EVENTARGUMENT"] ?? "").EndsWith("|postback|read");
+            if (isReadArgument)
+                return;
+
             var panelFilters = FilterControlPanel.GetFilterPanel(filters, defaultValuesJson, applyFunctionName, filterPanelCollapsed);
             filterPlaceHolder.Controls.Add(panelFilters);
         }

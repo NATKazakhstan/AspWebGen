@@ -27,7 +27,8 @@ namespace Nat.Web.Controls.Trace
             @"
 $(document).ready(function() 
 {{
-    Nat.Web.Controls.Trace.WebServiceTraceTimeOfDestinationUser.TraceDestination('{0}');
+    if (window.Nat && Nat.Web && Nat.Web.Controls && Nat.Web.Controls.Trace)
+        Nat.Web.Controls.Trace.WebServiceTraceTimeOfDestinationUser.TraceDestination('{0}');
 }});";
 
         private static readonly Regex pageRegex = new Regex(@"\w+\.aspx", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -56,7 +57,7 @@ $(document).ready(function()
 
         protected override void OnInit(EventArgs e)
         {
-            this.ScriptManager.Services.Add(new ServiceReference("/WebServiceTraceTimeOfDestinationUser.asmx"));
+            ScriptManager?.Services.Add(new ServiceReference("/WebServiceTraceTimeOfDestinationUser.asmx"));
             base.OnInit(e);
             if (Context != null && HttpContext.Current.Request.Url.AbsolutePath.Contains(".aspx"))
             {

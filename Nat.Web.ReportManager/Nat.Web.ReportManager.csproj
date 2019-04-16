@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C27556F8-274B-483A-B4D7-BC6808DA2EC6}</ProjectGuid>
+    <ProjectGuid>{7EF11E90-4E37-4485-A24F-AF48117D21AF}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -29,6 +29,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -218,6 +219,7 @@
     <Compile Include="Data\DB.cs">
       <DependentUpon>DB.dbml</DependentUpon>
     </Compile>
+    <Compile Include="IRememberReports.cs" />
     <Compile Include="Modules\SqlReportViewerLogExportModule.cs" />
     <Compile Include="ParamReportSubscriptions\DateTimeHelper.cs" />
     <Compile Include="ParamReportSubscriptions\ParamReportSubscriptions.cs" />

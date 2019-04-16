@@ -70,7 +70,7 @@
                         OnClick="btnCreateReportRu_Click" 
                         meta:resourcekey="btnCreateReportRuResource1" />
             &nbsp;<asp:Button ID="btnClearValueConditions" runat="server" Text="Очистить форму" OnClientClick="return false;" Visible="False"                       
-                        meta:resourcekey="SClearValueConditions" />
+                        meta:resourcekey="btnClearValueConditions" />
             &nbsp;<asp:Button ID="btnSubscriptionsJournal" runat="server" Text="Создать подписку" OnClientClick="useUPBarOnPostBack = false; return true;"
 			OnClick="btnSubscriptionsJournal_Click" meta:resourcekey="btnSubscriptionsJournalResource1" />
             &nbsp;<asp:Button ID="btnSubscriptionsSaveParams" runat="server" 

@@ -4,6 +4,8 @@
 * Copyright © JSC NAT Kazakhstan 2012
 */
 
+using System.Linq;
+
 namespace Nat.Web.Controls.Trace
 {
     using System;
@@ -174,10 +176,11 @@ $(document).ready(function()
 
         private void WriteParameters(XElement parametersXml)
         {
-            foreach (var key in HttpContext.Current.Request.QueryString.AllKeys)
+            foreach (var key in HttpContext.Current.Request.QueryString.AllKeys.Where(r => r != null))
             {
                 parametersXml.Add(
-                    new XElement("Url", new XAttribute("Key", key), new XAttribute("Value", HttpContext.Current.Request.QueryString[key])));
+                    new XElement("Url", new XAttribute("Key", key),
+                        new XAttribute("Value", HttpContext.Current.Request.QueryString[key])));
             }
 
             if ("POST".Equals(HttpContext.Current.Request.RequestType, StringComparison.OrdinalIgnoreCase))

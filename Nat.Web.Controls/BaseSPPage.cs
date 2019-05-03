@@ -51,7 +51,7 @@ namespace Nat.Web.Controls
             base.OnPreRender(e);
             //Приходится делать SetCulture, т.к. есть подозрение что Sharepoint в какой то момент устанавливает свою Culture
             ClientScript.RegisterClientScriptResource(typeof(BaseMainPage), "Nat.Web.Controls.GenerationClasses.MainScripts.js");
-            LocalizationHelper.SetCulture(Page);
+            LocalizationHelper.SetCulture();
             BaseMainPage.RegisterStartupScript(Page, GetType(), _updateProgressBar.ClientID);
         }
 
@@ -63,9 +63,9 @@ namespace Nat.Web.Controls
         protected override void InitializeCulture()
         {
             if (string.IsNullOrEmpty(MainPageUrlBuilder.Current.Culture))
-                LocalizationHelper.SetCulture(Page);
+                LocalizationHelper.SetCulture();
             else
-                LocalizationHelper.SetCulture(MainPageUrlBuilder.Current.Culture, this);
+                LocalizationHelper.SetCulture(MainPageUrlBuilder.Current.Culture);
         }
 
         protected override void OnPreLoad(EventArgs e)

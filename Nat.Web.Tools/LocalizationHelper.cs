@@ -1,7 +1,7 @@
-/*
+п»ї/*
  * Created by: Roman V. Kurbangaliev
- * Created: 28 мая 2008 г.
- * Copyright © JSC New Age Technologies 2008
+ * Created: 28 РјР°СЏ 2008 Рі.
+ * Copyright В© JSC New Age Technologies 2008
  */
 using System;
 using System.Data;
@@ -18,15 +18,15 @@ namespace Nat.Web.Tools
     public class LocalizationHelper
     {
         /// <summary>
-        /// Изменить колонкам Expression, в соответствии с текущей культурой
+        /// РР·РјРµРЅРёС‚СЊ РєРѕР»РѕРЅРєР°Рј Expression, РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё СЃ С‚РµРєСѓС‰РµР№ РєСѓР»СЊС‚СѓСЂРѕР№
         /// </summary>
-        /// <param name="table">таблица с колонками</param>
+        /// <param name="table">С‚Р°Р±Р»РёС†Р° СЃ РєРѕР»РѕРЅРєР°РјРё</param>
         public static void ChangeColumnsExpression(DataTable table)
         {
             WebInitializer.Initialize();
-            string key = "userCulture";
+            var key = "userCulture";
 
-            string userCulture = CultureInfo.CurrentUICulture.Name;
+            var userCulture = CultureInfo.CurrentUICulture.Name;
 
             string serverCulture = null;
             if (table.ExtendedProperties.Contains(key) && table.ExtendedProperties[key] != null)
@@ -38,31 +38,25 @@ namespace Nat.Web.Tools
             foreach (DataColumn column in table.Columns)
             {
                 if (!String.IsNullOrEmpty(column.Expression))
-                    QueryCulture.ChangeColumnExpression(column, SpecificInstances.QueryCulture.AliaseCultures, userCulture);
+                    QueryCulture.ChangeColumnExpression(column, SpecificInstances.QueryCulture.AliaseCultures,
+                        userCulture);
             }
+
             table.ExtendedProperties[key] = userCulture;
         }
 
         /// <summary>
-        /// Установить культуру
+        /// РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РєСѓР»СЊС‚СѓСЂСѓ
         /// </summary>
-        /// <param name="page">страница</param>
-        public static void SetCulture(Page page)
+        public static void SetCulture()
         {
-            //return;
-            #if !KZ
-            string lcid;
-            var culture = GetCulture(out lcid);
-            SetCulture(culture, lcid, page);
-
-            #endif
-            #if KZ
-                CultureInfo ci = new CultureInfo("kk-KZ");
-                Thread.CurrentThread.CurrentUICulture = ci;
-                page.UICulture = "kk-KZ";
-            #endif
+            var culture = GetCulture(out var lcid);
+            SetThreadCulture(culture, lcid);
         }
-
+        public static void SetCulture(string culture)
+        {
+            SetThreadCulture(culture, null);
+        }
         private static string GetCulture(out string lcid)
         {
             var culture = "";
@@ -76,27 +70,7 @@ namespace Nat.Web.Tools
             return culture;
         }
 
-        public static void SetCulture(string culture, Page page)
-        {
-           SetCulture(culture, "1049", page);
-        }
-        
-        public static void SetCulture(string culture, string lcid, Page page)
-        {
-            var ci = SetThreadCulture(culture, lcid);
-            if (page != null)
-                page.UICulture = ci.Name;
-        }
-
-        public static bool IsCultureRU
-        {
-            get
-            {
-                if (CultureInfo.CurrentUICulture.Name.Equals("ru-ru", StringComparison.OrdinalIgnoreCase))
-                    return true;
-                return false;
-            }
-        }
+        public static bool IsCultureRU => CultureInfo.CurrentUICulture.Name.Equals("ru-ru", StringComparison.OrdinalIgnoreCase);
 
         public static bool IsCultureKZ
         {
@@ -108,15 +82,12 @@ namespace Nat.Web.Tools
             }
         }
 
-        public static string Culture
-        {
-            get { return CultureInfo.CurrentUICulture.Name; }
-        }
+        public static string Culture => CultureInfo.CurrentUICulture.Name;
 
         public static string GetGroupPart(string message, int index)
         {
             var values = message.Split('#');
-            if (values.Length <= index || index < 0) return "[Текст группы не определен]";
+            if (values.Length <= index || index < 0) return "[РўРµРєСЃС‚ РіСЂСѓРїРїС‹ РЅРµ РѕРїСЂРµРґРµР»РµРЅ]";
             var value = values[index];
             if (value.StartsWith("..._"))
                 return value.Substring(4);
@@ -129,8 +100,7 @@ namespace Nat.Web.Tools
 
         public static void SetThreadCulture()
         {
-            string lcid;
-            var culture = GetCulture(out lcid);
+            var culture = GetCulture(out var lcid);
             SetThreadCulture(culture, lcid);
         }
 
@@ -151,13 +121,43 @@ namespace Nat.Web.Tools
             }
             else
             {
-                int LCID = int.Parse(lcid);
+                var LCID = int.Parse(lcid);
                 ci = new CultureInfo(LCID);
             }
 
             ci.DateTimeFormat.ShortDatePattern = "dd.MM.yyyy";
             ci.DateTimeFormat.FullDateTimePattern = "dd.MM.yyyy HH:mm:ss";
             ci.DateTimeFormat.LongTimePattern = "HH:mm:ss";
+
+            if (ci.Name == "kk-KZ")
+            {
+                ci.DateTimeFormat.MonthNames = ci.DateTimeFormat.MonthGenitiveNames = new[]
+                {
+                    "QaЕ„tar", "Aqpan", "NaГЅryz", "SГЎГЅС–r", "Mamyr", "MaГЅsym", "ShС–lde", "Tamyz", "QyrkГєД±ek", "Qazan",
+                    "Qarasha", "Jeltoqsan", ""
+                };
+
+                ci.DateTimeFormat.AbbreviatedMonthNames = ci.DateTimeFormat.AbbreviatedMonthGenitiveNames = new[]
+                {
+                    "QaЕ„", "Aqp", "NaГЅ", "SГЎГЅ", "Mam", "MaГЅ", "ShС–l", "Tam", "Qyr", "Qaz", "Qar", "Jel", ""
+                };
+
+                ci.DateTimeFormat.DayNames = new[]
+                {
+                    "JeksenbС–", "DГєД±senbС–", "SeД±senbС–", "SГЎrsenbС–", "BeД±senbС–", "Juma", "SenbС–"
+                };
+
+                ci.DateTimeFormat.ShortestDayNames = new[]
+                {
+                    "Jk", "Ds", "Ss", "Sr", "Bs", "Jm", "Sn"
+                };
+
+                ci.DateTimeFormat.AbbreviatedDayNames = new[]
+                {
+                    "Jek", "DГєД±", "SeД±", "SГЎr", "BeД±", "Jum", "Sen"
+                };
+            }
+
             Thread.CurrentThread.CurrentUICulture = ci;
             Thread.CurrentThread.CurrentCulture = ci;
             return ci;

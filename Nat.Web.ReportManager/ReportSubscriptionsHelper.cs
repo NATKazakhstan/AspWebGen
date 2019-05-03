@@ -163,12 +163,12 @@
             var type = BuildManager.GetType(reportName, false, true);
 
             var isCultureRu = LocalizationHelper.IsCultureRU;
-            LocalizationHelper.SetCulture("ru-ru", page);
+            LocalizationHelper.SetCulture("ru-ru");
             var pluginRu = (IReportPlugin)Activator.CreateInstance(type);
             var conditionsRu = pluginRu.Conditions;
             pluginRu.SetCountCircleFillConditions(values.CountListValues, true);
 
-            LocalizationHelper.SetCulture("kk-kz", page);
+            LocalizationHelper.SetCulture("kk-kz");
             var pluginKz = (IReportPlugin)Activator.CreateInstance(type);
             var conditionsKz = pluginKz.Conditions;
             pluginKz.SetCountCircleFillConditions(values.CountListValues, true);
@@ -190,7 +190,7 @@
 
             // Save
             db.SubmitChanges();
-            LocalizationHelper.SetCulture(isCultureRu ? "ru-ru" : "kk-kz", page);
+            LocalizationHelper.SetCulture(isCultureRu ? "ru-ru" : "kk-kz");
         }
 
         public static void CreateReportSubscriptionParams(

@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Web;
 using System.Web.UI;
 using System.IO;
 using Nat.Web.Controls.Properties;
-using System.Globalization;
+
 using System.Threading;
 
 namespace Nat.Web.Controls.GenerationClasses
 {
+    using System.Web.Configuration;
+
     public class HelpFileLink : Control
     {
         public string NavigateUrl { get; set; }
@@ -22,6 +21,13 @@ namespace Nat.Web.Controls.GenerationClasses
             if (!DesignMode)
             {
                 var culture = Thread.CurrentThread.CurrentUICulture.Name;
+                var helpSite = WebConfigurationManager.AppSettings["OpenHelpSite"];
+                if (!string.IsNullOrEmpty(helpSite))
+                {
+                    RenderHyperLink(writer, string.Format(helpSite, culture));
+                    return;
+                }
+
                 if (MainPageUrlBuilder.Current.IsNew && TryRenderHyperLink(writer, NavigateUrlOnAdd, culture))
                     return;
                 if (MainPageUrlBuilder.Current.IsRead && TryRenderHyperLink(writer, NavigateUrlOnRead, culture))

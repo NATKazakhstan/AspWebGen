@@ -107,7 +107,7 @@ namespace Nat.Web.Controls.GenerationClasses
             _tbSaveNameRu.Text = "";
             _tbSaveNameKz.Text = "";
 
-            using (var db = new DB_RvsSettingsDataContext(SpecificInstances.DbFactory.CreateConnection()))
+            using (var db = new DB_RvsSettingsDataContext(LogMonitor.CreateConnection()))
             {
                 var sid = User.GetSID();
                 var journalTypeName = RvsSavedProperties.GetJournalTypeName(Journal.ParentUserControl);

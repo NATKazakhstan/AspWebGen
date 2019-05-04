@@ -13,7 +13,6 @@ namespace Nat.Web.Controls.Trace
     using System.Web;
     using System.Web.Services;
 
-    using Nat.Tools.Specific;
     using Nat.Web.Controls.Data;
     using Nat.Web.Tools.Initialization;
 
@@ -35,7 +34,7 @@ namespace Nat.Web.Controls.Trace
                 return;
             var dateTime = (DateTime)HttpContext.Current.Session[guid.ToString("N")];
             WebInitializer.Initialize();
-            using (var db = new DBTraceTimingRequestsDataContext(SpecificInstances.DbFactory.CreateConnection()))
+            using (var db = new DBTraceTimingRequestsDataContext(LogMonitor.CreateConnection()))
                 db.P_LOG_UpdateTraceTimingRequest(guid, (DateTime.Now.Ticks - dateTime.Ticks) / 10000);
             HttpContext.Current.Session.Remove(guid.ToString("N"));
         }

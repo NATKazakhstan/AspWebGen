@@ -17,6 +17,7 @@ using Nat.Web.Controls.Properties;
 using Nat.Web.Tools;
 using Nat.Web.Tools.Initialization;
 using System.Web;
+using System.Web.Configuration;
 using Nat.Web.Tools.Security;
 
 namespace Nat.Web.Controls
@@ -83,15 +84,21 @@ namespace Nat.Web.Controls
 
         #region Methods
 
+        public static DbConnection CreateConnection()
+        {
+            var configConnection = WebConfigurationManager.ConnectionStrings["LogConnection"];
+            return configConnection != null
+                ? new SqlConnection(configConnection.ConnectionString)
+                : SpecificInstances.DbFactory.CreateConnection();
+        }
+
         public void Init()
         {
             _cmdLog = SpecificInstances.DbFactory.CreateCommand();
             if (_cmdLog == null)
                 throw new NullReferenceException("Method 'SpecificInstances.DbFactory.CreateCommand()' return null");
             if (Transaction == null)
-            {
-                _cmdLog.Connection = SpecificInstances.DbFactory.CreateConnection();
-            }
+                _cmdLog.Connection = CreateConnection();
             else
             {
                 _cmdLog.Connection = Transaction.Connection;
@@ -117,7 +124,7 @@ namespace Nat.Web.Controls
             if (_cmdLogFields == null)
                 throw new NullReferenceException("Method 'SpecificInstances.DbFactory.CreateCommand()' return null");
             if(Transaction == null)
-                _cmdLogFields.Connection = SpecificInstances.DbFactory.CreateConnection();
+                _cmdLogFields.Connection = CreateConnection();
             else
             {
                 _cmdLogFields.Connection = Transaction.Connection;
@@ -448,8 +455,8 @@ namespace Nat.Web.Controls
             WebInitializer.Initialize();
             #region Create connections, commands
             
-            var connectionSelect = SpecificInstances.DbFactory.CreateConnection();
-            var connectionUpdate = SpecificInstances.DbFactory.CreateConnection();
+            var connectionSelect = CreateConnection();
+            var connectionUpdate = CreateConnection();
             var cSelect = SpecificInstances.DbFactory.CreateCommand();
             var cUpdate = SpecificInstances.DbFactory.CreateCommand();
             var nameParameter = SpecificInstances.DbFactory.CreateParameter();
@@ -583,8 +590,8 @@ namespace Nat.Web.Controls
                     {
                         _cmdLog.Transaction = null;
                         _cmdLogFields.Transaction = null;
-                        _cmdLog.Connection = SpecificInstances.DbFactory.CreateConnection();
-                        _cmdLogFields.Connection = SpecificInstances.DbFactory.CreateConnection();
+                        _cmdLog.Connection = CreateConnection();
+                        _cmdLogFields.Connection = CreateConnection();
                     }
                 }
             }
@@ -634,7 +641,7 @@ namespace Nat.Web.Controls
                     throw new NullReferenceException("Method 'SpecificInstances.DbFactory.CreateDataAdapter()' return null");
                 if (transaction == null)
                 {
-                    connection = SpecificInstances.DbFactory.CreateConnection();
+                    connection = CreateConnection();
                     if (connection == null)
                         throw new NullReferenceException("Method 'SpecificInstances.DbFactory.CreateConnection()' return null");
                 }

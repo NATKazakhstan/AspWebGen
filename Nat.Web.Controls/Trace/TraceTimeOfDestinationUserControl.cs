@@ -133,7 +133,7 @@ $(document).ready(function()
             this.WriteParameters(parametersXml);
 
             WebInitializer.Initialize();
-            using (var db = new DBTraceTimingRequestsDataContext(SpecificInstances.DbFactory.CreateConnection()))
+            using (var db = new DBTraceTimingRequestsDataContext(LogMonitor.CreateConnection()))
             {
                 var page = string.Empty;
                 var tableName = string.Empty;

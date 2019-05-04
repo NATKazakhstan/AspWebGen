@@ -41,7 +41,7 @@ namespace Nat.Web.Controls.Data
 
         public static RvsSavedProperties LoadFrom(long id, ILogMonitor logMonitor)
         {
-            using (var db = new DB_RvsSettingsDataContext(SpecificInstances.DbFactory.CreateConnection()))
+            using (var db = new DB_RvsSettingsDataContext(LogMonitor.CreateConnection()))
             {
                 return LoadFrom(db, db.RVS_Properties.FirstOrDefault(r => r.id == id));
             }
@@ -71,7 +71,7 @@ namespace Nat.Web.Controls.Data
 
         public static RvsSavedProperties LoadBySavedViewSettings(long idSavedProperty, ILogMonitor logMonitor)
         {
-            using (var db = new DB_RvsSettingsDataContext(SpecificInstances.DbFactory.CreateConnection()))
+            using (var db = new DB_RvsSettingsDataContext(LogMonitor.CreateConnection()))
             {
                 var row = db.RVS_SavedProperties.
                     Where(r => r.id == idSavedProperty
@@ -88,7 +88,7 @@ namespace Nat.Web.Controls.Data
 
         public long Save()
         {
-            using (var db = new DB_RvsSettingsDataContext(SpecificInstances.DbFactory.CreateConnection()))
+            using (var db = new DB_RvsSettingsDataContext(LogMonitor.CreateConnection()))
             {
                 var row = SaveProperties(db);
                 db.SubmitChanges();
@@ -100,7 +100,7 @@ namespace Nat.Web.Controls.Data
         {
             if (!argument.saveFilters)
                 PageUrl = null;
-            using (var db = new DB_RvsSettingsDataContext(SpecificInstances.DbFactory.CreateConnection()))
+            using (var db = new DB_RvsSettingsDataContext(LogMonitor.CreateConnection()))
             {
                 db.Connection.Open();
                 DbTransaction transaction = null;
@@ -446,7 +446,7 @@ namespace Nat.Web.Controls.Data
 
         public static bool DeleteProperties(long id)
         {
-            using (var db = new DB_RvsSettingsDataContext(SpecificInstances.DbFactory.CreateConnection()))
+            using (var db = new DB_RvsSettingsDataContext(LogMonitor.CreateConnection()))
             {
                 var data = db.RVS_SavedProperties.
                     Where(r => r.id == id);

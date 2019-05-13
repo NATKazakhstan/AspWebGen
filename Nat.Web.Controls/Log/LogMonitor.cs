@@ -573,13 +573,18 @@ namespace Nat.Web.Controls
         private DbTransaction _transaction;
         public DbTransaction Transaction
         {
-            get { return _transaction; }
+            get => _transaction;
             set
             {
+                var connection = WebConfigurationManager.ConnectionStrings["LogConnection"]?.ConnectionString;
+                // не присваиваем транзакцию если разные соединения.
+                if (value != null && !string.IsNullOrEmpty(connection) && value.Connection?.ConnectionString != connection)
+                    return;
+
                 _transaction = value;
                 if (_cmdLog != null)
                 {
-                    if(Transaction != null)
+                    if (Transaction != null)
                     {
                         _cmdLog.Transaction = Transaction;
                         _cmdLog.Connection = Transaction.Connection;

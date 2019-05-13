@@ -53,10 +53,12 @@ namespace Nat.Web.Tools
             var culture = GetCulture(out var lcid);
             SetThreadCulture(culture, lcid);
         }
+
         public static void SetCulture(string culture)
         {
             SetThreadCulture(culture, null);
         }
+
         private static string GetCulture(out string lcid)
         {
             var culture = "";
@@ -70,7 +72,8 @@ namespace Nat.Web.Tools
             return culture;
         }
 
-        public static bool IsCultureRU => CultureInfo.CurrentUICulture.Name.Equals("ru-ru", StringComparison.OrdinalIgnoreCase);
+        public static bool IsCultureRU =>
+            CultureInfo.CurrentUICulture.Name.Equals("ru-ru", StringComparison.OrdinalIgnoreCase);
 
         public static bool IsCultureKZ
         {
@@ -128,6 +131,7 @@ namespace Nat.Web.Tools
             ci.DateTimeFormat.ShortDatePattern = "dd.MM.yyyy";
             ci.DateTimeFormat.FullDateTimePattern = "dd.MM.yyyy HH:mm:ss";
             ci.DateTimeFormat.LongTimePattern = "HH:mm:ss";
+            ci.DateTimeFormat.LongDatePattern = "j F Y 'j.'";
 
             if (ci.Name == "kk-KZ")
             {
@@ -161,6 +165,16 @@ namespace Nat.Web.Tools
             Thread.CurrentThread.CurrentUICulture = ci;
             Thread.CurrentThread.CurrentCulture = ci;
             return ci;
+        }
+
+        public static void SetCulture(Page culture)
+        {
+            SetCulture();
+        }
+
+        public static void SetCulture(string cultureName, Page page)
+        {
+            SetCulture(cultureName);
         }
     }
 }

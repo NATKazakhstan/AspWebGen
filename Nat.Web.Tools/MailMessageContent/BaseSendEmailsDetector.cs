@@ -12,6 +12,8 @@
     /// </summary>
     public abstract class BaseSendEmailsDetector
     {
+        public long? refModuleSend { get; set; }
+
         protected BaseSendEmailsDetector(long refUser, string moduleCode)
         {
             if (string.IsNullOrEmpty(moduleCode))
@@ -73,7 +75,7 @@
                                 {
                                     refModule = module.id,
                                     Enabled = true,
-                                    Name = name,
+                                    Name = "Внесение изменений (добавление, изменение, удаление)",
                                     OnAdd = true,
                                     OnChange = true,
                                     OnDelete = true

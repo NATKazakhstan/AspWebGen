@@ -1,4 +1,7 @@
-﻿namespace Nat.Web.Tools.MailMessageContent
+﻿using System.Configuration;
+using System.Web.Configuration;
+
+namespace Nat.Web.Tools.MailMessageContent
 {
     using System;
     using System.Collections.Generic;
@@ -31,6 +34,11 @@
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Свойство для отписки от уведомления.
+        /// </summary>
+        public long? refModuleSend { get; set; }
 
         protected long refCurrentPerson { get; set; }
 
@@ -159,6 +167,8 @@
                 return;
             }
 
+            refModuleSend = mailsDetector.refModuleSend;
+
             using (var stringWriter = new StringWriter())
             using (var htmlWriter = new HtmlTextWriter(stringWriter))
             {
@@ -274,8 +284,17 @@
 
                 if (!baseRender)
                     RenderEMail(email, row);
-
+                
                 email.EndTable();
+
+                if (refModuleSend != null)
+                {
+                    email.HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Href, ConfigurationManager.AppSettings["MaxatServer"] + "/MSC/Unsubscribe?refSend=" + refModuleSend);
+                    email.HtmlWriter.RenderBeginTag(HtmlTextWriterTag.A);
+                    email.HtmlWriter.Write("Отписаться");
+                    email.HtmlWriter.RenderEndTag();
+                }
+
                 email.EndMessage();
             }
         }

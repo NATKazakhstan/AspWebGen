@@ -289,9 +289,14 @@ namespace Nat.Web.Tools.MailMessageContent
 
                 if (refModuleSend != null)
                 {
+                    email.HtmlWriter.Write("<br/>");
+                    email.HtmlWriter.Write("<hr/>");
+                    email.HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
+                    email.HtmlWriter.Write("Что бы прекратить отправку данных уведомлений перейдите по ");
                     email.HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Href, ConfigurationManager.AppSettings["MaxatServer"] + "/MSC/Unsubscribe?refSend=" + refModuleSend);
                     email.HtmlWriter.RenderBeginTag(HtmlTextWriterTag.A);
-                    email.HtmlWriter.Write("Отписаться");
+                    email.HtmlWriter.Write("ссылке");
+                    email.HtmlWriter.RenderEndTag();
                     email.HtmlWriter.RenderEndTag();
                 }
 

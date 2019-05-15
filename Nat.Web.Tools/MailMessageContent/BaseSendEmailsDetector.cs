@@ -45,7 +45,7 @@
 
         private static Dictionary<string, long> InitializedConfigurationModule = new Dictionary<string, long>();
 
-        public static void InitializeConfigurationModule(string moduleCode, string name)
+        public static void InitializeConfigurationModule(string moduleCode, string name, bool addChangeSend)
         {
             lock (InitializedConfigurationModule)
             {
@@ -69,20 +69,23 @@
                             };
                         db.MSC_Modules.InsertOnSubmit(module);
                         db.SubmitChanges();
+                        id = module.id;
+                    }
 
+                    if (addChangeSend &&
+                        !db.MSC_Module_Sends.Any(r => r.refModule == id && (r.OnChange || r.OnAdd || r.OnDelete)))
+                    {
                         db.MSC_Module_Sends.InsertOnSubmit(
                             new MSC_Module_Send
-                                {
-                                    refModule = module.id,
-                                    Enabled = true,
-                                    Name = "Внесение изменений (добавление, изменение, удаление)",
-                                    OnAdd = true,
-                                    OnChange = true,
-                                    OnDelete = true
-                                });
+                            {
+                                refModule = id,
+                                Enabled = true,
+                                Name = "Внесение изменений (добавление, изменение, удаление)",
+                                OnAdd = true,
+                                OnChange = true,
+                                OnDelete = true
+                            });
                         db.SubmitChanges();
-
-                        id = module.id;
                     }
 
                     InitializedConfigurationModule[moduleCode] = id;

@@ -109,6 +109,14 @@ namespace Nat.Web.Tools
 
         public static CultureInfo SetThreadCulture(string culture, string lcid)
         {
+            var ci = GetCultureInfo(culture, lcid);
+            Thread.CurrentThread.CurrentUICulture = ci;
+            Thread.CurrentThread.CurrentCulture = ci;
+            return ci;
+        }
+
+        public static CultureInfo GetCultureInfo(string culture, string lcid)
+        {
             if (culture == "ru")
                 culture = "ru-ru";
             else if (culture == "kz")
@@ -161,9 +169,6 @@ namespace Nat.Web.Tools
                     "Jek", "Dúı", "Seı", "Sár", "Beı", "Jum", "Sen"
                 };
             }
-
-            Thread.CurrentThread.CurrentUICulture = ci;
-            Thread.CurrentThread.CurrentCulture = ci;
             return ci;
         }
 

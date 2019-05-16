@@ -110,6 +110,13 @@ namespace Nat.Web.Tools
         public static CultureInfo SetThreadCulture(string culture, string lcid)
         {
             var ci = GetCultureInfo(culture, lcid);
+
+            if (!string.IsNullOrEmpty(culture))
+            {
+                if (HttpContext.Current != null)
+                    HttpContext.Current.Items["Culture"] = culture;
+            }
+
             Thread.CurrentThread.CurrentUICulture = ci;
             Thread.CurrentThread.CurrentCulture = ci;
             return ci;
@@ -126,8 +133,6 @@ namespace Nat.Web.Tools
             CultureInfo ci;
             if (!string.IsNullOrEmpty(culture))
             {
-                if (HttpContext.Current != null)
-                    HttpContext.Current.Items["Culture"] = culture;
                 ci = new CultureInfo(culture);
             }
             else

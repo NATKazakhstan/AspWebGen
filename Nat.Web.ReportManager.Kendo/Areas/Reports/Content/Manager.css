@@ -1,0 +1,46 @@
+﻿#pluginsTree {
+    border-bottom: 0;
+    border-top: 0;
+}
+
+.searchMenuDIV {
+    width: 100%;
+    position: relative;
+    clear: right;
+}
+
+.searchMenuInput {
+    width: 100%;
+    padding-right: 20px;
+}
+
+input.k-textbox.searchMenuInput {
+    padding-right: 20px;
+}
+
+.searchPlanLink {
+    top: 0;
+    right: 0;
+    padding: 3px 3px 4px 3px;
+    position: absolute;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.searchPlanLink span {
+    width: 20px;
+}
+
+.k-selectable tr {
+    cursor: pointer;
+}
+.k-selectable tr.k-treelist-group {
+    cursor: pointer;
+}
+.k-selectable tr.k-treelist-group {
+    cursor: default;
+}
+.k-selectable tr.k-treelist-group .k-i-collapse,
+.k-selectable tr.k-treelist-group .k-i-expand {
+    cursor: pointer;
+}

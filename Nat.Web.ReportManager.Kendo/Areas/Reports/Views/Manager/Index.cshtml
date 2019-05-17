@@ -1,7 +1,47 @@
-﻿
+﻿@using Kendo.Mvc.UI
+@using Nat.Web.ReportManager.Kendo.Properties
+@using Nat.Web.Tools
+@using Newtonsoft.Json
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = Resources.SReportViewer;
 }
 
-<h2>Index</h2>
+@section layoutHeader{
+    <h6>
+        <span class="fas fa-list-ul"></span>&nbsp;&nbsp;@(ViewData["Title"])
+        <a id="kzLang" class="m-headerLinkR k-link" href="javascript: void(0)" onclick="VM.manager.onLangClick(true)"><span class="fas fa-globe"></span>@Resources.SOnKaz</a>
+        <a id="ruLang" class="m-headerLinkR k-link" href="javascript: void(0)" onclick="VM.manager.onLangClick(false)"><span class="fas fa-globe"></span>@Resources.SOnRus</a>
+    </h6>
+}
+@section css {
+    @System.Web.Optimization.Styles.Render("~/content/Reports/bundle")
+}
+@section scripts{
+    @System.Web.Optimization.Scripts.Render("~/bundles/Reports")
+    <script>
+        kendo.syncReady(function() {
+            Nat.Reports.InitializeManager({isKz: @JsonConvert.SerializeObject(LocalizationHelper.IsCultureKZ) });
+        });
+    </script>
+}
 
+@(Html.Kendo().Splitter()
+      .Name("managerSplitter")
+      .HtmlAttributes(new { @class = "grid-h-100P" })
+      .Orientation(SplitterOrientation.Horizontal)
+      .Panes(p =>
+      {
+          p.Add()
+              .Size("450px")
+              .Collapsible(true)
+              .Resizable(true)
+              .Content(@<text>
+                           @Html.Action("Plugins")
+                        </text>);
+          p.Add()
+              .Content(@<text>
+                           @Html.Action("Parameters")
+                        </text>);
+      })
+      .Deferred())

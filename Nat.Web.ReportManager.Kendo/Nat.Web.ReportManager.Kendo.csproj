@@ -54,6 +54,9 @@
     <Reference Include="Nat.Tools">
       <HintPath>..\Libraries\Debug\Nat.Tools.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\Sources\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="ReportManager">
       <HintPath>..\Libraries\Debug\ReportManager.dll</HintPath>
     </Reference>
@@ -93,6 +96,9 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Reports\Content\Manager.css" />
+    <Content Include="Areas\Reports\Scripts\Main.js" />
+    <Content Include="Areas\Reports\Scripts\Manager.js" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
@@ -123,6 +129,8 @@
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="key.snk" />
+    <Content Include="Areas\Reports\Views\Manager\Plugins.cshtml" />
+    <Content Include="Areas\Reports\Views\Manager\Parameters.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -150,12 +158,17 @@
   <ItemGroup>
     <Compile Include="Areas\Reports\Controllers\ManagerController.cs" />
     <Compile Include="Areas\Reports\ReportsAreaRegistration.cs" />
+    <Compile Include="Areas\Reports\ViewModels\PluginViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Reports\Views\web.config" />
     <Content Include="Areas\Reports\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Reports\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Reports\Views\Manager\Index.cshtml" />
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
@@ -205,6 +218,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -65,54 +65,62 @@ namespace Nat.Web.ReportManager
                 if (_plugins != null)
                     return _plugins;
 
-                var errors = new StringBuilder();
-                _plugins = new Dictionary<string, IReportPlugin>();
-                var tPlugin = typeof(IWebReportPlugin);
-                var section = ReportInitializerSection.GetReportInitializerSection();
-                try
-                {
-                    var types = section.ReprotPlugins.GetReportPlugins();
-                    foreach (var type in types.Where(tPlugin.IsAssignableFrom))
-                    {
-                        try
-                        {
-                            var instance = (IWebReportPlugin)Activator.CreateInstance(type);
-                            _plugins.Add(type.FullName, instance);
-                        }
-                        catch (Exception e)
-                        {
-                            errors.AppendLine("Can't create '" + type.FullName + "':");
-                            errors.AppendLine(e.ToString());
-                            errors.AppendLine();
-                            errors.AppendLine();
-                        }
-                    }
-
-                    _typeReportLists = section.ReprotPlugins.GetTypeReportLists();
-                }
-                catch (Exception e)
-                {
-                    errors.AppendLine(e.ToString());
-                    errors.AppendLine();
-                    errors.AppendLine();
-                }
-
-                if (errors.Length > 0)
-                {
-                    var errorsStr = errors.ToString();
-                    var sid = HttpContext.Current == null || HttpContext.Current.User == null ? "Nat.Initializer" : User.GetSID();
-                    var logMonitor = InitializerSection.GetSection().LogMonitor;
-                    logMonitor.Init();
-                    logMonitor.Log(
-                        LogConstants.SystemErrorInApp,
-                        () => new LogMessageEntry(sid, LogMessageType.SystemErrorInApp, errorsStr));
-
-                    if (HttpContext.Current != null)
-                        TraceContextExt.WarnExt(HttpContext.Current.Trace, errorsStr);
-                }
+                _plugins = GetPlugins(out _typeReportLists);
 
                 return _plugins;
             }
+        }
+
+        public static Dictionary<string, IReportPlugin> GetPlugins(out Dictionary<Type, IReportList> typeReportLists)
+        {
+            var errors = new StringBuilder();
+            var plugins = new Dictionary<string, IReportPlugin>();
+            var tPlugin = typeof(IWebReportPlugin);
+            var section = ReportInitializerSection.GetReportInitializerSection();
+            typeReportLists = null;
+            try
+            {
+                var types = section.ReprotPlugins.GetReportPlugins();
+                foreach (var type in types.Where(tPlugin.IsAssignableFrom))
+                {
+                    try
+                    {
+                        var instance = (IWebReportPlugin) Activator.CreateInstance(type);
+                        plugins.Add(type.FullName, instance);
+                    }
+                    catch (Exception e)
+                    {
+                        errors.AppendLine("Can't create '" + type.FullName + "':");
+                        errors.AppendLine(e.ToString());
+                        errors.AppendLine();
+                        errors.AppendLine();
+                    }
+                }
+
+                typeReportLists = section.ReprotPlugins.GetTypeReportLists();
+            }
+            catch (Exception e)
+            {
+                errors.AppendLine(e.ToString());
+                errors.AppendLine();
+                errors.AppendLine();
+            }
+
+            if (errors.Length > 0)
+            {
+                var errorsStr = errors.ToString();
+                var sid = HttpContext.Current == null || HttpContext.Current.User == null ? "Nat.Initializer" : User.GetSID();
+                var logMonitor = InitializerSection.GetSection().LogMonitor;
+                logMonitor.Init();
+                logMonitor.Log(
+                    LogConstants.SystemErrorInApp,
+                    () => new LogMessageEntry(sid, LogMessageType.SystemErrorInApp, errorsStr));
+
+                if (HttpContext.Current != null)
+                    TraceContextExt.WarnExt(HttpContext.Current.Trace, errorsStr);
+            }
+
+            return plugins;
         }
 
         public bool RoleCheck { get; set; }

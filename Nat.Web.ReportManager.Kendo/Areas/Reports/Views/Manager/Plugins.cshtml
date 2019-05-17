@@ -1,0 +1,41 @@
+﻿@using Kendo.Mvc.UI
+@using Nat.Web.Core.Kendo.Extensions
+@using Nat.Web.Core.Resources
+@using Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
+@using Nat.Web.ReportManager.Kendo.Properties
+
+@{
+    Layout = null;
+}
+
+@(Html.Kendo().TreeList<PluginViewModel>()
+      .Name("pluginsTree")
+      .DataSource(ds => ds.Read("GetReports", "Manager", new { area = "Reports" })
+          .ServerOperation(false)
+          .Model(m =>
+              {
+                  m.Id("id");
+                  m.ParentId(r => r.parentID);
+                  m.Expanded(false);
+              }))
+          .Columns(c =>
+              {
+                  c.Bound(r => r.Name);
+              })
+      .Sortable()
+      .Selectable()
+      .Toolbar(t =>
+      {
+          t.Custom().Name("search").Text(SharedResources.SSearch);
+      })
+      .HtmlAttributes(new { @class = "grid-h-100P" })
+      .Deferred())
+
+
+
+<script type="text/x-kendo-template" id="pluginsSearch">
+    <div class="searchMenuDIV" style="#= divStyle #">
+        <input type='text' class='k-textbox searchMenuInput' id='#= id #' placeholder="@SharedResources.SQuickSearch" title="@SharedResources.SSearch" data-value-update="keyup" data-bind='value:searchValue' onkeypress='VM.manager.readDelay(event)' />
+        <a href='javascript:void(0)' onclick='VM.manager.readDelay({keyCode:13})' class='searchPlanLink'><span class='k-icon k-i-search'></span></a>
+    </div>
+</script>

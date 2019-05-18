@@ -79,6 +79,15 @@ namespace Nat.Web.ReportManager.Kendo.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Отчет не найден.
+        /// </summary>
+        public static string SPluginNotFound {
+            get {
+                return ResourceManager.GetString("SPluginNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Отчеты.
         /// </summary>
         public static string SReportName {

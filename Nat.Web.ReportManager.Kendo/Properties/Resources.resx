@@ -123,6 +123,9 @@
   <data name="SOnRus" xml:space="preserve">
     <value>Отчет на русском</value>
   </data>
+  <data name="SPluginNotFound" xml:space="preserve">
+    <value>Отчет не найден</value>
+  </data>
   <data name="SReportName" xml:space="preserve">
     <value>Отчеты</value>
   </data>

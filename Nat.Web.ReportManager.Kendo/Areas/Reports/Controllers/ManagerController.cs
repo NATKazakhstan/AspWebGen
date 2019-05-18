@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.UI;
+using Kendo.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Nat.Tools.Filtering;
+using Nat.Tools.QueryGeneration;
+using Nat.Web.Controls;
 using Nat.Web.Core.System.EventLog;
 using Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels;
+using Nat.Web.ReportManager.Kendo.Properties;
 using Nat.Web.Tools;
 
 namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
@@ -73,6 +80,85 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         public ActionResult Parameters()
         {
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult GetPluginInfo(string pluginName)
+        {
+            var plugin = WebReportManager.GetPlugin(pluginName);
+            if (plugin == null)
+                return Json(new {error = Resources.SPluginNotFound});
+
+            var list = new List<ConditionViewModel>();
+            foreach (var condition in plugin.Conditions)
+            {
+                var storage = condition.ColumnFilter.GetStorage();
+                var model = ConditionViewModel.From(storage);
+                model.Visible = condition.Visible;
+                list.Add(model);
+            }
+
+            return Json(list);
+        }
+
+        [HttpPost]
+        public ActionResult GetConditionData(string pluginName, string key, string text, [DataSourceRequest]DataSourceRequest request)
+        {
+            var plugin = WebReportManager.GetPlugin(pluginName);
+            if (plugin == null || string.IsNullOrEmpty(key))
+                return Json(new { error = Resources.SPluginNotFound });
+
+            foreach (var condition in plugin.Conditions)
+            {
+                var storage = condition.ColumnFilter.GetStorage();
+                if (key.Equals(storage.Name, StringComparison.OrdinalIgnoreCase))
+                {
+                    var ds = ConditionViewModel.GetTableDataSource(storage);
+                    ds.EnablePaging = true;
+
+                    var filter = Convert.ToString((request.Filters?.FirstOrDefault() as FilterDescriptor)?.Value);
+                    var paramNameId = 1;
+
+                    if (!string.IsNullOrEmpty(filter))
+                    {
+                        var table = DataSourceHelper.GetDataTable(storage.RefDataSource);
+                        var filterSplit = filter.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+                        var list = new QueryCondition
+                        {
+                            Conditions = new QueryConditionList
+                            {
+                                ConditionJunction = ConditionJunction.And
+                            }
+                        };
+                        list.Conditions.AddRange(filterSplit.Select(r => new QueryCondition
+                        {
+                            Conditions = new QueryConditionList {ConditionJunction = ConditionJunction.Or}
+                        }));
+
+                        foreach (DataColumn dc in table.Columns)
+                        {
+                            var column = ColumnViewModel.From(dc);
+                            if (column == null)
+                                continue;
+
+                            if (dc.DataType == typeof(string))
+                            {
+                                for (int i = 0; i < filterSplit.Length; i++)
+                                    list.Conditions[i].Conditions.Add(new QueryCondition(dc.ColumnName,
+                                        ColumnFilterType.Contains,
+                                        new QueryParameter("@filterParameter" + paramNameId++, filterSplit[i]), null));
+                            }
+                        }
+                        ds.View.CustomConditions.Add(list);
+                    }
+
+                    var data = ds.View.Select(true,
+                        new DataSourceSelectArguments(storage.DisplayColumn, 0, 50) {RetrieveTotalRowCount = true});
+                    return Json(ConditionViewModel.ParseDataView(data));
+                }
+            }
+
+            return Json(new { error = Resources.SPluginNotFound });
         }
     }
 }

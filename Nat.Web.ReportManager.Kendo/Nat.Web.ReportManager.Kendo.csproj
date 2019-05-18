@@ -158,6 +158,9 @@
   <ItemGroup>
     <Compile Include="Areas\Reports\Controllers\ManagerController.cs" />
     <Compile Include="Areas\Reports\ReportsAreaRegistration.cs" />
+    <Compile Include="Areas\Reports\ViewModels\ColumnFilterTypeViewModel.cs" />
+    <Compile Include="Areas\Reports\ViewModels\ColumnViewModel.cs" />
+    <Compile Include="Areas\Reports\ViewModels\ConditionViewModel.cs" />
     <Compile Include="Areas\Reports\ViewModels\PluginViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

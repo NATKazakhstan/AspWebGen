@@ -44,3 +44,30 @@ input.k-textbox.searchMenuInput {
 .k-selectable tr.k-treelist-group .k-i-expand {
     cursor: pointer;
 }
+
+#reportParameters {
+    width: 100%;
+    margin-top: 16px;
+}
+
+.editor-label.m-editor-label {
+    width: 20%;
+}
+.editor-field.m-editor-parameter {
+    width: 75%;
+}
+
+.editor-field.m-editor-filterTypes {
+    width: 20%;
+    float: left;
+}
+
+.editor-field.m-editor-value1,
+.editor-field.m-editor-value2 {
+    width: 25%;
+    float: left;
+    margin-left: 1%
+}
+.editor-field.m-editor-value {
+    width: 79%;
+}

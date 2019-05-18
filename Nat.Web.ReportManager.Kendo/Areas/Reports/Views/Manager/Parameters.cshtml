@@ -8,3 +8,96 @@
     Layout = null;
 }
 
+<div id="reportParameters" class="k-edit-form-container">
+
+</div>
+
+<script type="text/x-kendo-template" id="parametersDateTimeTemplate">
+    <div class="editor-label m-editor-label">
+        <label for="#= Name #Value1">#: Title #</label>
+    </div>
+    <div class="editor-field m-editor-parameter">
+        <div class="editor-field m-editor-filterTypes">
+            <input id="#: Name #FilterType" data-role="dropdownlist" 
+                   data-bind="value: FilterType, source: FilterTypes" 
+                   data-value-field="id" 
+                   data-text-field="Name"
+                   data-value-primitive="true"
+                   style="width:100%" />
+        </div>
+        <div class="editor-field m-editor-value1">
+            <input id="#: Name #Value1" data-role="datepicker" data-bind="value: Value1, visible: VisibleValue1" style="width:100%" />
+        </div>
+        <div class="editor-field m-editor-value2">
+            <input id="#: Name #Value2" data-role="datepicker" data-bind="value: Value2, visible: VisibleValue2" style="width:100%" />
+        </div>
+    </div>
+</script>
+<script type="text/x-kendo-template" id="parametersDDLTemplate">
+    <div class="editor-label m-editor-label">
+        <label for="#= Name #Value1">#: Title #</label>
+    </div>
+    <div class="editor-field m-editor-parameter">
+        <div class="editor-field m-editor-filterTypes">
+            <input id="#: Name #FilterType" data-role="dropdownlist" 
+                   data-bind="value: FilterType, source: FilterTypes" 
+                   data-value-field="id" 
+                   data-text-field="Name"
+                   data-value-primitive="true"
+                   style="width:100%" />
+        </div>
+        <div class="editor-field m-editor-value">
+            <input id="#: Name #Value1" data-role="dropdownlist" 
+                   data-bind="value: Value1, visible: VisibleValue1, source: Data" 
+                   data-filter="contains"
+                   data-value-field="#= ValueColumn #" 
+                   data-text-field="#= DisplayColumn #"
+                   data-value-primitive="true"
+                   style="width:100%" />
+        </div>
+    </div>
+</script>
+<script type="text/x-kendo-template" id="parametersMultiColumnTemplate">
+    <div class="editor-label m-editor-label">
+        <label for="#= Name #Value1">#: Title #</label>
+    </div>
+    <div class="editor-field m-editor-parameter">
+        <div class="editor-field m-editor-filterTypes">
+            <input id="#: Name #FilterType" data-role="dropdownlist" 
+                   data-bind="value: FilterType, source: FilterTypes" 
+                   data-value-field="id" 
+                   data-text-field="Name"
+                   data-value-primitive="true"
+                   style="width:100%" />
+        </div>
+        <div class="editor-field m-editor-value">
+            <input id="#: Name #Value1" data-role="multicolumncombobox" 
+                   data-bind="value: Value1, visible: VisibleValue1" 
+                   data-filter="contains"
+                   data-value-primitive="true"
+                   data-value-field="#= ValueColumn #" 
+                   data-text-field="#= DisplayColumn #"
+                   data-delay="750"
+                   data-columns='#= JSON.stringify(Columns) #'
+                   style="width:100%" />
+        </div>
+    </div>
+</script>
+<script type="text/x-kendo-template" id="parametersUndefinedTemplate">
+    <div class="editor-label m-editor-label">
+        <label for="#= Name #Value1">#: Title #</label>
+    </div>
+    <div class="editor-field m-editor-parameter">
+        <div class="editor-field m-editor-filterTypes">
+            <input id="#: Name #FilterType" data-role="dropdownlist"
+                   data-bind="value: FilterType, source: FilterTypes"
+                   data-value-field="id"
+                   data-text-field="Name"
+                   data-value-primitive="true"
+                   style="width:100%" />
+        </div>
+        <div class="editor-field m-editor-value">
+            Ошибка инициализации
+        </div>
+    </div>
+</script>

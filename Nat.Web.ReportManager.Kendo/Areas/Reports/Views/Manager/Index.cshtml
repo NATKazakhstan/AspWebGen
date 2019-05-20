@@ -40,8 +40,19 @@
                            @Html.Action("Plugins")
                         </text>);
           p.Add()
+              .HtmlAttributes(new { style = "border-left: 1px solid #c9c9c9;" })
               .Content(@<text>
                            @Html.Action("Parameters")
                         </text>);
       })
+      .Deferred())
+
+@(Html.Kendo().Window()
+      .Name("reportWindow")
+      .Visible(false)
+      .Width(900)
+      .Height(600)
+      .Modal(true)
+      .Draggable()
+      .Resizable()
       .Deferred())

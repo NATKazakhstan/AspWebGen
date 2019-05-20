@@ -8,13 +8,21 @@
     Layout = null;
 }
 
+<div class="k-header k-grid-toolbar reportToolbar">
+    <button class="k-button k-button-icontext" onclick="VM.manager.onCreateClick()"><span class="k-icon fas fa-file"></span> @Resources.SCreateReport</button>
+</div>
+
 <div id="reportParameters" class="k-edit-form-container">
+
+</div>
+
+<div id="reportResultDiv">
 
 </div>
 
 <script type="text/x-kendo-template" id="parametersDateTimeTemplate">
     <div class="editor-label m-editor-label">
-        <label for="#= Name #Value1">#: Title #</label>
+        <label id="#= Name #Label" for="#= Name #Value1">#: Title #</label>
     </div>
     <div class="editor-field m-editor-parameter">
         <div class="editor-field m-editor-filterTypes">
@@ -35,7 +43,7 @@
 </script>
 <script type="text/x-kendo-template" id="parametersDDLTemplate">
     <div class="editor-label m-editor-label">
-        <label for="#= Name #Value1">#: Title #</label>
+        <label id="#= Name #Label" for="#= Name #Value1">#: Title #</label>
     </div>
     <div class="editor-field m-editor-parameter">
         <div class="editor-field m-editor-filterTypes">
@@ -59,7 +67,7 @@
 </script>
 <script type="text/x-kendo-template" id="parametersMultiColumnTemplate">
     <div class="editor-label m-editor-label">
-        <label for="#= Name #Value1">#: Title #</label>
+        <label id="#= Name #Label" for="#= Name #Value1">#: Title #</label>
     </div>
     <div class="editor-field m-editor-parameter">
         <div class="editor-field m-editor-filterTypes">
@@ -85,7 +93,7 @@
 </script>
 <script type="text/x-kendo-template" id="parametersUndefinedTemplate">
     <div class="editor-label m-editor-label">
-        <label for="#= Name #Value1">#: Title #</label>
+        <label id="#= Name #Label" for="#= Name #Value1">#: Title #</label>
     </div>
     <div class="editor-field m-editor-parameter">
         <div class="editor-field m-editor-filterTypes">

@@ -60,6 +60,10 @@
     <Reference Include="ReportManager">
       <HintPath>..\Libraries\Debug\ReportManager.dll</HintPath>
     </Reference>
+    <Reference Include="Stimulsoft.Report.Web, Version=2013.3.1800.0, Culture=neutral, PublicKeyToken=ebe6666cba19647a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Stimulsoft.Reports.Net.2013.3.1800\lib\net35\Stimulsoft.Report.Web.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />

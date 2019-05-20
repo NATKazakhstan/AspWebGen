@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -159,6 +160,38 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             }
 
             return Json(new { error = Resources.SPluginNotFound });
+        }
+
+        [HttpPost]
+        public ActionResult CreateReport(string pluginName, string culture, List<ConditionViewModel> parameters)
+        {
+            var plugin = WebReportManager.GetPlugin(pluginName);
+            if (plugin == null)
+                return Json(new { error = Resources.SPluginNotFound });
+
+            var guid = Guid.NewGuid();
+            var storageValues = new StorageValues();
+            foreach (var parameter in parameters)
+            {
+                var filterType = (ColumnFilterType) parameter.FilterType;
+                if (filterType == ColumnFilterType.In)
+                    storageValues.SetStorageValues(parameter.Key, filterType, parameter.Values);
+                else
+                    storageValues.SetStorageValues(parameter.Key, filterType, parameter.Value1, parameter.Value2);
+            }
+
+            //logType = (LogMessageType)HttpContext.Current.Session["logcode" + guid];
+            //message = (string)HttpContext.Current.Session["logmsg" + guid];
+
+            using (var stream = ReportResultPage.GetReport(true, pluginName, guid.ToString(), storageValues, culture,
+                null,
+                "Mht",
+                "export", null, false, new Dictionary<string, object>(), null, out var fileNameExt, true))
+            using (var reader = new StreamReader(stream))
+            {
+                stream.Position = 0;
+                return Json(new { ReportContent = reader.ReadToEnd() });
+            }
         }
     }
 }

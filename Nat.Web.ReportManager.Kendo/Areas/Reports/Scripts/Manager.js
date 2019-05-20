@@ -8,6 +8,7 @@
         var me = this;
 
         this.grid = $('#pluginsTree').data('kendoTreeList');
+        this.reportWindow = $('#reportWindow').data('kendoWindow');
 
         var searchDiv = kendo.template($('#pluginsSearch').html())({ divStyle: '', id: 'searchValueInput' });
         this.grid.toolbar.find('button[data-command="search"]').replaceWith(searchDiv);
@@ -42,6 +43,23 @@
 
     this.onLangClick = function(isKz) {
         this.options.set('isKz', isKz);
+    };
+
+    this.onCreateClick = function () {
+        var data = {
+            PluginName: this.options.PluginName,
+            culture: this.options.isKz ? 'kz' : 'ru',
+            parameters: this.parameters.toJSON()
+        };
+        this.post('CreateReport',
+            data,
+            function(result) {
+                if (result.error)
+                    return;
+
+                $('#reportResultDiv').html(result.ReportContent);
+            },
+            false);
     };
 
     this.onFieldChange = function (e) {
@@ -135,6 +153,7 @@
             ddl.span.addClass('m-field-readOnly');
         } else
             item.bind('change', this.onChangeParameter);
+        this.onChangeParameter.call(item, { field: 'FilterType' });
     };
 
     this.MultiColumnInit = function(item) {
@@ -181,6 +200,11 @@
                 this.set('VisibleValue1', fType.VisibleValue1);
                 this.set('VisibleValue2', fType.VisibleValue2);
             }
+
+            if (!this.VisibleValue1 && !this.VisibleValue2)
+                $('#' + this.Name + 'Label').attr('for', this.Name + 'FilterType');
+            else
+                $('#' + this.Name + 'Label').attr('for', this.Name + 'Value1');
         }
     };
 };

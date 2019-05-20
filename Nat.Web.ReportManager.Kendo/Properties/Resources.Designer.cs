@@ -61,6 +61,15 @@ namespace Nat.Web.ReportManager.Kendo.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Сформировать отчет.
+        /// </summary>
+        public static string SCreateReport {
+            get {
+                return ResourceManager.GetString("SCreateReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Отчет на казахском.
         /// </summary>
         public static string SOnKaz {

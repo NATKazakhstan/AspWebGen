@@ -45,6 +45,10 @@ input.k-textbox.searchMenuInput {
     cursor: pointer;
 }
 
+.k-grid-toolbar.reportToolbar {
+    border-right: 1px solid #c9c9c9;
+}
+
 #reportParameters {
     width: 100%;
     margin-top: 16px;

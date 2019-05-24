@@ -4,6 +4,7 @@ using System.IO;
 using Nat.Web.Controls.Properties;
 
 using System.Threading;
+using Nat.Web.Tools;
 
 namespace Nat.Web.Controls.GenerationClasses
 {
@@ -24,7 +25,7 @@ namespace Nat.Web.Controls.GenerationClasses
                 var helpSite = WebConfigurationManager.AppSettings["OpenHelpSite"];
                 if (!string.IsNullOrEmpty(helpSite))
                 {
-                    RenderHyperLink(writer, string.Format(helpSite, culture));
+                    RenderHyperLink(writer, string.Format(helpSite, culture, LocalizationHelper.IsCultureKZ ? "1087" : "1049"));
                     return;
                 }
 
@@ -92,8 +93,9 @@ namespace Nat.Web.Controls.GenerationClasses
             writer.AddAttribute(HtmlTextWriterAttribute.Title, Resources.SHelp);
             writer.AddAttribute(HtmlTextWriterAttribute.Href, helpFileLink);
             writer.AddAttribute(HtmlTextWriterAttribute.Onclick,
-                string.Format("javascript:var r = window.showModelessDialog(\"{0}\", '', 'resizable:yes;dialogHeight=' + (window.screen.height - window.screen.height/4) + 'px;dialogWidth=' + (window.screen.width - window.screen.width/4) +'px;');return false;",
-                              HttpUtility.HtmlAttributeEncode(helpFileLink)));
+                string.Format(
+                    "javascript:var r = window.showModelessDialog(\"{0}\", '', 'resizable:yes;dialogHeight=' + (window.screen.height - window.screen.height/4) + 'px;dialogWidth=' + (window.screen.width - window.screen.width/4) +'px;');return false;",
+                    helpFileLink));
             //writer.AddAttribute(HtmlTextWriterAttribute.Target, "_new");
             writer.RenderBeginTag(HtmlTextWriterTag.A);
 

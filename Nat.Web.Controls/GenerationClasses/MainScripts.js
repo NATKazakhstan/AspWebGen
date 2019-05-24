@@ -2695,19 +2695,29 @@ $(function () {
             $(newWindow.iframe).load(function () {
                 newWindow.isLoaded = true;
                 newWindow.loadingControl.removeClass('LoadingControlShow');
-                newWindow.iframe.contentWindow.dialogArguments = parentWindow;
-                if (newWindow.iframe.contentWindow.model && newWindow.iframe.contentWindow.model.Initizlize)
-                    newWindow.iframe.contentWindow.model.Initizlize();
-                if (newWindow.dialog.dialog("option", "title") == '') {
-                    var doc = newWindow.iframe.contentDocument;
-                    if (doc == null && newWindow.iframe.contentWindow != null)
-                        doc = newWindow.iframe.contentWindow.document;
-                    if (doc != null)
-                        newWindow.dialog.dialog("option", "title", doc.title);
+                var iframeWindow;
+                try {
+                    iframeWindow = newWindow.iframe.contentWindow;
+                    iframeWindow.eval('void(0)');
                 }
+                catch (err) {
+                    iframeWindow = null;
+                }
+                if (iframeWindow) {
+                    iframeWindow.dialogArguments = parentWindow;
+                    if (iframeWindow.model && iframeWindow.model.Initizlize)
+                        iframeWindow.model.Initizlize();
+                    if (newWindow.dialog.dialog("option", "title") == '') {
+                        var doc = newWindow.iframe.contentDocument;
+                        if (doc == null && iframeWindow != null)
+                            doc = iframeWindow.document;
+                        if (doc != null)
+                            newWindow.dialog.dialog("option", "title", doc.title);
+                    }
 
-                if (newWindow.iframe.contentWindow.InitialLoadFilterFromParam != null)
-                    newWindow.iframe.contentWindow.InitialLoadFilterFromParam();
+                    if (iframeWindow.InitialLoadFilterFromParam != null)
+                        iframeWindow.InitialLoadFilterFromParam();
+                }
             });
             newWindow.iframe.src = url;
             newWindow.iframe.showModalDialog = showModalDialog;
@@ -2716,17 +2726,26 @@ $(function () {
             windowsDialogCacheById[newWindow.id] = newWindow;
             windowsDialogCacheNextId++;
         } else {
-
-            if (newWindow.isLoaded)
-                newWindow.iframe.contentWindow.dialogArguments = parentWindow;
+            var iframeWindow;
+            try {
+                iframeWindow = newWindow.iframe.contentWindow;
+                iframeWindow.eval('void(0)');
+            }
+            catch (err) {
+                iframeWindow = null;
+            }
+            if (newWindow.isLoaded && iframeWindow)
+                iframeWindow.dialogArguments = parentWindow;
 
             if (reloadPage) {
                 newWindow.loadingControl.addClass('LoadingControlShow');
-                var doc = newWindow.iframe.contentDocument;
-                if (doc == null && newWindow.iframe.contentWindow != null)
-                    doc = newWindow.iframe.contentWindow.document;
-                if (doc != null)
-                    doc.body.innerHTML = '';
+                if (iframeWindow) {
+                    var doc = newWindow.iframe.contentDocument;
+                    if (doc == null && iframeWindow != null)
+                        doc = iframeWindow.document;
+                    if (doc != null)
+                        doc.body.innerHTML = '';
+                }
                 newWindow.isLoaded = false;
                 newWindow.iframe.src = url;
             }

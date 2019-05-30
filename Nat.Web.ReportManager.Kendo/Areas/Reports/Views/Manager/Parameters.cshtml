@@ -45,6 +45,87 @@
         </div>
     </div>
 </script>
+<script type="text/x-kendo-template" id="parametersInt32Template">
+    <div class="editor-label m-editor-label">
+        <label id="#= Name #Label" for="#= Name #Value1">#: Title #</label>
+    </div>
+    <div class="editor-field m-editor-parameter">
+        <div class="editor-field m-editor-filterTypes">
+            <input id="#: Name #FilterType" data-role="dropdownlist" 
+                   data-bind="value: FilterType, source: FilterTypes" 
+                   data-value-field="id" 
+                   data-text-field="Name"
+                   data-value-primitive="true"
+                   style="width:100%" />
+        </div>
+        <div class="editor-field m-editor-value1">
+            <input id="#: Name #Value1" data-role="numerictextbox" data-bind="value: Value1, visible: VisibleValue1" style="width:100%" data-restrict-decimals="true" data-decimals="0" data-format="{0:0}" data-min="@Int32.MinValue" data-max="@Int32.MaxValue" />
+        </div>
+        <div class="editor-field m-editor-value2">
+            <input id="#: Name #Value2" data-role="numerictextbox" data-bind="value: Value2, visible: VisibleValue2" style="width:100%" data-restrict-decimals="true" data-decimals="0" data-format="{0:0}" data-min="@Int32.MinValue" data-max="@Int32.MaxValue" />
+        </div>
+    </div>
+</script>
+<script type="text/x-kendo-template" id="parametersInt64Template">
+    <div class="editor-label m-editor-label">
+        <label id="#= Name #Label" for="#= Name #Value1">#: Title #</label>
+    </div>
+    <div class="editor-field m-editor-parameter">
+        <div class="editor-field m-editor-filterTypes">
+            <input id="#: Name #FilterType" data-role="dropdownlist" 
+                   data-bind="value: FilterType, source: FilterTypes" 
+                   data-value-field="id" 
+                   data-text-field="Name"
+                   data-value-primitive="true"
+                   style="width:100%" />
+        </div>
+        <div class="editor-field m-editor-value1">
+            <input id="#: Name #Value1" data-role="numerictextbox" data-bind="value: Value1, visible: VisibleValue1" style="width:100%" data-restrict-decimals="true" data-decimals="0" data-format="{0:0}" data-min="@Int64.MinValue" data-max="@Int64.MaxValue" />
+        </div>
+        <div class="editor-field m-editor-value2">
+            <input id="#: Name #Value2" data-role="numerictextbox" data-bind="value: Value2, visible: VisibleValue2" style="width:100%" data-restrict-decimals="true" data-decimals="0" data-format="{0:0}" data-min="@Int64.MinValue" data-max="@Int64.MaxValue" />
+        </div>
+    </div>
+</script>
+<script type="text/x-kendo-template" id="parametersBooleanTemplate">
+    <div class="editor-label m-editor-label">
+        <label id="#= Name #Label" for="#= Name #Value1">#: Title #</label>
+    </div>
+    <div class="editor-field m-editor-parameter">
+        <div class="editor-field m-editor-filterTypes">
+            <input id="#: Name #FilterType" data-role="dropdownlist" 
+                   data-bind="value: FilterType, source: FilterTypes" 
+                   data-value-field="id" 
+                   data-text-field="Name"
+                   data-value-primitive="true"
+                   style="width:100%" />
+        </div>
+        <div class="editor-field m-editor-value" style="margin-top: 4px;">
+            <input type="radio" id="#: Name #ValueTrue" name="#: Name #Value1" class="k-radio" data-type="boolean" data-bind="checked: Value1, visible: VisibleValue1" value="true" />
+            <label class="k-radio-label" for="#: Name #ValueTrue">@SharedResources.SYes</label>
+            <input type="radio" id="#: Name #ValueFalse" name="#: Name #Value1" class="k-radio" data-type="boolean" data-bind="checked: Value1, visible: VisibleValue1" value="false" />
+            <label class="k-radio-label" for="#: Name #ValueFalse">@SharedResources.SNo</label>
+        </div>
+    </div>
+</script>
+<script type="text/x-kendo-template" id="parametersStringTemplate">
+    <div class="editor-label m-editor-label">
+        <label id="#= Name #Label" for="#= Name #Value1">#: Title #</label>
+    </div>
+    <div class="editor-field m-editor-parameter">
+        <div class="editor-field m-editor-filterTypes">
+            <input id="#: Name #FilterType" data-role="dropdownlist" 
+                   data-bind="value: FilterType, source: FilterTypes" 
+                   data-value-field="id" 
+                   data-text-field="Name"
+                   data-value-primitive="true"
+                   style="width:100%" />
+        </div>
+        <div class="editor-field m-editor-value">
+            <input type="text" id="#: Name #Value1" class="k-textbox" data-bind="value: Value1, visible: VisibleValue1" style="width:100%" length="500" />
+        </div>
+    </div>
+</script>
 <script type="text/x-kendo-template" id="parametersDDLTemplate">
     <div class="editor-label m-editor-label">
         <label id="#= Name #Label" for="#= Name #Value1">#: Title #</label>
@@ -84,7 +165,7 @@
         </div>
         <div class="editor-field m-editor-value">
             <input id="#: Name #Value1" data-role="multicolumncombobox" 
-                   data-bind="value: Value1, visible: VisibleValue1" 
+                   data-bind="value: Value1, visible: VisibleValue1, source: Data" 
                    data-filter="contains"
                    data-value-primitive="true"
                    data-value-field="#= ValueColumn #" 
@@ -93,6 +174,20 @@
                    data-columns='#= JSON.stringify(Columns) #'
                    style="width:100%" />
         </div>
+    </div>
+</script>
+<script type="text/x-kendo-template" id="parametersGridTemplate">
+    <div class="editor-label m-editor-label">
+        <label id="#= Name #Label" for="#= Name #Value1">#: Title #</label>
+    </div>
+    <div class="editor-field m-editor-parameter">
+        <div id="#: Name #Value1" data-role="grid"
+             data-bind="visible: VisibleValue1, source: Data" 
+             data-columns='#= JSON.stringify(Columns) #'
+             data-scrollable="true"
+             data-sortable="true"
+             data-pageable="true"
+             style="width:100%; height: 400px" />
     </div>
 </script>
 <script type="text/x-kendo-template" id="parametersUndefinedTemplate">

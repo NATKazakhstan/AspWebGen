@@ -18,12 +18,14 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
 {
     public class ConditionViewModel
     {
-        public static ConditionViewModel From(ColumnFilterStorage storage)
+        public static ConditionViewModel From(IColumnFilter columnFilter)
         {
+            var captions = (columnFilter as ColumnFilter)?.CustomColumnFilterTypeCaptions;
+            var storage = columnFilter.GetStorage();
             var filterTypes = Enum.GetValues(typeof(ColumnFilterType))
                 .Cast<ColumnFilterType>()
                 .Where(r => (r & storage.AvailableFilters) != 0)
-                .Select(r => new ColumnFilterTypeViewModel(r))
+                .Select(r => new ColumnFilterTypeViewModel(r, captions))
                 .ToList();
 
             var model = new ConditionViewModel
@@ -32,14 +34,16 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
                 Name = storage.Name.Replace(":", "_").Replace(".", "_"),
                 Title = storage.Caption,
                 FilterTypes = filterTypes,
-                DefaultFilterType = storage.DefaultFilterType == null ? 0 : (int)storage.DefaultFilterType,
+                DefaultFilterType = storage.DefaultFilterType == null ? 0 : (int) storage.DefaultFilterType,
                 DataType = storage.DataType.Name,
-                FilterType = (int)storage.FilterType,
+                FilterType = (int) storage.FilterType,
                 Value1 = storage.Value1,
                 Value2 = storage.Value2,
                 Values = storage.Values,
                 VisibleValue1 = storage.FilterType.HasArgs(),
                 VisibleValue2 = storage.FilterType.IsBinaryFilter(),
+                AutoPostBack = (columnFilter as ColumnFilter)?.PostBack ?? false,
+                RequireReload = storage.CustomConditions.Count > 0,
             };
 
             model.InitDataSource(storage);
@@ -83,7 +87,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
             var filterRefTable = DataSourceHelper.GetDataTable(storage.RefDataSource);
             if (filterRefTable == null)
             {
-                IEnumerable data = null;
+                var data = storage.RefDataSource as IEnumerable;
                 var ds = storage.RefDataSource as IDataSource;
                 var dsView = ds?.GetView("Default") ?? storage.RefDataSource as DataSourceView;
                 dsView?.Select(new DataSourceSelectArguments(storage.DisplayColumn), r => data = r);
@@ -94,14 +98,21 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
             var rolledIn =
                 DataSetResourceManager.GetTableExtProperty(filterRefTable, TableExtProperties.ROLLED_IN, false);
 
-            if (rolledIn)
+            if (rolledIn || string.IsNullOrEmpty(DisplayColumn) || string.IsNullOrEmpty(ValueColumn))
             {
+                if (string.IsNullOrEmpty(ValueColumn) && filterRefTable.PrimaryKey.Length > 0)
+                    ValueColumn = filterRefTable.PrimaryKey[0].ColumnName;
+
                 Columns = new List<ColumnViewModel>();
                 foreach (DataColumn dc in filterRefTable.Columns)
                 {
                     var column = ColumnViewModel.From(dc);
                     if (column != null)
+                    {
                         Columns.Add(column);
+                        if (string.IsNullOrEmpty(DisplayColumn))
+                            DisplayColumn = column.field;
+                    }
                 }
 
                 return null;
@@ -151,6 +162,8 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
         public string DisplayColumn { get; set; }
         public IEnumerable Data { get; set; }
         public bool Visible { get; set; }
+        public bool AutoPostBack { get; set; }
+        public bool RequireReload { get; set; }
         public List<ColumnViewModel> Columns { get; set; }
 
         public void SetToStorageValues(ColumnFilterStorage storage, StorageValues storageValues)
@@ -158,7 +171,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
             storage.FilterType = (ColumnFilterType)FilterType;
             ParseValues(storage.DataType);
             if (storage.FilterType == ColumnFilterType.In)
-                storage.Values = Values;
+                storage.Values = Values ?? new object[0];
             else
             {
                 storage.Value1 = Value1;

@@ -9,6 +9,7 @@ using System.Web.UI;
 using Kendo.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Nat.ReportManager.QueryGeneration;
 using Nat.ReportManager.ReportGeneration.StimulSoft;
 using Nat.Tools.Filtering;
 using Nat.Tools.QueryGeneration;
@@ -48,11 +49,14 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         [HttpPost]
         public ActionResult GetReports(string searchValue, DataSourceRequest request)
         {
-            var plugins = WebReportManager.GetPlugins(out _).AsEnumerable();
+            var plugins = WebReportManager.GetPlugins(out _)
+                .Where(r => r.Value.Visible)
+                .AsEnumerable();
             if (!string.IsNullOrEmpty(searchValue))
             {
                 searchValue = searchValue.ToLower();
-                plugins = plugins.Where(r =>
+                plugins = plugins
+                    .Where(r =>
                         r.Key.ToLower().Contains(searchValue)
                         || r.Value.Description.ToLower().Contains(searchValue)
                         || (r.Value.ReportGroup?.ToLower().Contains(searchValue) ?? false))
@@ -66,7 +70,8 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 .Where(r => !string.IsNullOrEmpty(r.Key))
                 .OrderBy(r => r.Name)
                 .ToList();
-            var data = plugins.Select(r => new PluginViewModel(r.Key, r.Value.ReportGroup, dicIDs)
+            var data = plugins
+                .Select(r => new PluginViewModel(r.Key, r.Value.ReportGroup, dicIDs)
                 {
                     Name = r.Value.Description,
                     Visible = r.Value.Visible,
@@ -97,8 +102,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             var list = new List<ConditionViewModel>();
             foreach (var condition in plugin.Conditions)
             {
-                var storage = condition.ColumnFilter.GetStorage();
-                var model = ConditionViewModel.From(storage);
+                var model = ConditionViewModel.From(condition.ColumnFilter);
                 model.Visible = condition.Visible;
                 list.Add(model);
             }
@@ -107,11 +111,13 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetConditionData(string pluginName, string key, string text, [DataSourceRequest]DataSourceRequest request)
+        public ActionResult GetConditionData(string pluginName, string key, string text, List<ConditionViewModel> parameters, [DataSourceRequest]DataSourceRequest request)
         {
             var plugin = WebReportManager.GetPlugin(pluginName);
             if (plugin == null || string.IsNullOrEmpty(key))
                 return Json(new { error = Resources.SPluginNotFound });
+
+            GetStotageValues(parameters, plugin);
 
             foreach (var condition in plugin.Conditions)
             {
@@ -178,24 +184,14 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             if (plugin == null)
                 return Json(new { error = Resources.SPluginNotFound });
 
-            var guid = Guid.NewGuid().ToString();
-            var storageValues = new StorageValues();
-            var paramsDic = parameters.ToDictionary(r => r.Key);
-            foreach (var condition in plugin.Conditions)
-            {
-                var storage = condition.ColumnFilter.GetStorage();
-                if (paramsDic.ContainsKey(storage.Name))
-                {
-                    paramsDic[storage.Name].SetToStorageValues(storage, storageValues);
-                    condition.ColumnFilter.SetStorage(storage);
-                    storageValues.SetStorageTextValues(storage.Name, condition.ColumnFilter.GetTexts());
-                }
-            }
+            if (!plugin.SupportCulture.Contains(culture))
+                culture = null;
 
-            //(plugin as IWebReportPlugin).Constants
+            var storageValues = GetStotageValues(parameters, plugin);
 
             //logType = (LogMessageType)HttpContext.Current.Session["logcode" + guid];
             //message = (string)HttpContext.Current.Session["logmsg" + guid];
+            var guid = Guid.NewGuid().ToString();
             Session[guid] = storageValues;
             Session["logmsg" + guid] = plugin.GetLogInformation().Replace("\r\n", "<br/>");
             Session["logcode" + guid] = ReportInitializerSection.GetReportInitializerSection().ReprotPlugins.GetTypeReportLists()[plugin.GetType()].LogMessageType;
@@ -219,6 +215,24 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             }
 
             return File(stream, "application/octet-stream", plugin.Description + "." + fileNameExt);
+        }
+
+        private static StorageValues GetStotageValues(List<ConditionViewModel> parameters, IReportPlugin plugin)
+        {
+            var storageValues = new StorageValues();
+            var paramsDic = parameters.ToDictionary(r => r.Key);
+            foreach (var condition in plugin.Conditions)
+            {
+                var storage = condition.ColumnFilter.GetStorage();
+                if (paramsDic.ContainsKey(storage.Name))
+                {
+                    paramsDic[storage.Name].SetToStorageValues(storage, storageValues);
+                    condition.ColumnFilter.SetStorage(storage);
+                    storageValues.SetStorageTextValues(storage.Name, condition.ColumnFilter.GetTexts());
+                }
+            }
+
+            return storageValues;
         }
     }
 }

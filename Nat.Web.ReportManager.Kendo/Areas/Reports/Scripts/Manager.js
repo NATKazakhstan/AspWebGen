@@ -50,9 +50,8 @@
         var data = {
             PluginName: this.options.PluginName,
             culture: this.options.isKz ? 'kz' : 'ru',
-            parameters: this.parameters.toJSON()
+            parameters: this.GetParameters()
         };
-        data.parameters.forEach(function(p) { p.Data = null; });
         this.post('CreateReport',
             data,
             function(result) {
@@ -80,17 +79,26 @@
         this.ExportDocument('Pdf', ".pdf");
     };
 
+    this.GetParameters = function() {
+        var parameters = this.parameters.toJSON();
+        parameters.forEach(function(p) {
+            p.Data = null;
+            if (p.Value1 instanceof Date)
+                p.Value1 = p.Value1.toJSON();
+            if (p.Value2 instanceof Date)
+                p.Value2 = p.Value2.toJSON();
+        });
+        return parameters;
+    };
+
     this.ExportDocument = function (format, ext) {
         //var me = this;
         var data = {
             PluginName: this.options.PluginName,
             culture: this.options.isKz ? 'kz' : 'ru',
-            parameters: this.parameters.toJSON(),
+            parametersStr: JSON.stringify(this.GetParameters()),
             export: format
         };
-        data.parameters.forEach(function (p) { p.Data = null; });
-        data.parametersStr = JSON.stringify(data.parameters);
-        data.parameters = undefined;
 
         $('#downloadForm').remove();
         var form = document.createElement("form");
@@ -147,6 +155,22 @@
         }
     };
 
+    this.onParametersFieldChange = function(e) {
+        if (e.field === "Value1" && e.items && e.items[0]) {
+            if (e.items[0].AutoPostBack) {
+                this.ReloadDataOnChange(e.items[0]);
+            } else if (this.options.oneParameter &&
+                (!e.items[0].VisibleValue2 || e.items[0].Value2)) {
+                this.onCreateClick();
+            }
+        }
+        else if (e.field === "Value2" && e.items && e.items[0]) {
+            if (this.options.oneParameter && e.items[0].Value1) {
+                this.onCreateClick();
+            }
+        }
+    };
+
     this.ClearParameters = function() {
         $('#reportParameters').html('');
         this.options.set('showButtons', false);
@@ -158,19 +182,26 @@
         };
 
         this.templates.DateTime = kendo.template($('#parametersDateTimeTemplate').html());
+        this.templates.Int32 = kendo.template($('#parametersInt32Template').html());
+        this.templates.Int64 = kendo.template($('#parametersInt64Template').html());
+        this.templates.Boolean = kendo.template($('#parametersBooleanTemplate').html());
+        this.templates.String = kendo.template($('#parametersStringTemplate').html());
         this.templates.DDL = kendo.template($('#parametersDDLTemplate').html());
         this.templates.Undefined = kendo.template($('#parametersUndefinedTemplate').html());
         this.templates.MultiColumn = kendo.template($('#parametersMultiColumnTemplate').html());
+        this.templates.Grid = kendo.template($('#parametersGridTemplate').html());
         this.InitParametersTemplates = function() {};
     };
 
     this.InitParameters = function (data) {
+        var me = this;
         this.parameters = kendo.observableHierarchy(data);
+        this.parameters.bind('change', function (e) { me.onParametersFieldChange(e); });
         data = this.parameters;
         var params = $('#reportParameters');
         this.InitParametersTemplates();
         params.html('');
-        var notExistsParameters = true;
+        var countParameters = 0;
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
             if (!item.Visible)
@@ -179,11 +210,17 @@
             var html = '';
             var func = null;
             if (item.Data) {
+                this.DDLInit(item);
                 html = $(this.templates.DDL(item));
             }
+            else if (item.Columns && item.FilterType === 65536) {
+                this.GridInit(item);
+                html = $(this.templates.Grid(item));
+                func = this.GridAfterInit;
+            }
             else if (item.Columns) {
+                this.MultiColumnInit(item);
                 html = $(this.templates.MultiColumn(item));
-                func = this.MultiColumnInit;
             }
             else if (this.templates[item.DataType]) {
                 html = $(this.templates[item.DataType](item));
@@ -194,13 +231,14 @@
             if (html) {
                 params.append(html);
                 kendo.bind(html, item);
-                if (func) func(item);
                 this.FilterTypesInit(item);
-                notExistsParameters = false;
+                if (func) func(item);
+                countParameters++;
+                if (item.FilterType === 65536) countParameters += 2;
             }
         }
 
-        if (notExistsParameters) {
+        if (countParameters === 0) {
             this.onCreateClick();
             params.hide();
         } else {
@@ -208,6 +246,7 @@
             params.show();
         }
 
+        this.options.set('oneParameter', countParameters <= 2);
         this.options.set('showButtons', true);
     };
 
@@ -221,32 +260,98 @@
         this.onChangeParameter.call(item, { field: 'FilterType' });
     };
 
-    this.MultiColumnInit = function(item) {
-        var combobox = $('#' + item.Name + 'Value1').data('kendoMultiColumnComboBox');
-        if (!combobox)
-            return;
-
-        if (item.Value1) {
-            /*var addItem = {};
-            addItem[item.ValueColumn] = item.Value1;
-            addItem[item.DisplayColumn] = item.Value2;
-            combobox.dataSource.add(addItem);*/
+    this.ReloadDataOnChange = function (startItem) {
+        for (var i = 0; i < this.parameters.length; i++) {
+            var item = this.parameters[i];
+            if (item.RequireReload && item !== startItem) {
+                var d = $('#' + item.Name + 'Value1').data();
+                if (d.kendoDropDownList)
+                    d.kendoDropDownList.dataSource.read();
+                if (d.kendoMultiColumnComboBox)
+                    d.kendoMultiColumnComboBox.dataSource.read();
+                if (d.kendoGrid) {
+                    d.kendoGrid.clearSelection();
+                    d.kendoGrid.dataSource.read();
+                }
+                if (d.kendoTreeList)
+                    d.kendoTreeList.dataSource.read();
+            }
         }
-        var ds = new kendo.data.DataSource({
+    };
+
+    this.MultiColumnInit = function (item) {
+        item.Data = new kendo.data.DataSource({
             type: 'aspnetmvc-ajax',
             serverFiltering: true,
             transport: {
                 read: {
                     type: 'POST',
                     url: "/Reports/Manager/GetConditionData",
-                    data: {
-                        PluginName: VM.manager.options.PluginName,
-                        Key: item.Key
+                    data: function() {
+                        return {
+                            PluginName: VM.manager.options.PluginName,
+                            Key: item.Key,
+                            parameters: VM.manager.GetParameters()
+                        };
                     }
                 }
             }
         });
-        combobox.setDataSource(ds);
+        /*var addItem = {};
+            addItem[item.ValueColumn] = item.Value1;
+            addItem[item.DisplayColumn] = item.Value2;
+            combobox.dataSource.add(addItem);*/
+        /*
+        var combobox = $('#' + item.Name + 'Value1').data('kendoMultiColumnComboBox');
+        if (!combobox)
+            return;
+
+        if (item.Value1) {
+            
+        }
+        var ds = ;
+        combobox.setDataSource(ds);*/
+    };
+
+    this.DDLInit = function(item) {
+        item.RequireReload = false;
+    };
+
+    this.GridInit = function(item) {
+        item.set('Data', new kendo.data.DataSource({
+            type: 'aspnetmvc-ajax',
+            serverFiltering: true,
+            pageSize: 25,
+            schema: {
+                model: {
+                    id: item.ValueColumn
+                }
+            },
+            transport: {
+                read: {
+                    type: 'POST',
+                    url: "/Reports/Manager/GetConditionData",
+                    data: function () {
+                        return {
+                            PluginName: VM.manager.options.PluginName,
+                            Key: item.Key,
+                            parameters: VM.manager.GetParameters()
+                        };
+                    }
+                }
+            }
+        }));
+        item.Columns.splice(0, 0, { selectable: true, width: "50px" });
+    };
+
+    this.GridAfterInit = function (item) {
+        var grid = $('#' + item.Name + "Value1").data('kendoGrid');
+        if (!grid) return;
+        grid.setOptions({ persistSelection: true });
+        grid.bind('change',
+            function() {
+                item.set('Values', grid.selectedKeyNames());
+            });
     };
 
     this.onChangeParameter = function(e) {

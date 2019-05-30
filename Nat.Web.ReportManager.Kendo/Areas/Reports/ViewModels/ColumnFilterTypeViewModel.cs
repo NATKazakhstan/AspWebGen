@@ -1,4 +1,5 @@
-﻿using Nat.Tools.Filtering;
+﻿using System.Collections.Generic;
+using Nat.Tools.Filtering;
 
 namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
 {
@@ -8,10 +9,13 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
         {
         }
 
-        public ColumnFilterTypeViewModel(ColumnFilterType columnFilterType)
+        public ColumnFilterTypeViewModel(ColumnFilterType columnFilterType,
+            Dictionary<ColumnFilterType, string> captions)
         {
             id = (int) columnFilterType;
-            Name = columnFilterType.GetFilterTypeCaption();
+            Name = (captions != null && captions.ContainsKey(columnFilterType)
+                ? captions[columnFilterType]
+                : columnFilterType.GetFilterTypeCaption()) ?? "*****";
             VisibleValue1 = columnFilterType.HasArgs();
             VisibleValue2 = columnFilterType.IsBinaryFilter();
         }

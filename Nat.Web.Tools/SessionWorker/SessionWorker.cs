@@ -1,4 +1,5 @@
 using System;
+using System.Web;
 using System.Web.SessionState;
 using System.Web.UI;
 
@@ -24,12 +25,12 @@ namespace Nat.Web.Tools
         /// <param name="key">Ключ сессии.</param>
         public SessionWorker(Page page, string key)
         {
-            session = page.Session;
+            session = HttpContext.Current.Session;
 //            IPage ipage = page as IPage;
 //            if (ipage != null)
 //                key += "_" + ipage.PageGuid;
-            if (!string.IsNullOrEmpty(page.Request.QueryString["sessionKey"]))
-                key += page.Request.QueryString["sessionKey"];
+            if (!string.IsNullOrEmpty(HttpContext.Current.Request.QueryString["sessionKey"]))
+                key += HttpContext.Current.Request.QueryString["sessionKey"];
             this.key = key;
         }
 

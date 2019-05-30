@@ -126,6 +126,7 @@ namespace Nat.Web.Controls
             set
             {
                 base.DataSource = value;
+                if (mainTextBox == null) OnInit(EventArgs.Empty);
                 mainTextBox.DataSource = value;
                 codeTextBox.DataSource = value;
             }

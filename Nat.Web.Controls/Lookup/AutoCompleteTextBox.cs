@@ -311,7 +311,11 @@ namespace Nat.Web.Controls
         public Boolean AutoPostBack
         {
             get { return textBox.AutoPostBack; }
-            set { textBox.AutoPostBack = value; }
+            set
+            {
+                if (textBox == null) OnInit(EventArgs.Empty);
+                textBox.AutoPostBack = value;
+            }
         }
 
         [Browsable(false)]

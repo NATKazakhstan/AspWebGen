@@ -286,8 +286,16 @@ namespace Nat.Web.Controls
         [Bindable(true, BindingDirection.TwoWay)]
         public Object Value
         {
-            get { return textBox.Value; }
-            set { textBox.Value = value; }
+            get
+            {
+                if (textBox == null) OnInit(EventArgs.Empty);
+                return textBox.Value;
+            }
+            set
+            {
+                if (textBox == null) OnInit(EventArgs.Empty);
+                textBox.Value = value;
+            }
         }
 
         [Browsable(false)]
@@ -295,7 +303,11 @@ namespace Nat.Web.Controls
         [Bindable(true, BindingDirection.TwoWay)]
         public String Text
         {
-            get { return textBox.Text; }
+            get
+            {
+                if (textBox == null) OnInit(EventArgs.Empty);
+                return textBox.Text;
+            }
             set { }
         }
 

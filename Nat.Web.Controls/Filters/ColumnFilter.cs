@@ -653,7 +653,8 @@ namespace Nat.Web.Controls
 
         public String GetText(Int32 index)
         {
-            if(!inited) throw new NotImplementedException();
+            EnsureChildControls();
+            //if(!inited) throw new NotImplementedException();
 
             if (!(index == 0 || index == 1))
                 throw new IndexOutOfRangeException("Allowed indices are 0 and 1");

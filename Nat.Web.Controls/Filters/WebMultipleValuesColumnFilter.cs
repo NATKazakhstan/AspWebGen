@@ -66,7 +66,8 @@ namespace Nat.Web.Controls.Filters
         {
             _storage = new ColumnFilterStorage();
             _storage.DataType = typeof(Int64);
-            _storage.AvailableFilters = ColumnFilterType.In | ColumnFilterType.Equal | ColumnFilterType.None;
+            _storage.AvailableFilters = ColumnFilterType.In/* | ColumnFilterType.Equal*/ | ColumnFilterType.None;
+            _storage.IsRefBound = true;
             PanelHeight = Unit.Pixel(380);
         }
 
@@ -554,12 +555,18 @@ function {1} (checkbox){{
 
         public DataRow GetRow(int index)
         {
-            return tableDataSource.Table.Rows[index];
+            Initialization();
+            if (tableDataSource.Table.Rows.Count > 0)
+                return tableDataSource.Table.Rows[index];
+            return null;
         }
 
         public string GetText(int index)
         {
             StringBuilder text = new StringBuilder();
+            Initialization();
+            if (tableDataSource.View.DataView.Count == 0)
+                return string.Empty;
 
             foreach (DataColumn dc in tableDataSource.Table.Columns)
             {

@@ -9,17 +9,21 @@
 }
 
 <div class="k-header k-grid-toolbar reportToolbar">
-    <button class="k-button k-button-icontext" onclick="VM.manager.onCreateClick()"><span class="k-icon fas fa-file"></span> @Resources.SCreateReport</button>
+    <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onCreateClick()"><span class="k-icon fas fa-file"></span> @Resources.SCreateReport</button>
+    <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onWordExportClick()"><span class="k-icon fas fa-file-word"></span> @Resources.SWordExport</button>
+    <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onExcelExportClick()"><span class="k-icon fas fa-file-excel"></span> @Resources.SExcelExport</button>
+    <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onPDFExportClick()"><span class="k-icon fas fa-file-pdf"></span> @Resources.SPDFExport</button>
 </div>
 
-<div id="reportParameters" class="k-edit-form-container">
+<div id="reportParameters" class="k-edit-form-container" style="display: none">
 
 </div>
 
-<div id="reportResultDiv">
+<div class="reportResultDiv">
+    <div id="reportResultDiv" style="display: none">
 
+    </div>
 </div>
-
 <script type="text/x-kendo-template" id="parametersDateTimeTemplate">
     <div class="editor-label m-editor-label">
         <label id="#= Name #Label" for="#= Name #Value1">#: Title #</label>

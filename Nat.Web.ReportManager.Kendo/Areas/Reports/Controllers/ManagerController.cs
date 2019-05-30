@@ -9,13 +9,17 @@ using System.Web.UI;
 using Kendo.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Nat.ReportManager.ReportGeneration.StimulSoft;
 using Nat.Tools.Filtering;
 using Nat.Tools.QueryGeneration;
 using Nat.Web.Controls;
 using Nat.Web.Core.System.EventLog;
 using Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels;
 using Nat.Web.ReportManager.Kendo.Properties;
+using Nat.Web.ReportManager.ReportGeneration;
 using Nat.Web.Tools;
+using Nat.Web.Tools.Initialization;
+using Newtonsoft.Json;
 
 namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
 {
@@ -163,35 +167,58 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateReport(string pluginName, string culture, List<ConditionViewModel> parameters)
+        public ActionResult CreateReport(string pluginName, string culture, List<ConditionViewModel> parameters, string parametersStr, string export)
         {
+            if (!string.IsNullOrEmpty(parametersStr))
+                parameters = JsonConvert.DeserializeObject<List<ConditionViewModel>>(parametersStr);
+            if (parameters == null)
+                parameters = new List<ConditionViewModel>();
+
             var plugin = WebReportManager.GetPlugin(pluginName);
             if (plugin == null)
                 return Json(new { error = Resources.SPluginNotFound });
 
-            var guid = Guid.NewGuid();
+            var guid = Guid.NewGuid().ToString();
             var storageValues = new StorageValues();
-            foreach (var parameter in parameters)
+            var paramsDic = parameters.ToDictionary(r => r.Key);
+            foreach (var condition in plugin.Conditions)
             {
-                var filterType = (ColumnFilterType) parameter.FilterType;
-                if (filterType == ColumnFilterType.In)
-                    storageValues.SetStorageValues(parameter.Key, filterType, parameter.Values);
-                else
-                    storageValues.SetStorageValues(parameter.Key, filterType, parameter.Value1, parameter.Value2);
+                var storage = condition.ColumnFilter.GetStorage();
+                if (paramsDic.ContainsKey(storage.Name))
+                {
+                    paramsDic[storage.Name].SetToStorageValues(storage, storageValues);
+                    condition.ColumnFilter.SetStorage(storage);
+                    storageValues.SetStorageTextValues(storage.Name, condition.ColumnFilter.GetTexts());
+                }
             }
+
+            //(plugin as IWebReportPlugin).Constants
 
             //logType = (LogMessageType)HttpContext.Current.Session["logcode" + guid];
             //message = (string)HttpContext.Current.Session["logmsg" + guid];
+            Session[guid] = storageValues;
+            Session["logmsg" + guid] = plugin.GetLogInformation().Replace("\r\n", "<br/>");
+            Session["logcode" + guid] = ReportInitializerSection.GetReportInitializerSection().ReprotPlugins.GetTypeReportLists()[plugin.GetType()].LogMessageType;
+            Session["constants" + guid] = (plugin as IWebReportPlugin)?.Constants ?? new Dictionary<string, object>();
 
-            using (var stream = ReportResultPage.GetReport(true, pluginName, guid.ToString(), storageValues, culture,
-                null,
-                "Mht",
-                "export", null, false, new Dictionary<string, object>(), null, out var fileNameExt, true))
-            using (var reader = new StreamReader(stream))
+            var logMonitor = InitializerSection.GetSection().LogMonitor;
+            logMonitor.Init();
+
+            var stream = ReportResultPage.GetReport(true, pluginName, guid, storageValues, culture,
+                null, export ?? "Html",
+                "export", (LogMonitor) logMonitor, false, null, null, out var fileNameExt, true);
+
+            if (string.IsNullOrEmpty(export))
             {
-                stream.Position = 0;
-                return Json(new { ReportContent = reader.ReadToEnd() });
+                using (stream)
+                using (var reader = new StreamReader(stream))
+                {
+                    stream.Position = 0;
+                    return Json(new {ReportContent = reader.ReadToEnd()});
+                }
             }
+
+            return File(stream, "application/octet-stream", plugin.Description + "." + fileNameExt);
         }
     }
 }

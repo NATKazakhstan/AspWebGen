@@ -47,11 +47,16 @@ input.k-textbox.searchMenuInput {
 
 .k-grid-toolbar.reportToolbar {
     border-right: 1px solid #c9c9c9;
+    min-height: 28px;
 }
 
 #reportParameters {
     width: 100%;
-    margin-top: 16px;
+    /*margin-top: 16px;
+    margin-bottom: 10px;*/
+    padding-top: 16px;
+    border-bottom: 1px solid rgb(201, 201, 201);
+    min-height: 35px;
 }
 
 .editor-label.m-editor-label {
@@ -74,4 +79,15 @@ input.k-textbox.searchMenuInput {
 }
 .editor-field.m-editor-value {
     width: 79%;
+}
+
+.reportResultDiv {
+    text-align: center;
+    padding-top: 6px;
+}
+
+#reportResultDiv {
+    padding: 10px;
+    border: 1px solid rgb(201, 201, 201);
+    display: inline-block;
 }

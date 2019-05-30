@@ -16,6 +16,7 @@ using Stimulsoft.Report;
 using Stimulsoft.Report.Web;
 using Stimulsoft.Report.Components;
 using System.Threading;
+using Stimulsoft.Report.Engine;
 
 namespace Nat.Web.ReportManager
 {
@@ -246,7 +247,12 @@ namespace Nat.Web.ReportManager
                         StiExportFormat stiExportFormat;
                         try
                         {
-                            stiExportFormat = (StiExportFormat) Enum.Parse(typeof (StiExportFormat), format);
+                            if ("Word".Equals(format, StringComparison.InvariantCulture))
+                                stiExportFormat = StiExportFormat.Word2007;
+                            else if ("Excel".Equals(format, StringComparison.InvariantCulture))
+                                stiExportFormat = StiExportFormat.Excel2007;
+                            else
+                                stiExportFormat = (StiExportFormat) Enum.Parse(typeof(StiExportFormat), format);
                         }
                         catch (Exception)
                         {
@@ -406,6 +412,8 @@ namespace Nat.Web.ReportManager
         private static Stream ExportWithoutShow(StiReport stiReport, StiExportFormat exportFormat, bool useReturnStream)
         {
             stiReport.Render(false);
+            if (exportFormat == StiExportFormat.Html)
+                stiReport.Bookmark?.Bookmarks.Clear();
 
             if (stiReport.AutoLocalizeReportOnRun)
                 LocalizeReport(stiReport, Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName);

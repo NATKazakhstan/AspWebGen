@@ -70,6 +70,15 @@ namespace Nat.Web.ReportManager.Kendo.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Excel.
+        /// </summary>
+        public static string SExcelExport {
+            get {
+                return ResourceManager.GetString("SExcelExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Отчет на казахском.
         /// </summary>
         public static string SOnKaz {
@@ -84,6 +93,15 @@ namespace Nat.Web.ReportManager.Kendo.Properties {
         public static string SOnRus {
             get {
                 return ResourceManager.GetString("SOnRus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на PDF.
+        /// </summary>
+        public static string SPDFExport {
+            get {
+                return ResourceManager.GetString("SPDFExport", resourceCulture);
             }
         }
         
@@ -111,6 +129,15 @@ namespace Nat.Web.ReportManager.Kendo.Properties {
         public static string SReportViewer {
             get {
                 return ResourceManager.GetString("SReportViewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Word.
+        /// </summary>
+        public static string SWordExport {
+            get {
+                return ResourceManager.GetString("SWordExport", resourceCulture);
             }
         }
     }

@@ -120,11 +120,17 @@
   <data name="SCreateReport" xml:space="preserve">
     <value>Сформировать отчет</value>
   </data>
+  <data name="SExcelExport" xml:space="preserve">
+    <value>Excel</value>
+  </data>
   <data name="SOnKaz" xml:space="preserve">
     <value>Отчет на казахском</value>
   </data>
   <data name="SOnRus" xml:space="preserve">
     <value>Отчет на русском</value>
+  </data>
+  <data name="SPDFExport" xml:space="preserve">
+    <value>PDF</value>
   </data>
   <data name="SPluginNotFound" xml:space="preserve">
     <value>Отчет не найден</value>
@@ -134,5 +140,8 @@
   </data>
   <data name="SReportViewer" xml:space="preserve">
     <value>Менеджер отчетов</value>
+  </data>
+  <data name="SWordExport" xml:space="preserve">
+    <value>Word</value>
   </data>
 </root>

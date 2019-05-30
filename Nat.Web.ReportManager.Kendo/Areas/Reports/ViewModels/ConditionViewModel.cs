@@ -5,11 +5,14 @@ using System.Data;
 using System.Linq;
 using System.Web.UI;
 using Nat.Controls.DataGridViewTools;
+using Nat.ReportManager.QueryGeneration;
 using Nat.Tools.Constants;
 using Nat.Tools.Data;
 using Nat.Tools.Filtering;
 using Nat.Tools.ResourceTools;
 using Nat.Web.Controls;
+using Nat.Web.Core.System.Mvc;
+using Nat.Web.Tools;
 
 namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
 {
@@ -149,5 +152,44 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
         public IEnumerable Data { get; set; }
         public bool Visible { get; set; }
         public List<ColumnViewModel> Columns { get; set; }
+
+        public void SetToStorageValues(ColumnFilterStorage storage, StorageValues storageValues)
+        {
+            storage.FilterType = (ColumnFilterType)FilterType;
+            ParseValues(storage.DataType);
+            if (storage.FilterType == ColumnFilterType.In)
+                storage.Values = Values;
+            else
+            {
+                storage.Value1 = Value1;
+                storage.Value2 = Value2;
+            }
+
+            storageValues.AddStorage(storage);
+        }
+
+        private void ParseValues(Type dataType)
+        {
+            Value1 = ParseValue(Value1, dataType);
+            Value2 = ParseValue(Value2, dataType);
+            
+            if (FilterType == (int)ColumnFilterType.In)
+                Values = Values?.Select(r => ParseValue(r, dataType)).ToArray();
+        }
+
+        private object ParseValue(object obj, Type dataType)
+        {
+            string strValue;
+            if (obj is object[] arr1)
+                strValue = (string) arr1[0];
+            else if (obj is string str)
+                strValue = str;
+            else
+                return obj == null ? null : Convert.ChangeType(obj, dataType);
+
+            if (strValue.StartsWith("/Date(") && (dataType == typeof(DateTime) || dataType == typeof(DateTime?)))
+                return DateModelBinder.ParseDateTime(strValue);
+            return string.IsNullOrEmpty(strValue) ? null : Convert.ChangeType(strValue, dataType);
+        }
     }
 }

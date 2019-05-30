@@ -14,6 +14,7 @@
         this.grid.toolbar.find('button[data-command="search"]').replaceWith(searchDiv);
 
         kendo.bind($('#searchValueInput'), this.options);
+        kendo.bind($('.reportToolbar'), this.options);
 
         this.bindSelectionChange();
         this.bindProgress();
@@ -51,15 +52,67 @@
             culture: this.options.isKz ? 'kz' : 'ru',
             parameters: this.parameters.toJSON()
         };
+        data.parameters.forEach(function(p) { p.Data = null; });
         this.post('CreateReport',
             data,
             function(result) {
                 if (result.error)
                     return;
 
-                $('#reportResultDiv').html(result.ReportContent);
+                //$('#reportResultDiv').html('<iframe width="100%" height="500px" style="border: 0px">' + result.ReportContent + '</iframe>');
+                $('#reportResultDiv').html($(result.ReportContent).filter(function(t) {
+                    return this.tagName === 'TABLE' || this.tagName === 'STYLE';
+                }));
+                $('#reportResultDiv').show();
             },
             false);
+    };
+
+    this.onWordExportClick = function() {
+        this.ExportDocument('Word', ".doc");
+    };
+
+    this.onExcelExportClick = function() {
+        this.ExportDocument('Excel', ".xls");
+    };
+
+    this.onPDFExportClick = function() {
+        this.ExportDocument('Pdf', ".pdf");
+    };
+
+    this.ExportDocument = function (format, ext) {
+        //var me = this;
+        var data = {
+            PluginName: this.options.PluginName,
+            culture: this.options.isKz ? 'kz' : 'ru',
+            parameters: this.parameters.toJSON(),
+            export: format
+        };
+        data.parameters.forEach(function (p) { p.Data = null; });
+        data.parametersStr = JSON.stringify(data.parameters);
+        data.parameters = undefined;
+
+        $('#downloadForm').remove();
+        var form = document.createElement("form");
+        $(form)
+            .attr('id', 'downloadForm')
+            .attr("method", 'POST')
+            .attr("action", "/" + this.controller + "/CreateReport")
+            .hide();
+
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                var hiddenField = document.createElement("input");
+                hiddenField.setAttribute("type", "hidden");
+                hiddenField.setAttribute("name", key);
+                hiddenField.setAttribute("value", data[key]);
+
+                form.appendChild(hiddenField);
+            }
+        }
+
+        document.body.appendChild(form);
+        form.submit();
     };
 
     this.onFieldChange = function (e) {
@@ -76,6 +129,10 @@
         }
 
         if (e.field === 'PluginName') {
+            this.ClearParameters();
+            $('#reportResultDiv').hide();
+            $('#reportResultDiv').html('');
+
             var data = {
                 PluginName: this.options.PluginName
             };
@@ -85,18 +142,15 @@
                     function (result) {
                         if (!result.error)
                             me.InitParameters(result);
-                        else
-                            me.ClearParameters();
                     },
                     false);
-            else {
-                me.ClearParameters();
-            }
         }
     };
 
     this.ClearParameters = function() {
         $('#reportParameters').html('');
+        this.options.set('showButtons', false);
+        $('#reportParameters').hide();
     };
 
     this.InitParametersTemplates = function() {
@@ -116,6 +170,7 @@
         var params = $('#reportParameters');
         this.InitParametersTemplates();
         params.html('');
+        var notExistsParameters = true;
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
             if (!item.Visible)
@@ -141,9 +196,19 @@
                 kendo.bind(html, item);
                 if (func) func(item);
                 this.FilterTypesInit(item);
-                
+                notExistsParameters = false;
             }
         }
+
+        if (notExistsParameters) {
+            this.onCreateClick();
+            params.hide();
+        } else {
+            params.append('<div style="clear: both;"/>');
+            params.show();
+        }
+
+        this.options.set('showButtons', true);
     };
 
     this.FilterTypesInit = function(item) {
@@ -206,5 +271,16 @@
             else
                 $('#' + this.Name + 'Label').attr('for', this.Name + 'Value1');
         }
+    };
+
+    this.progress = function (value, skipGrid) {
+
+        var element = $('#managerSplitter');
+
+        if (this.dataSourceProgress !== value) {
+            kendo.ui.progress(element, value);
+        }
+
+        this.dataSourceProgress = value;
     };
 };

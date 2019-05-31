@@ -28,6 +28,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
         [Display(ResourceType = typeof(Resources), Name = nameof(Resources.SReportName))]
         public string Name { get; set; }
         public string PluginName { get; set; }
+        public string PluginType { get; set; }
         public bool Visible { get; set; }
         public int? parentID { get; }
 

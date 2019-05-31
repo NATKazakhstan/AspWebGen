@@ -80,6 +80,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                     Name = r.Value.Description,
                     Visible = r.Value.Visible,
                     PluginName = r.Key,
+                    PluginType = r.Value is CrossJournalReportPlugin ? "CrossReport" : "Simple"
                 })
                 .OrderBy(r => r.Name)
                 .ToList();
@@ -201,6 +202,12 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 : Json(new {success = true});
         }
 
+        [HttpGet]
+        public ActionResult CreateReport()
+        {
+            return Redirect("/Reports/Manager");
+        }
+
         [HttpPost]
         public ActionResult CreateReport(string pluginName, string culture, List<ConditionViewModel> parameters, string parametersStr, string export)
         {
@@ -253,6 +260,26 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                     out fileNameExt,
                     true);
             }
+            else if (plugin is IRedirectReportPlugin crossPlugin)
+            {
+                var url = crossPlugin.GetReportUrl(guid, culture);
+                if (string.IsNullOrEmpty(export))
+                {
+                    return Json(new {Url = url + "&__p__InIFrame=true"});
+                }
+
+                return Redirect(url + "&__p__ExportExcel=true");
+                /*
+                stream = WebSpecificInstances.GetExcelExporter().GetExcelByTypeName(
+                    null,
+                    export,
+                    0,
+                    storageValues,
+                    culture == "kz" ? "kk-kz" : culture == "ru" ? "ru-ru" : culture,
+                    logMonitor,
+                    true,
+                    out fileNameExt);*/
+            }
             else
             {
                 return Json(new {error = "Отчет не поддерживается"});
@@ -279,7 +306,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         private static string Validate(IReportPlugin plugin)
         {
             var sbErrors = new StringBuilder();
-            foreach (var condition in plugin.Conditions)
+            foreach (var condition in plugin.Conditions.Where(r => r.Visible))
             {
                 var storage = condition.ColumnFilter.GetStorage();
                 var valid = true;

@@ -158,6 +158,11 @@ namespace Nat.Web.ReportManager.ReportGeneration
             get { return ReportInitializerSection.GetReportInitializerSection().ReportingServicesPageViewer; }
         }
 
+        public string GetReportUrl(string sessionGuid, string culture)
+        {
+            throw new NotImplementedException();
+        }
+
         public void OpenReport(WebReportManager webReportManager, StorageValues storageValues, string format, string culture, string backPath, string textOfBackPath, string command)
         {
             var guid = ReportManagerControl.SetSession(storageValues, webReportManager);

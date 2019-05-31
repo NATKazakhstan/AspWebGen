@@ -207,23 +207,26 @@ namespace Nat.Web.ReportManager.ReportGeneration
 
         public virtual void OpenReport(WebReportManager webReportManager, StorageValues storageValues, string format, string culture, string backPath, string textOfBackPath, string command)
         {
+            var guid = ReportManagerControl.SetSession(storageValues, webReportManager);
+            HttpContext.Current.Response.Redirect(GetReportUrl(guid, culture));
+        }
+
+        public virtual string GetReportUrl(string sessionGuid, string culture)
+        {
             if (culture == "ru")
                 culture = "ru-ru";
             else if (culture == "kz")
                 culture = "kk-kz";
 
-            var guid = ReportManagerControl.SetSession(storageValues, webReportManager);
             var redirectUrl = RedirectUrl;
-
-            var url = string.Format(
+            return string.Format(
                 "{0}{1}culture={2}&storageValues={3}&reportPluginName={4}{5}",
                 redirectUrl,
                 redirectUrl.Contains("?") ? "&" : "?",
                 culture,
-                guid,
+                sessionGuid,
                 GetType().FullName,
                 GetAdditionalUrlParameters());
-            HttpContext.Current.Response.Redirect(url);
         }
 
         #endregion

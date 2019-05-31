@@ -675,6 +675,16 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 
         protected override void OnPreRender(EventArgs e)
         {
+            if (ParentUserControl.Url.CustomQueryParameters.ContainsKey("ExportExcel"))
+            {
+                BaseInnerHeader.ColumnHierarchy
+                    .SelectMany(r => r.SelectAll())
+                    .Where(r => r.Width == 0)
+                    .Where(r => !string.IsNullOrEmpty(r.ColumnKey))
+                    .ForEach(r => r.Width = 200);
+                ExportToExcel();
+            }
+
             base.OnPreRender(e);
             Page.ClientScript.RegisterHiddenField(GetHfSortClientID(), DefaultOrder);
 

@@ -111,7 +111,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
 
         private void AddToReportPluginButton(HtmlTextWriter writer)
         {
-            if (string.IsNullOrEmpty(JournalUC.Url.ReportPluginName)) return;
+            if (string.IsNullOrEmpty(JournalUC.Url.ReportPluginName) || JournalUC.Url.CustomQueryParameters.ContainsKey("InIFrame")) return;
             writer.Write("&nbsp;");
             writer.Write("&nbsp;");
             AddButton(

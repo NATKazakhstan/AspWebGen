@@ -594,7 +594,11 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                         }
 
                         LogMonitor.Log(new LogMessageEntry(ViewLog, properties.NameRu, properties));
+                        var export = Url.CustomQueryParameters.ContainsKey("ExportExcel");
+                        var inIFrame = Url.CustomQueryParameters.ContainsKey("InIFrame");
                         properties.SetToJournal(this);
+                        if (export) Url.CustomQueryParameters.Add("ExportExcel", "true");
+                        if (inIFrame) Url.CustomQueryParameters.Add("InIFrame", "true");
                         loaded = true;
                     }
                 }

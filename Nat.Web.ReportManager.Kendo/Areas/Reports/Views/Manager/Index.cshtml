@@ -55,4 +55,7 @@
       .Modal(true)
       .Draggable()
       .Resizable()
+      .Iframe(true)
+      .Actions(a => a.Maximize().Close())
+      .Events(e => e.Refresh("function() { if (window.VM && VM.manager && VM.manager.reportWindow) kendo.ui.progress(VM.manager.reportWindow.element, false); }"))
       .Deferred())

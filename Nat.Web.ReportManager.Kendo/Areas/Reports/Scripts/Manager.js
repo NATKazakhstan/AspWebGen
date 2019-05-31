@@ -1,6 +1,6 @@
 ﻿Nat.Reports.Manager = function (options) {
 
-    Nat.Classes.SimpleGridController.call(this, 'Manager');
+    Nat.Classes.SimpleGridController.call(this, 'Reports/Manager');
 
     this.options = kendo.observable(options);
 
@@ -40,13 +40,15 @@
         }
 
         this.options.set('PluginName', !dataItem || !dataItem.PluginName ? null : dataItem.PluginName);
+        this.options.set('PluginType', !dataItem || !dataItem.PluginType ? null : dataItem.PluginType);
     };
 
     this.onLangClick = function(isKz) {
         this.options.set('isKz', isKz);
     };
 
-    this.onCreateClick = function () {
+    this.onCreateClick = function (newTab) {
+        var me = this;
         var data = {
             PluginName: this.options.PluginName,
             culture: this.options.isKz ? 'kz' : 'ru',
@@ -57,6 +59,22 @@
             function(result) {
                 if (result.error)
                     return;
+
+                if (result.Url) {
+                    if (newTab)
+                        window.open(result.Url, "_blank");
+                    else {
+                        var w = $(window);
+                        var dataItem = me.getSelected();
+                        me.reportWindow.setOptions({ width: w.width() * 0.95, height: w.height() * 0.9, title: dataItem.Name });
+                        me.reportWindow.content('<h6>Загрузка... <br/> Енгізу...</h6>');
+                        me.reportWindow.refresh({ url: result.Url.replace('/MainPage.aspx/', '/EmptyPage.aspx/'), iframe: true });
+                        kendo.ui.progress(me.reportWindow.element, true);
+                        me.reportWindow.open();
+                        me.reportWindow.center();
+                    }
+                    return;
+                }
 
                 //$('#reportResultDiv').html('<iframe width="100%" height="500px" style="border: 0px">' + result.ReportContent + '</iframe>');
                 var content = $(result.ReportContent);
@@ -192,6 +210,7 @@
     this.ClearParameters = function() {
         $('#reportParameters').html('');
         this.options.set('showButtons', false);
+        this.options.set('showCRButtons', false);
         $('#reportParameters').hide();
     };
 
@@ -265,7 +284,10 @@
         }
 
         this.options.set('oneParameter', countParameters === 1);
-        this.options.set('showButtons', true);
+        if (this.options.PluginType === 'CrossReport')
+            this.options.set('showCRButtons', true);
+        else
+            this.options.set('showButtons', true);
     };
 
     this.FilterTypesInit = function(item) {

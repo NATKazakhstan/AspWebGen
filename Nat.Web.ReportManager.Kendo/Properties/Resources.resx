@@ -126,6 +126,9 @@
   <data name="SOnKaz" xml:space="preserve">
     <value>Отчет на казахском</value>
   </data>
+  <data name="SOnNewTab" xml:space="preserve">
+    <value>В новой вкладке</value>
+  </data>
   <data name="SOnRus" xml:space="preserve">
     <value>Отчет на русском</value>
   </data>

@@ -7,6 +7,8 @@
         bool LogViewReport { get; }
         string RedirectUrl { get; }
 
+        string GetReportUrl(string sessionGuid, string culture);
+
         void OpenReport(
             WebReportManager webReportManager,
             StorageValues storageValues,

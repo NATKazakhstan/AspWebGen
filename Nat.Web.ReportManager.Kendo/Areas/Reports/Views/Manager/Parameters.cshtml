@@ -8,12 +8,15 @@
     Layout = null;
 }
 
-<div class="k-header k-grid-toolbar reportToolbar">
-    <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onCreateClick()"><span class="k-icon fas fa-file"></span> @Resources.SCreateReport</button>
-    <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onWordExportClick()"><span class="k-icon fas fa-file-word"></span> @Resources.SWordExport</button>
-    <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onExcelExportClick()"><span class="k-icon fas fa-file-excel"></span> @Resources.SExcelExport</button>
-    <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onPDFExportClick()"><span class="k-icon fas fa-file-pdf"></span> @Resources.SPDFExport</button>
-</div>
+    <div class="k-header k-grid-toolbar reportToolbar">
+        <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onCreateClick()"><span class="k-icon fas fa-file"></span> @Resources.SCreateReport</button>
+        <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onWordExportClick()"><span class="k-icon fas fa-file-word"></span> @Resources.SWordExport</button>
+        <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onExcelExportClick()"><span class="k-icon fas fa-file-excel"></span> @Resources.SExcelExport</button>
+        <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onPDFExportClick()"><span class="k-icon fas fa-file-pdf"></span> @Resources.SPDFExport</button>
+        <button class="k-button k-button-icontext" data-bind="visible: showCRButtons" onclick="VM.manager.onCreateClick()"><span class="k-icon fas fa-window-maximize"></span> @Resources.SCreateReport</button>
+        <button class="k-button k-button-icontext" data-bind="visible: showCRButtons" onclick="VM.manager.onCreateClick(true)"><span class="k-icon fas fa-window-restore"></span> @Resources.SOnNewTab</button>
+        <button class="k-button k-button-icontext" data-bind="visible: showCRButtons" onclick="VM.manager.onExcelExportClick()"><span class="k-icon fas fa-file-excel"></span> @Resources.SExcelExport</button>
+    </div>
 
 <div id="reportParameters" class="k-edit-form-container" style="display: none">
 

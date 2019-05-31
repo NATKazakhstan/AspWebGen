@@ -88,6 +88,15 @@ namespace Nat.Web.ReportManager.Kendo.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на В новой вкладке.
+        /// </summary>
+        public static string SOnNewTab {
+            get {
+                return ResourceManager.GetString("SOnNewTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Отчет на русском.
         /// </summary>
         public static string SOnRus {

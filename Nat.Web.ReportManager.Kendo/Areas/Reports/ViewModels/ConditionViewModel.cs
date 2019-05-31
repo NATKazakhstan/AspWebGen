@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web.UI;
 using Nat.Controls.DataGridViewTools;
 using Nat.ReportManager.QueryGeneration;
+using Nat.Tools;
 using Nat.Tools.Constants;
 using Nat.Tools.Data;
 using Nat.Tools.Filtering;
@@ -113,6 +114,12 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
                         if (string.IsNullOrEmpty(DisplayColumn))
                             DisplayColumn = column.field;
                     }
+                }
+
+                if (Columns.Count > 2)
+                {
+                    Columns[0].width = "330px";
+                    Columns.Where(c => string.IsNullOrEmpty(c.width)).ForEach(c => c.width = "220px");
                 }
 
                 return null;

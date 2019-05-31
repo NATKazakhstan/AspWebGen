@@ -24,12 +24,12 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
             var model = new ColumnViewModel
             {
                 field = dc.ColumnName,
-                title = columnCaption.Replace("'", "\"")
+                title = columnCaption.Replace("'", "\""),
             };
 
             if (dc.DataType == typeof(DateTime) || dc.DataType == typeof(DateTime?))
             {
-                model.width = "120px";
+                model.width = "100px";
             }
 
             if (dc.DataType == typeof(long) || dc.DataType == typeof(long?)

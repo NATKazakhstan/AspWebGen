@@ -91,36 +91,47 @@
         return parameters;
     };
 
-    this.ExportDocument = function (format, ext) {
-        //var me = this;
+    this.ExportDocument = function(format, ext) {
+        var me = this;
         var data = {
-            PluginName: this.options.PluginName,
-            culture: this.options.isKz ? 'kz' : 'ru',
-            parametersStr: JSON.stringify(this.GetParameters()),
+            PluginName: me.options.PluginName,
+            culture: me.options.isKz ? 'kz' : 'ru',
+            parameters: this.GetParameters(),
             export: format
         };
 
         $('#downloadForm').remove();
-        var form = document.createElement("form");
-        $(form)
-            .attr('id', 'downloadForm')
-            .attr("method", 'POST')
-            .attr("action", "/" + this.controller + "/CreateReport")
-            .hide();
 
-        for (var key in data) {
-            if (data.hasOwnProperty(key)) {
-                var hiddenField = document.createElement("input");
-                hiddenField.setAttribute("type", "hidden");
-                hiddenField.setAttribute("name", key);
-                hiddenField.setAttribute("value", data[key]);
+        this.post('ValidateBeforeExport',
+            data,
+            function(result) {
+                if (!result.success)
+                    return;
 
-                form.appendChild(hiddenField);
-            }
-        }
+                data.parametersStr = JSON.stringify(data.parameters);
+                data.parameters = null;
+                var form = document.createElement("form");
+                $(form)
+                    .attr('id', 'downloadForm')
+                    .attr("method", 'POST')
+                    .attr("action", "/" + me.controller + "/CreateReport")
+                    .hide();
 
-        document.body.appendChild(form);
-        form.submit();
+                for (var key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        var hiddenField = document.createElement("input");
+                        hiddenField.setAttribute("type", "hidden");
+                        hiddenField.setAttribute("name", key);
+                        hiddenField.setAttribute("value", data[key]);
+
+                        form.appendChild(hiddenField);
+                    }
+                }
+
+                document.body.appendChild(form);
+                form.submit();
+            },
+            false);
     };
 
     this.onFieldChange = function (e) {
@@ -246,7 +257,7 @@
             params.show();
         }
 
-        this.options.set('oneParameter', countParameters <= 2);
+        this.options.set('oneParameter', countParameters === 1);
         this.options.set('showButtons', true);
     };
 
@@ -283,6 +294,8 @@
         item.Data = new kendo.data.DataSource({
             type: 'aspnetmvc-ajax',
             serverFiltering: true,
+            serverPaging: true,
+            pageSize: 80,
             transport: {
                 read: {
                     type: 'POST',

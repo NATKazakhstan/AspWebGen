@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.UI;
@@ -13,7 +14,9 @@ using Nat.ReportManager.QueryGeneration;
 using Nat.ReportManager.ReportGeneration.StimulSoft;
 using Nat.Tools.Filtering;
 using Nat.Tools.QueryGeneration;
+using Nat.Tools.Validation;
 using Nat.Web.Controls;
+using Nat.Web.Controls.Filters;
 using Nat.Web.Core.System.EventLog;
 using Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels;
 using Nat.Web.ReportManager.Kendo.Properties;
@@ -163,13 +166,38 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                         ds.View.CustomConditions.Add(list);
                     }
 
-                    var data = ds.View.Select(true,
-                        new DataSourceSelectArguments(storage.DisplayColumn, 0, 50) {RetrieveTotalRowCount = true});
+                    var arguments = new DataSourceSelectArguments(
+                        storage.DisplayColumn,
+                        (request.Page - 1) * request.PageSize,
+                        request.PageSize > 0 ? request.PageSize : 1000) {RetrieveTotalRowCount = true};
+
+                    var data = ds.View.Select(true, arguments);
                     return Json(ConditionViewModel.ParseDataView(data));
                 }
             }
 
             return Json(new { error = Resources.SPluginNotFound });
+        }
+
+        [HttpPost]
+        public ActionResult ValidateBeforeExport(string pluginName, string culture, List<ConditionViewModel> parameters,
+            string parametersStr, string export)
+        {
+            if (!string.IsNullOrEmpty(parametersStr))
+                parameters = JsonConvert.DeserializeObject<List<ConditionViewModel>>(parametersStr);
+            if (parameters == null)
+                parameters = new List<ConditionViewModel>();
+
+            var plugin = WebReportManager.GetPlugin(pluginName);
+            if (plugin == null)
+                return Json(new { error = Resources.SPluginNotFound });
+
+            GetStotageValues(parameters, plugin);
+
+            var errors = Validate(plugin);
+            return !string.IsNullOrEmpty(errors)
+                ? Json(new {error = errors})
+                : Json(new {success = true});
         }
 
         [HttpPost]
@@ -189,8 +217,10 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
 
             var storageValues = GetStotageValues(parameters, plugin);
 
-            //logType = (LogMessageType)HttpContext.Current.Session["logcode" + guid];
-            //message = (string)HttpContext.Current.Session["logmsg" + guid];
+            var errors = Validate(plugin);
+            if (!string.IsNullOrEmpty(errors))
+                return Json(new {error = errors});
+
             var guid = Guid.NewGuid().ToString();
             Session[guid] = storageValues;
             Session["logmsg" + guid] = plugin.GetLogInformation().Replace("\r\n", "<br/>");
@@ -204,6 +234,11 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 null, export ?? "Html",
                 "export", (LogMonitor) logMonitor, false, null, null, out var fileNameExt, true);
 
+            Session[guid] = null;
+            Session["logmsg" + guid] = null;
+            Session["logcode" + guid] = null;
+            Session["constants" + guid] = null;
+
             if (string.IsNullOrEmpty(export))
             {
                 using (stream)
@@ -215,6 +250,61 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             }
 
             return File(stream, "application/octet-stream", plugin.Description + "." + fileNameExt);
+        }
+
+        private static string Validate(IReportPlugin plugin)
+        {
+            var sbErrors = new StringBuilder();
+            foreach (var condition in plugin.Conditions)
+            {
+                var storage = condition.ColumnFilter.GetStorage();
+                var valid = true;
+                switch (storage.FilterType)
+                {
+                    case ColumnFilterType.NotSet:
+                    case ColumnFilterType.None:
+                    case ColumnFilterType.IsNull:
+                    case ColumnFilterType.NotNull:
+                    case ColumnFilterType.Custom:
+                        break;
+                    case ColumnFilterType.Equal:
+                    case ColumnFilterType.NotEqual:
+                    case ColumnFilterType.More:
+                    case ColumnFilterType.MoreOrEqual:
+                    case ColumnFilterType.Less:
+                    case ColumnFilterType.LessOrEqual:
+                    case ColumnFilterType.Contains:
+                    case ColumnFilterType.StartWith:
+                    case ColumnFilterType.EndWith:
+                    case ColumnFilterType.ContainsWords:
+                    case ColumnFilterType.ContainsAnyWords:
+                        valid = storage.Value1 != null;
+                        break;
+                    case ColumnFilterType.Between:
+                    case ColumnFilterType.OutOf:
+                    case ColumnFilterType.BetweenColumns:
+                        valid = storage.Value1 != null && storage.Value2 != null;
+                        break;
+                    case ColumnFilterType.In:
+                        var allowNone = (condition.ColumnFilter as WebMultipleValuesColumnFilter)?.AllowNone ?? false;
+                        valid = allowNone
+                                || (storage.AvailableFilters & ColumnFilterType.None) != 0
+                                || storage.Values != null && storage.Values.Length > 0;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                if (!valid)
+                {
+                    sbErrors.AppendLine(string.Format(Controls.Properties.Resources.SRequiredFieldMessage,
+                        storage.Caption)).AppendLine("<br/>");
+                }
+                else if (storage.FilterType != ColumnFilterType.In && !condition.ColumnFilter.Validate())
+                    sbErrors.AppendLine(condition.ColumnFilter.ErrorText);
+            }
+
+            return sbErrors.ToString();
         }
 
         private static StorageValues GetStotageValues(List<ConditionViewModel> parameters, IReportPlugin plugin)

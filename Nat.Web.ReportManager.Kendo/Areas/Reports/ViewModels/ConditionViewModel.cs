@@ -199,17 +199,25 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
 
         private object ParseValue(object obj, Type dataType)
         {
-            string strValue;
-            if (obj is object[] arr1)
-                strValue = (string) arr1[0];
-            else if (obj is string str)
-                strValue = str;
-            else
-                return obj == null ? null : Convert.ChangeType(obj, dataType);
+            try
+            {
+                string strValue;
+                if (obj is object[] arr1)
+                    strValue = (string) arr1[0];
+                else if (obj is string str)
+                    strValue = str;
+                else
+                    return obj == null ? null : Convert.ChangeType(obj, dataType);
 
-            if (strValue.StartsWith("/Date(") && (dataType == typeof(DateTime) || dataType == typeof(DateTime?)))
-                return DateModelBinder.ParseDateTime(strValue);
-            return string.IsNullOrEmpty(strValue) ? null : Convert.ChangeType(strValue, dataType);
+                if (strValue.StartsWith("/Date(") && (dataType == typeof(DateTime) || dataType == typeof(DateTime?)))
+                    return DateModelBinder.ParseDateTime(strValue);
+
+                return string.IsNullOrEmpty(strValue) ? null : Convert.ChangeType(strValue, dataType);
+            }
+            catch (FormatException)
+            {
+                return null;
+            }
         }
     }
 }

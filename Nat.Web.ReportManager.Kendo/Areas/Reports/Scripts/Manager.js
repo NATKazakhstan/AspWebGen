@@ -59,10 +59,17 @@
                     return;
 
                 //$('#reportResultDiv').html('<iframe width="100%" height="500px" style="border: 0px">' + result.ReportContent + '</iframe>');
-                $('#reportResultDiv').html($(result.ReportContent).filter(function(t) {
-                    return this.tagName !== 'SCRIPT';
+                var content = $(result.ReportContent);
+                $('#reportResultDiv').html(content.filter(function() {
+                    return this.tagName !== 'SCRIPT' && this.tagName !== 'META';
                 }));
-                $('#reportResultDiv').show();
+                var anyText = $('#reportResultDiv > *').filter(function() {
+                    return this.tagName !== 'STYLE' && this.tagName !== 'TITLE';
+                }).text();
+                if (anyText)
+                    $('#reportResultDiv').show();
+                else
+                    $('#reportResultDiv').hide();
             },
             false);
     };

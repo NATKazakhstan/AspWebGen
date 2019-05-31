@@ -103,8 +103,17 @@ namespace Nat.Web.ReportManager
             StorageValues storageValues, string culture, Page page, string format, string command,
             LogMonitor logMonitor, ServerReport report, out string fileNameExtention, bool RoleCheck)
         {
+            switch (format.ToLower())
+            {
+                case "html":
+                    format = "HTML4.0";
+                    break;
+            }
+
             fileNameExtention = "";
             WebInitializer.Initialize();
+            if (report == null)
+                report = new Microsoft.Reporting.WebForms.ReportViewer().ServerReport;
             report = ReportViewerInitializer(report);
             var webReportManager = new WebReportManager(new TreeView());
             if (string.IsNullOrEmpty(pluginName)) 

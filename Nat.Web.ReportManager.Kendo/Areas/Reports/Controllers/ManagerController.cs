@@ -11,6 +11,7 @@ using Kendo.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Nat.ReportManager.QueryGeneration;
+using Nat.ReportManager.ReportGeneration.SqlReportingServices;
 using Nat.ReportManager.ReportGeneration.StimulSoft;
 using Nat.Tools.Filtering;
 using Nat.Tools.QueryGeneration;
@@ -227,12 +228,35 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             Session["logcode" + guid] = ReportInitializerSection.GetReportInitializerSection().ReprotPlugins.GetTypeReportLists()[plugin.GetType()].LogMessageType;
             Session["constants" + guid] = (plugin as IWebReportPlugin)?.Constants ?? new Dictionary<string, object>();
 
-            var logMonitor = InitializerSection.GetSection().LogMonitor;
+            var logMonitor = (LogMonitor)InitializerSection.GetSection().LogMonitor;
             logMonitor.Init();
 
-            var stream = ReportResultPage.GetReport(true, pluginName, guid, storageValues, culture,
-                null, export ?? "Html",
-                "export", (LogMonitor) logMonitor, false, null, null, out var fileNameExt, true);
+            Stream stream;
+            string fileNameExt;
+            if (plugin is IStimulsoftReportPlugin)
+                stream = ReportResultPage.GetReport(true, pluginName, guid, storageValues, culture,
+                    null, export ?? "Html",
+                    "export", logMonitor, false, null, null, out fileNameExt, true);
+            else if (plugin is ISqlReportingServicesPlugin)
+            {
+                stream = ReportingServicesViewer.GetReport(
+                    true,
+                    pluginName,
+                    guid,
+                    storageValues,
+                    culture,
+                    null,
+                    export ?? "Html",
+                    "render",
+                    logMonitor,
+                    null,
+                    out fileNameExt,
+                    true);
+            }
+            else
+            {
+                return Json(new {error = "Отчет не поддерживается"});
+            }
 
             Session[guid] = null;
             Session["logmsg" + guid] = null;

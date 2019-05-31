@@ -60,7 +60,7 @@
 
                 //$('#reportResultDiv').html('<iframe width="100%" height="500px" style="border: 0px">' + result.ReportContent + '</iframe>');
                 $('#reportResultDiv').html($(result.ReportContent).filter(function(t) {
-                    return this.tagName === 'TABLE' || this.tagName === 'STYLE';
+                    return this.tagName !== 'SCRIPT';
                 }));
                 $('#reportResultDiv').show();
             },

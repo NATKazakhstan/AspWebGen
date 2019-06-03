@@ -57,6 +57,12 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         {
             var plugins = WebReportManager.GetPlugins(out _)
                 .Where(r => r.Value.Visible)
+                .Where(r =>
+                {
+                    var roles = (r.Value as IWebReportPlugin)?.Roles();
+                    return roles == null || roles.Length == 0 || Tools.Security.UserRoles.IsInAnyRoles(roles);
+                })
+                .ToList()
                 .AsEnumerable();
             if (!string.IsNullOrEmpty(searchValue))
             {
@@ -70,14 +76,15 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             }
 
             var dicIDs = new Dictionary<string, int>();
+            var hasHash = new Dictionary<int, string>();
             var groupData = plugins.Where(r => !string.IsNullOrEmpty(r.Value.ReportGroup))
-                .SelectMany(r => PluginViewModel.ParseGroups(r.Value.ReportGroup, dicIDs))
+                .SelectMany(r => PluginViewModel.ParseGroups(r.Value.ReportGroup, dicIDs, hasHash))
                 .Distinct()
                 .Where(r => !string.IsNullOrEmpty(r.Key))
                 .OrderBy(r => r.Name)
                 .ToList();
             var data = plugins
-                .Select(r => new PluginViewModel(r.Key, r.Value.ReportGroup, dicIDs)
+                .Select(r => new PluginViewModel(r.Key, r.Value.ReportGroup, dicIDs, hasHash)
                 {
                     Name = r.Value.Description,
                     Visible = r.Value.Visible,

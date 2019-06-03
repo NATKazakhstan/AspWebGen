@@ -7,13 +7,20 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
 {
     public class PluginViewModel
     {
-        public PluginViewModel(string key, string reportGroup, IDictionary<string, int> dicIDs)
+        public PluginViewModel(string key, string reportGroup, IDictionary<string, int> dicIDs, IDictionary<int, string> hasHash)
         {
             Key = key;
             if (!dicIDs.ContainsKey(key))
-                dicIDs[key] = dicIDs.Count + 1;
+            {
+                id = key.GetHashCode();
+                while (hasHash.ContainsKey(id))
+                    id++;
 
-            id = dicIDs[key];
+                dicIDs[key] = id;
+                hasHash[id] = key;
+            }
+            else
+                id = dicIDs[key];
 
             reportGroup = string.IsNullOrEmpty(reportGroup)
                 ? null
@@ -32,13 +39,13 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
         public bool Visible { get; set; }
         public int? parentID { get; }
 
-        public static IEnumerable<PluginViewModel> ParseGroups(string valueReportGroup, IDictionary<string, int> dicIDs)
+        public static IEnumerable<PluginViewModel> ParseGroups(string valueReportGroup, IDictionary<string, int> dicIDs, IDictionary<int, string> hasHash)
         {
             var list = valueReportGroup.Split('\\').Select(r => r.Replace("<0>", "")).ToList();
             var groups = new List<PluginViewModel>();
             for (var i = 0; i < list.Count; i++)
             {
-                var model = new PluginViewModel(list[i], i == 0 ? null : list[i - 1], dicIDs);
+                var model = new PluginViewModel(list[i], i == 0 ? null : list[i - 1], dicIDs, hasHash);
                 model.Name = model.Key;
                 model.Visible = true;
                 groups.Add(model);

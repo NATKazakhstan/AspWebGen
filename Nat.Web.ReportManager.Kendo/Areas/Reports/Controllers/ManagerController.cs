@@ -46,9 +46,10 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         }
 
         // GET: Reports/Manager
-        public ActionResult Index()
+        public ActionResult Index(string pluginName)
         {
             ViewData["refChildMenu"] = 105;
+            ViewBag.PluginName = pluginName;
             return View();
         }
 

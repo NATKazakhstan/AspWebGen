@@ -17,11 +17,13 @@
         kendo.bind($('.reportToolbar'), this.options);
 
         this.bindSelectionChange();
-        this.bindProgress();
+        this.bindProgress(null, function () { me.onEndRequest(); });
         this.bindGetData();
 
         this.options.bind('change', function (e) { me.onFieldChange(e); });
         this.onFieldChange({ field: '*' });
+
+        $(window).on('popstate', function(e) { me.onPopState(e); });
     };
 
     this.onGetData = function() {
@@ -41,6 +43,9 @@
 
         this.options.set('PluginName', !dataItem || !dataItem.PluginName ? null : dataItem.PluginName);
         this.options.set('PluginType', !dataItem || !dataItem.PluginType ? null : dataItem.PluginType);
+        this.options.set('Name', !dataItem || !dataItem.Name ? null : dataItem.Name);
+        if (!this._meInOpen)
+            this.open(true);
     };
 
     this.onLangClick = function(isKz) {
@@ -132,6 +137,82 @@
         $('#ParameterID_' + parameterIndex).remove();
     };
 
+    this.onPopState = function(e) {
+        var state = e.state;
+        if (!state && e.originalEvent && e.originalEvent.state)
+            state = e.originalEvent.state;
+
+        if (state) {
+            this.setOptions(state);
+            this.open(false);
+        }
+        else
+            window.location.reload();
+    };
+
+    this.onEndRequest = function () {
+        var me = this;
+        setTimeout(function() { me.open(false, true); }, 100);
+    };
+
+    this.open = function (pushState, replaceState) {
+        var me = this;
+        this._meInOpen = true;
+        var dataItem = this.getSelected();
+        if (this.options.PluginName && (!dataItem || dataItem.PluginName !== this.options.PluginName)) {
+            var dsData = this.grid.dataSource.data();
+            for (var i = 0; i < dsData.length; i++) {
+                if (dsData[i].PluginName === this.options.PluginName || (dsData[i].Name === this.options.PluginName && dsData[i].PluginName)) {
+                    this.grid.clearSelection();
+                    this.gridSelectDataItem(dsData[i]);
+                    var parent = !dsData[i].parentID ? null : this.grid.dataSource.get(dsData[i].parentID);
+                    while (parent && parent.uid) {
+                        var tr = this.grid.table.find('tr[data-uid="' + parent.uid + '"]');
+                        this.grid.expand(tr);
+                        parent = !parent.parentID ? null : this.grid.dataSource.get(parent.parentID);
+                    }
+                }
+            }
+        }
+        this._meInOpen = false;
+
+        this.ClearParameters();
+        $('#reportResultDiv').hide();
+        $('#reportResultDiv').html('');
+
+        var data = {
+            PluginName: this.options.PluginName
+        };
+        if (data.PluginName)
+            this.post('GetPluginInfo',
+                data,
+                function (result) {
+                    if (!result.error)
+                        me.InitParameters(result);
+                },
+                false);
+        
+        if (pushState && window.history && history.pushState && dataItem.PluginName) {
+            history.pushState(this.options.toJSON(), this.options.Name, this.getUrl(this.options));
+        }
+
+        if (replaceState && window.history && window.history.replaceState) {
+            window.history.replaceState(this.options.toJSON(), this.options.Name, this.getUrl(this.options));
+        }
+    };
+
+    this.setOptions = function(options) {
+        this.options.set('PluginName', options.PluginName);
+        this.options.set('PluginType', options.PluginType);
+        this.options.set('Name', options.Name);
+    };
+
+    this.getUrl = function (data) {
+        if (data.PluginName)
+            return '/Reports/Manager/R/' + decodeURI(encodeURIComponent(data.PluginName)) + '/';
+        return '/Reports/Manager';
+    };
+
     this.GetParameters = function() {
         var parameters = this.parameters.toJSON();
         parameters.forEach(function(p) {
@@ -198,24 +279,6 @@
                 $('#kzLang').removeClass('k-state-selected');
                 $('#ruLang').addClass('k-state-selected');
             }
-        }
-
-        if (e.field === 'PluginName') {
-            this.ClearParameters();
-            $('#reportResultDiv').hide();
-            $('#reportResultDiv').html('');
-
-            var data = {
-                PluginName: this.options.PluginName
-            };
-            if (data.PluginName)
-                this.post('GetPluginInfo',
-                    data,
-                    function (result) {
-                        if (!result.error)
-                            me.InitParameters(result);
-                    },
-                    false);
         }
     };
 

@@ -21,7 +21,7 @@
     @System.Web.Optimization.Scripts.Render("~/bundles/Reports")
     <script>
         kendo.syncReady(function() {
-            Nat.Reports.InitializeManager({isKz: @JsonConvert.SerializeObject(LocalizationHelper.IsCultureKZ) });
+            Nat.Reports.InitializeManager({isKz: @JsonConvert.SerializeObject(LocalizationHelper.IsCultureKZ), PluginName: '@ViewBag.PluginName' });
         });
     </script>
 }

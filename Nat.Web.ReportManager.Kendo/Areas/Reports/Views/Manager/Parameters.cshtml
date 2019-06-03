@@ -33,10 +33,16 @@
     <div class="editor-field m-editor-parameter" id="ParameterID_#= ParameterIndex #">
         @Html.Partial("_FilterType")
         <div class="editor-field m-editor-value1">
-            <input id="Value1_#= ParameterIndex#" data-role="datepicker" data-bind="value: Value1, visible: VisibleValue1" style="width:100%" />
+            <input id="Value1_#= ParameterIndex#" data-role="datepicker"
+                   data-bind="value: Value1, visible: VisibleValue1" 
+                   data-parse-formats="['dd,MM,yyyy','ddMMyyyy','dd.MMyyyy','ddMM.yyyy','dd.MM.yy','dd,MM,yy','ddMMyy','dd.MMyy','ddMM.yy','ddMM','dd.MM','dd,MM']"
+                   style="width:100%" />
         </div>
         <div class="editor-field m-editor-value2">
-            <input id="Value2_#= ParameterIndex#" data-role="datepicker" data-bind="value: Value2, visible: VisibleValue2" style="width:100%" />
+            <input id="Value2_#= ParameterIndex#" data-role="datepicker" 
+                   data-parse-formats="['dd,MM,yyyy','ddMMyyyy','dd.MMyyyy','ddMM.yyyy','dd.MM.yy','dd,MM,yy','ddMMyy','dd.MMyy','ddMM.yy','ddMM','dd.MM','dd,MM']"
+                   data-bind="value: Value2, visible: VisibleValue2" 
+                   style="width:100%" />
         </div>
         @Html.Partial("_Remove")
     </div

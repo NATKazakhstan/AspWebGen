@@ -104,6 +104,34 @@
         this.ExportDocument('Pdf', ".pdf");
     };
 
+    this.onAddParametersClick = function() {
+        var params = $('#reportParameters');
+
+        for (var i = 0; i < this.parameters.length; i++) {
+            var item = this.parameters[i];
+            
+            if (!item.Visible || !item.AllowAddParameter || item.ParameterClone)
+                continue;
+
+            item = item.toJSON();
+            item.ParameterIndex = this.parameters.length;
+            item.ParameterClone = true;
+            item.Removed = false;
+            this.parameters.push(item);
+            item = this.parameters[this.parameters.length - 1];
+
+            this.InitParameterItem(params, item);
+        }
+        $('#ClearParameters').remove();
+        params.append('<div id="ClearParameters" style="clear: both;"/>');
+    };
+
+    this.onRemoveParameterClick = function (key, link, parameterIndex) {
+        this.parameters[parameterIndex].set('Removed', true);
+        $('#LabelID_' + parameterIndex).remove();
+        $('#ParameterID_' + parameterIndex).remove();
+    };
+
     this.GetParameters = function() {
         var parameters = this.parameters.toJSON();
         parameters.forEach(function(p) {
@@ -239,39 +267,21 @@
         this.InitParametersTemplates();
         params.html('');
         var countParameters = 0;
+        var showAddParameters = false;
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
+            item.ParameterIndex = i;
+
             if (!item.Visible)
                 continue;
 
-            var html = '';
-            var func = null;
-            if (item.Data) {
-                this.DDLInit(item);
-                html = $(this.templates.DDL(item));
-            }
-            else if (item.Columns && item.FilterType === 65536) {
-                this.GridInit(item);
-                html = $(this.templates.Grid(item));
-                func = this.GridAfterInit;
-            }
-            else if (item.Columns) {
-                this.MultiColumnInit(item);
-                html = $(this.templates.MultiColumn(item));
-            }
-            else if (this.templates[item.DataType]) {
-                html = $(this.templates[item.DataType](item));
-            }
-            else
-                html = $(this.templates.Undefined(item));
-
-            if (html) {
-                params.append(html);
-                kendo.bind(html, item);
-                this.FilterTypesInit(item);
-                if (func) func(item);
+            if (this.InitParameterItem(params, item)) {
                 countParameters++;
                 if (item.FilterType === 65536) countParameters += 2;
+                if (item.AllowAddParameter) {
+                    showAddParameters = true;
+                    countParameters += 2;
+                }
             }
         }
 
@@ -279,7 +289,7 @@
             this.onCreateClick();
             params.hide();
         } else {
-            params.append('<div style="clear: both;"/>');
+            params.append('<div id="ClearParameters" style="clear: both;"/>');
             params.show();
         }
 
@@ -288,11 +298,42 @@
             this.options.set('showCRButtons', true);
         else
             this.options.set('showButtons', true);
+        this.options.set('showAddParameters', showAddParameters);
+    };
+
+    this.InitParameterItem = function(paramsDiv, item) {
+        var html;
+        var func = null;
+        if (item.Data) {
+            this.DDLInit(item);
+            html = $(this.templates.DDL(item));
+        } else if (item.Columns && item.FilterType === 65536) {
+            this.GridInit(item);
+            html = $(this.templates.Grid(item));
+            func = this.GridAfterInit;
+        } else if (item.Columns) {
+            this.MultiColumnInit(item);
+            html = $(this.templates.MultiColumn(item));
+        } else if (this.templates[item.DataType]) {
+            html = $(this.templates[item.DataType](item));
+        } else
+            html = $(this.templates.Undefined(item));
+
+        if (html) {
+            paramsDiv.append(html);
+            kendo.bind(html, item);
+            this.FilterTypesInit(item);
+            if (func) func(item);
+
+            return true;
+        }
+
+        return false;
     };
 
     this.FilterTypesInit = function(item) {
         if (item.FilterTypes.length <= 1) {
-            var ddl = $('#' + item.Name + 'FilterType').data('kendoDropDownList');
+            var ddl = $('#FilterType_' + item.ParameterIndex).data('kendoDropDownList');
             ddl.readonly();
             ddl.span.addClass('m-field-readOnly');
         } else
@@ -304,7 +345,7 @@
         for (var i = 0; i < this.parameters.length; i++) {
             var item = this.parameters[i];
             if (item.RequireReload && item !== startItem) {
-                var d = $('#' + item.Name + 'Value1').data();
+                var d = $('#Value1_' + item.ParameterIndex).data();
                 if (d.kendoDropDownList)
                     d.kendoDropDownList.dataSource.read();
                 if (d.kendoMultiColumnComboBox)
@@ -344,7 +385,7 @@
             addItem[item.DisplayColumn] = item.Value2;
             combobox.dataSource.add(addItem);*/
         /*
-        var combobox = $('#' + item.Name + 'Value1').data('kendoMultiColumnComboBox');
+        var combobox = $('#Value1_' + item.ParameterIndex).data('kendoMultiColumnComboBox');
         if (!combobox)
             return;
 
@@ -387,7 +428,7 @@
     };
 
     this.GridAfterInit = function (item) {
-        var grid = $('#' + item.Name + "Value1").data('kendoGrid');
+        var grid = $('#Value1_' + item.ParameterIndex).data('kendoGrid');
         if (!grid) return;
         grid.setOptions({ persistSelection: true });
         grid.bind('change',
@@ -414,9 +455,9 @@
             }
 
             if (!this.VisibleValue1 && !this.VisibleValue2)
-                $('#' + this.Name + 'Label').attr('for', this.Name + 'FilterType');
+                $('#Label_' + item.ParameterIndex).attr('for', 'FilterType_' + item.ParameterIndex);
             else
-                $('#' + this.Name + 'Label').attr('for', this.Name + 'Value1');
+                $('#Label_' + item.ParameterIndex).attr('for', 'Value1_' + item.ParameterIndex);
         }
     };
 

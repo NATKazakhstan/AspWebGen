@@ -136,6 +136,9 @@
     <Content Include="key.snk" />
     <Content Include="Areas\Reports\Views\Manager\Plugins.cshtml" />
     <Content Include="Areas\Reports\Views\Manager\Parameters.cshtml" />
+    <Content Include="Areas\Reports\Views\Manager\_Label.cshtml" />
+    <Content Include="Areas\Reports\Views\Manager\_FilterType.cshtml" />
+    <Content Include="Areas\Reports\Views\Manager\_Remove.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

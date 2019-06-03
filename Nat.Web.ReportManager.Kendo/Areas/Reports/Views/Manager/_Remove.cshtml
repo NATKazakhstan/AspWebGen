@@ -1,0 +1,13 @@
+﻿@using Kendo.Mvc.UI
+@using Nat.Web.Core.Kendo.Extensions
+@using Nat.Web.Core.Resources
+@using Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
+@using Nat.Web.ReportManager.Kendo.Properties
+
+@{
+    Layout = null;
+}
+
+<div class="editor-field m-editor-remove">
+    <a class="k-link" data-bind="visible: AllowAddParameter" onclick="VM.manager.onRemoveParameterClick('#= Key #', this, #= ParameterIndex #)"><span class="k-icon fas fa-minus-square"></span></a>
+</div>

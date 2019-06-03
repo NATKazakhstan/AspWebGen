@@ -10,7 +10,9 @@ using System.Web.UI;
 using Kendo.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Nat.Controls.DataGridViewTools;
 using Nat.ReportManager.QueryGeneration;
+using Nat.ReportManager.ReportGeneration;
 using Nat.ReportManager.ReportGeneration.SqlReportingServices;
 using Nat.ReportManager.ReportGeneration.StimulSoft;
 using Nat.Tools.Filtering;
@@ -112,6 +114,14 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 list.Add(model);
             }
 
+            foreach (var condition in plugin.CreateModelFillConditions())
+            {
+                var model = ConditionViewModel.From(condition.ColumnFilter);
+                model.Visible = condition.Visible;
+                model.AllowAddParameter = true;
+                list.Add(model);
+            }
+
             return Json(list);
         }
 
@@ -122,63 +132,74 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             if (plugin == null || string.IsNullOrEmpty(key))
                 return Json(new { error = Resources.SPluginNotFound });
 
-            GetStotageValues(parameters, plugin);
+            GetStorageValues(parameters, plugin);
 
             foreach (var condition in plugin.Conditions)
             {
                 var storage = condition.ColumnFilter.GetStorage();
                 if (key.Equals(storage.Name, StringComparison.OrdinalIgnoreCase))
-                {
-                    var ds = ConditionViewModel.GetTableDataSource(storage);
-                    ds.EnablePaging = true;
+                    return GetConditionData(request, storage);
+            }
 
-                    var filter = Convert.ToString((request.Filters?.FirstOrDefault() as FilterDescriptor)?.Value);
-                    var paramNameId = 1;
-
-                    if (!string.IsNullOrEmpty(filter))
-                    {
-                        var table = DataSourceHelper.GetDataTable(storage.RefDataSource);
-                        var filterSplit = filter.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
-                        var list = new QueryCondition
-                        {
-                            Conditions = new QueryConditionList
-                            {
-                                ConditionJunction = ConditionJunction.And
-                            }
-                        };
-                        list.Conditions.AddRange(filterSplit.Select(r => new QueryCondition
-                        {
-                            Conditions = new QueryConditionList {ConditionJunction = ConditionJunction.Or}
-                        }));
-
-                        foreach (DataColumn dc in table.Columns)
-                        {
-                            var column = ColumnViewModel.From(dc);
-                            if (column == null)
-                                continue;
-
-                            if (dc.DataType == typeof(string))
-                            {
-                                for (int i = 0; i < filterSplit.Length; i++)
-                                    list.Conditions[i].Conditions.Add(new QueryCondition(dc.ColumnName,
-                                        ColumnFilterType.Contains,
-                                        new QueryParameter("@filterParameter" + paramNameId++, filterSplit[i]), null));
-                            }
-                        }
-                        ds.View.CustomConditions.Add(list);
-                    }
-
-                    var arguments = new DataSourceSelectArguments(
-                        storage.DisplayColumn,
-                        (request.Page - 1) * request.PageSize,
-                        request.PageSize > 0 ? request.PageSize : 1000) {RetrieveTotalRowCount = true};
-
-                    var data = ds.View.Select(true, arguments);
-                    return Json(ConditionViewModel.ParseDataView(data));
-                }
+            foreach (var condition in plugin.CreateModelFillConditions())
+            {
+                var storage = condition.ColumnFilter.GetStorage();
+                if (key.Equals(storage.Name, StringComparison.OrdinalIgnoreCase))
+                    return GetConditionData(request, storage);
             }
 
             return Json(new { error = Resources.SPluginNotFound });
+        }
+
+        private ActionResult GetConditionData(DataSourceRequest request, ColumnFilterStorage storage)
+        {
+            var ds = ConditionViewModel.GetTableDataSource(storage);
+            ds.EnablePaging = true;
+
+            var filter = Convert.ToString((request.Filters?.FirstOrDefault() as FilterDescriptor)?.Value);
+            var paramNameId = 1;
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                var table = DataSourceHelper.GetDataTable(storage.RefDataSource);
+                var filterSplit = filter.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+                var list = new QueryCondition
+                {
+                    Conditions = new QueryConditionList
+                    {
+                        ConditionJunction = ConditionJunction.And
+                    }
+                };
+                list.Conditions.AddRange(filterSplit.Select(r => new QueryCondition
+                {
+                    Conditions = new QueryConditionList {ConditionJunction = ConditionJunction.Or}
+                }));
+
+                foreach (DataColumn dc in table.Columns)
+                {
+                    var column = ColumnViewModel.From(dc);
+                    if (column == null)
+                        continue;
+
+                    if (dc.DataType == typeof(string))
+                    {
+                        for (int i = 0; i < filterSplit.Length; i++)
+                            list.Conditions[i].Conditions.Add(new QueryCondition(dc.ColumnName,
+                                ColumnFilterType.Contains,
+                                new QueryParameter("@filterParameter" + paramNameId++, filterSplit[i]), null));
+                    }
+                }
+
+                ds.View.CustomConditions.Add(list);
+            }
+
+            var arguments = new DataSourceSelectArguments(
+                storage.DisplayColumn,
+                (request.Page - 1) * request.PageSize,
+                request.PageSize > 0 ? request.PageSize : 1000) {RetrieveTotalRowCount = true};
+
+            var data = ds.View.Select(true, arguments);
+            return Json(ConditionViewModel.ParseDataView(data));
         }
 
         [HttpPost]
@@ -194,7 +215,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             if (plugin == null)
                 return Json(new { error = Resources.SPluginNotFound });
 
-            GetStotageValues(parameters, plugin);
+            GetStorageValues(parameters, plugin);
 
             var errors = Validate(plugin);
             return !string.IsNullOrEmpty(errors)
@@ -223,7 +244,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             if (!plugin.SupportCulture.Contains(culture))
                 culture = null;
 
-            var storageValues = GetStotageValues(parameters, plugin);
+            var storageValues = GetStorageValues(parameters, plugin);
 
             var errors = Validate(plugin);
             if (!string.IsNullOrEmpty(errors))
@@ -264,26 +285,12 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             {
                 var url = crossPlugin.GetReportUrl(guid, culture);
                 if (string.IsNullOrEmpty(export))
-                {
                     return Json(new {Url = url + "&__p__InIFrame=true"});
-                }
 
                 return Redirect(url + "&__p__ExportExcel=true");
-                /*
-                stream = WebSpecificInstances.GetExcelExporter().GetExcelByTypeName(
-                    null,
-                    export,
-                    0,
-                    storageValues,
-                    culture == "kz" ? "kk-kz" : culture == "ru" ? "ru-ru" : culture,
-                    logMonitor,
-                    true,
-                    out fileNameExt);*/
             }
             else
-            {
                 return Json(new {error = "Отчет не поддерживается"});
-            }
 
             Session[guid] = null;
             Session["logmsg" + guid] = null;
@@ -307,70 +314,102 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         {
             var sbErrors = new StringBuilder();
             foreach (var condition in plugin.Conditions.Where(r => r.Visible))
-            {
-                var storage = condition.ColumnFilter.GetStorage();
-                var valid = true;
-                switch (storage.FilterType)
-                {
-                    case ColumnFilterType.NotSet:
-                    case ColumnFilterType.None:
-                    case ColumnFilterType.IsNull:
-                    case ColumnFilterType.NotNull:
-                    case ColumnFilterType.Custom:
-                        break;
-                    case ColumnFilterType.Equal:
-                    case ColumnFilterType.NotEqual:
-                    case ColumnFilterType.More:
-                    case ColumnFilterType.MoreOrEqual:
-                    case ColumnFilterType.Less:
-                    case ColumnFilterType.LessOrEqual:
-                    case ColumnFilterType.Contains:
-                    case ColumnFilterType.StartWith:
-                    case ColumnFilterType.EndWith:
-                    case ColumnFilterType.ContainsWords:
-                    case ColumnFilterType.ContainsAnyWords:
-                        valid = storage.Value1 != null;
-                        break;
-                    case ColumnFilterType.Between:
-                    case ColumnFilterType.OutOf:
-                    case ColumnFilterType.BetweenColumns:
-                        valid = storage.Value1 != null && storage.Value2 != null;
-                        break;
-                    case ColumnFilterType.In:
-                        var allowNone = (condition.ColumnFilter as WebMultipleValuesColumnFilter)?.AllowNone ?? false;
-                        valid = allowNone
-                                || (storage.AvailableFilters & ColumnFilterType.None) != 0
-                                || storage.Values != null && storage.Values.Length > 0;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                ValidateCondition(condition, sbErrors);
 
-                if (!valid)
-                {
-                    sbErrors.AppendLine(string.Format(Controls.Properties.Resources.SRequiredFieldMessage,
-                        storage.Caption)).AppendLine("<br/>");
-                }
-                else if (storage.FilterType != ColumnFilterType.In && !condition.ColumnFilter.Validate())
-                    sbErrors.AppendLine(condition.ColumnFilter.ErrorText);
-            }
+            if (plugin.CircleFillConditions != null)
+                foreach (var condition in plugin.CircleFillConditions.SelectMany(r => r).Where(r => r.Visible))
+                    ValidateCondition(condition, sbErrors);
 
             return sbErrors.ToString();
         }
 
-        private static StorageValues GetStotageValues(List<ConditionViewModel> parameters, IReportPlugin plugin)
+        private static void ValidateCondition(BaseReportCondition condition, StringBuilder sbErrors)
+        {
+            var storage = condition.ColumnFilter.GetStorage();
+            var valid = true;
+            switch (storage.FilterType)
+            {
+                case ColumnFilterType.NotSet:
+                case ColumnFilterType.None:
+                case ColumnFilterType.IsNull:
+                case ColumnFilterType.NotNull:
+                case ColumnFilterType.Custom:
+                    break;
+                case ColumnFilterType.Equal:
+                case ColumnFilterType.NotEqual:
+                case ColumnFilterType.More:
+                case ColumnFilterType.MoreOrEqual:
+                case ColumnFilterType.Less:
+                case ColumnFilterType.LessOrEqual:
+                case ColumnFilterType.Contains:
+                case ColumnFilterType.StartWith:
+                case ColumnFilterType.EndWith:
+                case ColumnFilterType.ContainsWords:
+                case ColumnFilterType.ContainsAnyWords:
+                    valid = storage.Value1 != null;
+                    break;
+                case ColumnFilterType.Between:
+                case ColumnFilterType.OutOf:
+                case ColumnFilterType.BetweenColumns:
+                    valid = storage.Value1 != null && storage.Value2 != null;
+                    break;
+                case ColumnFilterType.In:
+                    var allowNone = (condition.ColumnFilter as WebMultipleValuesColumnFilter)?.AllowNone ?? false;
+                    valid = allowNone
+                            || (storage.AvailableFilters & ColumnFilterType.None) != 0
+                            || storage.Values != null && storage.Values.Length > 0;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            if (!valid)
+            {
+                sbErrors.AppendLine(string.Format(Controls.Properties.Resources.SRequiredFieldMessage,
+                    storage.Caption)).AppendLine("<br/>");
+            }
+            else if (storage.FilterType != ColumnFilterType.In && !condition.ColumnFilter.Validate())
+                sbErrors.AppendLine(condition.ColumnFilter.ErrorText);
+        }
+
+        private static StorageValues GetStorageValues(List<ConditionViewModel> parameters, IReportPlugin plugin)
         {
             var storageValues = new StorageValues();
-            var paramsDic = parameters.ToDictionary(r => r.Key);
+            var paramsDic = parameters.Where(r => !r.AllowAddParameter).ToDictionary(r => r.Key);
             foreach (var condition in plugin.Conditions)
             {
                 var storage = condition.ColumnFilter.GetStorage();
                 if (paramsDic.ContainsKey(storage.Name))
                 {
-                    paramsDic[storage.Name].SetToStorageValues(storage, storageValues);
+                    paramsDic[storage.Name].InitStorage(storage);
                     condition.ColumnFilter.SetStorage(storage);
-                    storageValues.SetStorageTextValues(storage.Name, condition.ColumnFilter.GetTexts());
+                    if (storage.DataType == null)
+                        storageValues.AddStorage(storage);
+                    else
+                        storageValues.AddStorage(storage, condition.ColumnFilter.GetTexts());
                 }
+            }
+
+            var paramsCircleDic = parameters.Where(r => !r.Removed && r.AllowAddParameter).ToLookup(r => r.Key);
+            var conditions = plugin.CreateModelFillConditions();
+            if (paramsCircleDic.Count == 0 || conditions == null || conditions.Count == 0)
+                return storageValues;
+
+            var count = paramsCircleDic[paramsCircleDic.First().Key].Count();
+            plugin.CircleFillConditions = new List<List<BaseReportCondition>>();
+            for (var i = 0; i < count; i++)
+            {
+                conditions = plugin.CreateModelFillConditions();
+                foreach (var condition in conditions)
+                {
+                    var storage = condition.ColumnFilter.GetStorage();
+                    if (!paramsCircleDic.Contains(storage.Name))
+                        continue;
+                    paramsCircleDic[storage.Name].Skip(i).First().InitStorage(storage);
+                    condition.ColumnFilter.SetStorage(storage);
+                    storageValues.AddListStorage(storage, i, condition.ColumnFilter.GetTexts());
+                }
+                plugin.CircleFillConditions.Add(conditions);
             }
 
             return storageValues;

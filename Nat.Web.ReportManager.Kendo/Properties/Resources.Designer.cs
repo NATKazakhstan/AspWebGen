@@ -61,6 +61,15 @@ namespace Nat.Web.ReportManager.Kendo.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Добавить условия.
+        /// </summary>
+        public static string SAddParameters {
+            get {
+                return ResourceManager.GetString("SAddParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Сформировать отчет.
         /// </summary>
         public static string SCreateReport {

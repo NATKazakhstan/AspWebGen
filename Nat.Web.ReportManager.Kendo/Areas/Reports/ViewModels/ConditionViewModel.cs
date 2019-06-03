@@ -32,11 +32,10 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
             var model = new ConditionViewModel
             {
                 Key = storage.Name,
-                Name = storage.Name.Replace(":", "_").Replace(".", "_"),
                 Title = storage.Caption,
                 FilterTypes = filterTypes,
                 DefaultFilterType = storage.DefaultFilterType == null ? 0 : (int) storage.DefaultFilterType,
-                DataType = storage.DataType.Name,
+                DataType = storage.DataType?.Name ?? "Object",
                 FilterType = (int) storage.FilterType,
                 Value1 = storage.Value1,
                 Value2 = storage.Value2,
@@ -153,7 +152,6 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
             return tableDataSource;
         }
 
-        public string Name { get; set; }
         public string Key { get; set; }
         public string Title { get; set; }
         public int DefaultFilterType { get; set; }
@@ -171,11 +169,15 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
         public bool Visible { get; set; }
         public bool AutoPostBack { get; set; }
         public bool RequireReload { get; set; }
+        public bool AllowAddParameter { get; set; }
+        public bool Removed { get; set; }
         public List<ColumnViewModel> Columns { get; set; }
 
-        public void SetToStorageValues(ColumnFilterStorage storage, StorageValues storageValues)
+        public void InitStorage(ColumnFilterStorage storage)
         {
             storage.FilterType = (ColumnFilterType)FilterType;
+            if (storage.DataType == null)
+                return;
             ParseValues(storage.DataType);
             if (storage.FilterType == ColumnFilterType.In)
                 storage.Values = Values ?? new object[0];
@@ -184,8 +186,6 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
                 storage.Value1 = Value1;
                 storage.Value2 = Value2;
             }
-
-            storageValues.AddStorage(storage);
         }
 
         private void ParseValues(Type dataType)

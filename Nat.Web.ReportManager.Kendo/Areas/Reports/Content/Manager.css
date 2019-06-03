@@ -73,12 +73,25 @@ input.k-textbox.searchMenuInput {
 
 .editor-field.m-editor-value1,
 .editor-field.m-editor-value2 {
-    width: 25%;
+    width: calc(25% - 10px);
     float: left;
     margin-left: 1%
 }
 .editor-field.m-editor-value {
-    width: 79%;
+    width: calc(79% - 20px);
+    clear: none;
+}
+.editor-field.m-editor-remove {
+    width: 20px;
+    margin-top: -2px;
+    clear: right;
+}
+
+.editor-field.m-editor-remove > a{
+    padding-right: 2px;
+    padding-bottom: 3px;
+    padding-left: 6px;
+    font-size: 20px;
 }
 
 .reportResultDiv {

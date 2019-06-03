@@ -106,6 +106,31 @@
         </div>
     </div>
 </script>
+<script type="text/x-kendo-template" id="parametersDDL2Template">
+    @Html.Partial("_Label")
+    <div class="editor-field m-editor-parameter" id="ParameterID_#= ParameterIndex #">
+        @Html.Partial("_FilterType")
+        <div class="editor-field m-editor-value1">
+            <input id="Value1_#= ParameterIndex#" data-role="dropdownlist"
+                   data-bind="value: Value1, visible: VisibleValue1, source: Data"
+                   data-filter="contains"
+                   data-value-field="#= ValueColumn #"
+                   data-text-field="#= DisplayColumn #"
+                   data-value-primitive="true"
+                   style="width:100%" />
+        </div>
+        <div class="editor-field m-editor-value2">
+            <input id="Value2_#= ParameterIndex#" data-role="dropdownlist"
+                   data-bind="value: Value2, visible: VisibleValue2, source: Data"
+                   data-filter="contains"
+                   data-value-field="#= ValueColumn #"
+                   data-text-field="#= DisplayColumn #"
+                   data-value-primitive="true"
+                   style="width:100%" />
+        </div>
+        @Html.Partial("_Remove")
+    </div>
+</script>
 <script type="text/x-kendo-template" id="parametersMultiColumnTemplate">
     @Html.Partial("_Label")
     <div class="editor-field m-editor-parameter" id="ParameterID_#= ParameterIndex #">

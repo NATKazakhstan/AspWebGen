@@ -252,6 +252,7 @@
         this.templates.Boolean = kendo.template($('#parametersBooleanTemplate').html());
         this.templates.String = kendo.template($('#parametersStringTemplate').html());
         this.templates.DDL = kendo.template($('#parametersDDLTemplate').html());
+        this.templates.DDL2 = kendo.template($('#parametersDDL2Template').html());
         this.templates.Undefined = kendo.template($('#parametersUndefinedTemplate').html());
         this.templates.MultiColumn = kendo.template($('#parametersMultiColumnTemplate').html());
         this.templates.Grid = kendo.template($('#parametersGridTemplate').html());
@@ -306,7 +307,12 @@
         var func = null;
         if (item.Data) {
             this.DDLInit(item);
-            html = $(this.templates.DDL(item));
+            // если есть тип фильтра Between
+            if (item.FilterTypes.filter(function(f) { return f.id === 256; }).length > 0) {
+                html = $(this.templates.DDL2(item));
+            } else {
+                html = $(this.templates.DDL(item));
+            }
         } else if (item.Columns && item.FilterType === 65536) {
             this.GridInit(item);
             html = $(this.templates.Grid(item));

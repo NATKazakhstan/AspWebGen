@@ -92,6 +92,8 @@ namespace Nat.Web.Tools
             //Изменение размеров изображения и рисование уголка для фотографий на документы
             buffer = ImageUtils.ResizingGraphicsFile(buffer, HttpContext.Current.Request);
             //
+            var cacheControl = Response.CacheControl;
+            var contentType = Response.ContentType;
             Response.Clear();
             Response.ClearContent();
             var request = HttpContext.Current.Request;
@@ -106,7 +108,15 @@ namespace Nat.Web.Tools
 
             try
             {
-                Response.ContentType = "application/octet-stream";
+                if (cacheControl.StartsWith("public" ) && contentType.StartsWith("image/"))
+                {
+                    Response.CacheControl = cacheControl;
+                    Response.ContentType = contentType;
+                    Response.Expires = 43200;
+                }
+                else
+                    Response.ContentType = "application/octet-stream";
+
                 Response.AppendHeader("Connection", "keep-alive");
                 Response.AppendHeader("Content-Length", buffer.Length.ToString());
                 Response.OutputStream.Write(buffer, 0, buffer.Length);

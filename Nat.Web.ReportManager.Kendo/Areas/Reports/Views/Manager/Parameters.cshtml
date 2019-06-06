@@ -155,6 +155,26 @@
         </div>
     </div>
 </script>
+<script type="text/x-kendo-template" id="parametersValue1Template">
+    @Html.Partial("_Label")
+    <div class="editor-field m-editor-parameter" id="ParameterID_#= ParameterIndex #">
+        @Html.Partial("_FilterType")
+        @Html.Partial("_Remove")
+        <div class="editor-field m-editor-value">
+        </div>
+    </div>
+</script>
+<script type="text/x-kendo-template" id="parametersValue2Template">
+    @Html.Partial("_Label")
+    <div class="editor-field m-editor-parameter" id="ParameterID_#= ParameterIndex #">
+        @Html.Partial("_FilterType")
+        <div class="editor-field m-editor-value1">
+        </div>
+        <div class="editor-field m-editor-value2">
+        </div>
+        @Html.Partial("_Remove")
+    </div>
+</script>
 <script type="text/x-kendo-template" id="parametersGridTemplate">
     @Html.Partial("_Label")
     <div class="editor-field m-editor-parameter" id="ParameterID_#= ParameterIndex #">

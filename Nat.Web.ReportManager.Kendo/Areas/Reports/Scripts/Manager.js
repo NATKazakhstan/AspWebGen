@@ -217,6 +217,8 @@
         var parameters = this.parameters.toJSON();
         parameters.forEach(function(p) {
             p.Data = null;
+            p.TemplateValue1 = null;
+            p.TemplateValue2 = null;
             if (p.Value1 instanceof Date)
                 p.Value1 = p.Value1.toJSON();
             if (p.Value2 instanceof Date)
@@ -319,6 +321,8 @@
         this.templates.Undefined = kendo.template($('#parametersUndefinedTemplate').html());
         this.templates.MultiColumn = kendo.template($('#parametersMultiColumnTemplate').html());
         this.templates.Grid = kendo.template($('#parametersGridTemplate').html());
+        this.templates.Value1 = kendo.template($('#parametersValue1Template').html());
+        this.templates.Value2 = kendo.template($('#parametersValue2Template').html());
         this.InitParametersTemplates = function() {};
     };
 
@@ -368,7 +372,17 @@
     this.InitParameterItem = function(paramsDiv, item) {
         var html;
         var func = null;
-        if (item.Data) {
+        if (item.TemplateValue1 && item.TemplateValue2) {
+            html = $(this.templates.Value2(item));
+            html.find('.m-editor-value1').html(kendo.template(item.TemplateValue1)(item));
+            html.find('.m-editor-value2').html(kendo.template(item.TemplateValue2)(item));
+        }
+        else if (item.TemplateValue1) {
+            html = $(this.templates.Value1(item));
+            html.find('.m-editor-value').html(kendo.template(item.TemplateValue1)(item));
+            $('#DynamicValue1').attr('id', 'Value1_' + item.ParameterIndex);
+        }
+        else if (item.Data) {
             this.DDLInit(item);
             // если есть тип фильтра Between
             if (item.FilterTypes.filter(function(f) { return f.id === 256; }).length > 0) {
@@ -390,6 +404,27 @@
 
         if (html) {
             paramsDiv.append(html);
+
+            var dv = $('#DynamicValue1');
+            if (dv.length) {
+                var dataBind1 = dv.attr('data-bind');
+                dv.attr('data-bind', dataBind1.replace(/DynamicValue/gi, 'Value1'))
+                    .attr('name', 'Value1_' + item.ParameterIndex)
+                    .attr('id', 'Value1_' + item.ParameterIndex);
+                $('#DynamicValue1_link').attr('id', 'Value1_' + item.ParameterIndex + '_link')
+                    .attr('clientId', 'Value1_' + item.ParameterIndex);
+            }
+
+            dv = $('#DynamicValue2');
+            if (dv.length) {
+                var dataBind2 = dv.attr('data-bind');
+                dv.attr('data-bind', dataBind2.replace(/DynamicValue/gi, 'Value2'))
+                    .attr('name', 'Value2_' + item.ParameterIndex)
+                    .attr('id', 'Value2_' + item.ParameterIndex);
+                $('#DynamicValue2_link').attr('id', 'Value2_' + item.ParameterIndex + '_link')
+                    .attr('clientId', 'Value2_' + item.ParameterIndex);
+            }
+
             kendo.bind(html, item);
             this.FilterTypesInit(item);
             if (func) func(item);
@@ -524,9 +559,9 @@
             }
 
             if (!this.VisibleValue1 && !this.VisibleValue2)
-                $('#Label_' + item.ParameterIndex).attr('for', 'FilterType_' + item.ParameterIndex);
+                $('#Label_' + this.ParameterIndex).attr('for', 'FilterType_' + this.ParameterIndex);
             else
-                $('#Label_' + item.ParameterIndex).attr('for', 'Value1_' + item.ParameterIndex);
+                $('#Label_' + this.ParameterIndex).attr('for', 'Value1_' + this.ParameterIndex);
         }
     };
 

@@ -84,6 +84,17 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
 
         private IEnumerable GetData(ColumnFilterStorage storage)
         {
+            if (storage.RefDataSource is ReportDataSource reportDataSource)
+            {
+                TemplateValue1 = reportDataSource.GetTemplateValue("DynamicValue1");
+                if ((storage.AvailableFilters & ColumnFilterType.Between) != 0)
+                    TemplateValue2 = reportDataSource.GetTemplateValue("DynamicValue2");
+
+                reportDataSource.Data = reportDataSource.GetStaticData(storage);
+                storage.RefTableRolledIn = reportDataSource.Data == null;
+                return reportDataSource.Data;
+            }
+
             var filterRefTable = DataSourceHelper.GetDataTable(storage.RefDataSource);
             if (filterRefTable == null)
             {
@@ -171,6 +182,8 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
         public bool RequireReload { get; set; }
         public bool AllowAddParameter { get; set; }
         public bool Removed { get; set; }
+        public string TemplateValue1 { get; set; }
+        public string TemplateValue2 { get; set; }
         public List<ColumnViewModel> Columns { get; set; }
 
         public void InitStorage(ColumnFilterStorage storage)
@@ -186,6 +199,9 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
                 storage.Value1 = Value1;
                 storage.Value2 = Value2;
             }
+
+            if (storage.RefDataSource is ReportDataSource)
+                GetData(storage);
         }
 
         private void ParseValues(Type dataType)

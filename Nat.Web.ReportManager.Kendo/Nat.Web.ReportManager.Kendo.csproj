@@ -176,6 +176,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ReportDataSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Reports\Views\web.config" />

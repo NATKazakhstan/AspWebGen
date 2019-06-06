@@ -165,8 +165,8 @@ namespace Nat.Web.Controls
                         ColumnFilterStorage.RefTableRolledIn =
                             (bool)(DataSetResourceManager.GetTableExtProperty(filterRefTable, TableExtProperties.ROLLED_IN) ?? false);
                     }
-                    else
-                        ColumnFilterStorage.RefTableRolledIn = false;
+                    //else
+                    //    ColumnFilterStorage.RefTableRolledIn = false;
 
                     if (String.IsNullOrEmpty(ColumnFilterStorage.ValueColumn) || String.IsNullOrEmpty(ColumnFilterStorage.DisplayColumn))
                         throw new Exception("FILTER_REF_DISPLAY_COLUMN and FILTER_REF_VALUE_COLUMN attribute must be specified");
@@ -183,7 +183,7 @@ namespace Nat.Web.Controls
                         checkBoxForFilterCondition.CheckedChanged += OnCheckBoxForFilterConditionOnCheckedChanged;
                     }
 
-                    if(ColumnFilterStorage.RefTableRolledIn)
+                    if(ColumnFilterStorage.RefTableRolledIn && tableDataSource != null)
                     {
                         LookupTextBox lookupTextBox = new LookupTextBox();
                         lookupTextBox.DataSource = tableDataSource;
@@ -448,7 +448,10 @@ namespace Nat.Web.Controls
                 for (int i = 0; i != controlsCount; i++)
                 {
                     if (ColumnFilterStorage.RefTableRolledIn)
-                        ((LookupTextBox)controls[i]).Value = ColumnFilterStorage.GetValue(i);
+                    {
+                        if (tableDataSource != null)
+                            ((LookupTextBox) controls[i]).Value = ColumnFilterStorage.GetValue(i);
+                    }
                     else
                     {
                         var selectedValue = ColumnFilterStorage.GetValue(i);
@@ -663,6 +666,9 @@ namespace Nat.Web.Controls
             {
                 if (ColumnFilterStorage.RefTableRolledIn)
                 {
+                    if (tableDataSource == null)
+                        return null;
+
                     return ((LookupTextBox)controls[index]).Text;
                 }
                 else

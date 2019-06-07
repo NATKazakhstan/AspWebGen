@@ -285,7 +285,8 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             if (plugin is IStimulsoftReportPlugin)
                 stream = ReportResultPage.GetReport(true, pluginName, guid, storageValues, culture,
                     null, export ?? "Html",
-                    "export", logMonitor, false, null, null, out fileNameExt, true);
+                    "export", logMonitor, false, null, null, out fileNameExt, true,
+                    string.IsNullOrEmpty(export));
             else if (plugin is ISqlReportingServicesPlugin)
             {
                 stream = ReportingServicesViewer.GetReport(
@@ -300,10 +301,26 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                     logMonitor,
                     null,
                     out fileNameExt,
-                    true);
+                    true,
+                    string.IsNullOrEmpty(export));
             }
             else if (plugin is IRedirectReportPlugin crossPlugin)
             {
+
+                if (crossPlugin.LogViewReport)
+                {
+                    Tools.Security.DBDataContext.AddViewReports(
+                        Tools.Security.User.GetSID(),
+                        HttpContext.User.Identity.Name,
+                        HttpContext.User.Identity.Name,
+                        ReportInitializerSection.GetReportInitializerSection().ReportPageViewer
+                        + "?ClassName=" + crossPlugin.GetType().FullName,
+                        HttpContext.Request.Url?.GetLeftPart(UriPartial.Authority) ?? "https://srvmax.vvmvd.kz",
+                        Environment.MachineName,
+                        false,
+                        crossPlugin.GetType());
+                }
+
                 var url = crossPlugin.GetReportUrl(guid, culture);
                 if (string.IsNullOrEmpty(export))
                     return Json(new {Url = url + "&__p__InIFrame=true"});

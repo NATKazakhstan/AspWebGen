@@ -101,7 +101,8 @@ namespace Nat.Web.ReportManager
 
         public static Stream GetReport(bool useReturnStream, string pluginName, string guid,
             StorageValues storageValues, string culture, Page page, string format, string command,
-            LogMonitor logMonitor, ServerReport report, out string fileNameExtention, bool RoleCheck)
+            LogMonitor logMonitor, ServerReport report, out string fileNameExtention, bool RoleCheck, 
+            bool isPreview = false)
         {
             switch (format.ToLower())
             {
@@ -163,9 +164,9 @@ namespace Nat.Web.ReportManager
                 HttpContext.Current?.User.Identity.Name ?? "anonymous",
                 HttpContext.Current?.User.Identity.Name ?? "anonymous",
                 ReportInitializerSection.GetReportInitializerSection().ReportPageViewer + "?ClassName=" + webReportManager.Plugin.GetType().FullName,
-                HttpContext.Current?.Request.Url.GetLeftPart(UriPartial.Authority) ?? "https://maxat",
+                HttpContext.Current?.Request.Url.GetLeftPart(UriPartial.Authority) ?? "https://srvmax.vvmvd.kz",
                 Environment.MachineName,
-                export,
+                !isPreview && export,
                 webReportManager.Plugin.GetType());
 
             if (export)

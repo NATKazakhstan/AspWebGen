@@ -140,7 +140,8 @@ namespace Nat.Web.ReportManager
         
         public static Stream GetReport(bool useReturnStream, string pluginName, string guid,
             StorageValues storageValues, string culture, Page page, string format, string command,
-            LogMonitor logMonitor, bool expToWord, Dictionary<string, object> constants, StiWebViewer report, out string fileNameExtention, bool RoleCheck)
+            LogMonitor logMonitor, bool expToWord, Dictionary<string, object> constants, StiWebViewer report, out string fileNameExtention, bool RoleCheck, 
+            bool isPreview = false)
         {
             var originalUICulture = Thread.CurrentThread.CurrentUICulture;
             var originalCulture = Thread.CurrentThread.CurrentCulture;
@@ -236,9 +237,9 @@ namespace Nat.Web.ReportManager
                         HttpContext.Current?.User.Identity.Name ?? "anonymous",
                         HttpContext.Current?.User.Identity.Name ?? "anonymous",
                         ReportInitializerSection.GetReportInitializerSection().ReportPageViewer + "?ClassName=" + pluginName,
-                        HttpContext.Current?.Request.Url.GetLeftPart(UriPartial.Authority) ?? "https://maxat",
+                        HttpContext.Current?.Request.Url.GetLeftPart(UriPartial.Authority) ?? "https://srvmax.vvmvd.kz",
                         Environment.MachineName,
-                        useReturnStream || autoExport != null || expToWord || stiPlugin.AutoExportTo != null,
+                        !isPreview && (useReturnStream || autoExport != null || expToWord || stiPlugin.AutoExportTo != null),
                         webReportManager.Plugin.GetType());
 
                     Log(logMonitor, guid, webReportManager);

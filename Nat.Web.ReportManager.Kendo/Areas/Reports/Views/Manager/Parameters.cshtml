@@ -47,6 +47,19 @@
         @Html.Partial("_Remove")
     </div
 </script>
+<script type="text/x-kendo-template" id="parametersInt16Template">
+    @Html.Partial("_Label")
+    <div class="editor-field m-editor-parameter" id="ParameterID_#= ParameterIndex #">
+        @Html.Partial("_FilterType")
+        <div class="editor-field m-editor-value1">
+            <input id="Value1_#= ParameterIndex#" data-role="numerictextbox" data-bind="value: Value1, visible: VisibleValue1" style="width:100%" data-restrict-decimals="true" data-decimals="0" data-format="{0:0}" data-min="@Int16.MinValue" data-max="@Int16.MaxValue" />
+        </div>
+        <div class="editor-field m-editor-value2">
+            <input id="Value2_#= ParameterIndex#" data-role="numerictextbox" data-bind="value: Value2, visible: VisibleValue2" style="width:100%" data-restrict-decimals="true" data-decimals="0" data-format="{0:0}" data-min="@Int16.MinValue" data-max="@Int16.MaxValue" />
+        </div>
+        @Html.Partial("_Remove")
+    </div>
+</script>
 <script type="text/x-kendo-template" id="parametersInt32Template">
     @Html.Partial("_Label")
     <div class="editor-field m-editor-parameter" id="ParameterID_#= ParameterIndex #">

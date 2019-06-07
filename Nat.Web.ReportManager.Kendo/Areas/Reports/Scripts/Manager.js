@@ -312,6 +312,7 @@
         };
 
         this.templates.DateTime = kendo.template($('#parametersDateTimeTemplate').html());
+        this.templates.Int16 = kendo.template($('#parametersInt16Template').html());
         this.templates.Int32 = kendo.template($('#parametersInt32Template').html());
         this.templates.Int64 = kendo.template($('#parametersInt64Template').html());
         this.templates.Boolean = kendo.template($('#parametersBooleanTemplate').html());

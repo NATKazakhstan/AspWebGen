@@ -89,8 +89,15 @@
                 var anyText = $('#reportResultDiv > *').filter(function() {
                     return this.tagName !== 'STYLE' && this.tagName !== 'TITLE';
                 }).text();
-                if (anyText)
+                if (anyText) {
                     $('#reportResultDiv').show();
+                    var height = 300 +
+                        $('.reportToolbar').height() +
+                        $('#reportParameters').height() -
+                        $('#reportParameters').closest('.k-pane').height();
+                    if (height > 0)
+                        $('#reportResultDiv').focus();
+                }
                 else
                     $('#reportResultDiv').hide();
             },
@@ -502,7 +509,29 @@
     };
 
     this.DDLInit = function(item) {
-        item.RequireReload = false;
+        //item.RequireReload = false;
+        if (!item.RequireReload)
+            return;
+
+        item.Data = new kendo.data.DataSource({
+            type: 'aspnetmvc-ajax',
+            serverFiltering: true,
+            serverPaging: true,
+            pageSize: 80,
+            transport: {
+                read: {
+                    type: 'POST',
+                    url: "/Reports/Manager/GetConditionData",
+                    data: function () {
+                        return {
+                            PluginName: VM.manager.options.PluginName,
+                            Key: item.Key,
+                            parameters: VM.manager.GetParameters()
+                        };
+                    }
+                }
+            }
+        });
     };
 
     this.GridInit = function(item) {

@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.UI;
@@ -15,8 +16,10 @@ using Nat.ReportManager.QueryGeneration;
 using Nat.ReportManager.ReportGeneration;
 using Nat.ReportManager.ReportGeneration.SqlReportingServices;
 using Nat.ReportManager.ReportGeneration.StimulSoft;
+using Nat.Tools.Constants;
 using Nat.Tools.Filtering;
 using Nat.Tools.QueryGeneration;
+using Nat.Tools.ResourceTools;
 using Nat.Tools.Validation;
 using Nat.Web.Controls;
 using Nat.Web.Controls.Filters;
@@ -164,12 +167,19 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             var ds = ConditionViewModel.GetTableDataSource(storage);
             ds.EnablePaging = true;
 
-            var filter = Convert.ToString((request.Filters?.FirstOrDefault() as FilterDescriptor)?.Value);
+            var filterDescriptor = request.Filters?.FirstOrDefault() as FilterDescriptor;
+            var filter = Convert.ToString(filterDescriptor?.Value);
             var paramNameId = 1;
 
-            if (!string.IsNullOrEmpty(filter))
+            var table = DataSourceHelper.GetDataTable(storage.RefDataSource);
+            if (!string.IsNullOrEmpty(filter) && filterDescriptor != null &&
+                filterDescriptor.Member == storage.ValueColumn)
             {
-                var table = DataSourceHelper.GetDataTable(storage.RefDataSource);
+                ds.View.CustomConditions.Add(new QueryCondition(storage.ValueColumn, ColumnFilterType.Equal,
+                    Convert.ChangeType(filter, storage.DataType), null));
+            }
+            else if (!string.IsNullOrEmpty(filter))
+            {
                 var filterSplit = filter.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
                 var list = new QueryCondition
                 {
@@ -201,11 +211,14 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 ds.View.CustomConditions.Add(list);
             }
 
-            var arguments = new DataSourceSelectArguments(
-                storage.DisplayColumn,
-                (request.Page - 1) * request.PageSize,
-                request.PageSize > 0 ? request.PageSize : 1000) {RetrieveTotalRowCount = true};
-
+            var paging = (bool)(DataSetResourceManager.GetTableExtProperty(table, TableExtProperties.ALLOW_PAGING) ?? true);
+            var arguments = paging
+                ? new DataSourceSelectArguments(
+                    storage.DisplayColumn,
+                    (request.Page - 1) * request.PageSize,
+                    request.PageSize > 0 ? request.PageSize : 1000) {RetrieveTotalRowCount = true}
+                : new DataSourceSelectArguments();
+            ds.EnablePaging = paging;
             var data = ds.View.Select(true, arguments);
             return Json(ConditionViewModel.ParseDataView(data));
         }

@@ -311,7 +311,16 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 using (var reader = new StreamReader(stream))
                 {
                     stream.Position = 0;
-                    return Json(new {ReportContent = reader.ReadToEnd()});
+                    var actionResult = Json(new {ReportContent = reader.ReadToEnd()});
+                    if (WebConfigurationManager.GetSection(
+                            "system.web.extensions/scripting/webServices/jsonSerialization") is
+                        ScriptingJsonSerializationSection section)
+                    {
+                        actionResult.MaxJsonLength = section.MaxJsonLength * 10;
+                        actionResult.RecursionLimit = section.RecursionLimit;
+                    }
+
+                    return actionResult;
                 }
             }
 

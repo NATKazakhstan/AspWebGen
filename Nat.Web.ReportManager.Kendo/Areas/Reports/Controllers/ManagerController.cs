@@ -376,11 +376,11 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 case ColumnFilterType.EndWith:
                 case ColumnFilterType.ContainsWords:
                 case ColumnFilterType.ContainsAnyWords:
+                case ColumnFilterType.BetweenColumns:
                     valid = storage.Value1 != null;
                     break;
                 case ColumnFilterType.Between:
                 case ColumnFilterType.OutOf:
-                case ColumnFilterType.BetweenColumns:
                     valid = storage.Value1 != null && storage.Value2 != null;
                     break;
                 case ColumnFilterType.In:

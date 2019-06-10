@@ -245,29 +245,38 @@ namespace Nat.Web.ReportManager
                     Log(logMonitor, guid, webReportManager);
                     if (useReturnStream)
                     {
-                        StiExportFormat stiExportFormat;
+                        StiExportFormat? stiExportFormat = null;
+                        CustomExportType? stiCustomExportType = null;
                         try
                         {
-                            if ("Word".Equals(format, StringComparison.InvariantCulture))
+                            if ("Auto".Equals(format, StringComparison.InvariantCulture))
+                            {
+                                stiExportFormat = stiPlugin.AutoExportTo ?? StiExportFormat.Word2007;
+                                stiCustomExportType = webReportPlugin.CustomExportType;
+                            }
+                            else if ("Word".Equals(format, StringComparison.InvariantCulture))
                                 stiExportFormat = StiExportFormat.Word2007;
                             else if ("Excel".Equals(format, StringComparison.InvariantCulture))
                                 stiExportFormat = StiExportFormat.Excel2007;
                             else
                                 stiExportFormat = (StiExportFormat) Enum.Parse(typeof(StiExportFormat), format);
                         }
-                        catch (Exception)
+                        catch (ArgumentException)
                         {
-                            var stiCustomExportType = (CustomExportType) Enum.Parse(typeof (CustomExportType), format);
+                            stiCustomExportType = (CustomExportType) Enum.Parse(typeof(CustomExportType), format);
+                        }
 
+                        if (stiCustomExportType != null && stiCustomExportType != CustomExportType.None)
+                        {
                             return ExportWithoutShow(
                                 webReportManager.Report,
-                                stiCustomExportType,
+                                stiCustomExportType.Value,
                                 true,
                                 out fileNameExtention);
                         }
 
-                        fileNameExtention = WebReportManager.GetFileExtension(stiExportFormat);
-                        return ExportWithoutShow(webReportManager.Report, stiExportFormat, true);
+                        fileNameExtention = WebReportManager.GetFileExtension(stiExportFormat.Value);
+                        return ExportWithoutShow(webReportManager.Report, stiExportFormat.Value, true);
                     }
 
                     //webReportManager.Report.EndRender += (sender, args) => LogMessages(webReportManager.Report, logMonitor);

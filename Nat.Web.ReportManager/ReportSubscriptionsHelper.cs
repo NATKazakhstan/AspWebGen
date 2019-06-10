@@ -163,18 +163,18 @@
             var type = BuildManager.GetType(reportName, false, true);
 
             var isCultureRu = LocalizationHelper.IsCultureRU;
-            LocalizationHelper.SetCulture("ru-ru", page);
+            LocalizationHelper.SetCulture("ru-ru", null);
             var pluginRu = (IReportPlugin)Activator.CreateInstance(type);
             var conditionsRu = pluginRu.Conditions;
             pluginRu.SetCountCircleFillConditions(values.CountListValues, true);
 
-            LocalizationHelper.SetCulture("kk-kz", page);
+            LocalizationHelper.SetCulture("kk-kz", null);
             var pluginKz = (IReportPlugin)Activator.CreateInstance(type);
             var conditionsKz = pluginKz.Conditions;
             pluginKz.SetCountCircleFillConditions(values.CountListValues, true);
 
             // Create Conditions
-            CreateReportSubscriptionParams(db, refReportSubscriptions, conditionsRu, conditionsKz, ph, values, null);
+            CreateReportSubscriptionParams(db, refReportSubscriptions, conditionsRu, conditionsKz, null, values, null);
             
             // Create CircleConditions            
             if (pluginRu.CircleFillConditions != null)
@@ -184,13 +184,13 @@
                 {
                     i++;
                     var circleConditionsKz = pluginKz.CircleFillConditions;
-                    CreateReportSubscriptionParams(db, refReportSubscriptions, circleConditionsRu, circleConditionsKz[i], ph, values, i);
+                    CreateReportSubscriptionParams(db, refReportSubscriptions, circleConditionsRu, circleConditionsKz[i], null, values, i);
                 }
             }
 
             // Save
             db.SubmitChanges();
-            LocalizationHelper.SetCulture(isCultureRu ? "ru-ru" : "kk-kz", page);
+            LocalizationHelper.SetCulture(isCultureRu ? "ru-ru" : "kk-kz", null);
         }
 
         public static void CreateReportSubscriptionParams(
@@ -209,7 +209,7 @@
                 if (!conditionRu.Visible) continue;
                 var conditionKz = conditionsKz[i];
 
-                ph.Controls.Add((Control)conditionRu.ColumnFilter);
+                //ph.Controls.Add((Control)conditionRu.ColumnFilter);
                 var storageRu = conditionRu.ColumnFilter.GetStorage();
                 if (index == null)
                     values.SetStorage(storageRu);
@@ -217,7 +217,7 @@
                     values.SetListStorage(storageRu, index.Value);
                 conditionRu.ColumnFilter.SetStorage(storageRu);
 
-                ph.Controls.Add((Control)conditionKz.ColumnFilter);
+                //ph.Controls.Add((Control)conditionKz.ColumnFilter);
                 var storageKz = conditionKz.ColumnFilter.GetStorage();
                 if (index == null)
                     values.SetStorage(storageKz);
@@ -251,8 +251,8 @@
                                  };       
                 db.ReportSubscriptions_Params.InsertOnSubmit(record);
 
-                ph.Controls.Remove((Control)conditionRu.ColumnFilter);
-                ph.Controls.Remove((Control)conditionKz.ColumnFilter);
+                //ph.Controls.Remove((Control)conditionRu.ColumnFilter);
+                //ph.Controls.Remove((Control)conditionKz.ColumnFilter);
             }
         }
     }

@@ -3,6 +3,7 @@
     Nat.Classes.SimpleGridController.call(this, 'Reports/Manager');
 
     this.options = kendo.observable(options);
+    this.options.showSubscription = true;
 
     this.Initialize = function () {
         var me = this;
@@ -16,14 +17,21 @@
         kendo.bind($('#searchValueInput'), this.options);
         kendo.bind($('.reportToolbar'), this.options);
 
-        this.bindSelectionChange();
-        this.bindProgress(null, function () { me.onEndRequest(); });
-        this.bindGetData();
-
         this.options.bind('change', function (e) { me.onFieldChange(e); });
         this.onFieldChange({ field: '*' });
 
-        $(window).on('popstate', function(e) { me.onPopState(e); });
+        if (this.options.viewOne) {
+            var splitter = $('#managerSplitter').data('kendoSplitter');
+            $('#managerSplitter .k-splitbar').hide();
+            splitter.collapse($('#pluginsTree').closest('.k-pane'));
+            this.open();
+        } else {
+            this.bindSelectionChange();
+            this.bindProgress(null, function () { me.onEndRequest(); });
+            this.bindGetData();
+
+            $(window).on('popstate', function(e) { me.onPopState(e); });
+        }
     };
 
     this.onGetData = function() {
@@ -71,7 +79,7 @@
                     else {
                         var w = $(window);
                         var dataItem = me.getSelected();
-                        me.reportWindow.setOptions({ width: w.width() * 0.95, height: w.height() * 0.9, title: dataItem.Name });
+                        me.reportWindow.setOptions({ width: w.width() * 0.95, height: w.height() * 0.9, title: dataItem ? dataItem.Name : options.name || '' });
                         me.reportWindow.content('<h6>Загрузка... <br/> Енгізу...</h6>');
                         me.reportWindow.refresh({ url: result.Url.replace('/MainPage.aspx/', '/EmptyPage.aspx/'), iframe: true });
                         kendo.ui.progress(me.reportWindow.element, true);
@@ -114,6 +122,44 @@
 
     this.onPDFExportClick = function() {
         this.ExportDocument('Pdf', ".pdf");
+    };
+
+    this.onSubscriptionClick = function() {
+        var me = this;
+        var data = {
+            PluginName: me.options.PluginName,
+            culture: me.options.isKz ? 'kz' : 'ru',
+            parameters: this.GetParameters(),
+            subscription: true
+        };
+
+        this.post('CreateReport',
+            data,
+            function (result) {
+                if (result.error)
+                    return;
+
+                if (result.Url)
+                    window.open(result.Url, "_blank");
+            },
+            false);
+    };
+
+    this.onSaveSubscriptionClick = function() {
+        var me = this;
+        var data = {
+            PluginName: me.options.PluginName,
+            parameters: this.GetParameters(),
+            idSubscription: this.options.idSubscription
+        };
+
+        this.post('SaveSubscription',
+            data,
+            function (result) {
+                if (result.success)
+                    window.location = me.options.url;
+            },
+            false);
     };
 
     this.onAddParametersClick = function() {
@@ -188,7 +234,10 @@
         $('#reportResultDiv').html('');
 
         var data = {
-            PluginName: this.options.PluginName
+            PluginName: this.options.PluginName,
+            idrec: this.options.idrec,
+            storageValuesKey: this.options.storageValuesKey,
+            setDefaultParams: this.options.setDefaultParams
         };
         if (data.PluginName)
             this.post('GetPluginInfo',
@@ -198,13 +247,15 @@
                         me.InitParameters(result);
                 },
                 false);
-        
-        if (pushState && window.history && history.pushState && dataItem.PluginName) {
-            history.pushState(this.options.toJSON(), this.options.Name, this.getUrl(this.options));
-        }
 
-        if (replaceState && window.history && window.history.replaceState) {
-            window.history.replaceState(this.options.toJSON(), this.options.Name, this.getUrl(this.options));
+        if (!this.options.viewOne) {
+            if (pushState && window.history && history.pushState && dataItem.PluginName) {
+                history.pushState(this.options.toJSON(), this.options.Name, this.getUrl(this.options));
+            }
+
+            if (replaceState && window.history && window.history.replaceState) {
+                window.history.replaceState(this.options.toJSON(), this.options.Name, this.getUrl(this.options));
+            }
         }
     };
 
@@ -309,6 +360,8 @@
 
     this.ClearParameters = function() {
         $('#reportParameters').html('');
+        this.options.set('showSubscription', false);
+        this.options.set('showSaveSubscription', false);
         this.options.set('showButtons', false);
         this.options.set('showCRButtons', false);
         $('#reportParameters').hide();
@@ -372,8 +425,16 @@
         this.options.set('oneParameter', countParameters === 1);
         if (this.options.PluginType === 'CrossReport')
             this.options.set('showCRButtons', true);
-        else
+        else {
             this.options.set('showButtons', true);
+            this.options.set('showSubscription', true);
+        }
+
+        if (this.options.idSubscription) {
+            this.options.set('showSubscription', false);
+            this.options.set('showSaveSubscription', true);
+        }
+
         this.options.set('showAddParameters', showAddParameters);
     };
 

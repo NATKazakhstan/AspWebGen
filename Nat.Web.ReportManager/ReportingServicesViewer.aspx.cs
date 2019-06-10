@@ -109,6 +109,9 @@ namespace Nat.Web.ReportManager
                 case "html":
                     format = "HTML4.0";
                     break;
+                case "auto":
+                    format = "WORD";
+                    break;
             }
 
             fileNameExtention = "";

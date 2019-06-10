@@ -9,6 +9,7 @@ namespace Nat.Web.Tools
     {
         private string key;
         private HttpSessionState session;
+        private object temp;
         public const string KeyConst = "SessionWorker$";
 
         /// <summary>
@@ -39,8 +40,14 @@ namespace Nat.Web.Tools
         /// </summary>
         public virtual object Object
         {
-            get { return session[GetSessionKey()]; }
-            set { session[GetSessionKey()] = value; }
+            get => session == null ? temp : session[GetSessionKey()];
+            set
+            {
+                if (session == null)
+                    temp = value;
+                else
+                    session[GetSessionKey()] = value;
+            }
         }
 
         public virtual T GetObject<T>() where T : new()
@@ -67,8 +74,9 @@ namespace Nat.Web.Tools
 
         public virtual void RemoveObject()
         {
-            if (session[GetSessionKey()] != null)
+            if (session != null && session[GetSessionKey()] != null)
                 session.Remove(GetSessionKey());
+            temp = null;
         }
 
         public string Key

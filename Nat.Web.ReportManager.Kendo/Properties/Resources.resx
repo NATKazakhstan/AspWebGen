@@ -147,6 +147,12 @@
   <data name="SReportViewer" xml:space="preserve">
     <value>Менеджер отчетов</value>
   </data>
+  <data name="SSaveSubscription" xml:space="preserve">
+    <value>Сохранить параметры</value>
+  </data>
+  <data name="SSubscription" xml:space="preserve">
+    <value>Создать подписку</value>
+  </data>
   <data name="SWordExport" xml:space="preserve">
     <value>Word</value>
   </data>

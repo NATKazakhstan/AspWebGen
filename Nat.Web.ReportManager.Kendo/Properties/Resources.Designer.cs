@@ -151,6 +151,24 @@ namespace Nat.Web.ReportManager.Kendo.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Сохранить параметры.
+        /// </summary>
+        public static string SSaveSubscription {
+            get {
+                return ResourceManager.GetString("SSaveSubscription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Создать подписку.
+        /// </summary>
+        public static string SSubscription {
+            get {
+                return ResourceManager.GetString("SSubscription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Word.
         /// </summary>
         public static string SWordExport {

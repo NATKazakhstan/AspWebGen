@@ -20,10 +20,12 @@ using Nat.Tools.Constants;
 using Nat.Tools.Filtering;
 using Nat.Tools.QueryGeneration;
 using Nat.Tools.ResourceTools;
+using Nat.Tools.Specific;
 using Nat.Tools.Validation;
 using Nat.Web.Controls;
 using Nat.Web.Controls.Filters;
 using Nat.Web.Core.System.EventLog;
+using Nat.Web.ReportManager.Data;
 using Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels;
 using Nat.Web.ReportManager.Kendo.Properties;
 using Nat.Web.ReportManager.ReportGeneration;
@@ -52,8 +54,121 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         public ActionResult Index(string pluginName)
         {
             ViewData["refChildMenu"] = 105;
-            ViewBag.PluginName = pluginName;
+            var options = new {PluginName = pluginName, isKz = LocalizationHelper.IsCultureKZ, setDefaultParams = true};
+            ViewBag.Options = JsonConvert.SerializeObject(options);
             return View();
+        }
+
+        // GET: Reports/Manager/V
+        public ActionResult V(string className, string idrec, string expword, long? idSubscription,
+            string idStorageValues, string open, string url, string culture, string format, 
+            string setDefaultParams)
+        {
+            if (idSubscription != null)
+                return ChangeSubscription(className, idSubscription.Value, idStorageValues, url);
+
+            if (!string.IsNullOrEmpty(expword) || string.IsNullOrEmpty(open) ||
+                "on".Equals(open, StringComparison.InvariantCulture))
+            {
+                if (string.IsNullOrEmpty(format))
+                    format = Request.QueryString["rs:format"];
+                if (format == string.Empty) format = null;
+                return ExportReport(className, idrec, culture, format, setDefaultParams);
+            }
+
+            return OpenReport(className, idrec, culture, setDefaultParams);
+        }
+
+        private ActionResult OpenReport(string className, string idrec, string culture, string setDefaultParams)
+        {
+            ViewData["refChildMenu"] = 105;
+            var isKz = LocalizationHelper.IsCultureKZ;
+            if (!string.IsNullOrEmpty(culture))
+            {
+                culture = culture.ToLower();
+                switch (culture)
+                {
+                    case "kz":
+                    case "kk-kz":
+                        isKz = true;
+                        break;
+                    case "ru":
+                    case "ru-ru":
+                        isKz = false;
+                        break;
+                }
+            }
+
+            var plugin = WebReportManager.GetPlugin(className);
+            var options = new
+            {
+                PluginName = className,
+                viewOne = true,
+                idrec,
+                isKz,
+                name = plugin?.Description,
+                setDefaultParams = !string.IsNullOrEmpty(setDefaultParams) && Convert.ToBoolean(setDefaultParams)
+            };
+            ViewBag.Options = JsonConvert.SerializeObject(options);
+            return View("Index");
+        }
+
+        private ActionResult ChangeSubscription(string className, long idSubscription, string storageValuesKey,
+            string url)
+        {
+            ViewData["refChildMenu"] = 105;
+            var plugin = WebReportManager.GetPlugin(className);
+            var storageValues = Session[storageValuesKey] as StorageValues;
+            if (plugin == null || storageValues == null)
+                return Redirect(url);
+
+            var options = new
+            {
+                PluginName = className,
+                viewOne = true,
+                idSubscription,
+                url,
+                storageValuesKey,
+                name = plugin.Description
+            };
+            ViewBag.Options = JsonConvert.SerializeObject(options);
+            return View("Index");
+        }
+
+        private ActionResult ExportReport(string className, string idrec, string culture, string format, string setDefaultParams)
+        {
+            var value = CreateReport(className, idrec, culture, null, null, format ?? "Auto", false);
+            return value is JsonResult ? OpenReport(className, idrec, culture, setDefaultParams) : value;
+        }
+
+        [HttpPost]
+        public ActionResult SaveSubscription(string pluginName, List<ConditionViewModel> parameters, long idSubscription)
+        {
+            using (var connection = SpecificInstances.DbFactory.CreateConnection())
+            using (var db = new DBDataContext(connection))
+            {
+                var plugin = WebReportManager.GetPlugin(pluginName);
+                if (plugin == null)
+                    return Json(new { error = Resources.SPluginNotFound });
+
+                var storageValues = GetStorageValues(parameters, plugin);
+                var errors = Validate(plugin);
+                if (!string.IsNullOrEmpty(errors))
+                    return Json(new {error = errors});
+
+                var row = db.ReportSubscriptions.FirstOrDefault(q => q.id == idSubscription);
+                if (row != null)
+                {
+                    row.values = ReportSubscriptionsHelper.ObjectToBinary(storageValues);
+                    var constants = ((IWebReportPlugin) plugin).Constants;
+                    row.constants = ReportSubscriptionsHelper.ObjectToBinary(constants);
+                    db.SubmitChanges();
+
+                    ReportSubscriptionsHelper.UpdateReportSubscriptionParams(db, row.id, null, null, storageValues, row.reportName);
+                }
+            }
+
+            return Json(new { success = true });
         }
 
         [HttpPost]
@@ -111,26 +226,60 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetPluginInfo(string pluginName)
+        public ActionResult GetPluginInfo(string pluginName, string idrec, string storageValuesKey, bool? setDefaultParams)
         {
             var plugin = WebReportManager.GetPlugin(pluginName);
+            var webReportPlugin = (IWebReportPlugin) plugin;
             if (plugin == null)
                 return Json(new {error = Resources.SPluginNotFound});
+
+            webReportPlugin.DefaultValue = idrec;
+            var storageValues = Session[storageValuesKey] as StorageValues;
+            if (string.IsNullOrEmpty(idrec)
+                && string.IsNullOrEmpty(storageValuesKey)
+                && (setDefaultParams == null || setDefaultParams.Value)
+                && webReportPlugin.AllowSaveValuesConditions)
+            {
+                // Load StorageValues
+                storageValues = StorageValues.GetStorageValues(plugin.GetType().FullName,
+                    Encoding.UTF8.GetBytes(Tools.Security.User.GetSID()));
+            }
 
             var list = new List<ConditionViewModel>();
             foreach (var condition in plugin.Conditions)
             {
+                if (storageValues != null && (condition.Visible || webReportPlugin.InitSavedValuesInvisibleConditions))
+                {
+                    var storage = condition.ColumnFilter.GetStorage();
+                    storageValues.SetStorage(storage);
+                    condition.ColumnFilter.SetStorage(storage);
+                }
+
                 var model = ConditionViewModel.From(condition.ColumnFilter);
                 model.Visible = condition.Visible;
                 list.Add(model);
             }
 
-            foreach (var condition in plugin.CreateModelFillConditions())
+            var listCount = storageValues?.CountListValues ?? 1;
+            if (listCount < 0)
+                listCount = 1;
+
+            for (int i = 0; i < listCount; i++)
             {
-                var model = ConditionViewModel.From(condition.ColumnFilter);
-                model.Visible = condition.Visible;
-                model.AllowAddParameter = true;
-                list.Add(model);
+                foreach (var condition in plugin.CreateModelFillConditions())
+                {
+                    if (storageValues != null && (condition.Visible || webReportPlugin.InitSavedValuesInvisibleConditions))
+                    {
+                        var storage = condition.ColumnFilter.GetStorage();
+                        storageValues.SetListStorage(storage, i);
+                        condition.ColumnFilter.SetStorage(storage);
+                    }
+
+                    var model = ConditionViewModel.From(condition.ColumnFilter);
+                    model.Visible = condition.Visible;
+                    model.AllowAddParameter = i == 0;
+                    list.Add(model);
+                }
             }
 
             return Json(list);
@@ -251,7 +400,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateReport(string pluginName, string culture, List<ConditionViewModel> parameters, string parametersStr, string export)
+        public ActionResult CreateReport(string pluginName, string idrec, string culture, List<ConditionViewModel> parameters, string parametersStr, string export, bool? subscription)
         {
             if (!string.IsNullOrEmpty(parametersStr))
                 parameters = JsonConvert.DeserializeObject<List<ConditionViewModel>>(parametersStr);
@@ -259,23 +408,58 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 parameters = new List<ConditionViewModel>();
 
             var plugin = WebReportManager.GetPlugin(pluginName);
+            var webReportPlugin = (IWebReportPlugin) plugin;
             if (plugin == null)
                 return Json(new { error = Resources.SPluginNotFound });
 
             if (!plugin.SupportCulture.Contains(culture))
                 culture = null;
 
+            webReportPlugin.DefaultValue = idrec;
             var storageValues = GetStorageValues(parameters, plugin);
 
             var errors = Validate(plugin);
             if (!string.IsNullOrEmpty(errors))
                 return Json(new {error = errors});
 
+            // Save StorageValues
+            if (webReportPlugin.AllowSaveValuesConditions)
+            {
+                StorageValues.SetStorageValues(plugin.GetType().FullName,
+                    Encoding.UTF8.GetBytes(Tools.Security.User.GetSID()), storageValues);
+            }
+
             var guid = Guid.NewGuid().ToString();
             Session[guid] = storageValues;
             Session["logmsg" + guid] = plugin.GetLogInformation().Replace("\r\n", "<br/>");
             Session["logcode" + guid] = ReportInitializerSection.GetReportInitializerSection().ReprotPlugins.GetTypeReportLists()[plugin.GetType()].LogMessageType;
             Session["constants" + guid] = (plugin as IWebReportPlugin)?.Constants ?? new Dictionary<string, object>();
+
+            if (subscription ?? false)
+            {
+                var url = new MainPageUrlBuilder
+                {
+                    UserControl = "ReportSubscriptionsEdit",
+                    IsDataControl = true,
+                    IsNew = true
+                };
+                url.CustomQueryParameters.Add("guid", guid);
+                url.CustomQueryParameters.Add("reportName", plugin.GetType().FullName);
+                url.CustomQueryParameters.Add("culture", culture);
+                switch (plugin)
+                {
+                    case ISqlReportingServicesPlugin _:
+                        url.CustomQueryParameters.Add("isSqlReportingServices", "1");
+                        break;
+                    case IRedirectReportPlugin _:
+                        url.CustomQueryParameters.Add("isSqlReportingServices", "2");
+                        break;
+                    default:
+                        url.CustomQueryParameters.Add("isSqlReportingServices", "0");
+                        break;
+                }
+                return Json(new {Url = url.CreateUrl(false, true)});
+            }
 
             var logMonitor = (LogMonitor)InitializerSection.GetSection().LogMonitor;
             logMonitor.Init();
@@ -306,7 +490,6 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             }
             else if (plugin is IRedirectReportPlugin crossPlugin)
             {
-
                 if (crossPlugin.LogViewReport)
                 {
                     Tools.Security.DBDataContext.AddViewReports(
@@ -430,11 +613,12 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 {
                     paramsDic[storage.Name].InitStorage(storage);
                     condition.ColumnFilter.SetStorage(storage);
-                    if (storage.DataType == null)
-                        storageValues.AddStorage(storage);
-                    else
-                        storageValues.AddStorage(storage, condition.ColumnFilter.GetTexts());
                 }
+
+                if (storage.DataType == null)
+                    storageValues.AddStorage(storage);
+                else
+                    storageValues.AddStorage(storage, condition.ColumnFilter.GetTexts());
             }
 
             var paramsCircleDic = parameters.Where(r => !r.Removed && r.AllowAddParameter).ToLookup(r => r.Key);

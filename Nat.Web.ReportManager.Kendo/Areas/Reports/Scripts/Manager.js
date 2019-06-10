@@ -494,7 +494,15 @@
                     .attr('clientId', 'Value2_' + item.ParameterIndex);
             }
 
+            VM.bindModel = {
+                value: item.Value1,
+                keyField: item.ValueColumn
+            };
+
             kendo.bind(html, item);
+
+            VM.bindModel = null;
+
             this.FilterTypesInit(item);
             if (func) func(item);
 
@@ -543,7 +551,12 @@
                 read: {
                     type: 'POST',
                     url: "/Reports/Manager/GetConditionData",
-                    data: function() {
+                    data: function (e) {
+
+                        if (window.VM && window.VM.bindModel && window.VM.bindModel.value && window.VM.bindModel.keyField) {
+                            e.filter = { field: window.VM.bindModel.keyField, value: window.VM.bindModel.value, operator: 'eq' };
+                        }
+
                         return {
                             PluginName: VM.manager.options.PluginName,
                             Key: item.Key,

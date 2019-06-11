@@ -4,6 +4,8 @@
 
     this.options = kendo.observable(options);
     this.options.showSubscription = true;
+    if (this.options.Name)
+        this.options.DisplayName = ' / ' + this.options.Name;
 
     this.Initialize = function () {
         var me = this;
@@ -16,6 +18,7 @@
 
         kendo.bind($('#searchValueInput'), this.options);
         kendo.bind($('.reportToolbar'), this.options);
+        kendo.bind($('#spanReportName'), this.options);
 
         this.options.bind('change', function (e) { me.onFieldChange(e); });
         this.onFieldChange({ field: '*' });
@@ -52,6 +55,7 @@
         this.options.set('PluginName', !dataItem || !dataItem.PluginName ? null : dataItem.PluginName);
         this.options.set('PluginType', !dataItem || !dataItem.PluginType ? null : dataItem.PluginType);
         this.options.set('Name', !dataItem || !dataItem.Name ? null : dataItem.Name);
+        this.options.set('DisplayName', !dataItem || !dataItem.Name ? '' : ' / ' + dataItem.Name);
         if (!this._meInOpen)
             this.open(true);
     };

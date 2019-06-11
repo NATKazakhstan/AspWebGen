@@ -5,6 +5,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Web.Compilation;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -105,6 +106,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             var options = new
             {
                 PluginName = className,
+                Name = plugin.Description,
                 viewOne = true,
                 idrec,
                 isKz,

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -24,6 +25,7 @@ using Nat.Tools.Specific;
 using Nat.Tools.Validation;
 using Nat.Web.Controls;
 using Nat.Web.Controls.Filters;
+using Nat.Web.Controls.GenerationClasses;
 using Nat.Web.Core.System.EventLog;
 using Nat.Web.ReportManager.Data;
 using Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels;
@@ -313,8 +315,19 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
 
         private ActionResult GetConditionData(DataSourceRequest request, ColumnFilterStorage storage)
         {
-            var ds = ConditionViewModel.GetTableDataSource(storage);
-            ds.EnablePaging = true;
+            var tableDataSource = ConditionViewModel.GetTableDataSource(storage);
+            if (tableDataSource == null)
+            {
+                var enumerable = storage.RefDataSource as IEnumerable;
+                var ds = storage.RefDataSource as IDataSource;
+                var dsView = ds?.GetView("Default") ?? storage.RefDataSource as DataSourceView;
+                var isDSV = dsView is IDataSourceView;
+                var selectArguments = isDSV ? new DataSourceSelectArguments() : new DataSourceSelectArguments(storage.DisplayColumn);
+                dsView?.Select(selectArguments, r => enumerable = r);
+                return Json(ConditionViewModel.ParseDataView(enumerable));
+            }
+
+            tableDataSource.EnablePaging = true;
 
             var filterDescriptor = request.Filters?.FirstOrDefault() as FilterDescriptor;
             var filter = Convert.ToString(filterDescriptor?.Value);
@@ -324,7 +337,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             if (!string.IsNullOrEmpty(filter) && filterDescriptor != null &&
                 filterDescriptor.Member == storage.ValueColumn)
             {
-                ds.View.CustomConditions.Add(new QueryCondition(storage.ValueColumn, ColumnFilterType.Equal,
+                tableDataSource.View.CustomConditions.Add(new QueryCondition(storage.ValueColumn, ColumnFilterType.Equal,
                     Convert.ChangeType(filter, storage.DataType), null));
             }
             else if (!string.IsNullOrEmpty(filter))
@@ -357,7 +370,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                     }
                 }
 
-                ds.View.CustomConditions.Add(list);
+                tableDataSource.View.CustomConditions.Add(list);
             }
 
             var paging = (bool)(DataSetResourceManager.GetTableExtProperty(table, TableExtProperties.ALLOW_PAGING) ?? true);
@@ -367,8 +380,8 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                     (request.Page - 1) * request.PageSize,
                     request.PageSize > 0 ? request.PageSize : 1000) {RetrieveTotalRowCount = true}
                 : new DataSourceSelectArguments();
-            ds.EnablePaging = paging;
-            var data = ds.View.Select(true, arguments);
+            tableDataSource.EnablePaging = paging;
+            var data = tableDataSource.View.Select(true, arguments);
             return Json(ConditionViewModel.ParseDataView(data));
         }
 

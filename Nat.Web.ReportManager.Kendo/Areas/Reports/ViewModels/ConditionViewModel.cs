@@ -12,6 +12,7 @@ using Nat.Tools.Data;
 using Nat.Tools.Filtering;
 using Nat.Tools.ResourceTools;
 using Nat.Web.Controls;
+using Nat.Web.Controls.GenerationClasses;
 using Nat.Web.Core.System.Mvc;
 using Nat.Web.Tools;
 
@@ -64,8 +65,15 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
 
         public static IEnumerable ParseDataView(IEnumerable inData)
         {
+            if (inData == null)
+                return null;
+
             if (!(inData is DataView dataView))
+            {
+                if (inData.OfType<BaseRow>().FirstOrDefault() != null)
+                    return inData.Cast<BaseRow>().Select(r => new {r.id, r.Value, r.Name});
                 return inData;
+            }
 
             var data = new List<object>();
             var columns = dataView.Table.Columns.Cast<DataColumn>().Select((r, index) => new { r.ColumnName, index }).ToArray();
@@ -101,7 +109,9 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
                 var data = storage.RefDataSource as IEnumerable;
                 var ds = storage.RefDataSource as IDataSource;
                 var dsView = ds?.GetView("Default") ?? storage.RefDataSource as DataSourceView;
-                dsView?.Select(new DataSourceSelectArguments(storage.DisplayColumn), r => data = r);
+                var isDSV = dsView is IDataSourceView;
+                var arguments = isDSV ? new DataSourceSelectArguments() : new DataSourceSelectArguments(storage.DisplayColumn);
+                dsView?.Select(arguments, r => data = r);
                 return data;
             }
 

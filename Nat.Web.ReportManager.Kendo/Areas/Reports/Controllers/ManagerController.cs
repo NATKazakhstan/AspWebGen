@@ -105,13 +105,14 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             var plugin = WebReportManager.GetPlugin(className);
             var options = new
             {
-                PluginName = className,
-                Name = plugin.Description,
+                PluginName = plugin?.GetType().FullName,
+                Name = plugin?.Description ?? Resources.SPluginNotFound,
                 viewOne = true,
                 idrec,
                 isKz,
-                name = plugin?.Description,
-                setDefaultParams = !string.IsNullOrEmpty(setDefaultParams) && Convert.ToBoolean(setDefaultParams)
+                setDefaultParams = !string.IsNullOrEmpty(setDefaultParams)
+                                   && ("on".Equals(setDefaultParams, StringComparison.OrdinalIgnoreCase)
+                                       || Convert.ToBoolean(setDefaultParams))
             };
             ViewBag.Options = JsonConvert.SerializeObject(options);
             return View("Index");

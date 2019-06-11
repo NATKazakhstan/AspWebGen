@@ -266,8 +266,11 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             }
 
             var listCount = storageValues?.CountListValues ?? 1;
-            if (listCount < 0)
+            if (listCount == 0)
+            {
                 listCount = 1;
+                storageValues = null;
+            }
 
             for (int i = 0; i < listCount; i++)
             {
@@ -282,7 +285,8 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
 
                     var model = ConditionViewModel.From(condition.ColumnFilter);
                     model.Visible = condition.Visible;
-                    model.AllowAddParameter = i == 0;
+                    model.AllowAddParameter = true;
+                    model.ParameterClone = i > 0;
                     list.Add(model);
                 }
             }

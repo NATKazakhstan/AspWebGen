@@ -191,6 +191,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
         public bool AutoPostBack { get; set; }
         public bool RequireReload { get; set; }
         public bool AllowAddParameter { get; set; }
+        public bool ParameterClone { get; set; }
         public bool Removed { get; set; }
         public string TemplateValue1 { get; set; }
         public string TemplateValue2 { get; set; }

@@ -479,6 +479,16 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             var logMonitor = (LogMonitor)InitializerSection.GetSection().LogMonitor;
             logMonitor.Init();
 
+            RememberReports(
+                WebReportManager.GetReportUrl(
+                    string.Empty,
+                    plugin.GetType().FullName,
+                    string.Empty,
+                    string.Empty,
+                    false) + "&open=false&setDefaultParams=true",
+                plugin, 
+                logMonitor);
+
             Stream stream;
             string fileNameExt;
             if (plugin is IStimulsoftReportPlugin)
@@ -553,6 +563,23 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             }
 
             return File(stream, "application/octet-stream", plugin.Description + "." + fileNameExt);
+        }
+
+        private static void RememberReports(string path, IReportPlugin plugin, LogMonitor logMonitor)
+        {
+            var typeStr = ReportInitializerSection.GetReportInitializerSection().RememberLastReportType;
+            if (string.IsNullOrEmpty(typeStr))
+                return;
+            try
+            {
+                var type = BuildManager.GetType(typeStr, true, true);
+                var obj = (IRememberReports) Activator.CreateInstance(type);
+                obj.CreateReport(path, plugin);
+            }
+            catch (Exception e)
+            {
+                logMonitor.LogException(e);
+            }
         }
 
         private static string Validate(IReportPlugin plugin)

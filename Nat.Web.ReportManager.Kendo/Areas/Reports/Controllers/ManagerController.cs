@@ -365,7 +365,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 foreach (DataColumn dc in table.Columns)
                 {
                     var column = ColumnViewModel.From(dc);
-                    if (column == null)
+                    if (column == null && !dc.ColumnName.Equals(storage.DisplayColumn, StringComparison.OrdinalIgnoreCase))
                         continue;
 
                     if (dc.DataType == typeof(string))

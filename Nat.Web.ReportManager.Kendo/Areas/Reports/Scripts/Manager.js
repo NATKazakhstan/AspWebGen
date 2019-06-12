@@ -279,6 +279,7 @@
         var parameters = this.parameters.toJSON();
         parameters.forEach(function(p) {
             p.Data = null;
+            p.Columns = null;
             p.TemplateValue1 = null;
             p.TemplateValue2 = null;
             if (p.Value1 instanceof Date)
@@ -658,8 +659,14 @@
 
     this.TreeInit = function (item) {
         var fields = {};
-        fields[item.ValueColumn] = { nullable: false, type: 'number' };
-        fields[item.ParentField] = { nullable: true, type: 'number' };
+        if (item.DataType === "String") {
+            fields[item.ValueColumn] = { nullable: false, type: 'string' };
+            fields[item.ParentField] = { nullable: true, type: 'string' };
+        }
+        else {
+            fields[item.ValueColumn] = { nullable: false, type: 'number' };
+            fields[item.ParentField] = { nullable: true, type: 'number' };
+        }
         item.set('Data', new kendo.data.TreeListDataSource({
             type: 'aspnetmvc-ajax',
             //serverFiltering: true,
@@ -691,9 +698,6 @@
 
                 var keys = {};
                 for (var i = 0; i < e.response.length; i++) {
-                    if (keys[e.response[i][item.ValueColumn]]) {
-                        debugger;
-                    }
                     keys[e.response[i][item.ValueColumn]] = true;
                 }
 
@@ -707,8 +711,8 @@
                 }
 
                 setTimeout(function() {
-                        for (var j = 0; j < item.Values.length; j++) {
-                            var checkBox = $('#checked_' + item.ParameterIndex + '_' + item.Values[j])[0];
+                    for (var j = 0; j < item.Values.length; j++) {
+                        var checkBox = $('#checked_' + item.ParameterIndex + '_' + VM.manager.FixId(item.Values[j], item.ParameterIndex))[0];
                             if (checkBox) checkBox.checked = true;
                         }
                     },
@@ -719,9 +723,15 @@
             0,
             {
                 headerTemplate: '<input type="checkbox" onclick="VM.manager.treeListToggleAll(event, this, ' + item.ParameterIndex + ')" />',
-                template: '<input type="checkbox" id="checked_' + item.ParameterIndex + '_#= ' + item.ValueColumn + ' #" onclick="VM.manager.treeListToggleItem(event, this, #= ' + item.ValueColumn + ' #, ' + item.ParameterIndex + ')" />',
+                template: '<input type="checkbox" idValue="#=' + item.ValueColumn + '#" id="checked_' + item.ParameterIndex + '_#= VM.manager.FixId(' + item.ValueColumn + ', ' + item.ParameterIndex + ') #" onclick="VM.manager.treeListToggleItem(event, this, ' + item.ParameterIndex + ')" />',
                 width: 150
             });
+    };
+
+    this.FixId = function (id, parameterIndex) {
+        if (this.parameters[parameterIndex].DataType === "String")
+            return id.toString().replace(/\.|,/g, '_');
+        return id;
     };
 
     this.TreeAfterInit = function (item) {
@@ -747,13 +757,17 @@
             }
             else
                 data[i].checked = false;
-            var checkBoxItem = $('#checked_' + item.ParameterIndex + '_' + id)[0];
+            var checkBoxItem = $('#checked_' + item.ParameterIndex + '_' + VM.manager.FixId(id, item.ParameterIndex))[0];
             if (checkBoxItem) checkBoxItem.checked = data[i].checked;
         }
     };
 
-    this.treeListToggleItem = function (e, checkBox, id, parameterIndex) {
+    this.treeListToggleItem = function (e, checkBox, parameterIndex) {
         var item = this.parameters[parameterIndex];
+        var id = $(checkBox).attr('idValue');
+        if (this.parameters[parameterIndex].DataType === "Int64" || this.parameters[parameterIndex].DataType === "Int32" || this.parameters[parameterIndex].DataType === "Int16")
+            id = parseInt(id);
+
         var index = item.Values.indexOf(id);
         if (checkBox.checked && index === -1)
             item.Values.push(id);
@@ -773,7 +787,7 @@
             else if (!checked && index > -1)
                 item.Values.splice(index, 1);
             childNodes[i].checked = checked;
-            var checkBoxItem = $('#checked_' + item.ParameterIndex + '_' + id)[0];
+            var checkBoxItem = $('#checked_' + item.ParameterIndex + '_' + VM.manager.FixId(id, item.ParameterIndex))[0];
             if (checkBoxItem) checkBoxItem.checked = checked;
 
             this.treeListToggleChildNodes(item, tree.dataSource.childNodes({ id: id }), checked, tree);

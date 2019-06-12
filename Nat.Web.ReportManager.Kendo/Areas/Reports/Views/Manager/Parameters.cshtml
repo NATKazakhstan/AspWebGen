@@ -202,6 +202,17 @@
              style="width:100%; height: 400px" />
     </div>
 </script>
+<script type="text/x-kendo-template" id="parametersTreeTemplate">
+    @Html.Partial("_Label")
+    <div class="editor-field m-editor-parameter" id="ParameterID_#= ParameterIndex #">
+        <div id="Value1_#= ParameterIndex#" data-role="treelist"
+             data-bind="visible: VisibleValue1, source: Data"
+             data-columns='#= JSON.stringify(Columns) #'
+             data-selectable="true"
+             data-sortable="true"
+             style="width:100%; height: 400px" />
+    </div>
+</script>
 <script type="text/x-kendo-template" id="parametersUndefinedTemplate">
     @Html.Partial("_Label")
     <div class="editor-field m-editor-parameter" id="ParameterID_#= ParameterIndex #">

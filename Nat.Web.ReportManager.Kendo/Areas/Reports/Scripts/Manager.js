@@ -386,6 +386,7 @@
         this.templates.Undefined = kendo.template($('#parametersUndefinedTemplate').html());
         this.templates.MultiColumn = kendo.template($('#parametersMultiColumnTemplate').html());
         this.templates.Grid = kendo.template($('#parametersGridTemplate').html());
+        this.templates.Tree = kendo.template($('#parametersTreeTemplate').html());
         this.templates.Value1 = kendo.template($('#parametersValue1Template').html());
         this.templates.Value2 = kendo.template($('#parametersValue2Template').html());
         this.InitParametersTemplates = function() {};
@@ -464,9 +465,15 @@
                 html = $(this.templates.DDL(item));
             }
         } else if (item.Columns && item.FilterType === 65536) {
-            this.GridInit(item);
-            html = $(this.templates.Grid(item));
-            func = this.GridAfterInit;
+            if (item.ParentField) {
+                this.TreeInit(item);
+                html = $(this.templates.Tree(item));
+                func = this.TreeAfterInit;
+            } else {
+                this.GridInit(item);
+                html = $(this.templates.Grid(item));
+                func = this.GridAfterInit;
+            }
         } else if (item.Columns) {
             this.MultiColumnInit(item);
             html = $(this.templates.MultiColumn(item));
@@ -647,6 +654,130 @@
             function() {
                 item.set('Values', grid.selectedKeyNames());
             });
+    };
+
+    this.TreeInit = function (item) {
+        var fields = {};
+        fields[item.ValueColumn] = { nullable: false, type: 'number' };
+        fields[item.ParentField] = { nullable: true, type: 'number' };
+        item.set('Data', new kendo.data.TreeListDataSource({
+            type: 'aspnetmvc-ajax',
+            //serverFiltering: true,
+            //pageSize: 25,
+            schema: {
+                model: {
+                    id: item.ValueColumn,
+                    parentId: item.ParentField,
+                    expanded: false,
+                    fields: fields
+                }
+            },
+            transport: {
+                read: {
+                    type: 'POST',
+                    url: "/Reports/Manager/GetConditionData",
+                    data: function () {
+                        return {
+                            PluginName: VM.manager.options.PluginName,
+                            Key: item.Key,
+                            parameters: VM.manager.GetParameters()
+                        };
+                    }
+                }
+            },
+            requestEnd: function(e) {
+                if (e.type !== 'read')
+                    return;
+
+                var keys = {};
+                for (var i = 0; i < e.response.length; i++) {
+                    if (keys[e.response[i][item.ValueColumn]]) {
+                        debugger;
+                    }
+                    keys[e.response[i][item.ValueColumn]] = true;
+                }
+
+                for (var i = 0; i < e.response.length; i++) {
+                    var row = e.response[i];
+                    if (row[item.ParentField] === '')
+                        row[item.ParentField] = null;
+                    else if (!keys[row[item.ParentField]]) {
+                        row[item.ParentField] = null;
+                    }
+                }
+
+                setTimeout(function() {
+                        for (var j = 0; j < item.Values.length; j++) {
+                            var checkBox = $('#checked_' + item.ParameterIndex + '_' + item.Values[j])[0];
+                            if (checkBox) checkBox.checked = true;
+                        }
+                    },
+                    100);
+            }
+        }));
+        item.Columns.splice(0,
+            0,
+            {
+                headerTemplate: '<input type="checkbox" onclick="VM.manager.treeListToggleAll(event, this, ' + item.ParameterIndex + ')" />',
+                template: '<input type="checkbox" id="checked_' + item.ParameterIndex + '_#= ' + item.ValueColumn + ' #" onclick="VM.manager.treeListToggleItem(event, this, #= ' + item.ValueColumn + ' #, ' + item.ParameterIndex + ')" />',
+                width: 150
+            });
+    };
+
+    this.TreeAfterInit = function (item) {
+        var grid = $('#Value1_' + item.ParameterIndex).data('kendoTreeList');
+        if (!grid) return;
+        //grid.setOptions({ persistSelection: true });
+        /*grid.bind('change',
+            function() {
+                item.set('Values', grid.selectedKeyNames());
+            });*/
+    };
+
+    this.treeListToggleAll = function(e, checkBox, parameterIndex) {
+        var item = this.parameters[parameterIndex];
+        var tree = $('#Value1_' + item.ParameterIndex).data('kendoTreeList');
+        item.Values.splice(0, item.Values.length);
+        var data = tree.dataSource.data();
+        for (var i = 0; i < data.length; i++) {
+            var id = data[i][item.ValueColumn];
+            if (checkBox.checked) {
+                item.Values.push(id);
+                data[i].checked = true;
+            }
+            else
+                data[i].checked = false;
+            var checkBoxItem = $('#checked_' + item.ParameterIndex + '_' + id)[0];
+            if (checkBoxItem) checkBoxItem.checked = data[i].checked;
+        }
+    };
+
+    this.treeListToggleItem = function (e, checkBox, id, parameterIndex) {
+        var item = this.parameters[parameterIndex];
+        var index = item.Values.indexOf(id);
+        if (checkBox.checked && index === -1)
+            item.Values.push(id);
+        else if (!checkBox.checked && index > -1)
+            item.Values.splice(index, 1);
+
+        var tree = $('#Value1_' + item.ParameterIndex).data('kendoTreeList');
+        this.treeListToggleChildNodes(item, tree.dataSource.childNodes({ id: id }), checkBox.checked, tree);
+    };
+
+    this.treeListToggleChildNodes = function (item, childNodes, checked, tree) {
+        for (var i = 0; i < childNodes.length; i++) {
+            var id = childNodes[i][item.ValueColumn];
+            var index = item.Values.indexOf(id);
+            if (checked && index === -1)
+                item.Values.push(id);
+            else if (!checked && index > -1)
+                item.Values.splice(index, 1);
+            childNodes[i].checked = checked;
+            var checkBoxItem = $('#checked_' + item.ParameterIndex + '_' + id)[0];
+            if (checkBoxItem) checkBoxItem.checked = checked;
+
+            this.treeListToggleChildNodes(item, tree.dataSource.childNodes({ id: id }), checked, tree);
+        }
     };
 
     this.onChangeParameter = function(e) {

@@ -118,6 +118,8 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
             var tableDataSource = GetTableDataSource(storage);
             var rolledIn =
                 DataSetResourceManager.GetTableExtProperty(filterRefTable, TableExtProperties.ROLLED_IN, false);
+            var isTree =
+                DataSetResourceManager.GetTableExtProperty(filterRefTable, TableExtProperties.IS_TREE_REF, false);
 
             if (rolledIn || string.IsNullOrEmpty(DisplayColumn) || string.IsNullOrEmpty(ValueColumn))
             {
@@ -140,6 +142,14 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
                 {
                     Columns[0].width = "330px";
                     Columns.Where(c => string.IsNullOrEmpty(c.width)).ForEach(c => c.width = "220px");
+                }
+
+                if (isTree)
+                {
+                    var relation = DataSetResourceManager.GetTableExtProperty(filterRefTable, TableExtProperties.TREE_REF_RELATION, "");
+                    if (!string.IsNullOrEmpty(relation) && filterRefTable.ParentRelations[relation].ChildColumns.Length == 1)
+                        ParentField = filterRefTable.ParentRelations[relation].ChildColumns[0].ColumnName;
+
                 }
 
                 return null;
@@ -195,6 +205,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
         public bool Removed { get; set; }
         public string TemplateValue1 { get; set; }
         public string TemplateValue2 { get; set; }
+        public string ParentField { get; set; }
         public List<ColumnViewModel> Columns { get; set; }
 
         public void InitStorage(ColumnFilterStorage storage)

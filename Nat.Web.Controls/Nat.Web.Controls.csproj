@@ -1001,6 +1001,10 @@
       <Project>{6b73dc79-4a4c-4644-8b69-44df33c4377c}</Project>
       <Name>JS.Linq.Extensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Nat.SqlDbInitializer\Nat.SqlDbInitializer.csproj">
+      <Project>{81465aea-933e-4f6e-b37c-d43bd2e3c0f6}</Project>
+      <Name>Nat.SqlDbInitializer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Nat.Web.Tools\Nat.Web.Tools.csproj">
       <Project>{e2f1c772-023d-49fc-b1c8-45c407a300bd}</Project>
       <Name>Nat.Web.Tools</Name>

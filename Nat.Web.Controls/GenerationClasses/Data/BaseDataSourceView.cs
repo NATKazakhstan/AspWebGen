@@ -25,6 +25,7 @@ namespace Nat.Web.Controls.GenerationClasses
     using Nat.Web.Controls.Trace;
     using Nat.Web.Tools;
     using Nat.Web.Tools.WorkFlow;
+    using Nat.SqlDbInitializer.Wrappers;
 
     public abstract class BaseDataSourceView<TKey> : DataSourceView,
                                                      IDataSourceView,
@@ -49,9 +50,18 @@ namespace Nat.Web.Controls.GenerationClasses
 
         public virtual Type RowType { get; private set; }
 
+        protected string SelectQueryEndText { get; set; }
+
         public virtual DbConnection InitConnection
         {
-            get { return _initConnection; }
+            get
+            {
+                if (_initConnection != null)
+                    return _initConnection;
+
+                _initConnection = !string.IsNullOrEmpty(SelectQueryEndText) ? new DbConnectionWrapper() : _initConnection;
+                return _initConnection;
+            }
             set
             {
                 _initConnection = value;
@@ -1183,7 +1193,10 @@ namespace Nat.Web.Controls.GenerationClasses
 
             if (arguments.RetrieveTotalRowCount)
             {
+                DB.Connection.SetCommandTextAddToWrappedConn(SelectQueryEndText);
                 CountData = arguments.TotalRowCount = GetCount(tableExp, DB, qParams);
+                DB.Connection.SetCommandTextAddToWrappedConn("");
+
                 if (owner.EmptyLoad && arguments.TotalRowCount > arguments.MaximumRows)
                 {
                     arguments.TotalRowCount = 0;
@@ -1222,7 +1235,9 @@ namespace Nat.Web.Controls.GenerationClasses
             List<TRow> returnValue;
             try
             {
+                DB.Connection.SetCommandTextAddToWrappedConn(SelectQueryEndText);
                 returnValue = qParams.GetCompiled<TRow>(tableExp, SupportGlobalCache).ToList();
+                DB.Connection.SetCommandTextAddToWrappedConn("");
             }
             catch (SqlException exception)
             {

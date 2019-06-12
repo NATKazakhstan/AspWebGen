@@ -78,6 +78,9 @@
     <Compile Include="SqlDbConstants.cs" />
     <Compile Include="SqlDbSpecific.cs" />
     <Compile Include="SqlDbTypeConverter.cs" />
+    <Compile Include="Wrappers\DbCommandWrapper.cs" />
+    <Compile Include="Wrappers\DbConnectionWrapper.cs" />
+    <Compile Include="Wrappers\WrapperExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />

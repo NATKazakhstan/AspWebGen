@@ -282,6 +282,7 @@
             p.Columns = null;
             p.TemplateValue1 = null;
             p.TemplateValue2 = null;
+            p.CheckedFilterConditionTooltip = null;
             if (p.Value1 instanceof Date)
                 p.Value1 = p.Value1.toJSON();
             if (p.Value2 instanceof Date)
@@ -361,6 +362,9 @@
                 this.onCreateClick();
             }
         }
+        else if (e.field === 'CheckedFilterConditionValue' && e.items && e.items[0]) {
+            this.ReloadItemDataOnChange(e.items[0]);
+        }
     };
 
     this.ClearParameters = function() {
@@ -382,6 +386,7 @@
         this.templates.Int64 = kendo.template($('#parametersInt64Template').html());
         this.templates.Boolean = kendo.template($('#parametersBooleanTemplate').html());
         this.templates.String = kendo.template($('#parametersStringTemplate').html());
+        this.templates.CFC = kendo.template($('#parametersCFCTemplate').html());
         this.templates.DDL = kendo.template($('#parametersDDLTemplate').html());
         this.templates.DDL2 = kendo.template($('#parametersDDL2Template').html());
         this.templates.Undefined = kendo.template($('#parametersUndefinedTemplate').html());
@@ -459,6 +464,11 @@
         }
         else if (item.Data) {
             this.DDLInit(item);
+            if (item.CheckedFilterCondition) {
+                html = $(this.templates.CFC(item));
+                paramsDiv.append(html);
+                kendo.bind(html, item);
+            }
             // если есть тип фильтра Between
             if (item.FilterTypes.filter(function(f) { return f.id === 256; }).length > 0) {
                 html = $(this.templates.DDL2(item));
@@ -538,19 +548,23 @@
         for (var i = 0; i < this.parameters.length; i++) {
             var item = this.parameters[i];
             if (item.RequireReload && item !== startItem) {
-                var d = $('#Value1_' + item.ParameterIndex).data();
-                if (d.kendoDropDownList)
-                    d.kendoDropDownList.dataSource.read();
-                if (d.kendoMultiColumnComboBox)
-                    d.kendoMultiColumnComboBox.dataSource.read();
-                if (d.kendoGrid) {
-                    d.kendoGrid.clearSelection();
-                    d.kendoGrid.dataSource.read();
-                }
-                if (d.kendoTreeList)
-                    d.kendoTreeList.dataSource.read();
+                ReloadItemDataOnChange(item);
             }
         }
+    };
+
+    this.ReloadItemDataOnChange = function(item) {
+        var d = $('#Value1_' + item.ParameterIndex).data();
+        if (d.kendoDropDownList)
+            d.kendoDropDownList.dataSource.read();
+        if (d.kendoMultiColumnComboBox)
+            d.kendoMultiColumnComboBox.dataSource.read();
+        if (d.kendoGrid) {
+            d.kendoGrid.clearSelection();
+            d.kendoGrid.dataSource.read();
+        }
+        if (d.kendoTreeList)
+            d.kendoTreeList.dataSource.read();
     };
 
     this.MultiColumnInit = function (item) {

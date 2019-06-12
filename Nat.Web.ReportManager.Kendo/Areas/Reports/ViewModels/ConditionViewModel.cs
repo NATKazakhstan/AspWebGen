@@ -45,8 +45,10 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
                 VisibleValue2 = storage.FilterType.IsBinaryFilter(),
                 AutoPostBack = (columnFilter as ColumnFilter)?.PostBack ?? false,
                 RequireReload = storage.CustomConditions.Count > 0,
+                CheckedFilterCondition = (columnFilter as ColumnFilter)?.CheckedFilterCondition,
+                CheckedFilterConditionTooltip = (columnFilter as ColumnFilter)?.CheckedFilterConditionTooltip,
             };
-
+            
             model.InitDataSource(storage);
 
             return model;
@@ -207,6 +209,9 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
         public string TemplateValue2 { get; set; }
         public string ParentField { get; set; }
         public List<ColumnViewModel> Columns { get; set; }
+        public string CheckedFilterCondition { get; set; }
+        public bool CheckedFilterConditionValue { get; set; }
+        public string CheckedFilterConditionTooltip { get; set; }
 
         public void InitStorage(ColumnFilterStorage storage)
         {
@@ -220,6 +225,12 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
             {
                 storage.Value1 = Value1;
                 storage.Value2 = Value2;
+            }
+
+            if (!string.IsNullOrEmpty(CheckedFilterCondition))
+            {
+                var condition = storage.CustomConditions.FirstOrDefault(r => r.ColumnName == CheckedFilterCondition);
+                if (condition != null) condition.EmptyCondition = CheckedFilterConditionValue;
             }
 
             if (storage.RefDataSource is ReportDataSource)

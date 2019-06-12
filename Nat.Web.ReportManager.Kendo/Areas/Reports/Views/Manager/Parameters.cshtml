@@ -111,6 +111,14 @@
         </div>
     </div>
 </script>
+<script type="text/x-kendo-template" id="parametersCFCTemplate">
+    <div class="editor-field m-editor-parameter" id="CFCParameterID_#= ParameterIndex #">
+        <input id="CFCValue1_#= ParameterIndex#" name="CFCValue1_#= ParameterIndex#" type="checkbox"
+               class="k-checkbox"
+               data-bind="checked: CheckedFilterConditionValue" />
+        <label class="k-checkbox-label" style="margin-bottom: 0px;" for="CFCValue1_#= ParameterIndex#">#: CheckedFilterConditionTooltip #</label>
+    </div>
+</script>
 <script type="text/x-kendo-template" id="parametersDDLTemplate">
     @Html.Partial("_Label")
     <div class="editor-field m-editor-parameter" id="ParameterID_#= ParameterIndex #">

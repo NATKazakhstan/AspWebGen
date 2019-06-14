@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Default" Class="DBTraceTimingRequestsDataContext" AccessModifier="Internal" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Default" Class="DBTraceTimingRequestsDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="WebSettings" ConnectionString="Data Source=.\sqlexpress2014;Initial Catalog=Sample;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnectionString1" Provider="System.Data.SqlClient" />
   <Function Name="dbo.P_LOG_UpdateTraceTimingRequest" Method="P_LOG_UpdateTraceTimingRequest">
     <Parameter Name="TraceKey" Parameter="traceKey" Type="System.Guid" DbType="uniqueidentifier" />

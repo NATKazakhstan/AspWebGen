@@ -23,7 +23,7 @@ namespace Nat.Web.Controls.Data
 	
 	
 	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="Default")]
-	internal partial class DBTraceTimingRequestsDataContext : System.Data.Linq.DataContext
+	public partial class DBTraceTimingRequestsDataContext : System.Data.Linq.DataContext
 	{
 		
 		private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();

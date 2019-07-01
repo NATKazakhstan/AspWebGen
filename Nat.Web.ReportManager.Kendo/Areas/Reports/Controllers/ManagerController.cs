@@ -662,6 +662,8 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                     paramsDic[storage.Name].InitStorage(storage);
                     condition.ColumnFilter.SetStorage(storage);
                 }
+                else
+                    ConditionViewModel.From(condition.ColumnFilter);
 
                 if (storage.DataType == null)
                     storageValues.AddStorage(storage);

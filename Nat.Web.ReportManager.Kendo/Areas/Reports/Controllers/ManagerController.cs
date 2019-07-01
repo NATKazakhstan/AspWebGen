@@ -108,6 +108,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 PluginName = plugin?.GetType().FullName,
                 Name = plugin?.Description ?? Resources.SPluginNotFound,
                 viewOne = true,
+                viewOneOpen = !string.IsNullOrEmpty(idrec) || (plugin?.Conditions.Count == 0 && plugin.CreateModelFillConditions().Count == 0),
                 idrec,
                 isKz,
                 setDefaultParams = !string.IsNullOrEmpty(setDefaultParams)

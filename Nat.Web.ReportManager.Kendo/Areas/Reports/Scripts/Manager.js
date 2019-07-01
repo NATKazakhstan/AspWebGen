@@ -447,6 +447,10 @@
         }
 
         this.options.set('showAddParameters', showAddParameters);
+
+        if (this.options.viewOneOpen) {
+            this.onCreateClick();
+        }
     };
 
     this.InitParameterItem = function(paramsDiv, item) {

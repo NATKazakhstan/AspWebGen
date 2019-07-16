@@ -79,10 +79,10 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 return ExportReport(className, idrec, culture, format, setDefaultParams);
             }
 
-            return OpenReport(className, idrec, culture, setDefaultParams);
+            return OpenReport(className, idrec, culture, setDefaultParams, string.IsNullOrEmpty(open) || "on".Equals(open) || "true".Equals(open));
         }
 
-        private ActionResult OpenReport(string className, string idrec, string culture, string setDefaultParams)
+        private ActionResult OpenReport(string className, string idrec, string culture, string setDefaultParams, bool allowOpen)
         {
             ViewData["refChildMenu"] = 105;
             var isKz = LocalizationHelper.IsCultureKZ;
@@ -102,18 +102,21 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 }
             }
 
+            var setDefaultParameters = !string.IsNullOrEmpty(setDefaultParams)
+                                       && ("on".Equals(setDefaultParams, StringComparison.OrdinalIgnoreCase)
+                                           || Convert.ToBoolean(setDefaultParams));
             var plugin = WebReportManager.GetPlugin(className);
             var options = new
             {
                 PluginName = plugin?.GetType().FullName,
+                PluginType = plugin is CrossJournalReportPlugin ? "CrossReport" : "Simple",
                 Name = plugin?.Description ?? Resources.SPluginNotFound,
                 viewOne = true,
-                viewOneOpen = !string.IsNullOrEmpty(idrec) || (plugin?.Conditions.Count == 0 && plugin.CreateModelFillConditions().Count == 0),
+                viewOneOpen = allowOpen && (!string.IsNullOrEmpty(idrec) || (plugin?.Conditions.Count == 0 && plugin.CreateModelFillConditions().Count == 0))
+                             || setDefaultParameters,
                 idrec,
                 isKz,
-                setDefaultParams = !string.IsNullOrEmpty(setDefaultParams)
-                                   && ("on".Equals(setDefaultParams, StringComparison.OrdinalIgnoreCase)
-                                       || Convert.ToBoolean(setDefaultParams))
+                setDefaultParams = setDefaultParameters
             };
             ViewBag.Options = JsonConvert.SerializeObject(options);
             return View("Index");
@@ -144,7 +147,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         private ActionResult ExportReport(string className, string idrec, string culture, string format, string setDefaultParams)
         {
             var value = CreateReport(className, idrec, culture, null, null, format ?? "Auto", false);
-            return value is JsonResult ? OpenReport(className, idrec, culture, setDefaultParams) : value;
+            return value is JsonResult ? OpenReport(className, idrec, culture, setDefaultParams, false) : value;
         }
 
         [HttpPost]

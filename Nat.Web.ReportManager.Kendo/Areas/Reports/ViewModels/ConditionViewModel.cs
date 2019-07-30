@@ -259,7 +259,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
                     return obj == null ? null : Convert.ChangeType(obj, dataType);
 
                 if (strValue.StartsWith("/Date(") && (dataType == typeof(DateTime) || dataType == typeof(DateTime?)))
-                    return DateModelBinder.ParseDateTime(strValue).ToLocalTime();
+                    return DateModelBinder.ParseDateTime(strValue);
 
                 return string.IsNullOrEmpty(strValue) ? null : Convert.ChangeType(strValue, dataType);
             }

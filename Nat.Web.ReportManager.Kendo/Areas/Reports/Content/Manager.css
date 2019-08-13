@@ -105,5 +105,5 @@ input.k-textbox.searchMenuInput {
     display: inline-block;
 }
 #reportWindow {
-    margin-left: 6px;
+    margin: 0 6px;
 }

@@ -85,7 +85,10 @@
                         var dataItem = me.getSelected();
                         me.reportWindow.setOptions({ width: w.width() * 0.95, height: w.height() * 0.9, title: dataItem ? dataItem.Name : options.name || '' });
                         me.reportWindow.content('<h6>Загрузка... <br/> Енгізу...</h6>');
-                        me.reportWindow.refresh({ url: result.Url.replace('/MainPage.aspx/', '/EmptyPage.aspx/'), iframe: true });
+                        var url = result.Url.indexOf('MainPage.aspx') === -1
+                            ? result.Url + '&HideMainMenu=true'
+                            : result.Url.replace('/MainPage.aspx/', '/EmptyPage.aspx/');
+                        me.reportWindow.refresh({ url: url, iframe: true });
                         kendo.ui.progress(me.reportWindow.element, true);
                         me.reportWindow.open();
                         me.reportWindow.center();

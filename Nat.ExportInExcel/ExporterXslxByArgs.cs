@@ -99,7 +99,7 @@ namespace Nat.ExportInExcel
         protected override void RenderColumnsSettings()
         {
             _writer.WriteStartElement("cols");
-            var columns = _args.Columns.SelectMany(GetColumns).ToList();
+            var columns = AvailableColumns;
             for (int i = 0; i < columns.Count;)
             {
                 var item = columns[i];
@@ -119,6 +119,18 @@ namespace Nat.ExportInExcel
             }
 
             _writer.WriteEndElement();
+        }
+
+        private List<IExportColumn> _columns;
+
+        private List<IExportColumn> AvailableColumns
+        {
+            get
+            {
+                if (_columns != null)
+                    return _columns;
+                return _columns = _args.Columns.SelectMany(GetColumns).ToList();
+            }
         }
 
         private IEnumerable<IExportColumn> GetColumns(IExportColumn column)
@@ -143,7 +155,7 @@ namespace Nat.ExportInExcel
             WriteStartRow(null);
 
             MoveRowIndex();
-            foreach (var column in _args.Columns.SelectMany(GetColumns))
+            foreach (var column in AvailableColumns)
             {
                 string styleId;
 

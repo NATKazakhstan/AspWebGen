@@ -123,7 +123,7 @@ namespace Nat.ExportInExcel
 
         private List<IExportColumn> _columns;
 
-        private List<IExportColumn> AvailableColumns
+        public List<IExportColumn> AvailableColumns
         {
             get
             {
@@ -151,17 +151,29 @@ namespace Nat.ExportInExcel
 
         private void RenderData(object row)
         {
-            if (_args.StartRenderRow != null) _args.StartRenderRow(row);
+            _args.StartRenderRow?.Invoke(row);
             WriteStartRow(null);
 
             MoveRowIndex();
             foreach (var column in AvailableColumns)
             {
+                if (column.ColSpan < 1 || column.RowSpan < 1)
+                    continue;
+
                 string styleId;
 
-                if (column.IsVerticalDataText) styleId = DataVerticalStyleId;
-                else if (column.IsNumericColumn) styleId = DataStyleCenterId;
-                else styleId = DataStyleId;
+                if (GroupStyle)
+                {
+                    if (column.IsVerticalDataText) styleId = DataGroupVerticalStyleId;
+                    else if (column.IsNumericColumn) styleId = DataGroupStyleCenterId;
+                    else styleId = DataGroupStyleId;
+                }
+                else
+                {
+                    if (column.IsVerticalDataText) styleId = DataVerticalStyleId;
+                    else if (column.IsNumericColumn) styleId = DataStyleCenterId;
+                    else styleId = DataStyleId;
+                }
 
                 string cellData = column.GetValue(row);
                 if (!string.IsNullOrEmpty(column.ColumnName))
@@ -179,7 +191,7 @@ namespace Nat.ExportInExcel
                     column.ColSpan,
                     styleId,
                     column.IsNumericColumn ? ColumnType.Numeric : ColumnType.Other,
-                    string.Empty);
+                    column.GetFormula(row)?.ToString(_columnIndex, _rowIndex));
                 
                 var href = column.GetHyperLink(row);
                 if (!string.IsNullOrEmpty(href)) AddHyperLink(rangeOfCell, cellData, href);
@@ -206,6 +218,7 @@ namespace Nat.ExportInExcel
         protected override Table RenderFooterTable { get; }
         protected override Table RenderFirstHeaderTable { get; }
         protected override Table[] RenderAdditionalSheetsTable { get; }
+        public bool GroupStyle { get; set; }
 
         private void RenderHeader(IEnumerable<IExportColumn> columns, int renderLevel, int currentLevel, int maxRowSpan)
         {

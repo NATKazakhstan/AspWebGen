@@ -1,4 +1,6 @@
-﻿namespace Nat.Web.ReportManager.CustomExport
+﻿using Nat.Web.Tools.Export.Computing;
+
+namespace Nat.Web.ReportManager.CustomExport
 {
     using System;
     using System.Collections.Generic;
@@ -211,6 +213,11 @@
             }
 
             public IEnumerable<IExportColumn> GetChilds()
+            {
+                return null;
+            }
+
+            public Formula GetFormula(object row)
             {
                 return null;
             }

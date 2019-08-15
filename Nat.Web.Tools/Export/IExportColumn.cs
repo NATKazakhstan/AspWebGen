@@ -4,6 +4,8 @@
 * Copyright © JSC NAT Kazakhstan 2012
 */
 
+using Nat.Web.Tools.Export.Computing;
+
 namespace Nat.Web.Tools.Export
 {
     using System.Collections.Generic;
@@ -84,5 +86,10 @@ namespace Nat.Web.Tools.Export
         /// </summary>
         /// <returns></returns>
         IEnumerable<IExportColumn> GetChilds();
+
+        /// <summary>
+        /// Формула для расчета значения.
+        /// </summary>
+        Formula GetFormula(object row);
     }
 }

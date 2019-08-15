@@ -4,6 +4,8 @@
  * Copyright © JSC New Age Technologies 2008
  */
 
+using Nat.Web.Tools.Export.Computing;
+
 namespace Nat.Web.Controls.GenerationClasses
 {
     using System;
@@ -222,6 +224,14 @@ namespace Nat.Web.Controls.GenerationClasses
             /// Наименование колонки. Должно быть уникальным.
             /// </summary>
             public string ColumnName { get; set; }
+
+            /// <summary>
+            /// Формула для расчета значения.
+            /// </summary>
+            public Formula GetFormula(object row)
+            {
+                return null;
+            }
 
             /// <summary>
             /// Наименование таблицы. Формирование ссылки на родителя использует указанную таблицу. Чем можно воспользоваться для изменения родительской записи по условию в InitializeDinamicColumnsInRow.

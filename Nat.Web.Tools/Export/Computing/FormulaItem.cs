@@ -4,6 +4,10 @@
 
     public class FormulaItem
     {
+        protected FormulaItem()
+        {
+        }
+
         public FormulaItem(string s)
         {
             String = s;
@@ -18,12 +22,11 @@
         {
             FormulaCell = new FormulaCell(columnMove, rowMove);
         }
-
-
+        
         public string String { get; }
         public FormulaCell FormulaCell { get; }
 
-        public void ToString(StringBuilder sb, int column, int row)
+        public virtual void ToString(StringBuilder sb, int column, int row)
         {
             if (FormulaCell != null)
                 FormulaCell.ToString(sb, column, row);

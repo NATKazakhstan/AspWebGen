@@ -1,4 +1,6 @@
-﻿namespace Nat.ExportInExcel
+﻿using Nat.Web.Tools.Export.Computing;
+
+namespace Nat.ExportInExcel
 {
     using System;
     using System.Collections.Generic;
@@ -22,6 +24,7 @@
         public bool IsNumericColumn { get; set; }
         public Func<object, string> GetValueHandler { get; set; }
         public Func<object, string> GetHyperLinkHandler { get; set; }
+        public Func<object, Formula> GetFormulaHandler { get; set; }
 
         public virtual string GetValue(object row)
         {
@@ -31,6 +34,11 @@
         public virtual string GetHyperLink(object row)
         {
             return GetHyperLinkHandler?.Invoke(row) ?? (row as ExportDataRow)?.GetHyperLink(ColumnName);
+        }
+
+        public Formula GetFormula(object row)
+        {
+            return GetFormulaHandler?.Invoke(row);
         }
 
         public virtual IEnumerable<IExportColumn> GetChilds()

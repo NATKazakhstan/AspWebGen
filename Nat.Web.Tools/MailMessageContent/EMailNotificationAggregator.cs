@@ -23,21 +23,23 @@
             BaseEMailNotification notification,
             string from,
             HtmlTextWriter htmlWriter,
+            string unsubscribe,
             string subject,
-            List<string> emailsTo,
-            List<string> emailsCopy,
-            List<BaseEMailNotification.MyAttachment> attachments)
+            IEnumerable<string> emailsTo,
+            IEnumerable<string> emailsCopy,
+            IEnumerable<BaseEMailNotification.MyAttachment> attachments)
         {
             _requiredNotify = true;
             var value = htmlWriter.InnerWriter.ToString();
             var item = new Item
                 {
                     Html = new StringBuilder(value),
-                    Attachments = attachments,
+                    Attachments = attachments.ToList(),
                     From = from,
                     Subject = subject,
-                    EMailsTo = emailsTo,
-                    EMailsCopy = emailsCopy,
+                    Unsubscribe = unsubscribe,
+                    EMailsTo = emailsTo.ToList(),
+                    EMailsCopy = emailsCopy.ToList(),
                     Notification = notification
                 };
             item.AddedContent.Add(value);
@@ -75,6 +77,7 @@
 
             public string Subject { get; set; }
             public string From { get; set; }
+            public string Unsubscribe { get; set; }
             public List<string> EMailsTo { get; set; }
             public List<string> EMailsCopy { get; set; }
             public List<string> AddedContent { get; } = new List<string>();
@@ -134,9 +137,13 @@
 
             public void Notify()
             {
+                if (!string.IsNullOrEmpty(Unsubscribe))
+                    Html.Insert(Html.Length - 16, Unsubscribe);
                 using (var stringWriter = new StringWriter(Html))
                 using (var writer = new HtmlTextWriter(stringWriter))
+                {
                     Notification.SendEMail(From, writer, Subject, EMailsTo, EMailsCopy, Attachments);
+                }
             }
         }
     }

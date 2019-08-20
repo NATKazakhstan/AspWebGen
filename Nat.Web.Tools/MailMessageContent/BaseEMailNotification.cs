@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System.Text;
 using System.Web.Configuration;
 
 namespace Nat.Web.Tools.MailMessageContent
@@ -138,6 +139,8 @@ namespace Nat.Web.Tools.MailMessageContent
 
     public abstract class BaseEMailNotification<TRowState> : BaseEMailNotification
     {
+        private StringBuilder unsubscribeSeperateString;
+
         #region Constructors and Destructors
 
         protected BaseEMailNotification(long refPerson)
@@ -174,24 +177,32 @@ namespace Nat.Web.Tools.MailMessageContent
             {
                 var subject = GetSubject();
                 var row = GetData();
-                RenderEMail(htmlWriter, subject, row);
                 if (EMailAggregator != null)
+                {
+                    unsubscribeSeperateString = new StringBuilder();
+                    RenderEMail(htmlWriter, subject, row);
                     EMailAggregator.Add(
                         this,
                         GetCurrentUserEMail(),
                         htmlWriter,
+                        unsubscribeSeperateString.ToString(),
                         subject,
                         mailsDetector.EMailsTo,
                         mailsDetector.EMailsCopy,
                         Attachments);
+
+                }
                 else
+                {
+                    unsubscribeSeperateString = null;
+                    RenderEMail(htmlWriter, subject, row);
                     SendEMail(
                         GetCurrentUserEMail(),
                         htmlWriter,
                         subject,
                         mailsDetector.EMailsTo,
                         mailsDetector.EMailsCopy,
-                        Attachments);
+                        Attachments);}
             }
         }
 
@@ -289,15 +300,32 @@ namespace Nat.Web.Tools.MailMessageContent
 
                 if (refModuleSend != null)
                 {
-                    email.HtmlWriter.Write("<br/>");
-                    email.HtmlWriter.Write("<hr/>");
-                    email.HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
-                    email.HtmlWriter.Write("Что бы прекратить отправку данных уведомлений перейдите по ");
-                    email.HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Href, ConfigurationManager.AppSettings["MaxatServer"] + "/MSC/Unsubscribe?refSend=" + refModuleSend);
-                    email.HtmlWriter.RenderBeginTag(HtmlTextWriterTag.A);
-                    email.HtmlWriter.Write("ссылке");
-                    email.HtmlWriter.RenderEndTag();
-                    email.HtmlWriter.RenderEndTag();
+                    var unsubscribeUrl = ConfigurationManager.AppSettings["MaxatServer"] + "/MSC/Unsubscribe?refSend=" + refModuleSend;
+                    if (unsubscribeSeperateString != null)
+                    {
+                        unsubscribeSeperateString.AppendLine("<br/>");
+                        unsubscribeSeperateString.AppendLine("<hr/>");
+                        unsubscribeSeperateString.AppendLine("<" + HtmlTextWriterTag.Div + ">");
+                        unsubscribeSeperateString.AppendLine("Что бы прекратить отправку данных уведомлений перейдите по ");
+                        unsubscribeSeperateString.Append("<").Append(HtmlTextWriterTag.A)
+                            .Append(" ").Append(HtmlTextWriterAttribute.Href).Append("=\"").Append(unsubscribeUrl)
+                            .Append("\">");
+                        unsubscribeSeperateString.AppendLine("ссылке");
+                        unsubscribeSeperateString.AppendLine("</a>");
+                        unsubscribeSeperateString.AppendLine("</div>");
+                    }
+                    else
+                    {
+                        email.HtmlWriter.Write("<br/>");
+                        email.HtmlWriter.Write("<hr/>");
+                        email.HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Div);
+                        email.HtmlWriter.Write("Что бы прекратить отправку данных уведомлений перейдите по ");
+                        email.HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Href, unsubscribeUrl);
+                        email.HtmlWriter.RenderBeginTag(HtmlTextWriterTag.A);
+                        email.HtmlWriter.Write("ссылке");
+                        email.HtmlWriter.RenderEndTag();
+                        email.HtmlWriter.RenderEndTag();
+                    }
                 }
 
                 email.EndMessage();

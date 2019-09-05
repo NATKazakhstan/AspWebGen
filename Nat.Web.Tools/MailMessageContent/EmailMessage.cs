@@ -261,6 +261,20 @@ namespace Nat.Web.Tools.MailMessageContent
         public void BeginMessage()
         {
             HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Html);
+            HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Head);
+
+            //<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            HtmlWriter.AddAttribute("http-equiv", "Content-Type");
+            HtmlWriter.AddAttribute("content", "text/html; charset=utf-8");
+            HtmlWriter.RenderBeginTag("meta");
+            HtmlWriter.RenderEndTag();
+
+            //<meta charset="utf-8" />
+            HtmlWriter.AddAttribute("charset", "utf-8");
+            HtmlWriter.RenderBeginTag("meta");
+            HtmlWriter.RenderEndTag();
+
+            HtmlWriter.RenderEndTag();
             HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Body);
         }
 

@@ -255,11 +255,18 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
                     strValue = (string) arr1[0];
                 else if (obj is string str)
                     strValue = str;
+                else if (dataType == typeof(DateTime) || dataType == typeof(DateTime?))
+                    return obj == null
+                        ? (DateTime?) null
+                        : ((DateTime) Convert.ChangeType(obj, dataType)).ToLocalTime();
                 else
                     return obj == null ? null : Convert.ChangeType(obj, dataType);
 
-                if (strValue.StartsWith("/Date(") && (dataType == typeof(DateTime) || dataType == typeof(DateTime?)))
-                    return DateModelBinder.ParseDateTime(strValue);
+                if((dataType == typeof(DateTime) || dataType == typeof(DateTime?)))
+                {
+                    if (strValue.StartsWith("/Date(")) return DateModelBinder.ParseDateTime(strValue);
+                    return ((DateTime) Convert.ChangeType(strValue, dataType)).ToLocalTime();
+                }
 
                 return string.IsNullOrEmpty(strValue) ? null : Convert.ChangeType(strValue, dataType);
             }

@@ -50,7 +50,9 @@
         public static void GetUpdateReportSubscriptionValuesParams(UpdateReportSubscriptionValuesParamsArgs args)
         {
             var storageValues = (StorageValues)BinaryToObject(args.Values.ToArray());
-            var storageConstants = (IDictionary)BinaryToObject(args.Constants.ToArray());
+            var storageConstants = args.Constants == null
+                ? new Dictionary<string, object>()
+                : (IDictionary) BinaryToObject(args.Constants.ToArray());
             var rowParams =
                 args.db.ReportSubscriptions_Params.Where(
                     q => q.refReportSubscriptions == args.refReportSubscriptions);

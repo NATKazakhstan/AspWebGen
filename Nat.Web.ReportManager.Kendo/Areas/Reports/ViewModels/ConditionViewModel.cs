@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Web.UI;
 using Nat.Controls.DataGridViewTools;
 using Nat.ReportManager.QueryGeneration;
@@ -256,19 +258,31 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
                 else if (obj is string str)
                     strValue = str;
                 else if (dataType == typeof(DateTime) || dataType == typeof(DateTime?))
-                    return obj == null
-                        ? (DateTime?) null
-                        : ((DateTime) Convert.ChangeType(obj, dataType)).ToLocalTime();
+                {
+                    if (obj == null) return null;
+
+                    if (obj is DateTime dateTime)
+                        return dateTime.ToLocalTime();
+
+                    strValue = Convert.ToString(obj);
+                }
                 else
                     return obj == null ? null : Convert.ChangeType(obj, dataType);
 
-                if((dataType == typeof(DateTime) || dataType == typeof(DateTime?)))
+                if (string.IsNullOrEmpty(strValue))
+                    return null;
+
+                if (dataType == typeof(DateTime) || dataType == typeof(DateTime?))
                 {
                     if (strValue.StartsWith("/Date(")) return DateModelBinder.ParseDateTime(strValue);
-                    return ((DateTime) Convert.ChangeType(strValue, dataType)).ToLocalTime();
+                    return DateTime.Parse(strValue,
+                            Thread.CurrentThread.CurrentCulture.DateTimeFormat,
+                            DateTimeStyles.AssumeLocal)
+                        .ToLocalTime();
+                    //return ((DateTime) Convert.ChangeType(strValue, dataType)).ToLocalTime();
                 }
 
-                return string.IsNullOrEmpty(strValue) ? null : Convert.ChangeType(strValue, dataType);
+                return Convert.ChangeType(strValue, dataType);
             }
             catch (FormatException)
             {

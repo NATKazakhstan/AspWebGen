@@ -287,9 +287,9 @@
             p.TemplateValue2 = null;
             p.CheckedFilterConditionTooltip = null;
             if (p.Value1 instanceof Date)
-                p.Value1 = p.Value1.toJSON();
+                p.Value1 = kendo.format('{0:dd.MM.yyyy}', p.Value1);
             if (p.Value2 instanceof Date)
-                p.Value2 = p.Value2.toJSON();
+                p.Value2 = kendo.format('{0:dd.MM.yyyy}', p.Value2);
         });
         return parameters;
     };

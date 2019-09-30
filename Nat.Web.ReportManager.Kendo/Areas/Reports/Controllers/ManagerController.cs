@@ -266,6 +266,8 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
 
                 var model = ConditionViewModel.From(condition.ColumnFilter);
                 model.Visible = condition.Visible;
+                if (model.Value1 is DateTime) model.Value1 = ((DateTime)model.Value1).ToString("dd.MM.yyyy");
+                if (model.Value2 is DateTime) model.Value2 = ((DateTime)model.Value2).ToString("dd.MM.yyyy");
                 list.Add(model);
             }
 

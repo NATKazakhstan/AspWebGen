@@ -1012,7 +1012,8 @@ function ApplyFilter(filterTable, url) {
 
         if (dialogArguments.closeModalDialog != null)
             dialogArguments.closeModalDialog();
-        window.close();
+        if (dialogArguments.closeSelfWindow === undefined || dialogArguments.closeSelfWindow)
+            window.close();
         return;
     }
 

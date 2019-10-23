@@ -270,7 +270,13 @@ namespace Nat.Web.Controls.Filters
         {
             if (GridViewCreated)
             {
-                gridViewExt.DataBind();
+                if (gridViewExt.AllowPaging)
+                {
+                    gridViewExt.PageIndex = 0;
+                    DataBind();
+                }
+                else
+                    gridViewExt.DataBind();
             }
         }
 

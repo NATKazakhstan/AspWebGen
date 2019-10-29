@@ -122,6 +122,47 @@ namespace Nat.Web.Controls.HistoryFilters
         {
             return r => true;
         }
+
+        /// <summary>
+        /// Фильтрация истории.
+        /// </summary>
+        /// <typeparam name="TSource">Тип</typeparam>
+        /// <param name="source">Журнал для фильтрации</param>
+        /// <returns>Результат фильтрации</returns>
+        public static Expression<Func<TSource, bool>> FDateStartEndHistoryGetExpression2<TSource>() where TSource : class, IFilterDateStartEndHistory2
+        {
+            var time = DateTime.Now;
+            return r => r.DateStart < time && (r.DateEnd == null || r.DateEnd > time);
+        }
+
+        /// <summary>
+        /// Фильтрация истории.
+        /// </summary>
+        /// <typeparam name="TSource">Тип</typeparam>
+        /// <param name="ids">Ключи</param>
+        /// <returns>Результат фильтрации</returns>
+        public static Expression<Func<TSource, bool>> FDateStartEndHistoryGetExpression2<TSource>(params long[] ids) where TSource : class, IFilterDateStartEndHistory2
+        {
+            var time = DateTime.Now;
+            return r => (r.DateStart < time && (r.DateEnd == null || r.DateEnd > time)) || ids.Contains(r.id);
+        }
+
+        /// <summary>
+        /// Фильтрация истории.
+        /// </summary>
+        /// <typeparam name="TSource">Тип</typeparam>
+        /// <param name="id">Ключ</param>
+        /// <returns>Результат фильтрации</returns>
+        public static Expression<Func<TSource, bool>> FDateStartEndHistoryGetExpression2<TSource>(long id) where TSource : class, IFilterDateStartEndHistory2
+        {
+            var time = DateTime.Now;
+            return r => (r.DateStart < time && (r.DateEnd == null || r.DateEnd > time)) || r.id == id;
+        }
+
+        public static Expression<Func<TSource, bool>> FDateStartEndHistoryCanEditDeleteExpression2<TSource>() where TSource : class, IFilterDateStartEndHistory2
+        {
+            return r => true;
+        }
     }
 
     /// <summary>
@@ -131,6 +172,16 @@ namespace Nat.Web.Controls.HistoryFilters
     {
         DateTime dateStart { get; }
         DateTime? dateEnd { get; }
+        long id { get; }
+    }
+
+    /// <summary>
+    /// Интерфейс, для таблицы с историей.
+    /// </summary>
+    public interface IFilterDateStartEndHistory2
+    {
+        DateTime DateStart { get; }
+        DateTime? DateEnd { get; }
         long id { get; }
     }
 }

@@ -555,7 +555,7 @@
         for (var i = 0; i < this.parameters.length; i++) {
             var item = this.parameters[i];
             if (item.RequireReload && item !== startItem) {
-                ReloadItemDataOnChange(item);
+                this.ReloadItemDataOnChange(item);
             }
         }
     };

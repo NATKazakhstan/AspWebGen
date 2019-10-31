@@ -344,7 +344,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
 
             tableDataSource.EnablePaging = true;
 
-            var filterDescriptor = request.Filters?.FirstOrDefault() as FilterDescriptor;
+            var filterDescriptor = GetFilterDescriptor(request.Filters);
             var filter = Convert.ToString(filterDescriptor?.Value);
             var paramNameId = 1;
 
@@ -398,6 +398,21 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             tableDataSource.EnablePaging = paging;
             var data = tableDataSource.View.Select(true, arguments);
             return Json(ConditionViewModel.ParseDataView(data));
+        }
+
+        private static FilterDescriptor GetFilterDescriptor(IList<IFilterDescriptor> filters)
+        {
+            if (filters == null)
+                return null;
+            var filter = filters.OfType<FilterDescriptor>().FirstOrDefault();
+            if (filter != null)
+                return filter;
+
+            var composite = filters.OfType<CompositeFilterDescriptor>().FirstOrDefault();
+            if (composite == null)
+                return null;
+
+            return GetFilterDescriptor(composite.FilterDescriptors);
         }
 
         [HttpPost]

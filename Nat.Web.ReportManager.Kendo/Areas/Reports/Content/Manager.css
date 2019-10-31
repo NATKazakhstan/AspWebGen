@@ -107,3 +107,6 @@ input.k-textbox.searchMenuInput {
 #reportWindow {
     margin: 0 6px;
 }
+.m-editor-parameter .k-grid .k-header .k-grid-search {
+    width: 40%;
+}

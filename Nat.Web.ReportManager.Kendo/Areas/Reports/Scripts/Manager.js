@@ -645,6 +645,7 @@
         item.set('Data', new kendo.data.DataSource({
             type: 'aspnetmvc-ajax',
             serverFiltering: true,
+            //serverPaging: true,
             pageSize: 25,
             schema: {
                 model: {

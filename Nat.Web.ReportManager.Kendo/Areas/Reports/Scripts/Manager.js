@@ -471,6 +471,7 @@
         }
         else if (item.Data) {
             this.DDLInit(item);
+            // дополнительная галочка
             if (item.CheckedFilterCondition) {
                 html = $(this.templates.CFC(item));
                 paramsDiv.append(html);
@@ -485,15 +486,37 @@
         } else if (item.Columns && item.FilterType === 65536) {
             if (item.ParentField) {
                 this.TreeInit(item);
+                // дополнительная галочка
+                if (item.CheckedFilterCondition) {
+                    html = $(this.templates.CFC(item));
+                    paramsDiv.append(html);
+                    kendo.bind(html, item);
+                }
+
                 html = $(this.templates.Tree(item));
                 func = this.TreeAfterInit;
             } else {
                 this.GridInit(item);
+                // дополнительная галочка
+                if (item.CheckedFilterCondition) {
+                    html = $(this.templates.CFC(item));
+                    paramsDiv.append(html);
+                    kendo.bind(html, item);
+                }
+
                 html = $(this.templates.Grid(item));
                 func = this.GridAfterInit;
             }
         } else if (item.Columns) {
             this.MultiColumnInit(item);
+            
+            // дополнительная галочка
+            if (item.CheckedFilterCondition) {
+                html = $(this.templates.CFC(item));
+                paramsDiv.append(html);
+                kendo.bind(html, item);
+            }
+
             html = $(this.templates.MultiColumn(item));
         } else if (this.templates[item.DataType]) {
             html = $(this.templates[item.DataType](item));

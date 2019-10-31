@@ -47,8 +47,8 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
                 VisibleValue2 = storage.FilterType.IsBinaryFilter(),
                 AutoPostBack = (columnFilter as ColumnFilter)?.PostBack ?? false,
                 RequireReload = storage.CustomConditions.Count > 0,
-                CheckedFilterCondition = (columnFilter as ColumnFilter)?.CheckedFilterCondition,
-                CheckedFilterConditionTooltip = (columnFilter as ColumnFilter)?.CheckedFilterConditionTooltip,
+                CheckedFilterCondition = (columnFilter as ICheckedFilterCondition)?.CheckedFilterCondition,
+                CheckedFilterConditionTooltip = (columnFilter as ICheckedFilterCondition)?.CheckedFilterConditionTooltip,
             };
             
             model.InitDataSource(storage);

@@ -31,7 +31,7 @@ namespace Nat.Web.Controls.Filters
     using Nat.Tools.QueryGeneration;
 
     public class WebMultipleValuesColumnFilter : WebControl, IMultipleValuesColumnFilter, ISupportSessionWorker,
-        ISupportLog, IColumnFilterStorageChanged, IDefaultFilterValues, INamingContainer, ISupportPostBack
+        ISupportLog, IColumnFilterStorageChanged, IDefaultFilterValues, INamingContainer, ISupportPostBack, ICheckedFilterCondition
     {
         #region Fields
 
@@ -417,6 +417,16 @@ function {1} (checkbox){{
         }
 
         #region Properties
+        
+        /// <summary>
+        /// Имя условия из CustomConditions, для фильтрации текущего списка полей. Для этого фильтра создается CheckBox.
+        /// </summary>
+        public string CheckedFilterCondition { get; set; }
+
+        /// <summary>
+        /// Всплывающая подсказка для CheckBox, создаваемого на основании свойства CheckedFilterCondition.
+        /// </summary>
+        public string CheckedFilterConditionTooltip { get; set; }
 
         protected bool GridViewCreated
         {

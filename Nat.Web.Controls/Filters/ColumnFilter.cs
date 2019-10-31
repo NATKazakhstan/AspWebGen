@@ -40,7 +40,7 @@ namespace Nat.Web.Controls
     [ClientCssResource("Nat.Web.Controls.Filters.ColumnFilter.css")]
     [ClientScriptResource("Nat.Web.Controls.ColumnFilter", "Nat.Web.Controls.Filters.ColumnFilter.js")]
     public class ColumnFilter : WebControl, IScriptControl, INamingContainer,
-                                IColumnFilter, ISupportSessionWorker, ISupportPostBack, IDefaultFilterValues, IColumnFilterStorageChanged
+                                IColumnFilter, ISupportSessionWorker, ISupportPostBack, IDefaultFilterValues, IColumnFilterStorageChanged, ICheckedFilterCondition
     {
         #region Fields
 

@@ -361,7 +361,9 @@
             }
         }
         else if (e.field === "Value2" && e.items && e.items[0]) {
-            if (this.options.oneParameter && e.items[0].Value1) {
+            if (e.items[0].AutoPostBack) {
+                this.ReloadDataOnChange(e.items[0]);
+            } else if (this.options.oneParameter && e.items[0].Value1) {
                 this.onCreateClick();
             }
         }

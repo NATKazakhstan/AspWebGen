@@ -135,4 +135,16 @@
   <data name="SCreateReport" xml:space="preserve">
     <value>Есебі қалыптасу</value>
   </data>
+  <data name="SOnNewTab" xml:space="preserve">
+    <value>Жаңа қойындыда</value>
+  </data>
+  <data name="SOnKaz" xml:space="preserve">
+    <value>Қазақ тіліндегі есеп</value>
+  </data>
+  <data name="SOnRus" xml:space="preserve">
+    <value>Орыс тіліндегі есеп</value>
+  </data>
+  <data name="SPluginNotFound" xml:space="preserve">
+    <value>Есеп табылмады</value>
+  </data>
 </root>

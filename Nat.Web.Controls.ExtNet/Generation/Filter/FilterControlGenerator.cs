@@ -48,7 +48,7 @@ namespace Nat.Web.Controls.ExtNet.Generation.Filter
             var isReadArgument = (HttpContext.Current.Request.Form["__EVENTARGUMENT"] ?? "").EndsWith("|postback|read");
             if (isReadArgument)
                 return;
-            if (!filters.Any()) return;
+            if (!filters.Any(f => f.MainGroup)) return;
 
             var panelFilters = FilterControlPanel.GetFilterPanel(filters, defaultValuesJson, applyFunctionName, filterPanelCollapsed);
             filterPlaceHolder.Controls.Add(panelFilters);

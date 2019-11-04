@@ -4,6 +4,7 @@
  * Copyright © JSC NAT Kazakhstan 2013
  */
 
+using System.Linq;
 using System.Web.UI.WebControls;
 
 namespace Nat.Web.Controls.ExtNet.Generation.Filter
@@ -47,6 +48,7 @@ namespace Nat.Web.Controls.ExtNet.Generation.Filter
             var isReadArgument = (HttpContext.Current.Request.Form["__EVENTARGUMENT"] ?? "").EndsWith("|postback|read");
             if (isReadArgument)
                 return;
+            if (!filters.Any()) return;
 
             var panelFilters = FilterControlPanel.GetFilterPanel(filters, defaultValuesJson, applyFunctionName, filterPanelCollapsed);
             filterPlaceHolder.Controls.Add(panelFilters);

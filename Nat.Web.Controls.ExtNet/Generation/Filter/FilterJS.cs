@@ -64,7 +64,7 @@ namespace Nat.Web.Controls.ExtNet.Generation.Filter
         /// </returns>
         internal static string GetFilterRepository(string clientReposiotry, string panelId, string defaultValuesJson)
         {
-            return string.Format(@"window.defaultValuesFilterRepository = $.parseJSON({0}()); 
+            return string.Format(@"window.defaultValuesFilterRepository = $.parseJSON({0}() || '[]'); 
                                    if (window.defaultValuesFilterRepository == null) window.defaultValuesFilterRepository = [];
                                    window.filterRepository = [{1}];{2}",
                                                               defaultValuesJson,

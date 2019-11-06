@@ -1,4 +1,6 @@
-﻿namespace Nat.Web.Controls.ExtNet.Generation
+﻿using System;
+
+namespace Nat.Web.Controls.ExtNet.Generation
 {
     using System.Collections.Generic;
     using System.Web;
@@ -10,13 +12,15 @@
     {
         static AbstractUserControl()
         {
-            ShowWarningMessage = (title, message) => X.Msg.Show(new MessageBoxConfig
+            ShowMessage = (icon, title, message) => X.Msg.Show(new MessageBoxConfig
             {
                 Title = title,
                 Message = message,
                 Buttons = MessageBox.Button.OK,
-                Icon = MessageBox.Icon.WARNING,
+                Icon = (MessageBox.Icon) icon
             });
+
+            ShowWarningMessage = (title, message) => ShowMessage((int) MessageBox.Icon.WARNING, title, message);
         }
 
         public static void NotifyInfoMessage(string title, string message)

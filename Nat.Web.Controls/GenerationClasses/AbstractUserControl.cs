@@ -696,6 +696,8 @@ namespace Nat.Web.Controls.GenerationClasses
 
         public static Action<string, string> ShowWarningMessage { get; set; }
 
+        public static Action<int, string, string> ShowMessage { get; set; }
+
         protected virtual void AddInfoMessage(string message)
         {
         }

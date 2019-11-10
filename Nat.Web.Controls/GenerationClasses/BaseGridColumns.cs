@@ -54,6 +54,51 @@ namespace Nat.Web.Controls.GenerationClasses
             SortByGroup(_columns);
         }
 
+        public void MoveColumnAfter(GridHtmlGenerator.Column column, GridHtmlGenerator.Column afterColumn)
+        {
+            var indexOfColumn = Columns.IndexOf(column);
+            var toIndex = Columns.IndexOf(afterColumn) + 1;
+            /*if (toIndex == Columns.Count)
+            {
+                Columns.RemoveAt(indexOfColumn);
+                Columns.Add(column);
+                return;
+            }*/
+
+            MoveColumnToIndex(indexOfColumn, toIndex);
+        }
+
+        public void MoveColumnBefore(GridHtmlGenerator.Column column, GridHtmlGenerator.Column beforeColumn)
+        {
+            var indexOfColumn = Columns.IndexOf(column);
+            var toIndex = Columns.IndexOf(beforeColumn);
+            /*if (toIndex == 0)
+            {
+                Columns.RemoveAt(indexOfColumn);
+                Columns.Insert(0, column);
+                return;
+            }*/
+
+            MoveColumnToIndex(indexOfColumn, toIndex);
+        }
+
+        public void MoveColumnToIndex(int indexOfColumn, int toIndex)
+        {
+            var column = Columns[indexOfColumn];
+            if (toIndex > indexOfColumn)
+            {
+                for (int i = indexOfColumn; i < toIndex; i++)
+                    Columns[i] = Columns[i + 1];
+                Columns[toIndex] = column;
+            }
+            else
+            {
+                for (int i = indexOfColumn; i > toIndex; i--)
+                    Columns[i] = Columns[i - 1];
+                Columns[toIndex] = column;
+            }
+        }
+
         /// <summary>
         /// Ќастройка количества строчек на одну запись. ≈сли 0 то все в одну строку независимо от индекса строки колонки.
         /// </summary>

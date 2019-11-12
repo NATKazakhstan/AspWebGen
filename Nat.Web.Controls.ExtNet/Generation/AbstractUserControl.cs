@@ -93,6 +93,7 @@ namespace Nat.Web.Controls.ExtNet.Generation
 
         protected override void AddErrorMessage(string message)
         {
+            if (!string.IsNullOrEmpty(Url.DataSessionKey)) X.AddScript("window.callSyncChildError++;");
             NotifyErrorMessage(Web.Controls.Properties.Resources.SErrorMessageTitle, message);
         }
 

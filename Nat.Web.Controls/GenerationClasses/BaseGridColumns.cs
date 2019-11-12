@@ -87,6 +87,7 @@ namespace Nat.Web.Controls.GenerationClasses
             var column = Columns[indexOfColumn];
             if (toIndex > indexOfColumn)
             {
+                toIndex--;
                 for (int i = indexOfColumn; i < toIndex; i++)
                     Columns[i] = Columns[i + 1];
                 Columns[toIndex] = column;

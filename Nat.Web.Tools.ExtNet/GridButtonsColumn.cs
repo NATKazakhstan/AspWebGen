@@ -128,6 +128,7 @@ namespace Nat.Web.Tools.ExtNet
                     MenuDisabled = true,
                     Align = Alignment.Center,
                     MenuText = Properties.Resources.SActionColumnText,
+                    Locked = Locked
                 };
 
             column.PreRender += AddActionItems;

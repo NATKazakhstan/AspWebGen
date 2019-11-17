@@ -211,6 +211,11 @@ namespace Nat.Web.Tools.ExtNet
         public bool HasFilter { get; set; }
 
         /// <summary>
+        /// Залочить (зафиксировать) колонку в гриде
+        /// </summary>
+        public bool Locked { get; set; }
+
+        /// <summary>
         /// Имеются ли дочерние колонки.
         /// </summary>
         public bool HasChildren
@@ -398,6 +403,9 @@ namespace Nat.Web.Tools.ExtNet
                     : RendererFunction;
                 column.Renderer = new Renderer { Handler = handler, };
             }
+
+            if (Locked)
+                column.Locked = true;
 
             ConfigureColumnHandler?.Invoke(column);
 

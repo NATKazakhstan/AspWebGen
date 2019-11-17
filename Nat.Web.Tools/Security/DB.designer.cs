@@ -82,6 +82,13 @@ namespace Nat.Web.Tools.Security
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), sid, ActivityDateTime);
 			return ((int)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.ADM_GetUsersInRole")]
+		public ISingleResult<UsersInRoleResult> ADM_GetUsersInRole([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="NVarChar(200)")] string permission)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), permission);
+			return ((ISingleResult<UsersInRoleResult>)(result.ReturnValue));
+		}
 	}
 	
 	public partial class GetPersonInfoBySidResult
@@ -303,6 +310,86 @@ namespace Nat.Web.Tools.Security
 				if ((this._PositionCode != value))
 				{
 					this._PositionCode = value;
+				}
+			}
+		}
+	}
+	
+	public partial class UsersInRoleResult
+	{
+		
+		private long _id;
+		
+		private string _Sid;
+		
+		private string _LoginName;
+		
+		private long _refUser;
+		
+		public UsersInRoleResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="BigInt NOT NULL")]
+		public long id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this._id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Sid", DbType="NVarChar(200) NOT NULL")]
+		public string Sid
+		{
+			get
+			{
+				return this._Sid;
+			}
+			set
+			{
+				if ((this._Sid != value))
+				{
+					this._Sid = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LoginName", DbType="NVarChar(200) NULL")]
+		public string LoginName
+		{
+			get
+			{
+				return this._LoginName;
+			}
+			set
+			{
+				if ((this._LoginName != value))
+				{
+					this._LoginName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_refUser", DbType="BigInt NOT NULL")]
+		public long refUser
+		{
+			get
+			{
+				return this._refUser;
+			}
+			set
+			{
+				if ((this._refUser != value))
+				{
+					this._refUser = value;
 				}
 			}
 		}

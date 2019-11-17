@@ -1,4 +1,6 @@
-﻿namespace Nat.Web.Tools.Security
+﻿using Nat.Tools.Specific;
+
+namespace Nat.Web.Tools.Security
 {
     using System;
     using System.Collections.Generic;
@@ -140,6 +142,15 @@
             var type = BuildManager.GetType(config.TypeOfMethodCheckPersonInfo, true, true);
             var mehtod = type.GetMethod("CheckPersonInfo");
             return (string)mehtod.Invoke(null, new object[0]);
+        }
+
+        public static UsersInRoleResult[] GetUsersInRole(string role)
+        {
+            using (var db = new DBDataContext(SpecificInstances.DbFactory.CreateConnection()))
+            {
+                using (var data = db.ADM_GetUsersInRole(role))
+                    return data.ToArray();
+            }
         }
     }
 }

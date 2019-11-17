@@ -38,4 +38,13 @@
     <Parameter Name="ActivityDateTime" Type="System.DateTime" DbType="DateTime" />
     <Return Type="System.Int32" />
   </Function>
+  <Function Name="dbo.ADM_GetUsersInRole" Method="ADM_GetUsersInRole">
+    <Parameter Name="permission" Type="System.String" DbType="NVarChar(200)" />
+    <ElementType Name="UsersInRoleResult">
+      <Column Name="id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Sid" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="true" />
+      <Column Name="LoginName" Type="System.String" DbType="NVarChar(200) NULL" CanBeNull="true" />
+      <Column Name="refUser" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
 </Database>

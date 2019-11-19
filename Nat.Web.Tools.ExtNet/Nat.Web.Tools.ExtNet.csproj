@@ -104,6 +104,7 @@
     <Compile Include="ExtNetSelectColumnParameters.cs" />
     <Compile Include="GridButtonsColumn.cs" />
     <Compile Include="GridColumn.cs" />
+    <Compile Include="GridCommandColumn.cs" />
     <Compile Include="IExportJournal.cs" />
     <Compile Include="IGridColumn.cs" />
     <Compile Include="Json\DecimalConverter.cs" />

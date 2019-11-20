@@ -25,6 +25,8 @@ namespace Nat.Web.Controls.ExtNet.SelectValues
         private string onChangedValuesFn;
         private string namingContainerIDOnInit;
 
+        public event EventHandler<CancelEventArgs> Deleting;
+
         #region Public Properties
 
         [Description("AllowBlank.")]
@@ -205,6 +207,11 @@ namespace Nat.Web.Controls.ExtNet.SelectValues
         {
             var items = GetDataForDelete();
             if (items == null || items.Count == 0)
+                return;
+
+            var args = new CancelEventArgs();
+            Deleting?.Invoke(items, args);
+            if (args.Cancel)
                 return;
 
             var dataSourceView = GetDataSourceView();

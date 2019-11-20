@@ -155,6 +155,7 @@ namespace Nat.ExportInExcel
             WriteStartRow(null);
 
             MoveRowIndex();
+            _args.RenderRowIndex = _rowIndex;
             foreach (var column in AvailableColumns)
             {
                 if (column.ColSpan < 1 || column.RowSpan < 1)

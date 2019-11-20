@@ -35,6 +35,26 @@
             else
                 throw new FormulaCellException("Не инициализирован Row и RowMove, один из них обязателен.");
         }
+
+        public string ToString(int column, int row)
+        {
+            var str = string.Empty;
+            if (Column != null)
+                str += GetLaterByInt(Column.Value);
+            else if (ColumnMove != null)
+                str += GetLaterByInt(column + ColumnMove.Value);
+            else
+                throw new FormulaCellException("Не инициализирован Column и ColumnMove, один из них обязателен.");
+
+            if (Row != null)
+                str += Row.Value;
+            else if (RowMove != null)
+                str += row + RowMove.Value;
+            else
+                throw new FormulaCellException("Не инициализирован Row и RowMove, один из них обязателен.");
+
+            return str;
+        }
         
         public static string GetLaterByInt(int value)
         {

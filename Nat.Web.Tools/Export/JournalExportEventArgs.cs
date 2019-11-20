@@ -91,6 +91,8 @@ namespace Nat.Web.Tools.Export
         /// </summary>
         public int FixedRowsCount { get; set; }
 
+        public int RenderRowIndex { get; set; }
+
         /// <summary>
         /// Добавить колонку.
         /// </summary>

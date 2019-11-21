@@ -21,6 +21,8 @@ namespace Nat.Web.Tools.Export
         /// </summary>
         public string Header { get; set; }
 
+        public int HeaderHeight { get; set; } = 28;
+
         /// <summary>
         /// Список примененных фильтров или другие строки перед таблицей данных.
         /// </summary>

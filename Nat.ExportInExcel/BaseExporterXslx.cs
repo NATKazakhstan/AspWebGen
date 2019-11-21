@@ -85,6 +85,7 @@ namespace Nat.ExportInExcel
         protected abstract void RenderColumnsSettings();
 
         protected abstract string GetHeader();
+        protected virtual int GetHeaderHeight() => 28;
 
         protected virtual string GetSheetName()
         {
@@ -817,7 +818,7 @@ namespace Nat.ExportInExcel
 
         private void RenderSheetHeader(int colSpan)
         {
-            WriteStartRow(28);
+            WriteStartRow(GetHeaderHeight());
             RenderCell(_writer, GetHeader(), 1, colSpan, HeaderSheetStyleId, ColumnType.Other, string.Empty);
             _writer.WriteEndElement();
             _addedRowSpans.Clear();

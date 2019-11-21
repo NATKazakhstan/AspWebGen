@@ -82,6 +82,11 @@ namespace Nat.ExportInExcel
             return _args.Header;
         }
 
+        protected override int GetHeaderHeight()
+        {
+            return _args.HeaderHeight;
+        }
+
         protected override IEnumerable<string> GetFilterStrings()
         {
             return _args.FilterValues;

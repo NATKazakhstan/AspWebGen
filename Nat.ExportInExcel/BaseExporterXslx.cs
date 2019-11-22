@@ -344,11 +344,12 @@ namespace Nat.ExportInExcel
 
         #region Render Sheet
 
-        private readonly Dictionary<Style, int> _styles = new Dictionary<Style, int>();
+        internal readonly Dictionary<string, int> _numFormats = new Dictionary<string, int>();
+        internal readonly Dictionary<Style, int> _styles = new Dictionary<Style, int>();
         private readonly Dictionary<StyleFont, int> _fonts = new Dictionary<StyleFont, int>();
         private readonly Dictionary<StyleBorder, int> _borders = new Dictionary<StyleBorder, int>();
         private readonly Dictionary<StyleFill, int> _fills = new Dictionary<StyleFill, int>();
-        private readonly Dictionary<string, Style> _baseStyles = new Dictionary<string, Style>();
+        internal readonly Dictionary<string, Style> _baseStyles = new Dictionary<string, Style>();
 
         private void RenderStyles()
         {
@@ -445,6 +446,25 @@ namespace Nat.ExportInExcel
             _writer.WriteStartElement("styleSheet");
             _writer.WriteAttributeString("xmlns", "http://schemas.openxmlformats.org/spreadsheetml/2006/main");
 
+            #region numFmts Форматы
+
+            if (_numFormats.Count > 0)
+            {
+                _writer.WriteStartElementExt("numFmts", "count", _numFormats.Count.ToString());
+
+                foreach (var numFormat in _numFormats)
+                {
+                    _writer.WriteElementStringExt(
+                        "numFmt", string.Empty,
+                        "numFmtId", numFormat.Value.ToString(),
+                        "formatCode", numFormat.Key);
+                }
+             
+                _writer.WriteEndElement();
+            }
+
+            #endregion
+
             #region Fonts
             _writer.WriteStartElement("fonts");
             _writer.WriteAttributeString("count", _fonts.Count.ToString());
@@ -526,7 +546,7 @@ namespace Nat.ExportInExcel
             foreach (var style in _styles.OrderBy(r => r.Value).Select(r => r.Key))
             {
                 // numFmtId="14" - формат даты
-                _writer.WriteStartElementExt("xf", "numFmtId", "0",
+                _writer.WriteStartElementExt("xf", "numFmtId", style.NumFormatId.ToString(),
                                              "fontId", (style.FontId ?? 0).ToString(),
                                              "fillId", (style.FillId ?? 0).ToString(),
                                              "borderId", (style.BorderId ?? 0).ToString());
@@ -1099,10 +1119,23 @@ namespace Nat.ExportInExcel
             if (hAligment != null) style.HorizontalAlignment = hAligment.Value;
             if (vAligment != null) style.VerticalAlignment = vAligment.Value;
 
+            return AddStyle(style);
+        }
+
+        protected int AddStyle(Style style)
+        {
             if (_styles.ContainsKey(style))
                 return _styles[style];
 
             return _styles[style] = _styles.Count;
+        }
+
+        protected int AddNumFormat(string numFormat)
+        {
+            if (_numFormats.ContainsKey(numFormat))
+                return _numFormats[numFormat];
+
+            return _numFormats[numFormat] = 164 + _numFormats.Count;
         }
 
         protected void MoveRowIndex()

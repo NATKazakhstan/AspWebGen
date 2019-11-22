@@ -23,6 +23,15 @@ namespace Nat.Web.Tools.Export
         string ColumnName { get; }
 
         /// <summary>
+        /// Формат данных числовой ячейки.
+        /// </summary>
+        string NumFormat { get; }
+        /// <summary>
+        /// Формат данных числовой ячейки для итогов.
+        /// </summary>
+        string TotalNumFormat { get; }
+
+        /// <summary>
         /// Текст заголовок выводить вертикально.
         /// </summary>
         bool IsVerticalHeaderText { get; }

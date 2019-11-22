@@ -12,6 +12,7 @@ namespace Nat.ExportInExcel
         public Aligment HorizontalAlignment { get; set; }
         public Aligment VerticalAlignment { get; set; }
         public bool WrapText { get; set; }
+        public int NumFormatId { get; set; }
 
         public Style Clone()
         {
@@ -24,6 +25,7 @@ namespace Nat.ExportInExcel
                            TextRotation = TextRotation,
                            VerticalAlignment = VerticalAlignment,
                            WrapText = WrapText,
+                           NumFormatId = NumFormatId,
                        };
         }
 
@@ -38,6 +40,7 @@ namespace Nat.ExportInExcel
                            TextRotation = TextRotation,
                            VerticalAlignment = VerticalAlignment,
                            WrapText = WrapText,
+                           NumFormatId = NumFormatId,
                        };
         }
 
@@ -52,6 +55,7 @@ namespace Nat.ExportInExcel
                 TextRotation = textRotation,
                 VerticalAlignment = textRotation == 90 ? RotationAligment90(HorizontalAlignment) : VerticalAlignment,
                 WrapText = WrapText,
+                NumFormatId = NumFormatId,
             };
         }
 
@@ -66,6 +70,7 @@ namespace Nat.ExportInExcel
                 TextRotation = TextRotation,
                 VerticalAlignment = VerticalAlignment,
                 WrapText = WrapText,
+                NumFormatId = NumFormatId,
             };
         }
 
@@ -80,6 +85,7 @@ namespace Nat.ExportInExcel
                 TextRotation = textRotation,
                 VerticalAlignment = textRotation == 90 ? RotationAligment90(horizontalAlignment) : VerticalAlignment,
                 WrapText = WrapText,
+                NumFormatId = NumFormatId,
             };
         }
 

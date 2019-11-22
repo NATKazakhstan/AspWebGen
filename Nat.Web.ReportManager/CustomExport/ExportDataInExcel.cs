@@ -184,6 +184,10 @@ namespace Nat.Web.ReportManager.CustomExport
             private int ColumnIndex { get; set; }
             public string Header { get; private set; }
             public string ColumnName { get; private set; }
+
+            public string NumFormat => null;
+            public string TotalNumFormat => null;
+
             public bool IsVerticalHeaderText { get; set; }
             public bool IsVerticalDataText { get; set; }
             public string NullItemText { get; set; }

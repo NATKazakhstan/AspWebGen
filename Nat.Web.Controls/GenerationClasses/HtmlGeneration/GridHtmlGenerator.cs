@@ -225,6 +225,9 @@ namespace Nat.Web.Controls.GenerationClasses
             /// </summary>
             public string ColumnName { get; set; }
 
+            public string NumFormat => null;
+            public string TotalNumFormat => null;
+
             /// <summary>
             /// Формула для расчета значения.
             /// </summary>

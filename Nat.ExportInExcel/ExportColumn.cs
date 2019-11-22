@@ -22,6 +22,8 @@ namespace Nat.ExportInExcel
         public bool HasChild => Children.Count > 0;
         public decimal Width { get; set; }
         public bool IsNumericColumn { get; set; }
+        public string NumFormat { get; set; }
+        public string TotalNumFormat { get; set; }
         public Func<object, string> GetValueHandler { get; set; }
         public Func<object, string> GetHyperLinkHandler { get; set; }
         public Func<object, Formula> GetFormulaHandler { get; set; }

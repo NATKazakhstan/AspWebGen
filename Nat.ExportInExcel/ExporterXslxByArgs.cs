@@ -94,6 +94,40 @@ namespace Nat.ExportInExcel
 
         protected override void AddRowsStyles()
         {
+            foreach (var column in AvailableColumns)
+            {
+                if (!string.IsNullOrEmpty(column.NumFormat)) 
+                    AddStyles(column, column.NumFormat);
+                if (!string.IsNullOrEmpty(column.TotalNumFormat)) 
+                    AddStyles(column, column.TotalNumFormat);
+            }
+        }
+
+        private void AddStyles(IExportColumn column, string numFormat)
+        {
+            if (column.IsVerticalDataText)
+            {
+                AddStyle(DataVerticalStyleId, numFormat);
+                AddStyle(DataGroupVerticalStyleId, numFormat);
+            }
+            else if (column.IsNumericColumn)
+            {
+                AddStyle(DataStyleCenterId, numFormat);
+                AddStyle(DataGroupStyleCenterId, numFormat);
+            }
+            else
+            {
+                AddStyle(DataStyleId, numFormat);
+                AddStyle(DataGroupStyleId, numFormat);
+            }
+        }
+
+        protected void AddStyle(string baseStyleId, string numFormat)
+        {
+            var numFormatId = AddNumFormat(numFormat);
+            var style = _baseStyles[baseStyleId].Clone();
+            style.NumFormatId = numFormatId;
+            AddStyle(style);
         }
 
         protected override List<ConditionalFormatting> GetConditionalFormatting()
@@ -173,14 +207,30 @@ namespace Nat.ExportInExcel
                     if (column.IsVerticalDataText) styleId = DataGroupVerticalStyleId;
                     else if (column.IsNumericColumn) styleId = DataGroupStyleCenterId;
                     else styleId = DataGroupStyleId;
+                    
+                    if (!string.IsNullOrEmpty(column.TotalNumFormat))
+                    {
+                        var style = _baseStyles[styleId].Clone();
+                        style.NumFormatId = _numFormats[column.TotalNumFormat];
+                        if (_styles.ContainsKey(style))
+                            styleId = _styles[style].ToString();
+                    }
                 }
                 else
                 {
                     if (column.IsVerticalDataText) styleId = DataVerticalStyleId;
                     else if (column.IsNumericColumn) styleId = DataStyleCenterId;
                     else styleId = DataStyleId;
+                    
+                    if (!string.IsNullOrEmpty(column.NumFormat))
+                    {
+                        var style = _baseStyles[styleId].Clone();
+                        style.NumFormatId = _numFormats[column.NumFormat];
+                        if (_styles.ContainsKey(style))
+                            styleId = _styles[style].ToString();
+                    }
                 }
-
+                
                 string cellData = column.GetValue(row);
                 if (!string.IsNullOrEmpty(column.ColumnName))
                 {

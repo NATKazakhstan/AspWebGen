@@ -1,4 +1,5 @@
-﻿using Nat.Tools.Specific;
+﻿using System.Security.Claims;
+using Nat.Tools.Specific;
 
 namespace Nat.Web.Tools.Security
 {
@@ -52,6 +53,19 @@ namespace Nat.Web.Tools.Security
         /// </summary>
         public const string AllowCopyTextFromWebBrowser = "AllowCopyTextFromWebBrowser";
         
+        /// <summary>
+        /// Проверка вошел ли текущий пользователь по ЭЦП.
+        /// </summary>
+        /// <returns>True, если пользователь вошел в EAS по ЭЦП, иначе false.</returns>
+        public static bool IsLoginByDigitalSignature()
+        {
+            var appSetting = WebConfigurationManager.AppSettings["UserRoles.IsLoginByDigitalSignature"];
+            if (!string.IsNullOrEmpty(appSetting) && bool.TryParse(appSetting, out var result))
+                return result;
+
+            return (HttpContext.Current.User.Identity as ClaimsIdentity)?.Claims.Any(r => r.Type == "edsIin") ?? false;
+        }
+
         public static bool IsInRole(string role)
         {
             if (methodIsInRole != null)

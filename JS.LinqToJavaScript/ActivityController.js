@@ -120,7 +120,7 @@ JS.Web.ActivityController.prototype = {
             var control = eval(controls[i]);
             if (control != null) {
                 control.addListener('change', function() {
-                    activity.onValueChanged(activity);
+                    activity.onValueChangedDelay(activity);
                 });
             }
         }
@@ -174,6 +174,14 @@ JS.Web.ActivityController.prototype = {
         return parentContainer;
     },
 
+    onValueChangedDelay: function(activity) {
+        clearTimeout(activity.valueChangedTimeOut);
+        activity.valueChangedTimeOut = setTimeout(function() {
+                activity.onValueChanged(activity);
+            },
+            50);
+    },
+
     onValueChanged: function (activity) {
         
         var activityControls = activity.get_activityControls();
@@ -189,7 +197,7 @@ JS.Web.ActivityController.prototype = {
             var allowRequired = activityItem.get_allowRequiredValidate();
             var control = activityItem.get_control();
             
-            if (control == null)
+            if (!control)
                 continue;
 
             if (!enabled)

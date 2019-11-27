@@ -29,7 +29,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 [assembly: CLSCompliant(true)]
-[assembly: AllowPartiallyTrustedCallers()]
+//[assembly: AllowPartiallyTrustedCallers()]
 [assembly: SecurityTransparent()]
 [module: SuppressMessage("Microsoft.Usage", "CA2209:AssembliesShouldDeclareMinimumSecurity", Justification = "Permissions are flowed through")]
 // The following SuppressMessages address the warnings that appear because

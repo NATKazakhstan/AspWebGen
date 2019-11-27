@@ -3121,3 +3121,29 @@ if (window.Ext) {
         }
     });
 }
+
+/* Исправление баги Extjs, когда вертикальная прокрутка грида с колонкой Locked становится очень медленной
+ * источник: https://www.sencha.com/forum/showthread.php?352518-Extjs-Locked-Grid-Mouse-wheel-scrolling-issue
+ */
+Ext.define('JS.overrides.grid.locking.Lockable', {
+    override: 'Ext.grid.locking.Lockable',
+    onNormalViewScroll: function () {
+        var me = this,
+            lockedView = me.lockedGrid.getView();
+
+        delete lockedView.scrolledByNormal; // remove always the flag when started the scroll by unlocked grid.
+
+        me.callParent(arguments);
+    },
+
+    onLockedViewScroll: function () {
+        var me = this,
+            lockedView = me.lockedGrid.getView();
+
+        if (!lockedView.scrolledByNormal) { // just the unlocked view will remove this flag.
+            lockedView.scrolledByNormal = true;
+            return false;
+        }
+        me.callParent(arguments);
+    }
+});

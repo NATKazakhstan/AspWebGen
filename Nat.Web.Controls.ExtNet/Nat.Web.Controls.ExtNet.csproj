@@ -114,6 +114,8 @@
     <Compile Include="ScriptFieldConstants.cs" />
     <Compile Include="ScriptFunctionConstant.cs" />
     <Compile Include="SelectValues\BaseMultipleSelect.cs" />
+    <Compile Include="CheckBoxFieldExtender.cs" />
+    <Compile Include="TextFieldExtender.cs" />
     <Compile Include="Validators\CompareValidatorProperties.cs" />
     <Compile Include="SelectValues\MultipleLookupSelect.cs" />
     <Compile Include="SelectValues\MultipleSelect.cs" />

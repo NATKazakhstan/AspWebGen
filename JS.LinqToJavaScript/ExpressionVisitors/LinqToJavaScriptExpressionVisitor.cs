@@ -1,4 +1,7 @@
-﻿namespace JS.LinqToJavaScript.ExpressionVisitors
+﻿using System.Globalization;
+using System.Reflection;
+
+namespace JS.LinqToJavaScript.ExpressionVisitors
 {
     using System;
     using System.Collections;
@@ -333,6 +336,16 @@
                     */
                     throw new NotSupportedException(
                         string.Format("The constant for '{0}' is not supported", c.Value));
+                case TypeCode.Single:
+                case TypeCode.Double:
+                case TypeCode.Decimal:
+                    resultScript.Append(Convert.ToString(c.Value, new NumberFormatInfo
+                    {
+                        CurrencyDecimalSeparator = ".",
+                        NumberDecimalSeparator = ".",
+                        PercentDecimalSeparator = ".",
+                    }));
+                    break;
                 default:
                     resultScript.Append(c.Value);
                     break;
@@ -458,7 +471,7 @@
                     if (m.Member.DeclaringType == typeof(bool?))
                         return m;
 
-                        resultScript.Append(".");
+                    resultScript.Append(".");
                 }
                 else if (expression != null && expression.NodeType == ExpressionType.Constant)
                 {
@@ -484,7 +497,12 @@
                 .SingleOrDefault();
             if (attrs == null)
             {
-                resultScript.Append(m.Member.Name);
+                if (m.Member is FieldInfo field && field.IsStatic)
+                    Visit(Expression.Constant(field.GetValue(null)));
+                else if (m.Member is PropertyInfo property && property.GetMethod.IsStatic)
+                    Visit(Expression.Constant(property.GetValue(null)));
+                else
+                    resultScript.Append(m.Member.Name);
             }
             else
             {

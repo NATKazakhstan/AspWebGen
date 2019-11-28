@@ -169,7 +169,9 @@ JS.LinqToJavaScript.Tests.TestFieldControl.prototype = {
     },
 
     get_enabled: function() {
-        return (($.inArray(this.parent.get_intValue(), this.parent.get_arrayValue()) > -1) && ((this.parent.get_field1LongControl().get_value() == null) || (this.parent.get_intValue() > this.parent.get_field1LongControl().get_value())));
+        var resVal = (($.inArray(this.parent.get_intValue(), this.parent.get_arrayValue()) > -1) && ((this.parent.get_field1LongControl().get_value() == null) || (this.parent.get_intValue() > this.parent.get_field1LongControl().get_value())));
+        resVal = (typeof resVal === 'string' || resVal instanceof String) ? resVal.toLowerCase() === 'true' : resVal;
+        return resVal;
     },
 
     get_readOnly: function() {

@@ -135,14 +135,37 @@ namespace JS.LinqToJavaScript.Tests
             AssertAreEqual(() => regex.IsMatch(x), @"'value'.match(/^[\d\-]+$/gi)");
         }
 
+        [TestMethod]
+        public void TestStaticValue()
+        {
+            AssertAreEqual(() => "01" == someStaticValue, "('01' == 'staticValue')");
+        }
+
+        [TestMethod]
+        public void TestConstValue()
+        {
+            var x = "value";
+            AssertAreEqual(() => x == someConstValue, "('value' == 'constValue')");
+        }
+
+        [TestMethod]
+        public void TestPropertyValue()
+        {
+            AssertAreEqual(() => "01" == somePropertyValue, "('01' == 'propertyValue')");
+        }
+
+        private static string someStaticValue = "staticValue";
+        private const string someConstValue = "constValue";
+        private static string somePropertyValue => "propertyValue";
+
         private void AssertAreEqual(Expression<Func<bool>> exp, string script)
         {
-            Assert.AreEqual(Provider.GetQueryText(exp), script);
+            Assert.AreEqual(script, Provider.GetQueryText(exp));
         }
 
         private void AssertAreEqual(Expression<Func<int>> exp, string script)
         {
-            Assert.AreEqual(Provider.GetQueryText(exp), script);
+            Assert.AreEqual(script, Provider.GetQueryText(exp));
         }
     }
 }

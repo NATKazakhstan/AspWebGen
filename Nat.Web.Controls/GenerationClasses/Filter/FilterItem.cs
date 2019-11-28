@@ -91,6 +91,8 @@ namespace Nat.Web.Controls.GenerationClasses.Filter
                     return "EndsWith";
                 case Nat.Tools.Filtering.ColumnFilterType.In:
                     return "EqualsCollection";
+                case Nat.Tools.Filtering.ColumnFilterType.OutOf:
+                    return "NotEqualsCollection";
                 default:
                     return value.ToString();
             }

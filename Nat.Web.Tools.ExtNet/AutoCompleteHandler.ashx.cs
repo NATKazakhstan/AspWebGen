@@ -148,8 +148,7 @@ namespace Nat.Web.Tools.ExtNet
                 return null;
             }
 
-            if (isKz)
-                LocalizationHelper.SetThreadCulture("kk-kz", null);
+            LocalizationHelper.SetThreadCulture(isKz ? "kk-kz" : "ru-ru", null);
 
             MainPageUrlBuilder.Current.IsDataControl = true;
            

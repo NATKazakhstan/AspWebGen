@@ -116,7 +116,7 @@ namespace Nat.Web.Tools.Security
 
         public static bool IsInAllRoles(params string[] roles)
         {
-            return IsInAnyRoles((IEnumerable<string>)roles);
+            return IsInAllRoles((IEnumerable<string>)roles);
         }
 
         public static bool DoesHaveUserPermissionToReport(string pluginName)

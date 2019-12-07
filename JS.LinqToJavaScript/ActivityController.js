@@ -204,6 +204,9 @@ JS.Web.ActivityController.prototype = {
                 control.disable();
             else 
                 control.enable();
+            
+            if (control.setReadOnly)
+                control.setReadOnly(readOnly);
 
             control.setVisible(visible);
             activity.setHiddenControlContainer(activity, activity.getParentContainer(control));

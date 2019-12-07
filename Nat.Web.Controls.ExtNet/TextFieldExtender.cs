@@ -15,9 +15,11 @@ namespace Nat.Web.Controls.ExtNet
         /// </summary>
         /// <param name="combo">ComboBox, который нужно сделать с многострочным вводом.</param>
         /// <param name="height">Настройка высоты ComboBox.</param>
-        public static void Multiline(this TextField combo, int height)
+        /// <param name="width">Настройка ширины ComboBox.</param>
+        public static void Multiline(this TextField combo, int height, int? width = null)
         {
             combo.Height = height;
+            if (width != null) combo.InputWidth = (int) width;
             combo.FieldSubTpl = new XTemplate
             {
                 Html = MultilineComboboxTemplate,

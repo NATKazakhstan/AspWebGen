@@ -237,6 +237,14 @@
             return GetPersonInfo(sid);
         }
 
+        public static TResult GetPersonInfoOnUseDelegation<TResult>()
+        {
+            var sid = GetDelegationSID();
+            if (string.IsNullOrEmpty(sid))
+                return default(TResult);
+            return GetPersonInfo<TResult>(sid);
+        }
+
         public static ADM_P_GetAvailableDelegationsResult[] GetAvailableDelegations()
         {
             if (!InitializerSection.PermissionsDelegationEnabled || HttpContext.Current == null || HttpContext.Current.User == null)

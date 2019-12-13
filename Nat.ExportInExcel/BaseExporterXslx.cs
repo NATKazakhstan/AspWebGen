@@ -652,7 +652,8 @@ namespace Nat.ExportInExcel
 
             _writer.WriteStartElement("sheetData");
             RenderFirstHeader();
-            RenderSheetHeader(fullColSpan);
+            if (!string.IsNullOrEmpty(GetHeader()))
+                RenderSheetHeader(fullColSpan);
             RenderFilter();
             RenderHeader();
             RenderData();
@@ -899,10 +900,13 @@ namespace Nat.ExportInExcel
         {
             var filters = GetFilterStrings();
             var fullColSpan = GetCountColumns();
+            var filterExists = false;
+
             if (filters != null)
             {
                 foreach (var filter in filters)
                 {
+                    filterExists = true;
                     WriteStartRow(null);
                     RenderCell(_writer, filter, 1, fullColSpan, FilterStyleId, ColumnType.Other, string.Empty);
                     _writer.WriteEndElement();
@@ -910,10 +914,13 @@ namespace Nat.ExportInExcel
                 }
             }
 
-            WriteStartRow(null);
-            RenderCell(_writer, string.Empty, 1, fullColSpan, FilterStyleId, ColumnType.Other, string.Empty);
-            _writer.WriteEndElement();
-            _addedRowSpans.Clear();
+            if (filterExists || !string.IsNullOrEmpty(GetHeader()))
+            {
+                WriteStartRow(null);
+                RenderCell(_writer, string.Empty, 1, fullColSpan, FilterStyleId, ColumnType.Other, string.Empty);
+                _writer.WriteEndElement();
+                _addedRowSpans.Clear();
+            }
         }
 
         #endregion

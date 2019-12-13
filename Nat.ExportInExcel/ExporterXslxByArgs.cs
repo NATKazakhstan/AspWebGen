@@ -50,10 +50,12 @@ namespace Nat.ExportInExcel
         {
             return _args.Data.Count // количество данных
                 + _args.Columns.Max(GetLevel) // количество строк в заголовке таблицы
-                + (_args.FilterValues?.Count ?? 0) + 1 // количество фильтров + пустая строка
+                + (_args.FilterValues?.Count ?? 0) // количество фильтров
                    + (RenderFooterTable?.Rows.Count ?? 0)
                    + (RenderFirstHeaderTable?.Rows.Count ?? 0)
-                + 1; // строка заголовка
+                + (string.IsNullOrEmpty(GetHeader()) ? 0 : 1)
+                + (!string.IsNullOrEmpty(GetHeader()) || (_args.FilterValues?.Count ?? 0) > 0 ? 1 : 0) // строка заголовка
+                ; // + пустая строка
         }
 
         protected override int GetCountColumns()

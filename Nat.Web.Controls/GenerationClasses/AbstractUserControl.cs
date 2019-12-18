@@ -255,10 +255,10 @@ namespace Nat.Web.Controls.GenerationClasses
         protected virtual void SetSelectedText<TKey>(IEnumerable<KeyValuePair<TKey, string>> values)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("if (dialogArguments) {");
-            sb.AppendLine("\tif (dialogArguments.selectedTexts == null) dialogArguments.selectedTexts = new Array();");
+            sb.AppendLine("if (window.dialogArguments) {");
+            sb.AppendLine("\tif (window.dialogArguments.selectedTexts == null) window.dialogArguments.selectedTexts = new Array();");
             foreach (var pair in values)
-                sb.AppendFormat("\tdialogArguments.selectedTexts['{0}'] = '{1}';\n", pair.Key, pair.Value);
+                sb.AppendFormat("\twindow.dialogArguments.selectedTexts['{0}'] = '{1}';\n", pair.Key, pair.Value);
             sb.AppendLine("}");
             if (HasAjax)
                 ScriptManager.RegisterClientScriptBlock(this, GetType(), "dialogArguments.selectedTexts", sb.ToString(), true);
@@ -269,9 +269,9 @@ namespace Nat.Web.Controls.GenerationClasses
         protected virtual void RemoveSelectedText(IEnumerable values)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("if (dialogArguments && dialogArguments.selectedTexts) {");
+            sb.AppendLine("if (window.dialogArguments && window.dialogArguments.selectedTexts) {");
             foreach (var key in values)
-                sb.AppendFormat("\tdialogArguments.selectedTexts['{0}'] = null;\n", key);
+                sb.AppendFormat("\twindow.dialogArguments.selectedTexts['{0}'] = null;\n", key);
             sb.AppendLine("}");
             if (HasAjax)
                 ScriptManager.RegisterClientScriptBlock(this, GetType(), "dialogArguments.selectedTexts", sb.ToString(), true);

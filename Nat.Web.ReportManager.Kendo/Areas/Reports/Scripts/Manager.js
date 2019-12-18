@@ -76,13 +76,14 @@
             function(result) {
                 if (result.error)
                     return;
+                
+                var w = $(window);
+                var dataItem = me.getSelected();
 
                 if (result.Url) {
                     if (newTab)
                         window.open(result.Url, "_blank");
                     else {
-                        var w = $(window);
-                        var dataItem = me.getSelected();
                         me.reportWindow.setOptions({ width: w.width() * 0.95, height: w.height() * 0.9, title: dataItem ? dataItem.Name : options.name || '' });
                         me.reportWindow.content('<h6>Загрузка... <br/> Енгізу...</h6>');
                         var url = result.Url.indexOf('MainPage.aspx') === -1
@@ -96,11 +97,28 @@
                     return;
                 }
 
-                //$('#reportResultDiv').html('<iframe width="100%" height="500px" style="border: 0px">' + result.ReportContent + '</iframe>');
-                var content = $(result.ReportContent);
-                $('#reportResultDiv').html(content.filter(function() {
+                var content = $(result.ReportContent).filter(function() {
                     return this.tagName !== 'SCRIPT' && this.tagName !== 'META';
-                }));
+                });
+
+                if (me.options.openReportInWindow) {
+
+                    me.reportWindow.setOptions({ width: w.width() * 0.95, height: w.height() * 0.9, title: dataItem ? dataItem.Name : options.name || '' });
+                    if (!me.openInWindowTemplate)
+                        me.openInWindowTemplate = kendo.template($('#openInWindowTemplate').html());
+                    var div = $(me.openInWindowTemplate({}));
+                    kendo.bind(div, me.options);
+                    div.find('.reportResultDiv-inner').html(content);
+                    me.reportWindow.element.removeClass('k-window-iframecontent');
+                    me.reportWindow.content(div);
+                    me.reportWindow.open();
+                    me.reportWindow.center();
+
+                    return;
+                }
+
+                //$('#reportResultDiv').html('<iframe width="100%" height="500px" style="border: 0px">' + result.ReportContent + '</iframe>');
+                $('#reportResultDiv').html(content);
                 var anyText = $('#reportResultDiv > *').filter(function() {
                     return this.tagName !== 'STYLE' && this.tagName !== 'TITLE';
                 }).text();
@@ -451,6 +469,7 @@
             this.options.set('showSaveSubscription', true);
         }
 
+        this.options.set('openReportInWindow', countParameters >= 4);
         this.options.set('showAddParameters', showAddParameters);
 
         if (this.options.viewOneOpen) {
@@ -867,7 +886,7 @@
 
     this.progress = function (value, skipGrid) {
 
-        var element = $('#managerSplitter');
+        var element = $('body');
 
         if (this.dataSourceProgress !== value) {
             kendo.ui.progress(element, value);

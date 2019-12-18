@@ -30,6 +30,17 @@
 
     </div>
 </div>
+<script type="text/x-kendo-template" id="openInWindowTemplate">
+    <div class="k-header k-grid-toolbar reportToolbarInWindow">
+        <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onWordExportClick()" style="display: none;"><span class="k-icon fas fa-file-word"></span> @Resources.SWordExport</button>
+        <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onExcelExportClick()" style="display: none;"><span class="k-icon fas fa-file-excel"></span> @Resources.SExcelExport</button>
+        <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onPDFExportClick()" style="display: none;"><span class="k-icon fas fa-file-pdf"></span> @Resources.SPDFExport</button>
+    </div>
+    <div class='reportResultDiv'>
+        <div class='reportResultDiv-inner'>
+        </div>
+    </div>
+</script>
 <script type="text/x-kendo-template" id="parametersDateTimeTemplate">
     @Html.Partial("_Label")
     <div class="editor-field m-editor-parameter" id="ParameterID_#= ParameterIndex #">

@@ -50,6 +50,14 @@ input.k-textbox.searchMenuInput {
     min-height: 28px;
 }
 
+.k-grid-toolbar.reportToolbarInWindow {
+    border: 1px solid #c9c9c9;
+    min-height: 28px;
+    margin-top: -6px;
+    margin-left: -12px;
+    position: fixed;
+}
+
 #reportParameters {
     width: 100%;
     /*margin-top: 16px;
@@ -99,7 +107,7 @@ input.k-textbox.searchMenuInput {
     padding-top: 6px;
 }
 
-#reportResultDiv {
+#reportResultDiv, .reportResultDiv-inner {
     padding: 10px;
     border: 1px solid rgb(201, 201, 201);
     display: inline-block;

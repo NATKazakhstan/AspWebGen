@@ -71,8 +71,10 @@ function UpdateAdditionalFields(addtionalInfo) {
     for (var uc in addtionalInfo.UserControls) {
         if (!addtionalInfo.UserControls.hasOwnProperty(uc))
             continue;
-        if (valueAddtionalInfo[i] == null)
+        if (valueAddtionalInfo[i] == null) {
+            i++;
             continue;
+        }
 
         var controlId = addtionalInfo.UserControls[uc].hfID;
         if (controlId != null && controlId != '') {

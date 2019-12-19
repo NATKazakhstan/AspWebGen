@@ -339,6 +339,12 @@
             return value;
         }
 
+        public static void ClearCache<TResult>(string sid)
+        {
+            var key = PersonInfoBySid + typeof(TResult).FullName + ">:" + sid;
+            HttpContext.Current.Cache.Remove(key);
+        }
+
         public static string GetMacAddress()
         {
             var ip = IPAddress.Parse(HttpContext.Current.Request.UserHostAddress);

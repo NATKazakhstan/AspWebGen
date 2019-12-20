@@ -49,7 +49,7 @@ namespace Nat.ExportInExcel
         protected override int GetCountRows()
         {
             return _args.Data.Count // количество данных
-                + _args.Columns.Max(GetLevel) // количество строк в заголовке таблицы
+                + (_args.HideColumnsHeader ? 0 : _args.Columns.Max(GetLevel)) // количество строк в заголовке таблицы
                 + (_args.FilterValues?.Count ?? 0) // количество фильтров
                    + (RenderFooterTable?.Rows.Count ?? 0)
                    + (RenderFirstHeaderTable?.Rows.Count ?? 0)
@@ -260,6 +260,9 @@ namespace Nat.ExportInExcel
 
         protected override void RenderHeader()
         {
+            if (_args.HideColumnsHeader)
+                return;
+
             int maxRowSpan = GetRowsInHeader();
             _addedRowSpans.Clear();
             int level = 0;

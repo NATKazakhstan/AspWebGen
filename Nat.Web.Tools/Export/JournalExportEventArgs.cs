@@ -95,6 +95,8 @@ namespace Nat.Web.Tools.Export
 
         public int RenderRowIndex { get; set; }
 
+        public bool HideColumnsHeader { get; set; }
+
         /// <summary>
         /// Добавить колонку.
         /// </summary>

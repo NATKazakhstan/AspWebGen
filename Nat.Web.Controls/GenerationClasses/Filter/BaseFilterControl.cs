@@ -391,12 +391,14 @@ namespace Nat.Web.Controls.GenerationClasses
             return FilterData<T>(source, null, upToTable, param, fieldsToCheckReference, filterByParents);
         }
 
+        protected bool DontSkipIsFiltered { get; set; }
+
         public Expression FilterData<T>(Expression source, QueryParameters qParams, Expression upToTable, ParameterExpression param, IEnumerable<Expression> fieldsToCheckReference, bool filterByParents)
             where T : class
         {
             QueryParameters = qParams ?? GetNullQueryParameters();
             var filterArgs = GetFilter(typeof(T));
-            if (QueryParameters?.IsFiltered(filterArgs.GetTTable()) ?? false)
+            if (!DontSkipIsFiltered && (QueryParameters?.IsFiltered(filterArgs.GetTTable()) ?? false))
                 return source;
             QueryParameters?.Filtered(filterArgs.GetTTable());
 

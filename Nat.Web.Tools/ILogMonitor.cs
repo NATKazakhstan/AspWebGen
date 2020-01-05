@@ -36,5 +36,8 @@ namespace Nat.Web.Tools
         /// <param name="sid">SID пользователя от имени которого нужно произвести логирование.</param>
         /// <returns>Ссылка на запись журнала событий.</returns>
         string LogException(Exception e, string sid);
+
+        void MessageSourceLink(long messageSourceId, long recordId);
+        void WriteMessageSourceLink(long refMessage);
     }
 }

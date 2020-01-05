@@ -35,8 +35,10 @@ namespace Nat.Web.Controls
         #region Fields
 
         private readonly List<LogChangedFieldEntry> _changedFieldList;
+        private readonly List<KeyValuePair<long, long>> _messageSourceLinkList;
         private DbCommand _cmdLog;
         private DbCommand _cmdLogFields;
+        private DbCommand _cmdLogLinks;
 
         #endregion
 
@@ -45,6 +47,7 @@ namespace Nat.Web.Controls
         public LogMonitor()
         {
             _changedFieldList = new List<LogChangedFieldEntry>();
+            _messageSourceLinkList = new List<KeyValuePair<long, long>>();
         }
 
         #endregion
@@ -141,6 +144,24 @@ namespace Nat.Web.Controls
             _cmdLogFields.Parameters.Add(new SqlParameter("@oldValue", null));
             _cmdLogFields.Parameters.Add(new SqlParameter("@newValue", null));
             _cmdLogFields.Parameters.Add(new SqlParameter("@refMessage", SqlDbType.BigInt));
+
+            _cmdLogLinks = SpecificInstances.DbFactory.CreateCommand();
+            if (_cmdLogLinks == null)
+                throw new NullReferenceException("Method 'SpecificInstances.DbFactory.CreateCommand()' return null");
+            if(Transaction == null)
+                _cmdLogLinks.Connection = CreateConnection();
+            else
+            {
+                _cmdLogLinks.Connection = Transaction.Connection;
+                _cmdLogLinks.Transaction = Transaction;
+            }
+            _cmdLogLinks.CommandType = CommandType.Text;
+            _cmdLogLinks.CommandText =
+                @"INSERT INTO LOG_MessageSourceLink(refMessage, refMessageSource, RecordID)
+                  VALUES(@refMessage, @refMessageSource, @recordId)";
+            _cmdLogLinks.Parameters.Add(new SqlParameter("@refMessage", SqlDbType.BigInt));
+            _cmdLogLinks.Parameters.Add(new SqlParameter("@refMessageSource", SqlDbType.BigInt));
+            _cmdLogLinks.Parameters.Add(new SqlParameter("@recordId", SqlDbType.BigInt));
         }
 
         public void RowChanged(DataTable table, DataColumnCollection columns, object[] oldValues, object[] newValues)
@@ -441,6 +462,39 @@ namespace Nat.Web.Controls
                     _cmdLogFields.Connection.Close();
             }
         }
+        
+        public void MessageSourceLink(long messageSourceId, long recordId)
+        {
+            MessageSourceLinkList.Add(new KeyValuePair<long, long>(messageSourceId, recordId));
+        }
+
+        public void WriteMessageSourceLink(long refMessage)
+        {
+            var openConnection = false;
+            try
+            {
+                if (_cmdLogLinks.Connection.State != ConnectionState.Open)
+                {
+                    openConnection = true;
+                    _cmdLogLinks.Connection.Open();
+                }
+
+                foreach (var link in MessageSourceLinkList)
+                {
+                    _cmdLogLinks.Parameters["@refMessage"].Value = refMessage;
+                    _cmdLogLinks.Parameters["@refMessageSource"].Value = link.Key;
+                    _cmdLogLinks.Parameters["@recordId"].Value = link.Value;
+                    _cmdLogLinks.ExecuteNonQuery();
+                }
+
+                _messageSourceLinkList.Clear();
+            }
+            finally
+            {
+                if (openConnection)
+                    _cmdLogLinks.Connection.Close();
+            }
+        }
 
         private static object GetValue(object oldValue)
         {
@@ -565,10 +619,8 @@ namespace Nat.Web.Controls
 
         #region Properties
 
-        internal List<LogChangedFieldEntry> ChangedFieldList
-        {
-            get { return _changedFieldList; }
-        }
+        internal List<LogChangedFieldEntry> ChangedFieldList => _changedFieldList;
+        internal List<KeyValuePair<long, long>> MessageSourceLinkList => _messageSourceLinkList;
 
         private DbTransaction _transaction;
         public DbTransaction Transaction
@@ -590,13 +642,17 @@ namespace Nat.Web.Controls
                         _cmdLog.Connection = Transaction.Connection;
                         _cmdLogFields.Transaction = Transaction;
                         _cmdLogFields.Connection = Transaction.Connection;
+                        _cmdLogLinks.Transaction = Transaction;
+                        _cmdLogLinks.Connection = Transaction.Connection;
                     }
                     else
                     {
                         _cmdLog.Transaction = null;
                         _cmdLogFields.Transaction = null;
+                        _cmdLogLinks.Transaction = null;
                         _cmdLog.Connection = CreateConnection();
                         _cmdLogFields.Connection = CreateConnection();
+                        _cmdLogLinks.Connection = CreateConnection();
                     }
                 }
             }

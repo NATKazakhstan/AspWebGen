@@ -136,6 +136,16 @@ namespace Nat.Web.Controls
             return logMonitor.LogException(e, sid);
         }
 
+        public void MessageSourceLink(long messageSourceId, long recordId)
+        {
+            logMonitor.MessageSourceLink(messageSourceId, recordId);
+        }
+
+        public void WriteMessageSourceLink(long refMessage)
+        {
+            logMonitor.WriteMessageSourceLink(refMessage);
+        }
+
         #endregion
 
 

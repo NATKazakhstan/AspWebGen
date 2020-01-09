@@ -504,7 +504,10 @@
             } else {
                 html = $(this.templates.DDL(item));
             }
-        } else if (item.Columns && item.FilterType === 65536) {
+        } else if (item.Columns && item.FilterTypes.filter(function(i){ return i.id === 65536; }).length) {
+            if (item.FilterType !== 65536)
+                item.FilterType = 65536;
+
             if (item.ParentField) {
                 this.TreeInit(item);
                 // дополнительная галочка

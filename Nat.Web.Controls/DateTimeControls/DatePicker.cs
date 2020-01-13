@@ -326,7 +326,7 @@ namespace Nat.Web.Controls.DateTimeControls
                     DateTimeFormatInfo formatInfo = new DateTimeFormatInfo();
                     if (Mode == DatePickerMode.Time)
                     {
-                        Regex r = new Regex(@"(?<hh>\d\d?)?(:(?<mm>\d\d?))?(:(?<ss>\d\d?))");
+                        Regex r = new Regex(@"(?<hh>\d\d?)?(:(?<mm>\d\d?))?(:(?<ss>\d\d?))?");
                         var hh = 0;
                         var mm = 0;
                         var ss = 0;

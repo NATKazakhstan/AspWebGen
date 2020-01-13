@@ -202,11 +202,11 @@
     <Compile Include="Threads\ProgressManagerAction.cs" />
     <Compile Include="Threads\ProgressManagerActionArgs.cs" />
     <Compile Include="Threads\ProgressManagerActionHandler.cs" />
-    <Content Include="MailMessageContent\DB.dbml">
+    <None Include="MailMessageContent\DB.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>DB.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
-    </Content>
+    </None>
     <Compile Include="Threads\ProgressManagerExistsException.cs" />
     <Compile Include="Threads\ProgressManagerPool.cs" />
     <Compile Include="Security\BaseLogMessageEntry.cs" />
@@ -225,11 +225,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SessionWorker\SessionWorkerArgs.cs" />
-    <Content Include="Tasks\DB.dbml">
+    <None Include="Tasks\DB.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>DB.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

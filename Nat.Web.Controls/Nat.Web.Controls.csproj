@@ -314,7 +314,7 @@
     <Content Include="App_Themes\NAT\WarningYellow.png" />
     <Content Include="App_Themes\NAT\word.png" />
     <Content Include="App_Themes\NAT\yellow.png" />
-    <Content Include="DataBinding\Resources\HoverPanel.js" />
+    <EmbeddedResource Include="DataBinding\Resources\HoverPanel.js" />
     <EmbeddedResource Include="DataBinding\Resources\info.gif" />
     <EmbeddedResource Include="DataBinding\Resources\warning.bmp" />
     <EmbeddedResource Include="DataBinding\Resources\warning.gif" />
@@ -404,17 +404,17 @@
     <EmbeddedResource Include="Lookup\control_fastforward_blue.png" />
     <EmbeddedResource Include="Lookup\control_rewind_blue.png" />
     <EmbeddedResource Include="CopyValue.js" />
-    <Content Include="Log\DS.xsc">
+    <None Include="Log\DS.xsc">
       <DependentUpon>DS.xsd</DependentUpon>
-    </Content>
+    </None>
     <None Include="Log\DS.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>DS.Designer.cs</LastGenOutput>
     </None>
-    <Content Include="Log\DS.xss">
+    <None Include="Log\DS.xss">
       <DependentUpon>DS.xsd</DependentUpon>
-    </Content>
+    </None>
     <None Include="MainPage.aspx" />
     <Content Include="WebServiceUploadFiles.asmx" />
     <Content Include="Trace\TimeOfDestinationUser.ascx" />

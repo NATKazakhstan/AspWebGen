@@ -140,6 +140,8 @@
     <Content Include="Areas\Reports\Views\Manager\_Label.cshtml" />
     <Content Include="Areas\Reports\Views\Manager\_FilterType.cshtml" />
     <Content Include="Areas\Reports\Views\Manager\_Remove.cshtml" />
+    <Content Include="Areas\Reports\Content\web.change.config" />
+    <Content Include="Areas\Reports\Scripts\web.change.config" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

@@ -136,9 +136,9 @@ namespace Nat.Web.Controls
             return logMonitor.LogException(e, sid);
         }
 
-        public void MessageSourceLink(long messageSourceId, long recordId)
+        public void MessageSourceLink(long messageSourceId, long messageSourceFromId, long recordId)
         {
-            logMonitor.MessageSourceLink(messageSourceId, recordId);
+            logMonitor.MessageSourceLink(messageSourceId, messageSourceFromId, recordId);
         }
 
         public void WriteMessageSourceLink(long refMessage)

@@ -18,6 +18,7 @@ using Nat.Web.Tools;
 using Nat.Web.Tools.Initialization;
 using System.Web;
 using System.Web.Configuration;
+using Nat.Tools.Classes;
 using Nat.Web.Tools.Security;
 
 namespace Nat.Web.Controls
@@ -35,7 +36,7 @@ namespace Nat.Web.Controls
         #region Fields
 
         private readonly List<LogChangedFieldEntry> _changedFieldList;
-        private readonly List<KeyValuePair<long, long>> _messageSourceLinkList;
+        private readonly List<Triplet<long, long, long>> _messageSourceLinkList;
         private DbCommand _cmdLog;
         private DbCommand _cmdLogFields;
         private DbCommand _cmdLogLinks;
@@ -47,7 +48,7 @@ namespace Nat.Web.Controls
         public LogMonitor()
         {
             _changedFieldList = new List<LogChangedFieldEntry>();
-            _messageSourceLinkList = new List<KeyValuePair<long, long>>();
+            _messageSourceLinkList = new List<Triplet<long, long, long>>();
         }
 
         #endregion
@@ -157,10 +158,11 @@ namespace Nat.Web.Controls
             }
             _cmdLogLinks.CommandType = CommandType.Text;
             _cmdLogLinks.CommandText =
-                @"INSERT INTO LOG_MessageSourceLink(refMessage, refMessageSource, RecordID)
-                  VALUES(@refMessage, @refMessageSource, @recordId)";
+                @"INSERT INTO LOG_MessageSourceLink(refMessage, refMessageSource, refMessageSourceFrom, RecordID)
+                  VALUES(@refMessage, @refMessageSource, @refMessageSourceFrom, @recordId)";
             _cmdLogLinks.Parameters.Add(new SqlParameter("@refMessage", SqlDbType.BigInt));
             _cmdLogLinks.Parameters.Add(new SqlParameter("@refMessageSource", SqlDbType.BigInt));
+            _cmdLogLinks.Parameters.Add(new SqlParameter("@refMessageSourceFrom", SqlDbType.BigInt));
             _cmdLogLinks.Parameters.Add(new SqlParameter("@recordId", SqlDbType.BigInt));
         }
 
@@ -463,9 +465,9 @@ namespace Nat.Web.Controls
             }
         }
         
-        public void MessageSourceLink(long messageSourceId, long recordId)
+        public void MessageSourceLink(long messageSourceId, long messageSourceFromId, long recordId)
         {
-            MessageSourceLinkList.Add(new KeyValuePair<long, long>(messageSourceId, recordId));
+            MessageSourceLinkList.Add(new Triplet<long, long, long>(messageSourceId, messageSourceFromId, recordId));
         }
 
         public void WriteMessageSourceLink(long refMessage)
@@ -482,8 +484,9 @@ namespace Nat.Web.Controls
                 foreach (var link in MessageSourceLinkList)
                 {
                     _cmdLogLinks.Parameters["@refMessage"].Value = refMessage;
-                    _cmdLogLinks.Parameters["@refMessageSource"].Value = link.Key;
-                    _cmdLogLinks.Parameters["@recordId"].Value = link.Value;
+                    _cmdLogLinks.Parameters["@refMessageSource"].Value = link.First;
+                    _cmdLogLinks.Parameters["@refMessageSourceFrom"].Value = link.Second;
+                    _cmdLogLinks.Parameters["@recordId"].Value = link.Third;
                     _cmdLogLinks.ExecuteNonQuery();
                 }
 
@@ -620,7 +623,7 @@ namespace Nat.Web.Controls
         #region Properties
 
         internal List<LogChangedFieldEntry> ChangedFieldList => _changedFieldList;
-        internal List<KeyValuePair<long, long>> MessageSourceLinkList => _messageSourceLinkList;
+        internal List<Triplet<long, long, long>> MessageSourceLinkList => _messageSourceLinkList;
 
         private DbTransaction _transaction;
         public DbTransaction Transaction

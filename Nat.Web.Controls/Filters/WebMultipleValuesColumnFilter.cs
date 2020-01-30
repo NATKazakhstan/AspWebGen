@@ -73,6 +73,7 @@ namespace Nat.Web.Controls.Filters
         public Unit PanelHeight { get; set; }
 
         public bool AllowNone { get; set; }
+        public bool AllowDefaultValues { get; set; }
 
         public ScriptManager ScriptManager
         {
@@ -354,6 +355,7 @@ namespace Nat.Web.Controls.Filters
 
             Page.ClientScript.RegisterClientScriptBlock(GetType(), GetQuickSearchValueChangeFunctionName(), script, true);
 
+            bool valueCheked = false;
             if (checkedIds != null)
             {
                 script = string.Format(@"function {0} (checkbox){{
@@ -380,6 +382,7 @@ function {1} (checkbox){{
                 var value = Page.Request.Params[checkedIds.UniqueID];
                 if (!string.IsNullOrEmpty(value) && !checkedIdsCleared)
                 {
+                    valueCheked = true;
                     var values = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Distinct().ToDictionary(r => r);
                     foreach (GridViewExtRow row in gridViewExt.Rows)
                     {
@@ -391,6 +394,21 @@ function {1} (checkbox){{
                         if (checkBox != null)
                             checkBox.Checked = true;
                     }
+                }
+            }
+
+            if (AllowDefaultValues && !valueCheked && _storage.Values != null && _storage.Values.Length > 0)
+            {
+                var values = _storage.Values;
+                foreach (GridViewExtRow row in gridViewExt.Rows)
+                {
+                    if (row.ItemValue == null || !values.Contains(row.ItemValue))
+                        continue;
+                    var checkBox = row.Cells.Cast<TableCell>()
+                        .SelectMany(r => r.Controls.OfType<CheckBox>())
+                        .FirstOrDefault();
+                    if (checkBox != null)
+                        checkBox.Checked = true;
                 }
             }
         }

@@ -207,9 +207,11 @@ namespace Nat.Web.Tools.ExtNet.Extenders
 
                 case Comparison.Gt:
                     if (condition.Type == FilterType.Date)
-                        return Expression.GreaterThan(exp1, exp3);
+                        return Expression.GreaterThanOrEqual(exp1, exp3);
                     return Expression.GreaterThan(exp1, exp2);
                 case Comparison.Lt:
+                    if (condition.Type == FilterType.Date)
+                        return Expression.LessThanOrEqual(exp1, exp2);
                     return Expression.LessThan(exp1, exp2);
                 default:
                     throw new ArgumentOutOfRangeException();

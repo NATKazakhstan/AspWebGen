@@ -519,5 +519,23 @@ namespace Nat.Web.ReportManager
                 return value.Substring(0, value.Length - 1) + ",";
             return value + ",";
         }
+
+        /// <summary>
+        /// Возвращает ФИО в сокращенной форме (с инициалами)
+        /// </summary>
+        /// <param name="fio"></param>
+        /// <returns></returns>
+        public static string GetShortFio(this string fio)
+        {
+            if (string.IsNullOrWhiteSpace(fio))
+                return fio;
+            var split = fio.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (split.Length > 3)
+                return fio;
+
+            return split[0]
+                   + (split.Length > 1 ? " " + split[1][0] + "." : "")
+                   + (split.Length > 2 ? " " + split[2][0] + "." : "");
+        }
     }
 }

@@ -299,10 +299,8 @@ namespace Nat.Web.Controls
                         _cmdLogFields.Connection.Open();
                 }
 
-                var user = User.GetPersonInfo();
                 _cmdLog.Parameters["@code"].Value = (LogMessageType)logMessageEntry.MessageCodeAsLong;
                 _cmdLog.Parameters["@SID"].Value = logMessageEntry.Sid ?? Sid ?? User.GetSID(false);
-                //_cmdLog.Parameters["@refRecordCard"].Value = user != null ? (long?)user.id : null;
                 _cmdLog.Parameters["@content"].Value = logMessageEntry.Message;
 
                 try

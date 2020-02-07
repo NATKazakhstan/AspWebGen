@@ -70,6 +70,9 @@ namespace Nat.Web.Tools
             if (HttpContext.Current.Items["Culture"] != null
                 && !string.IsNullOrEmpty((string) HttpContext.Current.Items["Culture"]))
                 culture = (string) HttpContext.Current.Items["Culture"];
+            else if (HttpContext.Current.Request.Cookies["langid"] != null
+                     && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies["langid"].Value))
+                lcid = HttpContext.Current.Request.Cookies["langid"].Value;
             else if (HttpContext.Current.Request.Cookies["lcid"] != null
                      && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies["lcid"].Value))
                 lcid = HttpContext.Current.Request.Cookies["lcid"].Value;

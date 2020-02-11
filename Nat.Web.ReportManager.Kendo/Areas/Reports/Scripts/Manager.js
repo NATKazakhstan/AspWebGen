@@ -14,7 +14,7 @@
         this.reportWindow = $('#reportWindow').data('kendoWindow');
 
         var searchDiv = kendo.template($('#pluginsSearch').html())({ divStyle: '', id: 'searchValueInput' });
-        this.grid.toolbar.find('button[data-command="search"]').replaceWith(searchDiv);
+        this.grid.toolbar.find('button[data-command="mysearch"]').replaceWith(searchDiv);
 
         kendo.bind($('#searchValueInput'), this.options);
         kendo.bind($('.reportToolbar'), this.options);

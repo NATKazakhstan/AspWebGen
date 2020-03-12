@@ -40285,7 +40285,7 @@ private void InternalCustomEditLogic()
 .endif</a:TemplateTargetItem.Value>
 <a:CreationDate>1352125308</a:CreationDate>
 <a:Creator>Sergey.Shpakovskiy</a:Creator>
-<a:ModificationDate>1512041924</a:ModificationDate>
+<a:ModificationDate>1580450154</a:ModificationDate>
 <a:Modifier>Sergey.Shpakovskiy</a:Modifier>
 <a:TargetCategory.Type>1</a:TargetCategory.Type>
 </o:TemplateTargetItem>
@@ -41526,7 +41526,7 @@ protected bool SaveData(%TableType% originalItem)
         else
         {
             var minId = data.Count == 0 ? 0 : data.Min(r =&gt; r.id);
-            newItem.id = minId &gt; 0 ? -1 : minId - 1;
+            newItem.id = minId &gt; -100000 ? -100000 : minId - 1;
             newItem.RowVersion = new byte\[0];
             DB.GetTable&lt;%TableType%&gt;().Attach(newItem, false);
             var newRow = 
@@ -41583,12 +41583,12 @@ protected bool SaveData(%TableType% originalItem)
         if (IsNew)
         {
             saved = OnInserted(true, newItem);
-            OnInsertedPartial(newItem, true);
+            OnInsertedPartial(newItem, saved);
         }
         else
         {
             saved = OnUpdated(true, newItem);
-            OnUpdatedPartial(newItem, originalItem, true);
+            OnUpdatedPartial(newItem, originalItem, saved);
         }
 
         if (saved) SelectedValueKey = ref%Code%;
@@ -41619,7 +41619,7 @@ protected bool SaveData(%TableType% originalItem)
 .endif</a:TemplateTargetItem.Value>
 <a:CreationDate>1352380827</a:CreationDate>
 <a:Creator>Sergey.Shpakovskiy</a:Creator>
-<a:ModificationDate>1575520033</a:ModificationDate>
+<a:ModificationDate>1584009777</a:ModificationDate>
 <a:Modifier>Sergey.Shpakovskiy</a:Modifier>
 <a:TargetCategory.Type>1</a:TargetCategory.Type>
 </o:TemplateTargetItem>

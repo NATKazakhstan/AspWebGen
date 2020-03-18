@@ -50,7 +50,7 @@ namespace Nat.Web.Controls
             _changedFieldList = new List<LogChangedFieldEntry>();
             _messageSourceLinkList = new List<Triplet<long, long, long>>();
         }
-
+         
         #endregion
 
         #region Enumerations
@@ -715,12 +715,16 @@ namespace Nat.Web.Controls
                     command.Transaction = transaction;
                 }
                 command.Connection = connection;
-                command.CommandText = "select code, enabled from DIC_LOG_MESSAGE_SOURCE_TO_TYPE";
                 adapter.SelectCommand = command;
                 if(transaction == null)
                     connection.Open();
                 try
                 {
+                    command.CommandText = "SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = "select code, enabled from DIC_LOG_MESSAGE_SOURCE_TO_TYPE";
+
                     Clear();
                     adapter.Fill(this);
                     _needReload = false;

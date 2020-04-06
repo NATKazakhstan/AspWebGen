@@ -241,6 +241,7 @@
             var dsData = this.grid.dataSource.data();
             for (var i = 0; i < dsData.length; i++) {
                 if (dsData[i].PluginName === this.options.PluginName || (dsData[i].Name === this.options.PluginName && dsData[i].PluginName)) {
+                    this.grid._selectedIds = {};
                     this.grid.clearSelection();
                     this.gridSelectDataItem(dsData[i]);
                     var parent = !dsData[i].parentID ? null : this.grid.dataSource.get(dsData[i].parentID);
@@ -614,6 +615,7 @@
         if (d.kendoMultiColumnComboBox)
             d.kendoMultiColumnComboBox.dataSource.read();
         if (d.kendoGrid) {
+            d.kendoGrid._selectedIds = {};
             d.kendoGrid.clearSelection();
             d.kendoGrid.dataSource.read();
         }
@@ -716,7 +718,7 @@
         item.Columns.splice(0, 0, { selectable: true, width: "50px" });
     };
 
-    this.GridAfterInit = function (item) {
+    this.GridAfterInit = function(item) {
         var grid = $('#Value1_' + item.ParameterIndex).data('kendoGrid');
         if (!grid) return;
         grid.setOptions({ persistSelection: true });
@@ -724,6 +726,19 @@
             function() {
                 item.set('Values', grid.selectedKeyNames());
             });
+        grid.bind('clear',
+            function() {
+                debugger;
+                item.set('Values', grid.selectedKeyNames());
+            });
+
+        if (!grid._selectedIds)
+            grid._selectedIds = {};
+        if (item.Values) {
+            for (var i = 0; i < item.Values.length; i++) {
+                grid._selectedIds[item.Values[i]] = true;
+            }
+        }
     };
 
     this.TreeInit = function (item) {

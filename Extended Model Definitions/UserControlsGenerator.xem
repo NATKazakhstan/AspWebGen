@@ -40951,6 +40951,8 @@ Request.Form\[hf%CurrentPart%.ClientID.Remove(0, 4)]
                     break;
    .endif
 .next(\n)
+                default:
+                    break;
             }
         }
 
@@ -41015,7 +41017,7 @@ Request.Form\[hf%CurrentPart%.ClientID.Remove(0, 4)]
 }</a:TemplateTargetItem.Value>
 <a:CreationDate>1352121234</a:CreationDate>
 <a:Creator>Sergey.Shpakovskiy</a:Creator>
-<a:ModificationDate>1526985795</a:ModificationDate>
+<a:ModificationDate>1587463170</a:ModificationDate>
 <a:Modifier>Sergey.Shpakovskiy</a:Modifier>
 <a:TargetCategory.Type>1</a:TargetCategory.Type>
 </o:TemplateTargetItem>

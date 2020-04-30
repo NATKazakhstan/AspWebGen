@@ -38,6 +38,9 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
         public string PluginType { get; set; }
         public bool Visible { get; set; }
         public int? parentID { get; }
+        public bool AllowWordExport { get; set; }
+        public bool AllowExcelExport { get; set; }
+        public bool AllowPdfExport { get; set; }
 
         public static IEnumerable<PluginViewModel> ParseGroups(string valueReportGroup, IDictionary<string, int> dicIDs, IDictionary<int, string> hasHash)
         {

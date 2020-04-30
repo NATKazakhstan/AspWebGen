@@ -107,10 +107,14 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                                        && ("on".Equals(setDefaultParams, StringComparison.OrdinalIgnoreCase)
                                            || Convert.ToBoolean(setDefaultParams));
             var plugin = WebReportManager.GetPlugin(className);
+            var availableFormats = WebReportManager.GetAvailableFormat(plugin).ToList();
             var options = new
             {
                 PluginName = plugin?.GetType().FullName,
                 PluginType = plugin is CrossJournalReportPlugin ? "CrossReport" : "Simple",
+                AllowWordExport = availableFormats.Contains(ExportFormat.Word),
+                AllowExcelExport = availableFormats.Contains(ExportFormat.Excel),
+                AllowPdfExport = availableFormats.Contains(ExportFormat.Pdf),
                 Name = plugin?.Description ?? Resources.SPluginNotFound,
                 viewOne = true,
                 viewOneOpen = allowOpen && (!string.IsNullOrEmpty(idrec) || (plugin?.Conditions.Count == 0 && plugin.CreateModelFillConditions().Count == 0))
@@ -213,12 +217,19 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 .OrderBy(r => r.Name)
                 .ToList();
             var data = plugins
-                .Select(r => new PluginViewModel(r.Key, r.Value.ReportGroup, dicIDs, hasHash)
+                .Select(r =>
                 {
-                    Name = r.Value.Description,
-                    Visible = r.Value.Visible,
-                    PluginName = r.Key,
-                    PluginType = r.Value is CrossJournalReportPlugin ? "CrossReport" : "Simple"
+                    var availableFormats = WebReportManager.GetAvailableFormat(r.Value).ToList();
+                    return new PluginViewModel(r.Key, r.Value.ReportGroup, dicIDs, hasHash)
+                    {
+                        Name = r.Value.Description,
+                        Visible = r.Value.Visible,
+                        PluginName = r.Key,
+                        PluginType = r.Value is CrossJournalReportPlugin ? "CrossReport" : "Simple",
+                        AllowWordExport = availableFormats.Contains(ExportFormat.Word),
+                        AllowExcelExport = availableFormats.Contains(ExportFormat.Excel),
+                        AllowPdfExport = availableFormats.Contains(ExportFormat.Pdf),
+                    };
                 })
                 .OrderBy(r => r.Name)
                 .ToList();

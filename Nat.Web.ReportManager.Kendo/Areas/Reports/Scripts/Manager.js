@@ -54,6 +54,9 @@
 
         this.options.set('PluginName', !dataItem || !dataItem.PluginName ? null : dataItem.PluginName);
         this.options.set('PluginType', !dataItem || !dataItem.PluginType ? null : dataItem.PluginType);
+        this.options.set('AllowWordExport', !dataItem ? null : dataItem.AllowWordExport);
+        this.options.set('AllowExcelExport', !dataItem ? null : dataItem.AllowExcelExport);
+        this.options.set('AllowPdfExport', !dataItem ? null : dataItem.AllowPdfExport);
         this.options.set('Name', !dataItem || !dataItem.Name ? null : dataItem.Name);
         this.options.set('DisplayName', !dataItem || !dataItem.Name ? '' : ' / ' + dataItem.Name);
         if (!this._meInOpen)
@@ -275,7 +278,7 @@
                 false);
 
         if (!this.options.viewOne) {
-            if (pushState && window.history && history.pushState && dataItem.PluginName) {
+            if (pushState && window.history && history.pushState && dataItem && dataItem.PluginName) {
                 history.pushState(this.options.toJSON(), this.options.Name, this.getUrl(this.options));
             }
 
@@ -288,6 +291,9 @@
     this.setOptions = function(options) {
         this.options.set('PluginName', options.PluginName);
         this.options.set('PluginType', options.PluginType);
+        this.options.set('AllowWordExport', options.AllowWordExport);
+        this.options.set('AllowExcelExport', options.AllowExcelExport);
+        this.options.set('AllowPdfExport', options.AllowPdfExport);
         this.options.set('Name', options.Name);
     };
 
@@ -396,6 +402,9 @@
         this.options.set('showSubscription', false);
         this.options.set('showSaveSubscription', false);
         this.options.set('showButtons', false);
+        this.options.set('showButtonsPdf', false);
+        this.options.set('showButtonsExcel', false);
+        this.options.set('showButtonsWord', false);
         this.options.set('showCRButtons', false);
         $('#reportParameters').hide();
     };
@@ -462,6 +471,9 @@
             this.options.set('showCRButtons', true);
         else {
             this.options.set('showButtons', true);
+            this.options.set('showButtonsPdf', this.options.AllowPdfExport);
+            this.options.set('showButtonsExcel', this.options.AllowExcelExport);
+            this.options.set('showButtonsWord', this.options.AllowWordExport);
             this.options.set('showSubscription', true);
         }
 

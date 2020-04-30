@@ -10,9 +10,9 @@
 
     <div class="k-header k-grid-toolbar reportToolbar">
         <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onCreateClick()" style="display: none;"><span class="k-icon fas fa-file"></span> @Resources.SCreateReport</button>
-        <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onWordExportClick()" style="display: none;"><span class="k-icon fas fa-file-word"></span> @Resources.SWordExport</button>
-        <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onExcelExportClick()" style="display: none;"><span class="k-icon fas fa-file-excel"></span> @Resources.SExcelExport</button>
-        <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onPDFExportClick()" style="display: none;"><span class="k-icon fas fa-file-pdf"></span> @Resources.SPDFExport</button>
+        <button class="k-button k-button-icontext" data-bind="visible: showButtonsWord" onclick="VM.manager.onWordExportClick()" style="display: none;"><span class="k-icon fas fa-file-word"></span> @Resources.SWordExport</button>
+        <button class="k-button k-button-icontext" data-bind="visible: showButtonsExcel" onclick="VM.manager.onExcelExportClick()" style="display: none;"><span class="k-icon fas fa-file-excel"></span> @Resources.SExcelExport</button>
+        <button class="k-button k-button-icontext" data-bind="visible: showButtonsPdf" onclick="VM.manager.onPDFExportClick()" style="display: none;"><span class="k-icon fas fa-file-pdf"></span> @Resources.SPDFExport</button>
         <button class="k-button k-button-icontext" data-bind="visible: showCRButtons" onclick="VM.manager.onCreateClick()" style="display: none;"><span class="k-icon fas fa-window-maximize"></span> @Resources.SCreateReport</button>
         <button class="k-button k-button-icontext" data-bind="visible: showCRButtons" onclick="VM.manager.onCreateClick(true)" style="display: none;"><span class="k-icon fas fa-window-restore"></span> @Resources.SOnNewTab</button>
         <button class="k-button k-button-icontext" data-bind="visible: showCRButtons" onclick="VM.manager.onExcelExportClick()" style="display: none;"><span class="k-icon fas fa-file-excel"></span> @Resources.SExcelExport</button>
@@ -32,9 +32,9 @@
 </div>
 <script type="text/x-kendo-template" id="openInWindowTemplate">
     <div class="k-header k-grid-toolbar reportToolbarInWindow">
-        <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onWordExportClick()" style="display: none;"><span class="k-icon fas fa-file-word"></span> @Resources.SWordExport</button>
-        <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onExcelExportClick()" style="display: none;"><span class="k-icon fas fa-file-excel"></span> @Resources.SExcelExport</button>
-        <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onPDFExportClick()" style="display: none;"><span class="k-icon fas fa-file-pdf"></span> @Resources.SPDFExport</button>
+        <button class="k-button k-button-icontext" data-bind="visible: showButtonsWord" onclick="VM.manager.onWordExportClick()" style="display: none;"><span class="k-icon fas fa-file-word"></span> @Resources.SWordExport</button>
+        <button class="k-button k-button-icontext" data-bind="visible: showButtonsExcel" onclick="VM.manager.onExcelExportClick()" style="display: none;"><span class="k-icon fas fa-file-excel"></span> @Resources.SExcelExport</button>
+        <button class="k-button k-button-icontext" data-bind="visible: showButtonsPdf" onclick="VM.manager.onPDFExportClick()" style="display: none;"><span class="k-icon fas fa-file-pdf"></span> @Resources.SPDFExport</button>
     </div>
     <div class='reportResultDiv'>
         <div class='reportResultDiv-inner'>

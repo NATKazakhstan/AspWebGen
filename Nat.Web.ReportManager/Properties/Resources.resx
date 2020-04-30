@@ -123,6 +123,9 @@
   <data name="SBack" xml:space="preserve">
     <value>Назад</value>
   </data>
+  <data name="SBarCodeInfo" xml:space="preserve">
+    <value>Сформировано: </value>
+  </data>
   <data name="SDeleteCondition" xml:space="preserve">
     <value>Удалить все условия</value>
   </data>

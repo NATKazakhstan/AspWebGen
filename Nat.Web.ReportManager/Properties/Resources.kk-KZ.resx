@@ -132,4 +132,7 @@
   <data name="SBack" xml:space="preserve">
     <value>Артқа</value>
   </data>
+  <data name="SBarCodeInfo" xml:space="preserve">
+    <value>Қалыптасқан: </value>
+  </data>
 </root>

@@ -16,6 +16,8 @@ using Stimulsoft.Report;
 using Stimulsoft.Report.Web;
 using Stimulsoft.Report.Components;
 using System.Threading;
+using System.Web.Mvc;
+using Nat.Web.ReportManager.Properties;
 using Stimulsoft.Report.Engine;
 
 namespace Nat.Web.ReportManager
@@ -191,6 +193,19 @@ namespace Nat.Web.ReportManager
                                 webReportManager.Plugin.InitializedCulture;
                         }
                     }
+                    
+                    var autoExport = webReportPlugin as IReportAutoExport;
+                    var isExport = !isPreview && (useReturnStream || autoExport != null || expToWord || stiPlugin.AutoExportTo != null);
+
+                    var logId = Log(logMonitor, guid, webReportManager,
+                        isExport ? LogReportGenerateCodeType.Export : LogReportGenerateCodeType.Preview);
+                    var user = Tools.Security.User.GetPersonInfoRequired();
+                    var logText1 = user.EMail + ", " + HttpContext.Current?.Request.UserHostAddress;
+                    var logText2 = (HttpContext.Current?.User.Identity.Name ?? "System") + ", " + DateTime.Now.ToString("dd.MM.yyyy HH:mm");
+                    stiPlugin.Report["BarCodeLogText"] = Resources.SBarCodeInfo + logText1 + "\r\n" + logText2;
+                    stiPlugin.Report["BarCodeLogData"] = "ID:" + logId + ", " + logText1 + ", " + logText2;
+                    //stiPlugin.Report["BarCodeLogData1"] = "ID:" + logId + ", " + logText1;
+                    //stiPlugin.Report["BarCodeLogData2"] = "ID:" + logId + ", " + logText2;
 
                     try
                     {
@@ -230,8 +245,6 @@ namespace Nat.Web.ReportManager
                         }
                     }
 
-                    var autoExport = webReportPlugin as IReportAutoExport;
-
                     DBDataContext.AddViewReports(
                         Tools.Security.User.GetSID(),
                         HttpContext.Current?.User.Identity.Name ?? "anonymous",
@@ -239,10 +252,9 @@ namespace Nat.Web.ReportManager
                         ReportInitializerSection.GetReportInitializerSection().ReportPageViewer + "?ClassName=" + pluginName,
                         HttpContext.Current?.Request.Url.GetLeftPart(UriPartial.Authority) ?? "https://srvmax.vvmvd.kz",
                         Environment.MachineName,
-                        !isPreview && (useReturnStream || autoExport != null || expToWord || stiPlugin.AutoExportTo != null),
+                        isExport,
                         webReportManager.Plugin.GetType());
 
-                    Log(logMonitor, guid, webReportManager);
                     if (useReturnStream)
                     {
                         StiExportFormat? stiExportFormat = null;
@@ -385,7 +397,7 @@ namespace Nat.Web.ReportManager
             }
         }
 
-        private static void Log(LogMonitor logMonitor, string guid, WebReportManager reportManager)
+        private static long? Log(LogMonitor logMonitor, string guid, WebReportManager reportManager, LogReportGenerateCodeType type)
         {
             LogMessageType logType;
             string message;
@@ -401,8 +413,16 @@ namespace Nat.Web.ReportManager
             }
             if (logType != LogMessageType.None)
             {
-                logMonitor.Log(new LogMessageEntry(logType, message));
+                var logInfo = DependencyResolver.Current.GetService<ILogReportGenerateCode>();
+                logType = (LogMessageType) logInfo.GetCodeFor(
+                    reportManager.Plugin.GetType().FullName,
+                    reportManager.Plugin.Description,
+                    (long) logType,
+                    type);
+                return logMonitor.WriteLog(new LogMessageEntry(logType, message));
             }
+
+            return null;
         }
 
         private List<object> TestCache()

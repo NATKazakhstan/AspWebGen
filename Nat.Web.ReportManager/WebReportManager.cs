@@ -598,5 +598,51 @@ namespace Nat.Web.ReportManager
 
             return UserRoles.IsInAnyRoles(plugin.Roles());
         }
+
+        public static IEnumerable<StiExportFormat> GetAvailableStiFormat(object plugin)
+        {
+            var exportPermissions = plugin as IExportPermission;
+            if (exportPermissions == null)
+                return new [] {StiExportFormat.Pdf, StiExportFormat.Word2007, StiExportFormat.Excel2007};
+            
+            var list = new List<StiExportFormat>(3);
+
+            var roles = exportPermissions.GetWordRoles();
+            if (roles == null || roles.Length == 0 || UserRoles.IsInAnyRoles(roles))
+                list.Add(StiExportFormat.Word2007);
+            
+            roles = exportPermissions.GetPdfRoles();
+            if (roles == null || roles.Length == 0 || UserRoles.IsInAnyRoles(roles))
+                list.Add(StiExportFormat.Pdf);
+
+            roles = exportPermissions.GetExcelRoles();
+            if (roles == null || roles.Length == 0 || UserRoles.IsInAnyRoles(roles))
+                list.Add(StiExportFormat.Excel2007);
+
+            return list;
+        }
+
+        public static IEnumerable<ExportFormat> GetAvailableFormat(object plugin)
+        {
+            var exportPermissions = plugin as IExportPermission;
+            if (exportPermissions == null)
+                return new[] {ExportFormat.Pdf, ExportFormat.Word, ExportFormat.Excel};
+
+            var list = new List<ExportFormat>(3);
+
+            var roles = exportPermissions.GetWordRoles();
+            if (roles == null || roles.Length == 0 || UserRoles.IsInAnyRoles(roles))
+                list.Add(ExportFormat.Word);
+
+            roles = exportPermissions.GetPdfRoles();
+            if (roles == null || roles.Length == 0 || UserRoles.IsInAnyRoles(roles))
+                list.Add(ExportFormat.Pdf);
+
+            roles = exportPermissions.GetExcelRoles();
+            if (roles == null || roles.Length == 0 || UserRoles.IsInAnyRoles(roles))
+                list.Add(ExportFormat.Excel);
+
+            return list;
+        }
     }
 }

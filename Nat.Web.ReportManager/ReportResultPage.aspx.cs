@@ -255,6 +255,7 @@ namespace Nat.Web.ReportManager
                         isExport,
                         webReportManager.Plugin.GetType());
 
+                    var availableFormat = WebReportManager.GetAvailableStiFormat(stiPlugin).ToList();
                     if (useReturnStream)
                     {
                         StiExportFormat? stiExportFormat = null;
@@ -263,13 +264,15 @@ namespace Nat.Web.ReportManager
                         {
                             if ("Auto".Equals(format, StringComparison.InvariantCulture))
                             {
-                                stiExportFormat = stiPlugin.AutoExportTo ?? StiExportFormat.Word2007;
+                                stiExportFormat = stiPlugin.AutoExportTo ?? availableFormat.First();
                                 stiCustomExportType = webReportPlugin.CustomExportType;
                             }
                             else if ("Word".Equals(format, StringComparison.InvariantCulture))
-                                stiExportFormat = StiExportFormat.Word2007;
+                                stiExportFormat = availableFormat.Contains(StiExportFormat.Word2007)
+                                    ? StiExportFormat.Word2007
+                                    : availableFormat.First();
                             else if ("Excel".Equals(format, StringComparison.InvariantCulture))
-                                stiExportFormat = StiExportFormat.Excel2007;
+                                stiExportFormat = availableFormat.Contains(StiExportFormat.Excel2007) ? StiExportFormat.Excel2007 : availableFormat.First();
                             else
                                 stiExportFormat = (StiExportFormat) Enum.Parse(typeof(StiExportFormat), format);
                         }
@@ -321,7 +324,7 @@ namespace Nat.Web.ReportManager
                     }
                     else
                     {
-                        return ExportWithoutShow(webReportManager.Report, StiExportFormat.Word2007, false);
+                        return ExportWithoutShow(webReportManager.Report, availableFormat.First(), false);
                     }
                 }
             }

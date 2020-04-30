@@ -222,6 +222,8 @@
     <Compile Include="Data\DB.cs">
       <DependentUpon>DB.dbml</DependentUpon>
     </Compile>
+    <Compile Include="ExportFormat.cs" />
+    <Compile Include="IExportPermission.cs" />
     <Compile Include="ILogReportGenerateCode.cs" />
     <Compile Include="IRememberReports.cs" />
     <Compile Include="LogReportGenerateCodeType.cs" />

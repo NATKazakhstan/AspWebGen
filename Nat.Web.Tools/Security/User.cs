@@ -158,7 +158,7 @@
                 return windowsIdentity.User.Value;
             return string.Empty;
         }
-
+        
         public static string[] GetGroups()
         {
             var config = InitializerSection.GetSection();

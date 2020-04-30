@@ -125,6 +125,8 @@ namespace Nat.Web.Tools.Security
 		
 		private string _PositionCode;
 		
+		private string _EMail;
+		
 		public GetPersonInfoBySidResult()
 		{
 		}
@@ -317,6 +319,22 @@ namespace Nat.Web.Tools.Security
 				if ((this._PositionCode != value))
 				{
 					this._PositionCode = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EMail", DbType="NVarChar(255)")]
+		public string EMail
+		{
+			get
+			{
+				return this._EMail;
+			}
+			set
+			{
+				if ((this._EMail != value))
+				{
+					this._EMail = value;
 				}
 			}
 		}

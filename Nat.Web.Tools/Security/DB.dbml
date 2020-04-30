@@ -15,6 +15,7 @@
       <Column Name="SubdivisionNameKz" Type="System.String" DbType="NVarChar(450)" CanBeNull="true" />
       <Column Name="refRegion" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
       <Column Name="PositionCode" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="EMail" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
     </ElementType>
   </Function>
   <Function Name="dbo.MSD_P_AddViewReports" Method="MSD_P_AddViewReports">

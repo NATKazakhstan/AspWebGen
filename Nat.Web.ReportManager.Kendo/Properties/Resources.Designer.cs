@@ -133,6 +133,15 @@ namespace Nat.Web.ReportManager.Kendo.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Условия формирования отчета.
+        /// </summary>
+        public static string SReportConditions {
+            get {
+                return ResourceManager.GetString("SReportConditions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Отчеты.
         /// </summary>
         public static string SReportName {

@@ -18,6 +18,7 @@ using Nat.ReportManager.QueryGeneration;
 using Nat.ReportManager.ReportGeneration;
 using Nat.ReportManager.ReportGeneration.SqlReportingServices;
 using Nat.ReportManager.ReportGeneration.StimulSoft;
+using Nat.Tools;
 using Nat.Tools.Constants;
 using Nat.Tools.Filtering;
 using Nat.Tools.QueryGeneration;
@@ -474,7 +475,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
 
             var guid = Guid.NewGuid().ToString();
             Session[guid] = storageValues;
-            Session["logmsg" + guid] = plugin.GetLogInformation().Replace("\r\n", "<br/>");
+            Session["logmsg" + guid] = GetLogInformation(parameters, plugin, storageValues);
             Session["logcode" + guid] = ReportInitializerSection.GetReportInitializerSection().ReprotPlugins.GetTypeReportLists()[plugin.GetType()].LogMessageType;
             Session["constants" + guid] = (plugin as IWebReportPlugin)?.Constants ?? new Dictionary<string, object>();
 
@@ -593,6 +594,46 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             return File(stream, "application/octet-stream", plugin.Description + "." + fileNameExt);
         }
 
+        private string GetLogInformation(List<ConditionViewModel> parameters, IReportPlugin plugin, StorageValues storageValues)
+        {
+            if (parameters.Count == 0)
+                return plugin.GetLogInformation();
+
+            var sb = new StringBuilder();
+            sb.Append(plugin.GetLogInformation());
+            var firstParam = true;
+            foreach (var model in parameters.Where(p=> p.Visible))
+            {
+                if (firstParam)
+                {
+                    sb.Append(". \r\n").Append(Resources.SReportConditions).Append(": ");
+                    firstParam = false;
+                }
+
+                if (!model.AllowAddParameter || !model.ParameterClone)
+                {
+                    sb.Append(model.Title).Append(": ");
+                    if (!model.AllowAddParameter)
+                        storageValues.GetStorageTextValues(model.Key).ForEach(v => sb.Append(v).Append(", "));
+                    else
+                    {
+                        for (int i = 0; i < storageValues.CountListValues; i++)
+                        {
+                            storageValues.GetCircleStorageTextValues(model.Key, i)
+                                .ForEach(v => sb.Append(v).Append(", "));
+                            sb.Remove(sb.Length - 2, 2).Append("; ");
+                        }
+                    }
+
+                    sb.Remove(sb.Length - 2, 2);
+                }
+
+                sb.Append(". \r\n");
+            }
+
+            return sb.ToString();
+        }
+
         private static void RememberReports(string path, IReportPlugin plugin, LogMonitor logMonitor)
         {
             var typeStr = ReportInitializerSection.GetReportInitializerSection().RememberLastReportType;
@@ -679,18 +720,23 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             foreach (var condition in plugin.Conditions)
             {
                 var storage = condition.ColumnFilter.GetStorage();
+                ConditionViewModel parameter;
                 if (paramsDic.ContainsKey(storage.Name))
                 {
-                    paramsDic[storage.Name].InitStorage(storage);
+                    parameter = paramsDic[storage.Name];
+                    parameter.InitStorage(storage);
                     condition.ColumnFilter.SetStorage(storage);
                 }
                 else
-                    ConditionViewModel.From(condition.ColumnFilter);
+                    parameter = ConditionViewModel.From(condition.ColumnFilter);
 
                 if (storage.DataType == null)
                     storageValues.AddStorage(storage);
                 else
-                    storageValues.AddStorage(storage, condition.ColumnFilter.GetTexts());
+                {
+                    var ds = storage.RefDataSource as ReportDataSource;
+                    storageValues.AddStorage(storage, ds != null ? ds.GetTexts(storage) : condition.ColumnFilter.GetTexts());
+                }
             }
 
             var paramsCircleDic = parameters.Where(r => !r.Removed && r.AllowAddParameter).ToLookup(r => r.Key);
@@ -710,7 +756,8 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                         continue;
                     paramsCircleDic[storage.Name].Skip(i).First().InitStorage(storage);
                     condition.ColumnFilter.SetStorage(storage);
-                    storageValues.AddListStorage(storage, i, condition.ColumnFilter.GetTexts());
+                    var ds = storage.RefDataSource as ReportDataSource;
+                    storageValues.AddListStorage(storage, i,  ds != null ? ds.GetTexts(storage) : condition.ColumnFilter.GetTexts());
                 }
                 plugin.CircleFillConditions.Add(conditions);
             }

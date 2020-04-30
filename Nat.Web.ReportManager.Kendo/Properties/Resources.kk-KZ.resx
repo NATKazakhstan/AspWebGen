@@ -147,4 +147,7 @@
   <data name="SPluginNotFound" xml:space="preserve">
     <value>Есеп табылмады</value>
   </data>
+  <data name="SReportConditions" xml:space="preserve">
+    <value>Есеп дайындау шарттары</value>
+  </data>
 </root>

@@ -18,25 +18,33 @@ namespace Nat.Web.ReportManager.Kendo
         {
             return Data?.GetEnumerator() ?? new string[0].GetEnumerator();
         }
+        public abstract string[] GetTexts(ColumnFilterStorage storage);
     }
 
     public class ReportDataSource<TModelView, TField> : ReportDataSource
         where TModelView : class
     {
         private readonly Expression<Func<TModelView, TField>> _field;
+        private readonly Func<ColumnFilterStorage, string[]> _getTexts;
         public TModelView Model { get; }
         public ModelMetadata ModelMetaData { get; }
         HtmlHelper<TModelView> htmlHelper;
 
-        public ReportDataSource(Expression<Func<TModelView, TField>> field, TModelView model)
+        public ReportDataSource(Expression<Func<TModelView, TField>> field, TModelView model, Func<ColumnFilterStorage, string[]> getTexts)
         {
             _field = field;
+            _getTexts = getTexts;
             Model = model;
             var member = field.Body as MemberExpression ?? (MemberExpression) ((UnaryExpression) field.Body).Operand;
             ModelMetaData = ModelMetadataProviders.Current.GetMetadataForProperty(
                 () => Model, typeof(TModelView), member.Member.Name);
 
             //new ViewDataDictionary<TModelView>(Model).ModelMetadata = ModelMetaData;
+        }
+
+        public override string[] GetTexts(ColumnFilterStorage storage)
+        {
+            return _getTexts?.Invoke(storage);
         }
 
         private HtmlHelper<TModelView> GetHtmlHelper()

@@ -141,6 +141,9 @@
   <data name="SPluginNotFound" xml:space="preserve">
     <value>Отчет не найден</value>
   </data>
+  <data name="SReportConditions" xml:space="preserve">
+    <value>Условия формирования отчета</value>
+  </data>
   <data name="SReportName" xml:space="preserve">
     <value>Отчеты</value>
   </data>

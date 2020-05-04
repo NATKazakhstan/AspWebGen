@@ -2888,8 +2888,8 @@ $(function() {
 
 function IsCultureKz() {
     return document.location.search.indexOf('culture=ru-ru') === -1 &&
-        (document.cookie.indexOf('lcid=1087') !== -1 || document.location.search.indexOf('culture=kk-kz') !== -1);
-};
+        (document.cookie.indexOf('langid=1087') !== -1 || document.location.search.indexOf('culture=kk-kz') !== -1);
+}
 
 function GetFiltersParameter(tableName, filterValues) {
     var filtersObj = [{

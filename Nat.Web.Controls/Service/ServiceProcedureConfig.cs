@@ -14,18 +14,33 @@ namespace Nat.Web.Controls.Service
     [Serializable]
     public class ServiceProcedureConfig
     {
+        private static ServiceProcedureConfig instanceConfig;
+
         public static ServiceProcedureConfig Load()
         {
+            if (instanceConfig != null)
+                return instanceConfig.Clone();
+
             var ser = new XmlSerializer(typeof(ServiceProcedureConfig));
-            var fileName = HttpContext.Current.Request.MapPath("ServiceProcedureConfig.xml");
-            if (!File.Exists(fileName)) return new ServiceProcedureConfig { Enabled = false, InitializeEnabled = false, ServicePage = "/ServiceProcedure.aspx", TimeBetweenRequest = new TimeSpan(0, 5, 0) };
+            var fileName = HttpContext.Current.Request.MapPath("~/App_Data/ServiceProcedureConfig.xml");
+            if (!File.Exists(fileName))
+            {
+                instanceConfig = new ServiceProcedureConfig
+                {
+                    Enabled = false,
+                    InitializeEnabled = false,
+                    ServicePage = "/ServiceProcedure.aspx",
+                    TimeBetweenRequest = new TimeSpan(0, 5, 0)
+                };
+                return instanceConfig;
+            }
+
             using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
                 var config = (ServiceProcedureConfig)ser.Deserialize(stream);
-                if (config._TimeBetweenRequest == null)
-                    config.TimeBetweenRequest = null;
-                else
-                    config.TimeBetweenRequest = new TimeSpan(config._TimeBetweenRequest.Value);
+                config.TimeBetweenRequest = config._TimeBetweenRequest == null
+                    ? (TimeSpan?) null
+                    : new TimeSpan(config._TimeBetweenRequest.Value);
                 return config;
             }
         }
@@ -33,17 +48,34 @@ namespace Nat.Web.Controls.Service
         public void Save()
         {
             ServiceProcedure.IsInited = false;
-            if (TimeBetweenRequest == null)
-                _TimeBetweenRequest = null;
-            else
-                _TimeBetweenRequest = TimeBetweenRequest.Value.Ticks;
+            _TimeBetweenRequest = TimeBetweenRequest?.Ticks;
+            instanceConfig = this;
+         
             var ser = new XmlSerializer(typeof(ServiceProcedureConfig));
-
-            var fileName = HttpContext.Current.Request.MapPath("ServiceProcedureConfig.xml");
+            var fileName = HttpContext.Current.Request.MapPath("~/App_Data/ServiceProcedureConfig.xml");
             using (var stream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
                 ser.Serialize(stream, this);
         }
+        
+        private ServiceProcedureConfig Clone()
+        {
+            return new ServiceProcedureConfig
+            {
+                ServicePage = ServicePage,
+                Enabled = Enabled,
+                CauseMessageKz = CauseMessageKz,
+                CauseMessageRu = CauseMessageRu,
+                InitializeEnabled = InitializeEnabled,
+                TimeBetweenRequest = TimeBetweenRequest,
+                TimeOfEndService = TimeOfEndService,
+                TimeToEnable = TimeToEnable,
+                TimeToShutDown = TimeToShutDown,
+                _TimeBetweenRequest = _TimeBetweenRequest,
+            };
+        }
 
+        #region Properties
+        
         /// <summary>
         /// Страница, режима обслуживания.
         /// </summary>
@@ -83,5 +115,7 @@ namespace Nat.Web.Controls.Service
         public string CauseMessageKz { get; set; }
 
         public long? _TimeBetweenRequest;
+        
+        #endregion
     }
 }

@@ -29,7 +29,7 @@ namespace Nat.Web.Controls.Service
         {
             //проверка включен ли режим обслуживания, если нет то можно открывать
             if (!Enabled) return true;
-            var userSID = ((WindowsIdentity)HttpContext.Current.User.Identity).User.Value;
+            var userSID = Tools.Security.User.GetSID();
             var page = HttpContext.Current.Request.Url.AbsolutePath;
             //у юзера стоит флаг может работать, если да то можно открывать
             if (UserMayWork(userSID)) return true;
@@ -401,7 +401,7 @@ namespace Nat.Web.Controls.Service
         public void SaveUsersMayWork()
         {
             var ser = new BinaryFormatter();
-            string path = HttpContext.Current.Request.MapPath("ServiceProcedureUsersMayWork.xml");
+            string path = HttpContext.Current.Request.MapPath("~/App_Data/ServiceProcedureUsersMayWork.xml");
             using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write))
                 ser.Serialize(stream, UsersMayWork);
         }
@@ -409,7 +409,7 @@ namespace Nat.Web.Controls.Service
         protected static Dictionary<string, string> LoadUsersMayWork()
         {
             var ser = new BinaryFormatter();
-            var fileName = HttpContext.Current.Request.MapPath("ServiceProcedureUsersMayWork.xml");
+            var fileName = HttpContext.Current.Request.MapPath("~/App_Data/ServiceProcedureUsersMayWork.xml");
             if (!File.Exists(fileName)) return new Dictionary<string, string>();
             using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
                 return (Dictionary<string, string>)ser.Deserialize(stream);
@@ -423,25 +423,25 @@ namespace Nat.Web.Controls.Service
             get
             {
                 var causeMessage = LocalizationHelper.IsCultureKZ ? CauseMessageKz : CauseMessageRu;
-                string causeName = UppercaseFirst(causeMessage);
-                causeMessage = (string.IsNullOrEmpty(causeMessage)) ? string.Empty : string.Format(Resources.SServiceProcedure_CauseMessage, causeName);
-                //string message = Resources.SServiceProcedure_EnabledMessage;
-                string message = (string.IsNullOrEmpty(causeMessage)) ? Resources.SServiceProcedure_EnabledMessage : causeMessage;
-                if (TimeBetweenRequest != null)
-                    message += string.Format(Resources.SServiceProcedure_TimeBetweenRequest, TimeBetweenRequest.Value);
-                if (TimeToShutDown != null)
-                    message += string.Format(Resources.SServiceProcedure_TimeToShutDown, TimeToShutDown.Value);
+                var message = string.IsNullOrEmpty(causeMessage)
+                    ? Resources.SServiceProcedure_EnabledMessage
+                    : string.Format(Resources.SServiceProcedure_CauseMessage, UppercaseFirst(causeMessage));
+                message += " ";
+                if (TimeToShutDown != null && TimeToShutDown.Value > DateTime.Now)
+                {
+                    if (TimeBetweenRequest != null)
+                        message += " " + string.Format(Resources.SServiceProcedure_TimeBetweenRequest, TimeBetweenRequest.Value);
+
+                    message += " " + string.Format(Resources.SServiceProcedure_TimeToShutDown, TimeToShutDown.Value.ToString("dd.MM.yyyy HH:mm"));
+                }
                 if (TimeOfEndService != null)
                 {
-                    if (string.IsNullOrEmpty(causeName))
-                    {
-                        message += string.Format(Resources.SServiceProcedure_TimeOfEndService, TimeOfEndService.Value);
-                    }
-                    else
-                    {
-                        message += string.Format(Resources.SServiceProcedure_TimeOfEndCause, TimeOfEndService.Value);
-                    }
+                    message += " " + string.Format(string.IsNullOrEmpty(causeMessage)
+                                       ? Resources.SServiceProcedure_TimeOfEndService
+                                       : Resources.SServiceProcedure_TimeOfEndCause,
+                                   TimeOfEndService.Value.ToString("dd.MM.yyyy HH:mm"));
                 }
+
                 return message;
             }
         }
@@ -453,22 +453,21 @@ namespace Nat.Web.Controls.Service
         {
             get
             {
-                if (!Enabled) return BeforeEnabledMessage;
+                if (!Enabled) 
+                    return BeforeEnabledMessage;
+
                 var causeMessage = LocalizationHelper.IsCultureKZ ? CauseMessageKz : CauseMessageRu;
-                string causeName = causeMessage;
-                causeMessage = (string.IsNullOrEmpty(causeMessage)) ? string.Empty : string.Format(Resources.SServiceProcedure_ServiceProcedureMessage, causeMessage);
-                string message = (string.IsNullOrEmpty(causeMessage)) ? Resources.SServiceProcedure : causeMessage;
+                var message = string.IsNullOrEmpty(causeMessage)
+                    ? Resources.SServiceProcedure
+                    : string.Format(Resources.SServiceProcedure_ServiceProcedureMessage, causeMessage);
                 if (TimeOfEndService != null)
                 {
-                    if (string.IsNullOrEmpty(causeName))
-                    {
-                        message += string.Format(Resources.SServiceProcedure_TimeOfEndService, TimeOfEndService.Value);
-                    }
-                    else
-                    {
-                        message += string.Format(Resources.SServiceProcedure_TimeOfEndCause, TimeOfEndService.Value);
-                    }
+                    message += " " + string.Format(
+                        string.IsNullOrEmpty(causeMessage)
+                            ? Resources.SServiceProcedure_TimeOfEndService
+                            : Resources.SServiceProcedure_TimeOfEndCause, TimeOfEndService.Value.ToString("dd.MM.yyyy HH:mm"));
                 }
+
                 return message;
             }
         }
@@ -480,23 +479,22 @@ namespace Nat.Web.Controls.Service
         {
             get
             {
-                if (TimeToEnable == null) return "";
-                //var message = string.Format(Resources.SServiceProcedure_TimeToEnableMessage, TimeToEnable.Value);
+                if (TimeToEnable == null) 
+                    return string.Empty;
+
                 var causeMessage = LocalizationHelper.IsCultureKZ ? CauseMessageKz : CauseMessageRu;
-                string causeName = causeMessage;
-                causeMessage = (string.IsNullOrEmpty(causeMessage)) ? string.Empty : string.Format(Resources.SServiceProcedure_BeforeEnabledMessage, TimeToEnable.Value, causeMessage);
-                var message = (string.IsNullOrEmpty(causeMessage)) ? string.Format(Resources.SServiceProcedure_TimeToEnableMessage, TimeToEnable.Value) : causeMessage;
+                var message = string.IsNullOrEmpty(causeMessage)
+                    ? string.Format(Resources.SServiceProcedure_TimeToEnableMessage, TimeToEnable.Value.ToString("dd.MM.yyyy HH:mm"))
+                    : string.Format(Resources.SServiceProcedure_BeforeEnabledMessage, TimeToEnable.Value.ToString("dd.MM.yyyy HH:mm"), causeMessage);
+               
                 if (TimeOfEndService != null)
                 {
-                    if (string.IsNullOrEmpty(causeName))
-                    {
-                        message += string.Format(Resources.SServiceProcedure_TimeOfEndService, TimeOfEndService.Value);
-                    }
-                    else
-                    {
-                        message += string.Format(Resources.SServiceProcedure_TimeOfEndCause, TimeOfEndService.Value);
-                    }
+                    message += " " + string.Format(
+                        string.IsNullOrEmpty(causeMessage)
+                            ? Resources.SServiceProcedure_TimeOfEndService
+                            : Resources.SServiceProcedure_TimeOfEndCause, TimeOfEndService.Value.ToString("dd.MM.yyyy HH:mm"));
                 }
+
                 return message;
             }
         }
@@ -525,23 +523,30 @@ namespace Nat.Web.Controls.Service
 
         protected class UsersDic : Dictionary<string, UserInfo>
         {
+            private object _lock = new object();
+
             public new UserInfo this[string sid]
             {
                 get
                 {
-                    if (!base.ContainsKey(sid))
+                    if (!ContainsKey(sid))
                     {
-                        var identity = ((WindowsIdentity)HttpContext.Current.User.Identity);
-                        base[sid] = new UserInfo
+                        var identity = (WindowsIdentity)HttpContext.Current.User.Identity;
+                        var userInfo = new UserInfo
                         {
                             SID = sid,
                             IsWorking = true,
                             TimeRequest = DateTime.Now,
                             Pages = new Dictionary<string, ItemPage>(),
-                            Name = identity.User.Value == sid ? identity.Name : "",
+                            Name = identity.User?.Value == sid ? identity.Name : "",
                         };
+
+                        lock(_lock)
+                            return base[sid] = userInfo;
                     }
-                    return base[sid];
+
+                    lock (_lock)
+                        return base[sid];
                 }
             }
         }
@@ -561,9 +566,8 @@ namespace Nat.Web.Controls.Service
         public string UppercaseFirst(string str)
         {
             if (string.IsNullOrEmpty(str))
-            {
                 return string.Empty;
-            }
+
             return char.ToUpper(str[0]) + str.Substring(1);
         }
     }

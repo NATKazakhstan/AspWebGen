@@ -36,7 +36,8 @@ namespace Nat.Web.Controls.Service
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
-            if (!IsServiceProcedurePage && (!Page.Request.Url.ToString().Contains("ServiceProcedure")) && !ServiceProcedure.MayOpenSite()) ServiceProcedure.Redirect();
+            if (!IsServiceProcedurePage && (!Page.Request.Url.ToString().Contains("ServiceProcedure")) && !ServiceProcedure.MayOpenSite())
+                ServiceProcedure.Redirect();
         }
 
         public override void RenderBeginTag(HtmlTextWriter writer)

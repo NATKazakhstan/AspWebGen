@@ -115,6 +115,8 @@ namespace Nat.Web.Controls.Service
         public string CauseMessageKz { get; set; }
 
         public long? _TimeBetweenRequest;
+
+        public long? ServiceProcedureId { get; set; }
         
         #endregion
     }

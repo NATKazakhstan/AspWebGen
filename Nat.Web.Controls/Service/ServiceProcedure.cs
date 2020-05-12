@@ -97,6 +97,11 @@ namespace Nat.Web.Controls.Service
                 CauseMessageRu = config.CauseMessageRu;
                 CauseMessageKz = config.CauseMessageKz;
             }
+            else
+            {
+                Enabled = false;
+                TimeToEnable = null;
+            }
         }
 
         /// <summary>

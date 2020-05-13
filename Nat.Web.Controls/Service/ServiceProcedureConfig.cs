@@ -71,6 +71,7 @@ namespace Nat.Web.Controls.Service
                 TimeToEnable = TimeToEnable,
                 TimeToShutDown = TimeToShutDown,
                 _TimeBetweenRequest = _TimeBetweenRequest,
+                ServiceProcedureId = ServiceProcedureId,
             };
         }
 

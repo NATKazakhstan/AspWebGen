@@ -373,16 +373,7 @@ namespace Nat.Web.Controls.Service
         /// <summary>
         /// Список SID-ов, тех юзеров разрешено пользоваться системой не зависимо от режима.
         /// </summary>
-        public static List<long> UsersMayWork
-        {
-            get
-            {
-                var users = (List<long>)HttpContext.Current.Application["ServiceProcedure_UsersMayWork"];
-                if (users == null) UsersMayWork = users = new List<long>();
-                return users;
-            }
-            set => HttpContext.Current.Application["ServiceProcedure_UsersMayWork"] = value;
-        }
+        public static List<long> UsersMayWork { get; set; }
 
         public static void SaveUsersMayWork(List<long> ids)
         {

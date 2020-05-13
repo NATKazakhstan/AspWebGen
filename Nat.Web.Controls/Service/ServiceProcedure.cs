@@ -13,6 +13,7 @@ using Nat.Web.Controls.Properties;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Nat.Web.Tools;
+using Nat.Web.Tools.Security;
 
 namespace Nat.Web.Controls.Service
 {
@@ -29,22 +30,24 @@ namespace Nat.Web.Controls.Service
         {
             //проверка включен ли режим обслуживания, если нет то можно открывать
             if (!Enabled) return true;
-            var userSID = Tools.Security.User.GetSID();
+            var userId = Tools.Security.User.GetPersonInfo()?.id ?? 0;
             var page = HttpContext.Current.Request.Url.AbsolutePath;
             //у юзера стоит флаг может работать, если да то можно открывать
-            if (UserMayWork(userSID)) return true;
+            if (UserMayWork(userId))
+                return true;
+
             //проверка поставлен ли флаг о том что юзер закончил работу, если да то открытие запрещено
-            if (UserIsExit(userSID, page)) return false;
+            if (UserIsExit(userId, page)) return false;
             //если это запрос на открытие страницы, то юзер завершил работу
             if (HttpContext.Current.Request.RequestType == "GET")
             {
-                SetUserIsExit(userSID, page);
+                SetUserIsExit(userId, page);
                 return false;
             }
             //проверка на истечение времени работы с системой
-            if (TimeIsEnd(userSID, page))
+            if (TimeIsEnd(userId, page))
             {
-                SetUserIsExit(userSID, page);
+                SetUserIsExit(userId, page);
                 return false;
             }
             SetUserPostBack();
@@ -114,15 +117,15 @@ namespace Nat.Web.Controls.Service
             foreach (var user in Users.Values)
             {
                 if (!user.IsWorking) continue;
-                if (UsersMayWork.ContainsKey(user.SID))
+                if (UsersMayWork.Contains(user.id))
                 {
                     allUsersExit = false;
                     continue;
                 }
                 foreach (var page in user.Pages.Values)
                 {
-                    if (TimeIsEnd(user.SID, page.Page))
-                        SetUserIsExit(user.SID, page.Page);
+                    if (TimeIsEnd(user.id, page.Page))
+                        SetUserIsExit(user.id, page.Page);
                     else
                         allUsersExit = false;
                 }
@@ -136,7 +139,7 @@ namespace Nat.Web.Controls.Service
         /// <param name="sid"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        private bool UserIsExit(string sid, string page)
+        private bool UserIsExit(long sid, string page)
         {
             //if (Users.ContainsKey(sid))
             return !Users[sid][page].IsWorking;
@@ -147,7 +150,7 @@ namespace Nat.Web.Controls.Service
         /// Проверка истечения времени
         /// </summary>
         /// <returns></returns>
-        protected bool TimeIsEnd(string sid, string page)
+        protected bool TimeIsEnd(long sid, string page)
         {
             var time = TimeToShutDown;
             //Время работы закончилось
@@ -171,39 +174,21 @@ namespace Nat.Web.Controls.Service
         }
 
         /// <summary>
-        /// Установить пользвателю значение MayWork
-        /// </summary>
-        /// <param name="sid"></param>
-        /// <param name="mayWork"></param>
-        public void SetUserMayWork(string sid, bool mayWork)
-        {
-            if (!UsersMayWork.ContainsKey(sid) && mayWork)
-                UsersMayWork.Add(sid, Users[sid].Name);
-            else if (UsersMayWork.ContainsKey(sid))
-                UsersMayWork.Remove(sid);
-        }
-
-        /// <summary>
         /// Текущий юзер.
         /// </summary>
-        protected UserInfo User
-        {
-            get
-            {
-                var userSID = ((WindowsIdentity)HttpContext.Current.User.Identity).User.Value;
-                return Users[userSID];
-            }
-        }
+        protected UserInfo User => Users[Tools.Security.User.GetPersonInfoRequired().id];
 
         /// <summary>
         /// Получить флаг того что юзер, может работать не смотря на ограничения
         /// </summary>
         /// <param name="sid"></param>
         /// <returns></returns>
-        protected bool UserMayWork(string sid)
+        protected bool UserMayWork(long id)
         {
-            if (Users.ContainsKey(sid)) return UsersMayWork.ContainsKey(sid);
-            return false;
+            if (UserRoles.IsInAnyRoles(UserRoles.ADMIN, UserRoles.ServiceProcedureConfig))
+                return true;
+
+            return UsersMayWork.Contains(id);
         }
 
         /// <summary>
@@ -211,7 +196,7 @@ namespace Nat.Web.Controls.Service
         /// </summary>
         /// <param name="userSID"></param>
         /// <param name="page"></param>
-        public void SetUserIsExit(string userSID, string page)
+        public void SetUserIsExit(long userSID, string page)
         {
             //if (Users.ContainsKey(userSID))
             {
@@ -246,7 +231,7 @@ namespace Nat.Web.Controls.Service
         public class UserInfo
         {
             public bool IsWorking { get; set; }
-            public string SID { get; set; }
+            public long id { get; set; }
             public string Name { get; set; }
             public DateTime TimeRequest { get; set; }
             public DateTime? TimeExit { get; set; }
@@ -388,36 +373,32 @@ namespace Nat.Web.Controls.Service
         /// <summary>
         /// Список SID-ов, тех юзеров разрешено пользоваться системой не зависимо от режима.
         /// </summary>
-        public static Dictionary<string, string> UsersMayWork
+        public static List<long> UsersMayWork
         {
             get
             {
-                var users = (Dictionary<string, string>)HttpContext.Current.Application["ServiceProcedure_UsersMayWork"];
-                if (users == null)
-                    UsersMayWork = users = new Dictionary<string, string>();
+                var users = (List<long>)HttpContext.Current.Application["ServiceProcedure_UsersMayWork"];
+                if (users == null) UsersMayWork = users = new List<long>();
                 return users;
             }
-            set
-            {
-                HttpContext.Current.Application["ServiceProcedure_UsersMayWork"] = value;
-            }
+            set => HttpContext.Current.Application["ServiceProcedure_UsersMayWork"] = value;
         }
 
-        public void SaveUsersMayWork()
+        public static void SaveUsersMayWork(List<long> ids)
         {
             var ser = new BinaryFormatter();
             string path = HttpContext.Current.Request.MapPath("~/App_Data/ServiceProcedureUsersMayWork.xml");
             using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write))
-                ser.Serialize(stream, UsersMayWork);
+                ser.Serialize(stream, ids);
         }
 
-        protected static Dictionary<string, string> LoadUsersMayWork()
+        protected static List<long> LoadUsersMayWork()
         {
             var ser = new BinaryFormatter();
             var fileName = HttpContext.Current.Request.MapPath("~/App_Data/ServiceProcedureUsersMayWork.xml");
-            if (!File.Exists(fileName)) return new Dictionary<string, string>();
+            if (!File.Exists(fileName)) return new List<long>();
             using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-                return (Dictionary<string, string>)ser.Deserialize(stream);
+                return ser.Deserialize(stream) as List<long> ?? new List<long>();
         }
 
         /// <summary>
@@ -526,32 +507,30 @@ namespace Nat.Web.Controls.Service
             HttpContext.Current.Response.Redirect(ServicePage ?? "ServiceProcedure.aspx");
         }
 
-        protected class UsersDic : Dictionary<string, UserInfo>
+        protected class UsersDic : Dictionary<long, UserInfo>
         {
             private object _lock = new object();
 
-            public new UserInfo this[string sid]
+            public new UserInfo this[long id]
             {
                 get
                 {
-                    if (!ContainsKey(sid))
+                    if (!ContainsKey(id))
                     {
-                        var identity = (WindowsIdentity)HttpContext.Current.User.Identity;
                         var userInfo = new UserInfo
                         {
-                            SID = sid,
+                            id = id,
                             IsWorking = true,
                             TimeRequest = DateTime.Now,
                             Pages = new Dictionary<string, ItemPage>(),
-                            Name = identity.User?.Value == sid ? identity.Name : "",
                         };
 
                         lock(_lock)
-                            return base[sid] = userInfo;
+                            return base[id] = userInfo;
                     }
 
                     lock (_lock)
-                        return base[sid];
+                        return base[id];
                 }
             }
         }

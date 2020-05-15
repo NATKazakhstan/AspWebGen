@@ -55,6 +55,10 @@ namespace Nat.Web.Controls
         {
         }
 
+        protected virtual void OnApplication_PreRequestHandlerExecute()
+        {
+        }
+
         protected void Application_PreRequestHandlerExecute(object sender, EventArgs e)
         {
             try
@@ -76,6 +80,8 @@ namespace Nat.Web.Controls
             catch (HttpException httpException)
             {
             }
+
+            OnApplication_PreRequestHandlerExecute();
         }
 
         protected void Application_EndRequest(object sender, EventArgs e)

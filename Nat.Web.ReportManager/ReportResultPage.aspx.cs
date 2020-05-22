@@ -199,13 +199,12 @@ namespace Nat.Web.ReportManager
 
                     var logId = Log(logMonitor, guid, webReportManager,
                         isExport ? LogReportGenerateCodeType.Export : LogReportGenerateCodeType.Preview);
-                    var user = Tools.Security.User.GetPersonInfoRequired();
-                    var logText1 = user.EMail + ", " + HttpContext.Current?.Request.UserHostAddress;
-                    var logText2 = (HttpContext.Current?.User.Identity.Name ?? "System") + ", " + DateTime.Now.ToString("dd.MM.yyyy HH:mm");
-                    stiPlugin.Report["BarCodeLogText"] = Resources.SBarCodeInfo + logText1 + "\r\n" + logText2;
-                    stiPlugin.Report["BarCodeLogData"] = "ID:" + logId + ", " + logText1 + ", " + logText2;
-                    //stiPlugin.Report["BarCodeLogData1"] = "ID:" + logId + ", " + logText1;
-                    //stiPlugin.Report["BarCodeLogData2"] = "ID:" + logId + ", " + logText2;
+                    var qrCodeTextFormat = DependencyResolver.Current.GetService<IQrCodeTextFormat>();
+                    if (logId != null)
+                    {
+                        stiPlugin.Report["BarCodeLogText"] = qrCodeTextFormat.GetUserText(logId.Value);
+                        stiPlugin.Report["BarCodeLogData"] = qrCodeTextFormat.GetQrCodeData(logId.Value);
+                    }
 
                     try
                     {
@@ -422,7 +421,11 @@ namespace Nat.Web.ReportManager
                     reportManager.Plugin.Description,
                     (long) logType,
                     type);
-                return logMonitor.WriteLog(new LogMessageEntry(logType, message));
+                var logId = logMonitor.WriteLog(new LogMessageEntry(logType, message));
+                if (logId != null && !string.IsNullOrEmpty(HttpContext.Current?.Request.UserHostAddress))
+                    logMonitor.WriteFieldChanged(logId.Value, string.Empty, "Имя ПК пользователя",
+                        System.Net.Dns.GetHostEntry(HttpContext.Current.Request.UserHostAddress).HostName, "");
+                return logId;
             }
 
             return null;

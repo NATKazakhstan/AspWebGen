@@ -225,6 +225,7 @@
     <Compile Include="ExportFormat.cs" />
     <Compile Include="IExportPermission.cs" />
     <Compile Include="ILogReportGenerateCode.cs" />
+    <Compile Include="IQrCodeTextFormat.cs" />
     <Compile Include="IRememberReports.cs" />
     <Compile Include="LogReportGenerateCodeType.cs" />
     <Compile Include="Modules\SqlReportViewerLogExportModule.cs" />

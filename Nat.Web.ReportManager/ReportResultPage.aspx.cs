@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Net.Sockets;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Caching;
@@ -423,8 +424,17 @@ namespace Nat.Web.ReportManager
                     type);
                 var logId = logMonitor.WriteLog(new LogMessageEntry(logType, message));
                 if (logId != null && !string.IsNullOrEmpty(HttpContext.Current?.Request.UserHostAddress))
-                    logMonitor.WriteFieldChanged(logId.Value, string.Empty, "Имя ПК пользователя",
-                        System.Net.Dns.GetHostEntry(HttpContext.Current.Request.UserHostAddress).HostName, "");
+                {
+                    try
+                    {
+                        logMonitor.WriteFieldChanged(logId.Value, string.Empty, "Имя ПК пользователя",
+                            System.Net.Dns.GetHostEntry(HttpContext.Current.Request.UserHostAddress).HostName, "");
+                    }
+                    catch (SocketException)
+                    {
+                    }
+                }
+
                 return logId;
             }
 

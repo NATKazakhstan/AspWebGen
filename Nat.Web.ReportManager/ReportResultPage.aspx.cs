@@ -205,6 +205,8 @@ namespace Nat.Web.ReportManager
                     {
                         stiPlugin.Report["BarCodeLogText"] = qrCodeTextFormat.GetUserText(logId.Value);
                         stiPlugin.Report["BarCodeLogData"] = qrCodeTextFormat.GetQrCodeData(logId.Value);
+                        stiPlugin.Report["BarCodeLogImageH"] = qrCodeTextFormat.GetHorizontalImage();
+                        stiPlugin.Report["BarCodeLogImageV"] = qrCodeTextFormat.GetVerticalImage();
                     }
 
                     try

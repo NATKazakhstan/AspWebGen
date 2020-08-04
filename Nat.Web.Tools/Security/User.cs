@@ -245,18 +245,22 @@
             return GetPersonInfo<TResult>(sid);
         }
 
-        public static ADM_P_GetAvailableDelegationsResult[] GetAvailableDelegations()
+        public static ADM_P_GetAvailableDelegationsResult[] GetAvailableDelegations(bool extended = false)
         {
             if (!InitializerSection.PermissionsDelegationEnabled || HttpContext.Current == null || HttpContext.Current.User == null)
                 return new ADM_P_GetAvailableDelegationsResult[0];
 
-            if (HttpContext.Current.Items["availableDelegation"] != null)
+            if (HttpContext.Current.Items["availableDelegation.extended"] != null)
+                return (ADM_P_GetAvailableDelegationsResult[])HttpContext.Current.Items["availableDelegation.extended"];
+
+            if (!extended && HttpContext.Current.Items["availableDelegation"] != null)
                 return (ADM_P_GetAvailableDelegationsResult[])HttpContext.Current.Items["availableDelegation"];
 
             using (var db = new DBDataContext(SpecificInstances.DbFactory.CreateConnection()))
-            using (var query = db.ADM_P_GetAvailableDelegations(GetSID()))
+            using (var query = db.ADM_P_GetAvailableDelegations(GetSID(), extended))
             {
                 var data = query.ToArray();
+                if (extended) HttpContext.Current.Items["availableDelegation.extended"] = data;
                 HttpContext.Current.Items["availableDelegation"] = data;
                 return data;
             }

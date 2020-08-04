@@ -84,9 +84,9 @@ namespace Nat.Web.Tools.Security
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.ADM_P_GetAvailableDelegations")]
-		public ISingleResult<ADM_P_GetAvailableDelegationsResult> ADM_P_GetAvailableDelegations([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="NVarChar(255)")] string sid)
+		public ISingleResult<ADM_P_GetAvailableDelegationsResult> ADM_P_GetAvailableDelegations([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="NVarChar(255)")] string sid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Bit")] System.Nullable<bool> extended)
 		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), sid);
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), sid, extended);
 			return ((ISingleResult<ADM_P_GetAvailableDelegationsResult>)(result.ReturnValue));
 		}
 		

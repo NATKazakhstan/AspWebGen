@@ -40,6 +40,7 @@
   </Function>
   <Function Name="dbo.ADM_P_GetAvailableDelegations" Method="ADM_P_GetAvailableDelegations">
     <Parameter Name="sid" Type="System.String" DbType="NVarChar(255)" />
+    <Parameter Name="extended" Type="System.Boolean" DbType="Bit" />
     <ElementType Name="ADM_P_GetAvailableDelegationsResult">
       <Column Name="id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
       <Column Name="Sid" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />

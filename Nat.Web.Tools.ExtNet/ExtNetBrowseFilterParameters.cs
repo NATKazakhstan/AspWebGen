@@ -64,7 +64,11 @@
             {
                 TypeComponent = TypeComponent.ValueControl;
                 Property = property;
-                GetValueScript = control.ClientID + ".getValue()";
+                if (control is DateField)
+                    GetValueScript = control.ClientID + ".getValue() ? " + control.ClientID +
+                                     ".getValue().toJSON() : null";
+                else
+                    GetValueScript = control.ClientID + ".getValue()";
             }
 
             public ExtNetControlParameter(IControl control, string property)

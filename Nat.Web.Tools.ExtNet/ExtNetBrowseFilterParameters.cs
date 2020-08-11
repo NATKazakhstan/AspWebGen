@@ -10,6 +10,14 @@
 
     public class ExtNetBrowseFilterParameters : BrowseFilterParameters
     {
+        public void AddJsParamerter(string propertyFilter, string getValueJavaScript)
+        {
+            PropertyValues.Add(propertyFilter, new SimpleJSControl()
+            {
+                GetValue = () => getValueJavaScript
+            });
+        }
+
         protected override ControlParameter CreateControlParameter(Control control, string key)
         {
             var baseControl = (BaseControl)control;
@@ -58,6 +66,10 @@
             return base.GetValueFromControl(control);
         }
 
+        public class SimpleJSControl : SimpleIDControl
+        {
+        }
+
         protected class ExtNetControlParameter : ControlParameter
         {
             public ExtNetControlParameter(BaseControl control, string property)
@@ -75,7 +87,7 @@
             {
                 TypeComponent = TypeComponent.ValueControl;
                 Property = property;
-                GetValueScript = control.ClientID + ".getValue()";
+                GetValueScript = control is SimpleJSControl ? control.GetValue() : control.ClientID + ".getValue()";
             }
 
             public string GetValueScript { get; set; }

@@ -71,26 +71,26 @@ function UpdateAdditionalFields(addtionalInfo) {
     for (var uc in addtionalInfo.UserControls) {
         if (!addtionalInfo.UserControls.hasOwnProperty(uc))
             continue;
-        if (valueAddtionalInfo[i] == null) {
-            i++;
-            continue;
+        var selectedAddtionalInfoValues = valueAddtionalInfo[i];
+        if (selectedAddtionalInfoValues == null) {
+            selectedAddtionalInfoValues = "";
         }
 
         var controlId = addtionalInfo.UserControls[uc].hfID;
         if (controlId != null && controlId != '') {
             var control = $get(addtionalInfo.UserControls[uc].hfID);
             if (control != null) {
-                $(control).val(valueAddtionalInfo[i]);
+                $(control).val(selectedAddtionalInfoValues);
                 fireEventOnChange(control);
             }
         }
 
         var setValueScript = addtionalInfo.UserControls[uc].SetValueScript;
         if (setValueScript != null && setValueScript != '') {
-            if(typeof (valueAddtionalInfo[i]) === 'string')
-                setValueScript = String.format(setValueScript, '\'' + valueAddtionalInfo[i].replace('\'','\\\'') + '\'');
+            if(typeof (selectedAddtionalInfoValues) === 'string')
+                setValueScript = String.format(setValueScript, '\'' + selectedAddtionalInfoValues.replace('\'','\\\'') + '\'');
             else
-                setValueScript = String.format(setValueScript, valueAddtionalInfo[i]);
+                setValueScript = String.format(setValueScript, selectedAddtionalInfoValues);
             eval(setValueScript);
         }
         
@@ -100,18 +100,18 @@ function UpdateAdditionalFields(addtionalInfo) {
             if (control != null) {
                 var format = $control.attr('format');
                 if (format == null || format == "")
-                    control.innerText = valueAddtionalInfo[i];
+                    control.innerText = selectedAddtionalInfoValues;
                 else
-                    control.innerText = String.format(format, valueAddtionalInfo[i]);
+                    control.innerText = String.format(format, selectedAddtionalInfoValues);
             }
         }
 
         var setLabelScript = addtionalInfo.UserControls[uc].SetLabelScript;
         if (setLabelScript != null && setLabelScript != '') {
-            if (typeof (valueAddtionalInfo[i]) === 'string')
-                setLabelScript = String.format(setLabelScript, '\'' + valueAddtionalInfo[i].replace('\'', '\\\'') + '\'');
+            if (typeof (selectedAddtionalInfoValues) === 'string')
+                setLabelScript = String.format(setLabelScript, '\'' + selectedAddtionalInfoValues.replace('\'', '\\\'') + '\'');
             else
-                setLabelScript = String.format(setLabelScript, valueAddtionalInfo[i]);
+                setLabelScript = String.format(setLabelScript, selectedAddtionalInfoValues);
             eval(setLabelScript);
         }
         
@@ -119,7 +119,7 @@ function UpdateAdditionalFields(addtionalInfo) {
             var control = $get(addtionalInfo.UserControls[uc].FileLinkID);
             var $control = $(control);
             if (control != null) {
-                var linkBuilder = Sys.Serialization.JavaScriptSerializer.deserialize(valueAddtionalInfo[i]);
+                var linkBuilder = Sys.Serialization.JavaScriptSerializer.deserialize(selectedAddtionalInfoValues);
                 if (linkBuilder.FileName == null)
                     control.innerText = '';
                 else

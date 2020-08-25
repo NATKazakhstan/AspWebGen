@@ -15,6 +15,12 @@ namespace Nat.Web.Tools.ExtNet.Extenders
         {
             if (container == null) return;
 
+            var abstractContainer = container.Parent as AbstractContainer;
+
+            if (container.ContentControls.Count > 0 && !container.Page.IsPostBack)
+            {
+                return;
+            }
             var components = container.Items.Where(c => c.GetType() != typeof(Hidden)).ToArray();
             if (components.Length == 0)
                 container.Hidden = newHidden;
@@ -23,7 +29,6 @@ namespace Nat.Web.Tools.ExtNet.Extenders
             else
                 container.Hidden = false;
 
-            var abstractContainer = container.Parent as AbstractContainer;
             abstractContainer.SetHiddenControlContainer(container.Hidden);
         }
     }

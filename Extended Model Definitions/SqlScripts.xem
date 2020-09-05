@@ -1075,6 +1075,9 @@ WITH EXECUTE AS CALLER
 INSTEAD OF UPDATE
 AS
 BEGIN
+   if not exists(select * from INSERTED)
+      return;
+
    declare @currentDate datetime = GetDate()
    set @currentDate = DateAdd(ms, -DatePart(ms, @currentDate), @currentDate)
 
@@ -1135,7 +1138,7 @@ INSERTED.%Code% = %Parent.Code%.%Code%
    WITH x (id, dateStart, isParent, refHistory[%HasWeight%?, FullWeight]) AS 
    (
       SELECT INSERTED.id
-          , case when INSERTED.dateStart &lt;&gt; DELETED.dateStart 
+          , case when INSERTED.dateStart &gt; DELETED.dateStart 
                then INSERTED.dateStart
                else @currentDate
           end as dateStart
@@ -1174,7 +1177,7 @@ INSERTED.%Code% = %Parent.Code%.%Code%
 .endif
 
    --обновление даты конца записям у котрых были изменеия полей
-   UPDATE %Code% SET dateEnd = case when INSERTED.dateStart &lt;&gt; %Code%.dateStart 
+   UPDATE %Code% SET dateEnd = case when INSERTED.dateStart &gt; %Code%.dateStart 
                                     then INSERTED.dateStart
                                     else @currentDate
                                end
@@ -1225,7 +1228,7 @@ i.id, isnull(i.refHistory, i.id)
 IsNull(i.refHistory, i.id)
 .endif
  as refHistory,
-          case when i.dateStart &lt;&gt; d.dateStart 
+          case when i.dateStart &gt; d.dateStart 
                then i.dateStart
                else @currentDate
           end as dateStart,
@@ -1315,7 +1318,7 @@ END
 GO</a:TemplateTargetItem.Value>
 <a:CreationDate>0</a:CreationDate>
 <a:Creator/>
-<a:ModificationDate>1577356077</a:ModificationDate>
+<a:ModificationDate>1592802398</a:ModificationDate>
 <a:Modifier>Sergey.Shpakovskiy</a:Modifier>
 <a:TargetCategory.Type>1</a:TargetCategory.Type>
 </o:TemplateTargetItem>

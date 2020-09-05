@@ -140,6 +140,11 @@ namespace Nat.Web.Controls.ExtNet.SelectValues
                 Ext.Net.X.AddScript(script);
         }
 
+        public void InitForSave()
+        {
+            OnInit(EventArgs.Empty);
+        }
+
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);

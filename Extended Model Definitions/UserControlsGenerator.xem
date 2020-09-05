@@ -41235,7 +41235,7 @@ protected %TableType% GetNewItem(%TableType% originalValues)
     {\n
    .foreach_item(Columns,,\n)
       .if ((%DetailsViewVisible% == false) or (%ReadOnly%)) and (%Code% != &quot;RowVersion&quot;)
-        newItem.%Code% = rowByChildGrid.%Code%;
+        newItem.%Code% = rowByChildGrid.Item.%Code%;
       .endif
    .next(\n)
     }
@@ -41274,7 +41274,7 @@ protected %TableType% GetNewItem(%TableType% originalValues)
 .endif</a:TemplateTargetItem.Value>
 <a:CreationDate>1352298570</a:CreationDate>
 <a:Creator>Sergey.Shpakovskiy</a:Creator>
-<a:ModificationDate>1573808837</a:ModificationDate>
+<a:ModificationDate>1599289431</a:ModificationDate>
 <a:Modifier>Sergey.Shpakovskiy</a:Modifier>
 <a:TargetCategory.Type>1</a:TargetCategory.Type>
 </o:TemplateTargetItem>
@@ -42355,9 +42355,9 @@ internal bool EditFromJournal { get; set; }
 
 .if (%ReadOnly% == false)
 
-private %TableType% rowByChildGrid;
+private %DataSourceView_RowClassName% rowByChildGrid;
 
-public bool EditRowByChildGrid(%TableType% row)
+public bool EditRowByChildGrid(%DataSourceView_RowClassName% row)
 {
     EditFromJournal = true;
     InitConnection();
@@ -42375,7 +42375,7 @@ public bool EditRowByChildGrid(%TableType% row)
     return SaveData();
 }
 
-public bool InsertRowByChildGrid(%TableType% row)
+public bool InsertRowByChildGrid(%DataSourceView_RowClassName% row)
 {
     EditFromJournal = true;
     InitConnection();
@@ -42410,21 +42410,21 @@ public bool InsertRowByChildGrid(%TableType% row)
     return false;
 }
 
-partial void SetValuesByChildGridPartial(%TableType% row);
+partial void SetValuesByChildGridPartial(%DataSourceView_RowClassName% row);
 
-private void SetValuesByChildGrid(%TableType% row)
+private void SetValuesByChildGrid(%DataSourceView_RowClassName% row)
 {
     rowByChildGrid = row;
 
    .foreach_item (Columns,,\n)
       .if (%DetailsViewVisible%) and (%Primary% == false) and (%Code% != &quot;RowVersion&quot;)
          .if (%ForeignKey_%)
-    Info.%Code% = row.%Code% == 0 ? null : (long?)row.%Code%;
+    Info.%Code% = row.Item.%Code% == 0 ? null : (long?)row.Item.%Code%;
          .elsif (%IsFile%)
-    Info.%Code% = row.%Code%;
-    Info.%FileDataColumn% = row.%FileDataColumn%?.ToArray();
+    Info.%Code% = row.Item.%Code%;
+    Info.%FileDataColumn% = row.Item.%FileDataColumn%?.ToArray();
          .else
-    Info.%Code% = row.%Code%;
+    Info.%Code% = row.Item.%Code%;
          .endif
       .endif
    .next(\n)
@@ -42517,7 +42517,7 @@ protected void DownloadAttach(object sender, DirectEventArgs e)
 .unset(existFileManager)</a:TemplateTargetItem.Value>
 <a:CreationDate>1361765665</a:CreationDate>
 <a:Creator>Sergey.Shpakovskiy</a:Creator>
-<a:ModificationDate>1573992131</a:ModificationDate>
+<a:ModificationDate>1599288382</a:ModificationDate>
 <a:Modifier>Sergey.Shpakovskiy</a:Modifier>
 <a:TargetCategory.Type>1</a:TargetCategory.Type>
 </o:TemplateTargetItem>
@@ -71143,7 +71143,7 @@ public %NullableDataType% %LookupColumnName%
 <a:ObjectID>6E007503-D0F2-47E4-B992-139ACFC758D9</a:ObjectID>
 <a:Name>DataSourceViewClasses</a:Name>
 <a:TemplateTargetItem.Value>\[Serializable]
-public class %Code%SelectValues
+public partial class %Code%SelectValues
 {\n
 .set_value(i,-1)
 .foreach_part(%DataTextField%,&quot;&#39;,&#39;&quot;)
@@ -71154,7 +71154,7 @@ public class %Code%SelectValues
 }</a:TemplateTargetItem.Value>
 <a:CreationDate>1364546003</a:CreationDate>
 <a:Creator>Sergey.Shpakovskiy</a:Creator>
-<a:ModificationDate>1413448011</a:ModificationDate>
+<a:ModificationDate>1599288099</a:ModificationDate>
 <a:Modifier>Sergey.Shpakovskiy</a:Modifier>
 <a:TargetCategory.Type>1</a:TargetCategory.Type>
 </o:TemplateTargetItem>
@@ -72032,6 +72032,8 @@ protected global::Ext.Net.FieldSet gridPanel%Code%;
 <a:ObjectID>E78C712D-C529-4FEB-82BE-725730F4024E</a:ObjectID>
 <a:Name>UpdateForm</a:Name>
 <a:TemplateTargetItem.Value>var dsView%Code% = new %ChildTable.DataSourceView_ClassName%();
+dsView%Code%.InitConnection = DB.Connection;
+dsView%Code%.InitTransaction = DB.Transaction;
 Session\[%GetSessionKey()%] = dsView%Code%.GetSelect().Where(r =&gt; 
    .foreach_item(ChildReference.Joins)
 r.Item.%GetChildColumn.Code% == row.%GetParentColumn.Code%
@@ -72041,7 +72043,7 @@ journal%Code%.DataSessionKey = %GetSessionKey()%;
 </a:TemplateTargetItem.Value>
 <a:CreationDate>1480902972</a:CreationDate>
 <a:Creator>Sergey.Shpakovskiy</a:Creator>
-<a:ModificationDate>1511514711</a:ModificationDate>
+<a:ModificationDate>1599293796</a:ModificationDate>
 <a:Modifier>Sergey.Shpakovskiy</a:Modifier>
 <a:TargetCategory.Type>1</a:TargetCategory.Type>
 </o:TemplateTargetItem>
@@ -72075,13 +72077,13 @@ foreach (var childItem in data%Code%)
     childItem.Item.%GetChildColumn.Code% = row.%GetParentColumn.Code%;
    .next(&quot;\n&quot;)
 
-    if (!edit%Code%.InsertRowByChildGrid(childItem.Item))
+    if (!edit%Code%.InsertRowByChildGrid(childItem))
         return false;
 }
 .endif</a:TemplateTargetItem.Value>
 <a:CreationDate>1510746763</a:CreationDate>
 <a:Creator>Sergey.Shpakovskiy</a:Creator>
-<a:ModificationDate>1511781880</a:ModificationDate>
+<a:ModificationDate>1599288286</a:ModificationDate>
 <a:Modifier>Sergey.Shpakovskiy</a:Modifier>
 <a:TargetCategory.Type>1</a:TargetCategory.Type>
 </o:TemplateTargetItem>
@@ -72107,9 +72109,9 @@ foreach (var childItem in data%Code%)
 
     bool childResult = true;
     if (childItem.id &lt;= 0)
-        childResult = edit%Code%.InsertRowByChildGrid(childItem.Item);
+        childResult = edit%Code%.InsertRowByChildGrid(childItem);
     else if (childItem.Dirty)
-        childResult = edit%Code%.EditRowByChildGrid(childItem.Item);
+        childResult = edit%Code%.EditRowByChildGrid(childItem);
     if (!childResult) return false;
 }
 
@@ -72160,7 +72162,7 @@ deleteFunc.Add(() =&gt;
 .endif</a:TemplateTargetItem.Value>
 <a:CreationDate>1510746763</a:CreationDate>
 <a:Creator>Sergey.Shpakovskiy</a:Creator>
-<a:ModificationDate>1545300532</a:ModificationDate>
+<a:ModificationDate>1599288286</a:ModificationDate>
 <a:Modifier>Sergey.Shpakovskiy</a:Modifier>
 <a:TargetCategory.Type>1</a:TargetCategory.Type>
 </o:TemplateTargetItem>

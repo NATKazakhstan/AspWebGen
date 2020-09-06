@@ -140,6 +140,32 @@ namespace Nat.Web.Controls.ExtNet.SelectValues
                 Ext.Net.X.AddScript(script);
         }
 
+        public void RemoveRow(long id, bool onLoad)
+        {
+            var script = string.Format(@"
+                if (!window.removed{4})
+                {{
+                    debugger;
+                    var records = #{{{0}}}.data.items.filter(function(r) {{ return r.data.SelectedKey == {3} }});
+                    records.forEach(function(record) {{ #{{{0}}}.remove(record); }});
+                    var field = #{{{1}}}; 
+                    var fn = field.{2}; 
+                    if (fn != null)
+                        fn(field.getValue());
+                    window.removed{4} = true;
+                }}
+",
+                ValuesStoreID,
+                ID,
+                ScriptFunctionConstant.OnChangedValues,
+                id,
+                Guid.NewGuid().ToString("N"));
+            if (onLoad)
+                GridPanel.GetStore().Listeners.Load.Handler += script;
+            else
+                Ext.Net.X.AddScript(script);
+        }
+
         public void InitForSave()
         {
             OnInit(EventArgs.Empty);
@@ -404,27 +430,35 @@ return isValid; }}; ",
                     }
                 );
 
-                var deletedValues = !string.IsNullOrEmpty((string)HiddenDeletedValues.Value)
-                    ? JsonConvert
-                        .DeserializeObject<List<Dictionary<string, object>>>((string)HiddenDeletedValues.Value)
-                        .SelectMany(r => r.Values.Select(q => q.ToString()))
-                        .ToArray()
-                    : new string[0];
-
+                var deletedValues = GetDeletedValues();
                 var selectedValues = result.Where(r =>
                         !string.IsNullOrEmpty(r.SelectedKey) && r.Selected && !deletedValues.Contains(r.SelectedKey))
                     .Select(r => r.Value).ToList();
 
-                var insertedValues = !string.IsNullOrEmpty((string)HiddenInsertedValues.Value) ?
-                    JsonConvert.DeserializeObject<List<Dictionary<string, object>>>((string)HiddenInsertedValues.Value)
-                        .SelectMany(r => r.Values.Select(q => q.ToString()))
-                        .ToArray()
-                    : new string[0];
-
+                var insertedValues = GetInsertedValues();
                 selectedValues.AddRange(insertedValues);
 
                 return selectedValues;
             }
+        }
+
+        public string[] GetDeletedValues()
+        {
+            return !string.IsNullOrEmpty((string)HiddenDeletedValues.Value)
+                ? JsonConvert
+                    .DeserializeObject<List<Dictionary<string, object>>>((string)HiddenDeletedValues.Value)
+                    .SelectMany(r => r.Values.Select(q => q.ToString()))
+                    .ToArray()
+                : new string[0];
+        }
+
+        public string[] GetInsertedValues()
+        {
+            return !string.IsNullOrEmpty((string)HiddenInsertedValues.Value) ?
+                JsonConvert.DeserializeObject<List<Dictionary<string, object>>>((string)HiddenInsertedValues.Value)
+                    .SelectMany(r => r.Values.Select(q => q.ToString()))
+                    .ToArray()
+                : new string[0];
         }
 
         protected override string GetValueJavaScriptFunction()

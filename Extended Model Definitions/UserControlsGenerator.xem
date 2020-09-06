@@ -41605,6 +41605,7 @@ protected bool SaveData(%TableType% originalItem)
         }
 
         if (saved) SelectedValueKey = ref%Code%;
+        if (saved &amp;&amp; rowByChildGrid != null) rowByChildGrid.Item = newItem;
         LogMonitor.Transaction = null;
         return saved;
     }
@@ -41632,7 +41633,7 @@ protected bool SaveData(%TableType% originalItem)
 .endif</a:TemplateTargetItem.Value>
 <a:CreationDate>1352380827</a:CreationDate>
 <a:Creator>Sergey.Shpakovskiy</a:Creator>
-<a:ModificationDate>1584009777</a:ModificationDate>
+<a:ModificationDate>1599370458</a:ModificationDate>
 <a:Modifier>Sergey.Shpakovskiy</a:Modifier>
 <a:TargetCategory.Type>1</a:TargetCategory.Type>
 </o:TemplateTargetItem>

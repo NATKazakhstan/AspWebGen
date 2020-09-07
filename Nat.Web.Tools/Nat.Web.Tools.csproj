@@ -62,18 +62,6 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.SqlServer.ConnectionInfo, Version=9.0.242.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\Microsoft\Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\Microsoft\Microsoft.SqlServer.Management.Sdk.Sfc.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.SqlServer.Smo, Version=9.0.242.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\Microsoft\Microsoft.SqlServer.Smo.dll</HintPath>
-    </Reference>
     <Reference Include="Nat.Tools, Version=1.0.0.0, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Debug\Nat.Tools.dll</HintPath>
@@ -188,9 +176,6 @@
     </Compile>
     <Compile Include="Tasks\ITask.cs" />
     <Compile Include="Tasks\TaskManager.cs" />
-    <Compile Include="LoaderExtendedProperties.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="MailMessageContent\BaseEMailNotification.cs" />
     <Compile Include="MailMessageContent\BaseSendEmailsDetector.cs" />
     <Compile Include="MailMessageContent\EmailMessage.cs" />

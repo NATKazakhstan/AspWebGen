@@ -308,7 +308,7 @@ namespace Nat.Web.Tools.MailMessageContent
                     HtmlWriter.AddAttribute(HtmlTextWriterAttribute.Colspan, count.ToString());
                     HtmlWriter.RenderBeginTag(HtmlTextWriterTag.Td); //// td 3
 
-                    HtmlWriter.WriteEncodedText(subsystemName);
+                    HtmlWriter.WriteEncodedText(string.Format("ПОДСИСТЕМА «{0}»", subsystemName));
 
                     HtmlWriter.RenderEndTag(); //// td 3
                     HtmlWriter.RenderEndTag(); //// tr 3

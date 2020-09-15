@@ -266,7 +266,11 @@ namespace Nat.Web.ReportManager
                         {
                             if ("Auto".Equals(format, StringComparison.InvariantCulture))
                             {
-                                stiExportFormat = stiPlugin.AutoExportTo ?? availableFormat.First();
+                                stiExportFormat = stiPlugin.AutoExportTo == null 
+                                    ? availableFormat.First()
+                                    : (availableFormat.Contains(stiPlugin.AutoExportTo.Value)
+                                        ? stiPlugin.AutoExportTo.Value 
+                                        : availableFormat.First());
                                 stiCustomExportType = webReportPlugin.CustomExportType;
                             }
                             else if ("Word".Equals(format, StringComparison.InvariantCulture))

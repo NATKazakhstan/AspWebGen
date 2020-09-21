@@ -564,22 +564,28 @@
             paramsDiv.append(html);
 
             var dv = $('#DynamicValue1');
+            var dvLink = $('#DynamicValue1_link');
             if (dv.length) {
                 var dataBind1 = dv.attr('data-bind');
                 dv.attr('data-bind', dataBind1.replace(/DynamicValue/gi, 'Value1'))
                     .attr('name', 'Value1_' + item.ParameterIndex)
                     .attr('id', 'Value1_' + item.ParameterIndex);
-                $('#DynamicValue1_link').attr('id', 'Value1_' + item.ParameterIndex + '_link')
+                dataBind1 = dvLink.attr('data-bind');
+                dvLink.attr('data-bind', dataBind1.replace(/DynamicValue/gi, 'Value1'))
+                    .attr('id', 'Value1_' + item.ParameterIndex + '_link')
                     .attr('clientId', 'Value1_' + item.ParameterIndex);
             }
 
             dv = $('#DynamicValue2');
+            dvLink = $('#DynamicValue2_link');
             if (dv.length) {
                 var dataBind2 = dv.attr('data-bind');
                 dv.attr('data-bind', dataBind2.replace(/DynamicValue/gi, 'Value2'))
                     .attr('name', 'Value2_' + item.ParameterIndex)
                     .attr('id', 'Value2_' + item.ParameterIndex);
-                $('#DynamicValue2_link').attr('id', 'Value2_' + item.ParameterIndex + '_link')
+                dataBind2 = dvLink.attr('data-bind');
+                dvLink.attr('data-bind', dataBind2.replace(/DynamicValue/gi, 'Value1'))
+                    .attr('id', 'Value2_' + item.ParameterIndex + '_link')
                     .attr('clientId', 'Value2_' + item.ParameterIndex);
             }
 

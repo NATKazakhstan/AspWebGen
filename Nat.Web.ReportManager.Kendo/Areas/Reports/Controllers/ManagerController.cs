@@ -585,6 +585,10 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
 
             if (string.IsNullOrEmpty(export))
             {
+                if(stream == null)
+                {
+                    return Json(new { error = Resources.NoAccess });
+                }
                 using (stream)
                 using (var reader = new StreamReader(stream))
                 {

@@ -29,3 +29,4 @@ _ReSharper*/
 #Nuget packages folder
 packages/
 BuildTools/
+Packages/

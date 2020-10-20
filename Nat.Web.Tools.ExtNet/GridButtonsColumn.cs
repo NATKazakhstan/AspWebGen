@@ -221,7 +221,7 @@ namespace Nat.Web.Tools.ExtNet
         }
 
         public Func<string, string> EditUrlJavaScript { get; set; } =
-            urlTemplate => $"'{urlTemplate}'.replace('{{0}}', record.internalId)";
+            urlTemplate => $"'{urlTemplate}'.replace('{{0}}', record.internalId).replace('{{1}}', record.data.id)";
 
         public Func<string, string> EditWindowTitleJavaScript { get; set; } =
             title => $"'{title}' + ': ' + record.data.RowName";
@@ -291,7 +291,7 @@ namespace Nat.Web.Tools.ExtNet
         }
 
         public Func<string, string> LookUrlJavaScript { get; set; } = 
-            urlTemplate => $"'{urlTemplate}'.replace('{{0}}', record.internalId)";
+            urlTemplate => $"'{urlTemplate}'.replace('{{0}}', record.internalId).replace('{{1}}', record.data.id)";
 
         public Func<string, string> LookWindowTitleJavaScript { get; set; } =
             title => $"'{title}' + ': ' + record.data.RowName";

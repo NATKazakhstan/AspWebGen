@@ -44,8 +44,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Kendo.Mvc">
-      <HintPath>..\..\Sources\Build\Template\GAC\Kendo.Mvc.dll</HintPath>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\..\Sources\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\Sources\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\Sources\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Kendo.Mvc, Version=2019.1.115.545, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a, processorArchitecture=MSIL">
+      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo-UI.1.0.20\lib\net45\Kendo.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
@@ -54,6 +63,18 @@
     </Reference>
     <Reference Include="Nat.Tools">
       <HintPath>..\Libraries\Debug\Nat.Tools.dll</HintPath>
+    </Reference>
+    <Reference Include="Nat.Web.Core.Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc6873e23d24701a, processorArchitecture=MSIL">
+      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.14\lib\net46\Nat.Web.Core.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Nat.Web.Core.Kendo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc6873e23d24701a, processorArchitecture=MSIL">
+      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.14\lib\net46\Nat.Web.Core.Kendo.dll</HintPath>
+    </Reference>
+    <Reference Include="Nat.Web.Core.Res, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc6873e23d24701a, processorArchitecture=MSIL">
+      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.14\lib\net46\Nat.Web.Core.Res.dll</HintPath>
+    </Reference>
+    <Reference Include="Nat.Web.Core.System, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc6873e23d24701a, processorArchitecture=MSIL">
+      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.14\lib\net46\Nat.Web.Core.System.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\Sources\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -81,6 +102,9 @@
     <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\Sources\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Sources\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\Sources\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
     </Reference>
@@ -100,6 +124,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Sources\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Reports\Content\Manager.css" />
@@ -199,22 +226,6 @@
     <Folder Include="Areas\Reports\Models\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Asp.Net.Core\Sources\Nat.Web.Core.Controls\Nat.Web.Core.Controls.MVC.csproj">
-      <Project>{ebbdcbb7-18fc-40ae-9428-689df400122d}</Project>
-      <Name>Nat.Web.Core.Controls.MVC</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Asp.Net.Core\Sources\Nat.Web.Core.Kendo\Nat.Web.Core.Kendo.MVC.csproj">
-      <Project>{c76d3872-f1f1-496f-9096-a2147c1f325a}</Project>
-      <Name>Nat.Web.Core.Kendo.MVC</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Asp.Net.Core\Sources\Nat.Web.Core.Resources\Nat.Web.Core.Resources.MVC.csproj">
-      <Project>{635c932d-179c-495a-9165-f533c6ee5ac5}</Project>
-      <Name>Nat.Web.Core.Resources.MVC</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Asp.Net.Core\Sources\Nat.Web.Core.System\Nat.Web.Core.System.MVC.csproj">
-      <Project>{dc159842-cf5a-4fed-84c4-465851dbaebf}</Project>
-      <Name>Nat.Web.Core.System.MVC</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Nat.Web.Controls\Nat.Web.Controls.csproj">
       <Project>{ff9f52a0-fe60-4ee5-8ee8-5b1093378fb3}</Project>
       <Name>Nat.Web.Controls</Name>

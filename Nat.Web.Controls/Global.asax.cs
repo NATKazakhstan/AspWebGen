@@ -108,6 +108,10 @@ namespace Nat.Web.Controls
             OnApplication_AuthenticateRequest();
         }
 
+        protected virtual void OnApplication_Error()
+        {
+        }
+
         protected void Application_Error(object sender, EventArgs e)
         {
             OnCustomEndRequest(sender, e);
@@ -159,6 +163,7 @@ namespace Nat.Web.Controls
             catch (Exception)
             {
             }
+            OnApplication_Error();
         }
 
         protected void Session_OnEnd(object sender, EventArgs e)

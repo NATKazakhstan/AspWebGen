@@ -29,10 +29,9 @@ using Nat.Web.Tools.Security;
 namespace Nat.Web.Controls
 {
     using System.Text.RegularExpressions;
-
     using Nat.Web.Controls.GenerationClasses.BaseJournal;
     using Nat.Web.Controls.GenerationClasses.Navigator;
-    
+
     public abstract class BaseMainPage : Page
     {
         private Control _control;
@@ -131,7 +130,11 @@ namespace Nat.Web.Controls
                         _control = Page.LoadControl("/UserControls/FileNotExists.ascx");
                     }
                     else
+                    {
                         _control = Page.LoadControl("/UserControls/NoPermit.ascx");
+                        WriteContent401();
+                        throw new HttpException(401, Resources.SAccessDanied);
+                    }
                     PlaceHolder.Controls.Add(_control);
                 }
             }
@@ -145,7 +148,11 @@ namespace Nat.Web.Controls
                     if (executeManager.CheckPermit(Page))
                         executeManager.Execute(url.QueryParameters, Page);
                     else
+                    {
                         _control = Page.LoadControl("/UserControls/NoPermit.ascx");
+                        WriteContent401();
+                        throw new HttpException(401, Resources.SAccessDanied);
+                    }
                     PlaceHolder.Controls.Add(_control);
                 }
             }
@@ -170,7 +177,11 @@ namespace Nat.Web.Controls
                 var access = _control as IAccessControl;
                 Trace.WriteExt("BaseMainPage.OnInit.BeginCheckPermit");
                 if ((access != null && !access.CheckPermit(this)))
+                {
                     _control = Page.LoadControl("/UserControls/NoPermit.ascx");
+                    WriteContent401();
+                    throw new HttpException(401, Resources.SAccessDanied);
+                }
                 Trace.WriteExt("BaseMainPage.OnInit.EndCheckPermit");
                 if (!UserRoles.IsInRole(UserRoles.ADMIN))
                 {
@@ -250,6 +261,14 @@ namespace Nat.Web.Controls
             PreRenderComplete += Page_PreRenderComplete;
         }
 
+        private void WriteContent401(string message = null)
+        {
+            Response.ClearContent();
+            Response.StatusCode = 401;
+            Response.Write(message ?? Resources.SAccessDanied);
+            Response.End();
+        }
+
         protected override void OnPreLoad(EventArgs e)
         {
             base.OnPreLoad(e);
@@ -258,12 +277,12 @@ namespace Nat.Web.Controls
 
         public Control EnsureRecordCardCorrect()
         {
-            UserControl control = null;
             var message = UserRoles.CheckPersonInfo();
-            if(string.IsNullOrEmpty(message)) return null;
-            control = (UserControl)Page.LoadControl("/UserControls/NoPermit.ascx");
+            if (string.IsNullOrEmpty(message)) return null;
+            var control = (UserControl)Page.LoadControl("/UserControls/NoPermit.ascx");
             control.Attributes["ErrorMessage"] = message;
-            return control;
+            WriteContent401(message);
+            throw new HttpException(401, message);
         }
 
         public static Control LoadControl(Page page, string controlName)

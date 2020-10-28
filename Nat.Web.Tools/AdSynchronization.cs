@@ -268,9 +268,12 @@ namespace Nat.Web.Tools
                 foreach (SearchResult entry in collection)
                 {
                     if (entry.Properties[DisplayName].Count == 0) continue;
-                    count++;
                     string name = GetProperty(entry, DisplayName);
                     string loginName = GetLoginName(GetProperty(entry, AccountName), GetProperty(entry, AdsPath));
+                    if (!string.IsNullOrEmpty(name) && name.EndsWith("$") || !string.IsNullOrEmpty(loginName) && loginName.EndsWith("$"))
+                        continue;
+                    
+                    count++;
                     string mail = GetProperty(entry, EMail);
 
                     var val = 0;

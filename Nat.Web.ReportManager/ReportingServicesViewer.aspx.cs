@@ -124,6 +124,9 @@ namespace Nat.Web.ReportManager
                 return null;
             webReportManager.RoleCheck = RoleCheck;
             webReportManager.Plugin = webReportManager.GetPlugins()[pluginName];
+            if (webReportManager.Plugin == null)
+                return null;
+
             webReportManager.Plugin.InitializeReportCulture(culture);
             var webReportPlugin = (IWebReportPlugin)webReportManager.Plugin;
             webReportPlugin.Page = page;

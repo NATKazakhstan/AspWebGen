@@ -583,9 +583,17 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             Session["logcode" + guid] = null;
             Session["constants" + guid] = null;
 
+            if (stream == null)
+            {
+                DependencyResolver.Current.GetService<IEventLogManager>().Log(
+                    this,
+                    () => $"Доступ запрещен/Кіру рұқсат етілмеген. Отчет {plugin.Description} ({pluginName})",
+                    true, "Security", "Warning", "System");
+            }
+
             if (string.IsNullOrEmpty(export))
             {
-                if(stream == null)
+                if (stream == null)
                 {
                     return Json(new { error = Resources.NoAccess });
                 }

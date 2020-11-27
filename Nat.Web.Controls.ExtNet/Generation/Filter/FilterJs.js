@@ -173,9 +173,12 @@ Array.prototype.RegistrateFilterOperationControl = function() {
 
         if (filterObj.ClientSecondFilterValueControl != null) {
             window.defaultValuesFilterRepository.SetDefaultValueToFilterValueControl(filterObj, false);
-
+            
+            // убираю это хардкодное скрытие второго поля, т.к. его отображение должно зависеть (и зависит на тек. момент) от типа фильтра
+            /*
             var idControl = "#" + filterObj.ClientSecondFilterValueControl.id;
             $(idControl).hide();
+            */
         }
     });
 

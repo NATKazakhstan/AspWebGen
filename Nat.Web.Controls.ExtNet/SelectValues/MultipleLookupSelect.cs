@@ -45,6 +45,12 @@ namespace Nat.Web.Controls.ExtNet.SelectValues
         #region Public Properties
 
         public LookupBox LookupBox { get; protected set; }
+        
+        /// <summary>
+        /// Кнопка просмотра выбранной записи.
+        /// При использовании необходимо выставить Hidden = false и добавить Listeners.Command.Handler
+        /// </summary>
+        public CommandColumn ViewCommand { get; set; }
 
         public CommandColumn DeleteCommand { get; set; }
         
@@ -253,6 +259,9 @@ if (newValue != null && newValue != '') {{
                     LookupBox.ID);
             }
 
+            ViewCommand = GetViewCommand();
+            GridPanel.ColumnModel.Add(ViewCommand);
+
             DeleteCommand = GetDeleteCommand();
             GridPanel.ColumnModel.Add(DeleteCommand);
             DataColumn = new Column
@@ -398,6 +407,25 @@ return isValid; }}; ",
                     ScriptFunctionConstant.OnChangedValues);
             deleteCommand.Hidden = ReadOnly;
             return deleteCommand;
+        }
+
+        private CommandColumn GetViewCommand()
+        {
+            var viewCommand = new CommandColumn
+            {
+                ID = "viewCommand" + ID,
+                Width = 24,
+                Enabled = true
+            };
+            var editCommand = new GridCommand
+            {
+                CommandName = "View",
+                Icon = Icon.Note
+            };
+            editCommand.ToolTip.Text = Web.Controls.Properties.Resources.SView;
+            viewCommand.Commands.Add(editCommand);
+            viewCommand.Hidden = true;
+            return viewCommand;
         }
 
         protected override List<Dictionary<string, object>> GetDataForDelete()

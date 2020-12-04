@@ -74,10 +74,10 @@
                     Aggregate(rowAgg, value);
                     rowAgg.Value = value;
                 };
-            args.GetTotalValue = (group, column) =>
+            args.GetTotalValue = (group, column, totalRowFilter) =>
                 {
                     if (configTotalValues.HasTotalValue(column))
-                        return configTotalValues.GetTotalValue(group, column);
+                        return configTotalValues.GetTotalValue(group, column, totalRowFilter);
 
                     if (!column.IsNumericColumn)
                         return null;
@@ -184,9 +184,9 @@
                 return _configGetTotal.ContainsKey(column.ColumnName);
             }
 
-            internal string GetTotalValue(string group, IExportColumn column)
+            internal string GetTotalValue(string group, IExportColumn column, string totalRowFilter)
             {
-                return _configGetTotal[column.ColumnName](new TotalValuesEventArgs(this, group, column));
+                return _configGetTotal[column.ColumnName](new TotalValuesEventArgs(this, group, column, totalRowFilter));
             }
 
             public ConfigTotalValues GetTotalValue(string columnName, Func<TotalValuesEventArgs, string> getTotalValue)
@@ -204,16 +204,18 @@
 
         public class TotalValuesEventArgs
         {
-            public TotalValuesEventArgs(ConfigTotalValues configTotalValues, string group, IExportColumn column)
+            public TotalValuesEventArgs(ConfigTotalValues configTotalValues, string group, IExportColumn column, string totalRowFilter)
             {
                 ConfigTotalValues = configTotalValues;
                 Group = group;
                 Column = column;
+                TotalRowFilter = totalRowFilter;
             }
 
             internal ConfigTotalValues ConfigTotalValues { get; set; }
             public string Group { get; }
             public IExportColumn Column { get; }
+            public string TotalRowFilter { get; }
 
             public double? GetTotalValue(string column)
             {

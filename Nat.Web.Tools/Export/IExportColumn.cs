@@ -84,5 +84,12 @@ namespace Nat.Web.Tools.Export
         /// </summary>
         /// <returns></returns>
         IEnumerable<IExportColumn> GetChilds();
+
+        /// <summary>
+        /// Кол-во соединеннных строк в колонке, для формирования данных
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        int? GetDataRowSpan(object row);
     }
 }

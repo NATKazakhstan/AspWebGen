@@ -214,6 +214,11 @@
             {
                 return null;
             }
+
+            public int? GetDataRowSpan(object row)
+            {
+                return null;
+            }
         }
     }
 }

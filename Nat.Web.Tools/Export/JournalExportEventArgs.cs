@@ -126,13 +126,30 @@ namespace Nat.Web.Tools.Export
 
         /// <summary>
         /// Получение значения для ячейки строки итога.
-        /// Первый параметр текст группы, второй колнка, вернуть текст ячейки Excel.
+        /// Первый параметр текст группы, второй колнка, третий параметр фильтр итоговой строки, вернуть текст ячейки Excel.
         /// </summary>
-        public Func<string, IExportColumn, string> GetTotalValue;
+        public Func<string, IExportColumn, string, string> GetTotalValue;
+
+        /// <summary>
+        /// Список строковых значений для фильтрации (множения) итоговых строк.
+        /// Для каждого значения формируется отдельная итоговая строка.
+        /// </summary>
+        public List<string> TotalRowFilterValues;
 
         /// <summary>
         /// Экспорт без обобщающей итоговой строки.
         /// </summary>
         public bool WithOutGroupTotalRow { get; set; }
+
+        /// <summary>
+        /// Экспорт без вывода значения группировки
+        /// </summary>
+        public bool WithoutRenderGroupText { get; set; }
+
+        /// <summary>
+        /// Значения кол-ва объединения строк в разрезе колонок для итоговой строки
+        /// Первый параметр ColumnName
+        /// </summary>
+        public Dictionary<string, int> ColumnTotalRowSpans { get; set; }
     }
 }

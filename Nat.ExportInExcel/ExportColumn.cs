@@ -22,6 +22,7 @@
         public bool IsNumericColumn { get; set; }
         public Func<object, string> GetValueHandler { get; set; }
         public Func<object, string> GetHyperLinkHandler { get; set; }
+        public Func<object, int> GetDataRowSpanHandler { get; set; }
 
         public virtual string GetValue(object row)
         {
@@ -36,6 +37,11 @@
         public virtual IEnumerable<IExportColumn> GetChilds()
         {
             return Children.Cast<IExportColumn>();
+        }
+
+        public virtual int? GetDataRowSpan(object row)
+        {
+            return GetDataRowSpanHandler?.Invoke(row);
         }
     }
 

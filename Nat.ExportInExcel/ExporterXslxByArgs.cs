@@ -133,9 +133,10 @@ namespace Nat.ExportInExcel
         protected override void RenderData()
         {
             var columns = _args.Columns.SelectMany(GetColumns).ToArray();
+            var rowSpanDic = new Dictionary<string, int>();
             if (_args.GetGroupText == null && _args.GetTotalValue == null)
                 foreach (var row in _args.Data)
-                    RenderData(row, columns);
+                    RenderData(row, columns, ref rowSpanDic);
             else
             {
                 var groupText = string.Empty;
@@ -145,9 +146,18 @@ namespace Nat.ExportInExcel
                     rowIndex++;
                     var newGroupText = _args.GetGroupText?.Invoke(row);
                     if (rowIndex != 0 && _args.GetTotalValue != null && newGroupText != groupText)
-                        RenderTotalRow(columns, groupText);
+                    {
+                        if (_args.TotalRowFilterValues != null && _args.TotalRowFilterValues.Any())
+                        {
+                            var totalRowSpanDic = new Dictionary<string, int>();
+                            foreach (var rowFilter in _args.TotalRowFilterValues)
+                                RenderTotalRow(columns, groupText, rowFilter, ref totalRowSpanDic);
+                        }
+                        else
+                            RenderTotalRow(columns, groupText);
+                    }
 
-                    if (_args.GetGroupText != null && (rowIndex == 0 || newGroupText != groupText))
+                    if (_args.GetGroupText != null && (rowIndex == 0 || newGroupText != groupText) && !_args.WithoutRenderGroupText)
                     {
                         _args.StartRenderRow?.Invoke(row);
                         WriteStartRow(null);
@@ -156,7 +166,7 @@ namespace Nat.ExportInExcel
                         _writer.WriteEndElement();
                     }
 
-                    RenderData(row, columns);
+                    RenderData(row, columns, ref rowSpanDic);
 
                     if (_args.ComputeTotalValue != null)
                     {
@@ -168,10 +178,28 @@ namespace Nat.ExportInExcel
                 }
 
                 if (rowIndex != -1 && _args.GetTotalValue != null && _args.GetGroupText != null)
-                    RenderTotalRow(columns, groupText);
+                {
+                    if (_args.TotalRowFilterValues != null && _args.TotalRowFilterValues.Any())
+                    {
+                        var totalRowSpanDic = new Dictionary<string, int>();
+                        foreach (var rowFilter in _args.TotalRowFilterValues)
+                            RenderTotalRow(columns, groupText, rowFilter, ref totalRowSpanDic);
+                    }
+                    else 
+                        RenderTotalRow(columns, groupText);
+                }
 
                 if (rowIndex != -1 && _args.GetTotalValue != null && !_args.WithOutGroupTotalRow)
-                    RenderTotalRow(columns, null);
+                {
+                    if (_args.TotalRowFilterValues != null && _args.TotalRowFilterValues.Any())
+                    {
+                        var totalRowSpanDic = new Dictionary<string, int>();
+                        foreach (var rowFilter in _args.TotalRowFilterValues)
+                            RenderTotalRow(columns, null, rowFilter, ref rowSpanDic);
+                    }
+                    else
+                        RenderTotalRow(columns, null);
+                }
             }
 
             _addedRowSpans.Clear();
@@ -179,32 +207,60 @@ namespace Nat.ExportInExcel
 
         private void RenderTotalRow(IExportColumn[] columns, string groupText)
         {
+            var emtyTotalRowSpanDic = new Dictionary<string, int>();
+            RenderTotalRow(columns, groupText, null, ref emtyTotalRowSpanDic);
+        }
+
+        private void RenderTotalRow(IExportColumn[] columns, string groupText, string totalRowFilter, ref Dictionary<string, int> totalRowSpanDic)
+        {
             _args.StartRenderRow?.Invoke(null);
             WriteStartRow(null);
 
             MoveRowIndex();
             foreach (var column in columns)
             {
+                int? rowSpan = null;
+                bool allowRenderCell = true;
+                if (!string.IsNullOrEmpty(column.ColumnName) && _args.ColumnTotalRowSpans != null && _args.ColumnTotalRowSpans.ContainsKey(column.ColumnName))
+                {
+                    allowRenderCell = !totalRowSpanDic.ContainsKey(column.ColumnName) || totalRowSpanDic[column.ColumnName] <= 0;
+                    rowSpan = _args.ColumnTotalRowSpans[column.ColumnName];
+
+                    if (rowSpan > 1)
+                    {
+                        if (!totalRowSpanDic.ContainsKey(column.ColumnName))
+                            totalRowSpanDic.Add(column.ColumnName, rowSpan.Value);
+                        else
+                            totalRowSpanDic[column.ColumnName] += rowSpan.Value;
+                    }
+
+                    if (totalRowSpanDic.ContainsKey(column.ColumnName) && totalRowSpanDic[column.ColumnName] > 0)
+                        totalRowSpanDic[column.ColumnName]--;
+                }
+
+                if (!allowRenderCell)
+                    continue;
+
                 string styleId;
                 if (column.IsVerticalDataText) styleId = DataGroupVerticalStyleId;
                 else if (column.IsNumericColumn) styleId = DataGroupStyleCenterId;
                 else styleId = DataGroupStyleId;
 
-                var totalValue = _args.GetTotalValue(groupText, column);
+                var totalValue = _args.GetTotalValue(groupText, column, totalRowFilter);
                 RenderCell(
                     _writer,
                     totalValue,
-                    column.RowSpan,
+                    rowSpan?? column.RowSpan,
                     column.ColSpan,
                     styleId,
                     column.IsNumericColumn ? ColumnType.Numeric : ColumnType.Other,
                     null);
             }
-         
+
             _writer.WriteEndElement();
         }
 
-        private void RenderData(object row, IEnumerable<IExportColumn> columns)
+        private void RenderData(object row, IEnumerable<IExportColumn> columns, ref Dictionary<string, int> rowSpanDic)
         {
             _args.StartRenderRow?.Invoke(row);
             WriteStartRow(null);
@@ -213,6 +269,8 @@ namespace Nat.ExportInExcel
             foreach (var column in columns)
             {
                 string styleId;
+                bool allowRenderCell = true;
+                var rowSpan = column.GetDataRowSpan(row) ?? column.RowSpan;
 
                 if (column.IsVerticalDataText) styleId = DataVerticalStyleId;
                 else if (column.IsNumericColumn) styleId = DataStyleCenterId;
@@ -225,12 +283,27 @@ namespace Nat.ExportInExcel
                     if (_columnsAddresses.ContainsKey(column.ColumnName)) sb = _columnsAddresses[column.ColumnName].Append(" ");
                     else _columnsAddresses[column.ColumnName] = sb = new StringBuilder();
                     sb.Append(GetLaterByInt(_columnIndex)).Append(_rowIndex);
+
+                    allowRenderCell = !rowSpanDic.ContainsKey(column.ColumnName) || rowSpanDic[column.ColumnName] <= 0;
+                    if (rowSpan > 1)
+                    {
+                        if (!rowSpanDic.ContainsKey(column.ColumnName))
+                            rowSpanDic.Add(column.ColumnName, rowSpan);
+                        else
+                            rowSpanDic[column.ColumnName] += rowSpan;
+                    }
+
+                    if (rowSpanDic.ContainsKey(column.ColumnName) && rowSpanDic[column.ColumnName] > 0)
+                        rowSpanDic[column.ColumnName] --;
                 }
+
+                if (!allowRenderCell)
+                    continue;
 
                 var rangeOfCell = RenderCell(
                     _writer,
                     cellData,
-                    column.RowSpan,
+                    rowSpan,
                     column.ColSpan,
                     styleId,
                     column.IsNumericColumn ? ColumnType.Numeric : ColumnType.Other,

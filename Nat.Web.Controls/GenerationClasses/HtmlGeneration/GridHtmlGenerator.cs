@@ -342,6 +342,11 @@ namespace Nat.Web.Controls.GenerationClasses
             public GetColumnContent ColumnHyperLinkHandler { get; set; }
 
             /// <summary>
+            /// Получение значения кол-ва соединенных строк
+            /// </summary>
+            public Func<object, int> GetDataRowSpanHandler { get; set; }
+
+            /// <summary>
             /// Метод заполнения ячейки итогов журнала.
             /// </summary>
             public GetColumnContent ColumnContentTotalHandler { get; set; }
@@ -623,6 +628,11 @@ namespace Nat.Web.Controls.GenerationClasses
                     return null;
 
                 return _selectParameters ?? (_selectParameters = SelectParametersHandler());
+            }
+
+            public int? GetDataRowSpan(object row)
+            {
+                return GetDataRowSpanHandler?.Invoke(row);
             }
         }
 

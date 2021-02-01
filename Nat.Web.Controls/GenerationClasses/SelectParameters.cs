@@ -206,7 +206,14 @@ namespace Nat.Web.Controls.GenerationClasses
                     else if (fieldValues.ContainsKey(FieldName) && !string.IsNullOrEmpty(fieldValues[FieldName]))
                         newValue = fieldValues[FieldName];
 
-                    value = newValue == null ? null : Convert.ChangeType(newValue, ResultDataType);
+                    try
+                    {
+                        value = newValue == null ? null : Convert.ChangeType(newValue, ResultDataType);
+                    }
+                    catch (FormatException)
+                    {
+                        value = null;
+                    }
                 }
                 return Expression.Constant(value, NullableResultDataType);
             }

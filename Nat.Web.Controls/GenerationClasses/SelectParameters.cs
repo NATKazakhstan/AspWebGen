@@ -214,6 +214,12 @@ namespace Nat.Web.Controls.GenerationClasses
                     {
                         value = null;
                     }
+
+                    // Ошибка даты в введенных данных
+                    if (value != null && (ResultDataType == typeof(DateTime) || ResultDataType == typeof(DateTime?)) && (DateTime) value < new DateTime(1900, 1, 1))
+                    {
+                        value = null;
+                    }
                 }
                 return Expression.Constant(value, NullableResultDataType);
             }

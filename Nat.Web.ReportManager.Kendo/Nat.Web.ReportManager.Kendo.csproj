@@ -54,7 +54,7 @@
       <HintPath>..\..\Sources\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Kendo.Mvc, Version=2019.1.115.545, Culture=neutral, PublicKeyToken=55f6c56e6ab9709a, processorArchitecture=MSIL">
-      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo-UI.1.0.20\lib\net45\Kendo.Mvc.dll</HintPath>
+      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo-UI.1.0.22\lib\net45\Kendo.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
@@ -65,16 +65,16 @@
       <HintPath>..\Libraries\Debug\Nat.Tools.dll</HintPath>
     </Reference>
     <Reference Include="Nat.Web.Core.Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc6873e23d24701a, processorArchitecture=MSIL">
-      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.31\lib\net46\Nat.Web.Core.Controls.dll</HintPath>
+      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.35\lib\net46\Nat.Web.Core.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Nat.Web.Core.Kendo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc6873e23d24701a, processorArchitecture=MSIL">
-      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.31\lib\net46\Nat.Web.Core.Kendo.dll</HintPath>
+      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.35\lib\net46\Nat.Web.Core.Kendo.dll</HintPath>
     </Reference>
     <Reference Include="Nat.Web.Core.Res, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc6873e23d24701a, processorArchitecture=MSIL">
-      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.31\lib\net46\Nat.Web.Core.Res.dll</HintPath>
+      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.35\lib\net46\Nat.Web.Core.Res.dll</HintPath>
     </Reference>
     <Reference Include="Nat.Web.Core.System, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc6873e23d24701a, processorArchitecture=MSIL">
-      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.31\lib\net46\Nat.Web.Core.System.dll</HintPath>
+      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.35\lib\net46\Nat.Web.Core.System.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\Sources\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>

@@ -78,14 +78,21 @@
             task.ExecuteTask<TTask>(countInIteration);
         }
 
+        public static void Execute(ITask task, int countInIteration = 100)
+        {
+            var taskManager = new TaskManager();
+            taskManager.ExecuteTask(task, null, countInIteration);
+        }
+
         public void ExecuteTask<TTask>(int countInIteration = 100)
             where TTask : ITask
         {
             ExecuteTask(typeof(TTask).AssemblyQualifiedName, null, countInIteration);
         }
 
-        public void ExecuteTask(string taskTypeName, ILogMonitor logMonitor, int countInIteration = 100)
+        public void ExecuteTask(ITask task, ILogMonitor logMonitor, int countInIteration = 100)
         {
+            var taskTypeName = task.GetType().AssemblyQualifiedName ?? "-";
             object lockRun;
             lock (LockRuns)
             {
@@ -100,11 +107,9 @@
             var startTime = DateTime.Now;
             lock (lockRun)
             {
-                var type = BuildManager.GetType(taskTypeName, true, true);
                 using (var connection = CreateConnection())
                 using (var db = new DBDataContext(connection))
                 {
-                    var task = (ITask)Activator.CreateInstance(type);
                     task.Initialize(SpecificInstances.DbFactory.CreateConnection(), 60, logMonitor);
                     var keyOfState = GetKeyOfState(taskTypeName, db);
                     var nextValue = keyOfState;
@@ -119,6 +124,13 @@
             }
         }
 
+        public void ExecuteTask(string taskTypeName, ILogMonitor logMonitor, int countInIteration = 100)
+        {
+            var type = BuildManager.GetType(taskTypeName, true, true);
+            var task = (ITask)Activator.CreateInstance(type);
+            ExecuteTask(task, logMonitor, countInIteration);
+        }
+        
         private DbConnection CreateConnection()
         {
             return SpecificInstances.DbFactory.CreateConnection();

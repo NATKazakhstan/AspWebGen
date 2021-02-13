@@ -2606,9 +2606,14 @@ var fixTreeStoreRecords = function(records) {
 
 // респонз файла в урле
 var saveFile = function (url) {
+    var fileName = url.substring(url.lastIndexOf('/') + 1);
+    saveFileWithFileName(url, fileName);
+};
+
+// респонз файла в урле
+var saveFileWithFileName = function (url, fileName) {
     var a = document.createElement('a');
     a.href = url;
-    var fileName = url.substring(url.lastIndexOf('/') + 1);
     a.download = fileName;
     a.style.display = 'none';
     document.body.appendChild(a);

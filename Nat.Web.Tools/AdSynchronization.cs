@@ -1,15 +1,19 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 using System.DirectoryServices;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
+using Nat.Tools;
 using Nat.Tools.Specific;
+using Nat.Web.Tools.Models;
 
 namespace Nat.Web.Tools
 {
@@ -30,6 +34,8 @@ namespace Nat.Web.Tools
         public AdSynchronizationFunction<string> LogFunction { get; set; }
         public AdSynchronizationFunction<decimal> SetProgressFunction { get; set; }
         public AdSynchronizationFunction<string> ErrorFunction { get; set; }
+        
+        private readonly List<Identification> allActiveDirectoryIdentifications = new List<Identification>();
         public int CountUpdates { get; set; }
         public int CountInserts { get; set; }
         public int Count { get; set; }
@@ -60,6 +66,8 @@ namespace Nat.Web.Tools
                         LogFunction(string.Format(
                             "Выполнение синхронизации SID (AdSynchronization) ({4}) обработано записей/добавлено/обнавлено: {0}/{1}/{2}\r\nДобавлены: {3}",
                             Count - countStart, CountInserts - countInsertsStart, CountUpdates - countUpdatesStart, _sbInserts, connectionString.Name));
+                    
+                    DisableInactiveIdentifications();
                 }
                 catch (Exception exception)
                 {
@@ -287,6 +295,9 @@ namespace Nat.Web.Tools
                     var sid = (byte[])entry.Properties[ObjectsId][0];
                     var sidStr = new SecurityIdentifier(sid, 0).Value;
                     var sidBase64 = Convert.ToBase64String(sid);
+                    
+                    allActiveDirectoryIdentifications.Add(new Identification {Sid = sidStr});
+                    
                     sidParameterSelect.Value = sidStr;
                     using (var reader = cSelect.ExecuteReader())
                     {
@@ -329,7 +340,8 @@ namespace Nat.Web.Tools
                         }
                     }
                 }
-                if (SetProgressFunction != null) SetProgressFunction(progress);
+                
+                if (SetProgressFunction != null)SetProgressFunction(progress);
             }
             finally
             {
@@ -338,6 +350,72 @@ namespace Nat.Web.Tools
                 connectionInsert.Close();
             }
             Count += count;
+        }
+
+        private void DisableInactiveIdentifications()
+        {
+            var conn = SpecificInstances.DbFactory.CreateConnection();
+            
+            try
+            {
+                conn.Open();
+                var identifications = GetActiveIdentifications(conn);
+
+                foreach (var identification in identifications.Where(entry => allActiveDirectoryIdentifications.All(s => s.Sid != entry.Sid)))
+                {
+                    DisableIdentification(conn, identification);
+                }
+            }
+            catch (Exception ex)
+            {
+                var error = WriteError(ex);
+                ErrorFunction?.Invoke(error);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        private static void DisableIdentification(DbConnection conn, Identification sid)
+        {
+            using (var command = conn.CreateCommand())
+            {
+                var parameter = SpecificInstances.DbFactory.CreateParameter();
+
+                parameter.DbType = DbType.String;
+                parameter.ParameterName = "sid";
+                parameter.Value = sid.Sid;
+             
+                command.CommandType = CommandType.Text;
+                command.CommandText = "update LOG_SidIdentification set isDisabled = true where Sid = @sid";
+                command.Parameters.Add(parameter);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        private static List<Identification> GetActiveIdentifications(DbConnection conn)
+        {
+            var result = new List<Identification>();
+            
+            using (var command = conn.CreateCommand())
+            {
+                command.CommandType = CommandType.Text;
+                command.CommandText = "select Sid from LOG_SidIdentification where isDisabled = false";
+                
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        result.Add(new Identification()
+                        {
+                            Sid = reader[0] as string
+                        });
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }

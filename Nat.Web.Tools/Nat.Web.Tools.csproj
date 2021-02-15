@@ -159,6 +159,7 @@
     </Compile>
     <Compile Include="MailMessageContent\EMailNotificationAggregator.cs" />
     <Compile Include="MailMessageContent\ModuleConfiguration.cs" />
+    <Compile Include="Models\Identification.cs" />
     <Compile Include="Modules\UnhandledExceptionModule.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

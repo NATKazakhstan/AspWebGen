@@ -35,7 +35,7 @@ namespace Nat.Web.Tools
         public AdSynchronizationFunction<decimal> SetProgressFunction { get; set; }
         public AdSynchronizationFunction<string> ErrorFunction { get; set; }
         
-        private readonly List<Identification> allActiveDirectoryIdentifications = new List<Identification>();
+        private readonly Dictionary<string, bool> allActiveDirectoryIdentifications = new Dictionary<string, bool>();
         public int CountUpdates { get; set; }
         public int CountInserts { get; set; }
         public int Count { get; set; }
@@ -296,7 +296,7 @@ namespace Nat.Web.Tools
                     var sidStr = new SecurityIdentifier(sid, 0).Value;
                     var sidBase64 = Convert.ToBase64String(sid);
                     
-                    allActiveDirectoryIdentifications.Add(new Identification {Sid = sidStr});
+                    allActiveDirectoryIdentifications.Add(sidStr, false);
                     
                     sidParameterSelect.Value = sidStr;
                     using (var reader = cSelect.ExecuteReader())
@@ -361,7 +361,7 @@ namespace Nat.Web.Tools
                 conn.Open();
                 var identifications = GetActiveIdentifications(conn);
 
-                foreach (var identification in identifications.Where(entry => allActiveDirectoryIdentifications.All(s => s.Sid != entry.Sid)))
+                foreach (var identification in identifications.Where(entry => !allActiveDirectoryIdentifications.ContainsKey(entry.Sid)))
                 {
                     DisableIdentification(conn, identification);
                 }
@@ -388,7 +388,7 @@ namespace Nat.Web.Tools
                 parameter.Value = sid.Sid;
              
                 command.CommandType = CommandType.Text;
-                command.CommandText = "update LOG_SidIdentification set isDisabled = true where Sid = @sid";
+                command.CommandText = "update LOG_SidIdentification set isDisabled = 1 where Sid = @sid";
                 command.Parameters.Add(parameter);
                 command.ExecuteNonQuery();
             }
@@ -401,7 +401,7 @@ namespace Nat.Web.Tools
             using (var command = conn.CreateCommand())
             {
                 command.CommandType = CommandType.Text;
-                command.CommandText = "select Sid from LOG_SidIdentification where isDisabled = false";
+                command.CommandText = "select Sid from LOG_SidIdentification where isDisabled = 0";
                 
                 using (var reader = command.ExecuteReader())
                 {

@@ -111,7 +111,7 @@
                         me.openInWindowTemplate = kendo.template($('#openInWindowTemplate').html());
                     var div = $(me.openInWindowTemplate({}));
                     kendo.bind(div, me.options);
-                    div.find('.reportResultDiv-inner').html(content);
+                    div.find('.reportResultDiv-inner').html(content).find('a').attr('target', '_blank');
                     me.reportWindow.element.removeClass('k-window-iframecontent');
                     me.reportWindow.content(div);
                     me.reportWindow.open();
@@ -121,7 +121,7 @@
                 }
 
                 //$('#reportResultDiv').html('<iframe width="100%" height="500px" style="border: 0px">' + result.ReportContent + '</iframe>');
-                $('#reportResultDiv').html(content);
+                $('#reportResultDiv').html(content).find('a').attr('target', '_blank');
                 var anyText = $('#reportResultDiv > *').filter(function() {
                     return this.tagName !== 'STYLE' && this.tagName !== 'TITLE';
                 }).text();

@@ -283,6 +283,8 @@ namespace Nat.Web.Tools
                     
                     count++;
                     string mail = GetProperty(entry, EMail);
+                    if (!string.IsNullOrEmpty(mail) && mail.Equals("none", StringComparison.OrdinalIgnoreCase))
+                        mail = string.Empty;
 
                     var val = 0;
                     bool isDisabled = false;

@@ -285,7 +285,10 @@ namespace Nat.Web.Controls
         {
             ChangedFieldList.Clear();
         }
-
+        public List<LogChangedFieldEntry> GetChangedFieldList()
+        {
+            return ChangedFieldList;
+        }
         private long? WriteToDataBase(ILogMessageEntry logMessageEntry)
         {
             var openConnection = false;

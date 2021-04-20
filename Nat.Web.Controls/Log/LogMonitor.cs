@@ -261,6 +261,16 @@ namespace Nat.Web.Controls
             Log((long) messageCode, () => log());
         }
 
+        public void FieldChanged(string tableName, string tableNameKz, string rowEntity, string fieldName, string fieldNameKz, bool isDetailsViewVisible, object oldValue, object newValue)
+        {
+            if (oldValue is Binary || newValue is Binary)
+                return;
+
+            var logChangedFieldEntry = new LogChangedFieldEntry(
+                tableName, tableNameKz, rowEntity, fieldName, fieldNameKz, isDetailsViewVisible, oldValue, newValue);
+            ChangedFieldList.Add(logChangedFieldEntry);
+        }
+
         public void FieldChanged(string tableName, string rowEntity, string fieldName, object oldValue, object newValue)
         {
             if (oldValue is Binary || newValue is Binary)

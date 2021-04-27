@@ -1,19 +1,30 @@
 ﻿@using Kendo.Mvc.UI
+@using Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
 @using Nat.Web.ReportManager.Kendo.Properties
 @using Nat.Web.Tools
 @using Newtonsoft.Json
 
 @{
+    var emptyLayout = ViewBag.emptyLayout is bool && (bool) ViewBag.emptyLayout;
+    
+    if (emptyLayout)
+    {
+        Layout = "~/Views/Shared/_DeferredNoLayout.cshtml";
+    }
+
     ViewBag.Title = Resources.SReportViewer;
 }
 
-@section layoutHeader{
-    <h6>
-        <span class="fas fa-file-word"></span>&nbsp;&nbsp;@(ViewData["Title"])
-        <span id="spanReportName" data-bind="text: DisplayName"></span>
-        <a id="kzLang" class="m-headerLinkR k-link" href="javascript: void(0)" onclick="VM.manager.onLangClick(true)"><span class="fas fa-globe"></span>@Resources.SOnKaz</a>
-        <a id="ruLang" class="m-headerLinkR k-link" href="javascript: void(0)" onclick="VM.manager.onLangClick(false)"><span class="fas fa-globe"></span>@Resources.SOnRus</a>
-    </h6>
+@if (!emptyLayout)
+{
+    @section layoutHeader{
+        <h6>
+            <span class="fas fa-file-word"></span>&nbsp;&nbsp;@(ViewData["Title"])
+            <span id="spanReportName" data-bind="text: DisplayName"></span>
+            <a id="kzLang" class="m-headerLinkR k-link" href="javascript: void(0)" onclick="VM.manager.onLangClick(true)"><span class="fas fa-globe"></span>@Resources.SOnKaz</a>
+            <a id="ruLang" class="m-headerLinkR k-link" href="javascript: void(0)" onclick="VM.manager.onLangClick(false)"><span class="fas fa-globe"></span>@Resources.SOnRus</a>
+        </h6>
+    }
 }
 @section css {
     @System.Web.Optimization.Styles.Render("~/content/Reports/bundle")
@@ -21,42 +32,47 @@
 @section scripts{
     @System.Web.Optimization.Scripts.Render("~/bundles/Reports")
     <script>
-        kendo.syncReady(function() {
-            Nat.Reports.InitializeManager(@Html.Raw(ViewBag.Options));
+        $(document).ready(function(){
+            kendo.syncReady(function() {
+                Nat.Reports.InitializeManager(@Html.Raw(ViewBag.Options));
+            });  
         });
     </script>
 }
 
 @(Html.Kendo().Splitter()
-      .Name("managerSplitter")
-      .HtmlAttributes(new { @class = "grid-h-100P" })
-      .Orientation(SplitterOrientation.Horizontal)
-      .Panes(p =>
-      {
-          p.Add()
-              .Size("450px")
-              .Collapsible(true)
-              .Resizable(true)
-              .Content(@<text>
-                           @Html.Action("Plugins")
-                        </text>);
-          p.Add()
-              .HtmlAttributes(new { style = "border-left: 1px solid #c9c9c9;" })
-              .Content(@<text>
-                           @Html.Action("Parameters")
-                        </text>);
-      })
-      .Deferred())
+    .Name("managerSplitter")
+    .HtmlAttributes(new {@class = "grid-h-100P"})
+    .Orientation(SplitterOrientation.Horizontal)
+    .Panes(p =>
+    {
+        p.Add()
+            .Size("450px")
+            .Collapsible(true)
+            .Resizable(true)
+            .Content(@<text>
+                         @Html.Action("Plugins")
+                      </text>);
+        p.Add()
+            .HtmlAttributes(new {style = "border-left: 1px solid #c9c9c9;"})
+            .Content(@<text>
+                         @Html.Action("Parameters", new ParameterViewModel
+                         {
+                             ShowLanguageButtons = emptyLayout
+                         })
+                      </text>);
+    })
+    .Deferred())
 
 @(Html.Kendo().Window()
-      .Name("reportWindow")
-      .Visible(false)
-      .Width(900)
-      .Height(600)
-      .Modal(true)
-      .Draggable()
-      .Resizable()
-      .Iframe(true)
-      .Actions(a => a.Maximize().Close())
-      .Events(e => e.Refresh("function() { if (window.VM && VM.manager && VM.manager.reportWindow) kendo.ui.progress(VM.manager.reportWindow.element, false); }"))
-      .Deferred())
+    .Name("reportWindow")
+    .Visible(false)
+    .Width(900)
+    .Height(600)
+    .Modal(true)
+    .Draggable()
+    .Resizable()
+    .Iframe(true)
+    .Actions(a => a.Maximize().Close())
+    .Events(e => e.Refresh("function() { if (window.VM && VM.manager && VM.manager.reportWindow) kendo.ui.progress(VM.manager.reportWindow.element, false); }"))
+    .Deferred())

@@ -66,7 +66,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         // GET: Reports/Manager/V
         public ActionResult V(string className, string idrec, string expword, long? idSubscription,
             string idStorageValues, string open, string url, string culture, string format, 
-            string setDefaultParams)
+            string setDefaultParams, bool emptyLayout = false)
         {
             if (idSubscription != null)
                 return ChangeSubscription(className, idSubscription.Value, idStorageValues, url);
@@ -80,6 +80,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 return ExportReport(className, idrec, culture, format, setDefaultParams);
             }
 
+            ViewBag.emptyLayout = emptyLayout;
             return OpenReport(className, idrec, culture, setDefaultParams, string.IsNullOrEmpty(open) || "on".Equals(open) || "true".Equals(open));
         }
 
@@ -241,9 +242,9 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             return View();
         }
 
-        public ActionResult Parameters()
+        public ActionResult Parameters(ParameterViewModel vm)
         {
-            return View();
+            return View(vm);
         }
 
         [HttpPost]

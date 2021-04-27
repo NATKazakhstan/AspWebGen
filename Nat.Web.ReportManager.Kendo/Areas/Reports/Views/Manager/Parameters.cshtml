@@ -4,6 +4,8 @@
 @using Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
 @using Nat.Web.ReportManager.Kendo.Properties
 
+@model ParameterViewModel
+
 @{
     Layout = null;
 }
@@ -19,6 +21,14 @@
         <button class="k-button k-button-icontext" data-bind="visible: showSubscription" onclick="VM.manager.onSubscriptionClick()" style="display: none;"><span class="k-icon fas fa-file-export"></span> @Resources.SSubscription</button>
         <button class="k-button k-button-icontext" data-bind="visible: showSaveSubscription" onclick="VM.manager.onSaveSubscriptionClick()" style="display: none;"><span class="k-icon fas fa-save"></span> @Resources.SSaveSubscription</button>
         <button class="k-button k-button-icontext" data-bind="visible: showAddParameters" onclick="VM.manager.onAddParametersClick()" style="display: none;"><span class="k-icon fas fa-plus-square"></span> @Resources.SAddParameters</button>
+        
+        @if (Model.ShowLanguageButtons)
+        {
+            <div class="float-right">
+                <a id="kzLang" class="k-button k-button-icontext" href="javascript: void(0)" onclick="VM.manager.onLangClick(true)"><span class="fas fa-globe"></span>@Resources.SOnKaz</a>
+                <a id="ruLang" class="k-button k-button-icontext" href="javascript: void(0)" onclick="VM.manager.onLangClick(false)"><span class="fas fa-globe"></span>@Resources.SOnRus</a>
+            </div>
+        }
     </div>
 
 <div id="reportParameters" class="k-edit-form-container" style="display: none">
@@ -58,7 +68,7 @@
                    style="width:100%" />
         </div>
         @Html.Partial("_Remove")
-    </div
+    </div>
 </script>
 <script type="text/x-kendo-template" id="parametersInt16Template">
     @Html.Partial("_Label")

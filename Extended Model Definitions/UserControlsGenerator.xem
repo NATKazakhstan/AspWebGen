@@ -72328,7 +72328,7 @@ ValidateGrid%Code%(#{SaveButton})
 .if (%ChildTable.HasHistory%)
    .if( %ChildTable.KeepIDHistory%)
 \.Where(rowED =&gt; rowED.refHistory == rowED.id &amp;&amp; !rowED.isDel)
-   .elsif (%ChildTable.HasCustomHistory% AND %CustomHistory% == &quot;DateStartEndHistory2&quot;)
+   .elsif ((%ChildTable.HasCustomHistory%) and (%ChildTable.CustomHistory% == &quot;DateStartEndHistory2&quot;))
 \.Where(rowED =&gt; rowED.%ChildTable.DateEndColumn% == null)
    .elsif (%ChildTable.HasCustomHistory%)
 \.Where(%ChildTable.FCustomHistoryGetHistoryExpression%())
@@ -72340,8 +72340,8 @@ ValidateGrid%Code%(#{SaveButton})
 \.ToArray()</a:TemplateTargetItem.Value>
 <a:CreationDate>1480989504</a:CreationDate>
 <a:Creator>Sergey.Shpakovskiy</a:Creator>
-<a:ModificationDate>1481075018</a:ModificationDate>
-<a:Modifier>Sergey.Shpakovskiy</a:Modifier>
+<a:ModificationDate>1620838922</a:ModificationDate>
+<a:Modifier>Nuraly.Zhunusbaev</a:Modifier>
 <a:TargetCategory.Type>1</a:TargetCategory.Type>
 </o:TemplateTargetItem>
 <o:TemplateTargetItem Id="o3028">
@@ -72355,7 +72355,7 @@ ValidateGrid%Code%(#{SaveButton})
 .if (%ChildTable.HasHistory%)
    .if( %ChildTable.KeepIDHistory%)
 \.Where(rowED =&gt; rowED.refHistory == rowED.id &amp;&amp; !rowED.isDel)
-   .elsif (%ChildTable.HasCustomHistory% AND %CustomHistory% == &quot;DateStartEndHistory2&quot;)
+   .elsif ((%ChildTable.HasCustomHistory%) and (%ChildTable.CustomHistory% == &quot;DateStartEndHistory2&quot;))
 \.Where(rowED =&gt; rowED.%ChildTable.DateEndColumn% == null)
    .elsif (%ChildTable.HasCustomHistory%)
 \.Where(%ChildTable.FCustomHistoryGetHistoryExpression%())
@@ -72367,8 +72367,8 @@ ValidateGrid%Code%(#{SaveButton})
 \.ToArray()</a:TemplateTargetItem.Value>
 <a:CreationDate>1480989504</a:CreationDate>
 <a:Creator>Sergey.Shpakovskiy</a:Creator>
-<a:ModificationDate>1481075018</a:ModificationDate>
-<a:Modifier>Sergey.Shpakovskiy</a:Modifier>
+<a:ModificationDate>1620838922</a:ModificationDate>
+<a:Modifier>Nuraly.Zhunusbaev</a:Modifier>
 <a:TargetCategory.Type>1</a:TargetCategory.Type>
 </o:TemplateTargetItem>
 <o:TemplateTargetItem Id="o3029">

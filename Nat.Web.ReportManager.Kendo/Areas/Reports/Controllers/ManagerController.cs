@@ -660,6 +660,9 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
 
         private static void RememberReports(string path, IReportPlugin plugin, LogMonitor logMonitor)
         {
+            if(!plugin.Visible)
+                return;
+            
             var typeStr = ReportInitializerSection.GetReportInitializerSection().RememberLastReportType;
             if (string.IsNullOrEmpty(typeStr))
                 return;

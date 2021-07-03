@@ -163,10 +163,19 @@ namespace Nat.Web.Tools.MailMessageContent
 
         public override void Notify()
         {
+            Notify(false, out _, out _, out _);
+        }
+
+        public void Notify(bool addContentAny, out List<string> emailsTo, out string content, out string subject)
+        {
             var mailsDetector = GetSendEmailsDetector();
-            if (!mailsDetector.Detect())
+            var detect = mailsDetector.Detect();
+            if (!detect && !addContentAny)
             {
                 OnDetectToEmailsEmpty();
+                emailsTo = new List<string>(0);
+                subject = null;
+                content = null;
                 return;
             }
 
@@ -175,34 +184,44 @@ namespace Nat.Web.Tools.MailMessageContent
             using (var stringWriter = new StringWriter())
             using (var htmlWriter = new HtmlTextWriter(stringWriter))
             {
-                var subject = GetSubject();
+                subject = GetSubject();
                 var row = GetData();
                 if (EMailAggregator != null)
                 {
                     unsubscribeSeperateString = new StringBuilder();
                     RenderEMail(htmlWriter, subject, row);
-                    EMailAggregator.Add(
-                        this,
-                        GetCurrentUserEMail(),
-                        htmlWriter,
-                        unsubscribeSeperateString.ToString(),
-                        subject,
-                        mailsDetector.EMailsTo,
-                        mailsDetector.EMailsCopy,
-                        Attachments);
-
+                    if (detect)
+                    {
+                        EMailAggregator.Add(
+                            this,
+                            GetCurrentUserEMail(),
+                            htmlWriter,
+                            unsubscribeSeperateString.ToString(),
+                            subject,
+                            mailsDetector.EMailsTo,
+                            mailsDetector.EMailsCopy,
+                            Attachments);
+                    }
                 }
                 else
                 {
                     unsubscribeSeperateString = null;
                     RenderEMail(htmlWriter, subject, row);
-                    SendEMail(
-                        GetCurrentUserEMail(),
-                        htmlWriter,
-                        subject,
-                        mailsDetector.EMailsTo,
-                        mailsDetector.EMailsCopy,
-                        Attachments);}
+                    if (detect)
+                    {
+                        SendEMail(
+                            GetCurrentUserEMail(),
+                            htmlWriter,
+                            subject,
+                            mailsDetector.EMailsTo,
+                            mailsDetector.EMailsCopy,
+                            Attachments);
+                    }
+                }
+
+                htmlWriter.Flush();
+                content = stringWriter.ToString();
+                emailsTo = mailsDetector.EMailsTo;
             }
         }
 

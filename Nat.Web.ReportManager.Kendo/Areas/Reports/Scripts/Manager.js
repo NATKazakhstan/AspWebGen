@@ -376,7 +376,7 @@
         }
     };
 
-    this.onParametersFieldChange = function(e) {
+    this.onParametersFieldChange = function (e) {
         if (e.field === "Value1" && e.items && e.items[0]) {
             if (e.items[0].AutoPostBack) {
                 this.ReloadDataOnChange(e.items[0]);
@@ -445,6 +445,16 @@
             var item = data[i];
             item.ParameterIndex = i;
 
+            item.CascadeFromComponent = "";
+            item.CascadeFromField = "";
+            if (item.CascadeFromCondition) {
+                var cascadeIndex = this.GetParameterIndexByKey(item.CascadeFromCondition);
+                if (cascadeIndex != null) {
+                    item.CascadeFromComponent = "Value1_" + cascadeIndex;
+                    item.CascadeFromField = item.CascadeFromParentField;
+                }
+            }
+
             if (!item.Visible)
                 continue;
 
@@ -490,9 +500,22 @@
         }
     };
 
+    this.GetParameterIndexByKey = function (key) {
+        var result = null;
+        $.each(this.parameters, function (index, parameter) {
+            if (parameter.Key == key) {
+                result = index;
+                return false;
+            }
+        });
+
+        return result;
+    };
+
     this.InitParameterItem = function(paramsDiv, item) {
         var html;
         var func = null;
+
         if (item.TemplateValue1 && item.TemplateValue2) {
             html = $(this.templates.Value2(item));
             html.find('.m-editor-value1').html(kendo.template(item.TemplateValue1)(item));
@@ -700,7 +723,8 @@
                         return {
                             PluginName: VM.manager.options.PluginName,
                             Key: item.Key,
-                            parameters: VM.manager.GetParameters()
+                            parameters: VM.manager.GetParameters(),
+                            cascadeFilterParam: item.CascadeFromCondition
                         };
                     }
                 }

@@ -46,9 +46,11 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
                 VisibleValue1 = storage.FilterType.HasArgs(),
                 VisibleValue2 = storage.FilterType.IsBinaryFilter(),
                 AutoPostBack = (columnFilter as ColumnFilter)?.PostBack ?? false,
-                RequireReload = storage.CustomConditions.Count > 0,
+                RequireReload = storage.CustomConditions.Count > 0 || !string.IsNullOrEmpty((columnFilter as ColumnFilter)?.CascadeFromCondition),
                 CheckedFilterCondition = (columnFilter as ICheckedFilterCondition)?.CheckedFilterCondition,
                 CheckedFilterConditionTooltip = (columnFilter as ICheckedFilterCondition)?.CheckedFilterConditionTooltip,
+                CascadeFromCondition = (columnFilter as ColumnFilter)?.CascadeFromCondition,
+                CascadeFromParentField = storage.ParentColumn,
             };
             
             model.InitDataSource(storage);
@@ -214,6 +216,8 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
         public string CheckedFilterCondition { get; set; }
         public bool CheckedFilterConditionValue { get; set; }
         public string CheckedFilterConditionTooltip { get; set; }
+        public string CascadeFromCondition { get; set; }
+        public string CascadeFromParentField { get; set; }
 
         public void InitStorage(ColumnFilterStorage storage)
         {

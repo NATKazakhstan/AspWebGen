@@ -78,6 +78,11 @@ namespace Nat.Web.Controls
         /// </summary>
         public string CheckedFilterConditionTooltip { get; set; }
 
+        /// <summary>
+        /// Наименование критерия, от которого каскадно зависит текущий критерий
+        /// </summary>
+        public string CascadeFromCondition { get; set; }
+
         public Unit? TextBoxHeight { get; set; }
 
         #region Methods

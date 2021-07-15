@@ -316,32 +316,35 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetConditionData(string pluginName, string key, string text, List<ConditionViewModel> parameters, [DataSourceRequest]DataSourceRequest request)
+        public ActionResult GetConditionData(string pluginName, string key, string text, List<ConditionViewModel> parameters, string cascadeFilterParam, [DataSourceRequest]DataSourceRequest request)
         {
             var plugin = WebReportManager.GetPlugin(pluginName);
             if (plugin == null || string.IsNullOrEmpty(key))
                 return Json(new { error = Resources.SPluginNotFound });
 
             GetStorageValues(parameters, plugin);
+            object cascadeFilterValue = null;
+            if (!string.IsNullOrEmpty(cascadeFilterParam))
+                cascadeFilterValue = parameters.Where(p => p.Key == cascadeFilterParam).Select(p => p.Value1).FirstOrDefault();
 
             foreach (var condition in plugin.Conditions)
             {
                 var storage = condition.ColumnFilter.GetStorage();
                 if (key.Equals(storage.Name, StringComparison.OrdinalIgnoreCase))
-                    return GetConditionData(request, storage);
+                    return GetConditionData(request, storage, cascadeFilterValue);
             }
 
             foreach (var condition in plugin.CreateModelFillConditions())
             {
                 var storage = condition.ColumnFilter.GetStorage();
                 if (key.Equals(storage.Name, StringComparison.OrdinalIgnoreCase))
-                    return GetConditionData(request, storage);
+                    return GetConditionData(request, storage, cascadeFilterValue);
             }
 
             return Json(new { error = Resources.SPluginNotFound });
         }
 
-        private ActionResult GetConditionData(DataSourceRequest request, ColumnFilterStorage storage)
+        private ActionResult GetConditionData(DataSourceRequest request, ColumnFilterStorage storage, object cascadeFilterValue)
         {
             var tableDataSource = ConditionViewModel.GetTableDataSource(storage);
             if (tableDataSource == null)
@@ -368,8 +371,18 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 tableDataSource.View.CustomConditions.Add(new QueryCondition(storage.ValueColumn, ColumnFilterType.Equal,
                     Convert.ChangeType(filter, storage.DataType), null));
             }
+            else if (!string.IsNullOrEmpty(filter) && filterDescriptor != null && !string.IsNullOrEmpty(storage.ParentColumn) &&
+                filterDescriptor.Member == storage.ParentColumn)
+            {
+                // фильтр для каскадных компонентов при изменении значения родительского элемента
+                tableDataSource.View.CustomConditions.Add(GetParentFilterCondition(storage, filter));
+            }
             else if (!string.IsNullOrEmpty(filter))
             {
+                // учет фильтра для каскадных компонентов при фильтре Contains
+                if (!string.IsNullOrEmpty(storage.ParentColumn) && cascadeFilterValue != null)
+                    tableDataSource.View.CustomConditions.Add(GetParentFilterCondition(storage, Convert.ToString(cascadeFilterValue)));
+
                 var filterSplit = filter.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
                 var list = new QueryCondition
                 {
@@ -411,6 +424,17 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             tableDataSource.EnablePaging = paging;
             var data = tableDataSource.View.Select(true, arguments);
             return Json(ConditionViewModel.ParseDataView(data));
+        }
+
+        private QueryCondition GetParentFilterCondition(ColumnFilterStorage storage, string filter)
+        {
+            var condition = storage.CustomConditions.FirstOrDefault(c => c.AttachedColumn == storage.ParentColumn);
+            if (condition != null)
+                condition.Param1.Value = Convert.ChangeType(filter, storage.DataType);
+            else
+                condition = new QueryCondition(storage.ParentColumn, ColumnFilterType.Equal,
+                    Convert.ChangeType(filter, storage.DataType), null);
+            return condition;
         }
 
         private static FilterDescriptor GetFilterDescriptor(IList<IFilterDescriptor> filters)
@@ -752,6 +776,19 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 {
                     parameter = paramsDic[storage.Name];
                     parameter.InitStorage(storage);
+
+                    if (condition.ColumnFilter is ColumnFilter colFilter 
+                        && !string.IsNullOrEmpty(colFilter.CascadeFromCondition)
+                        && parameters.Any(p => p.Key == colFilter.CascadeFromCondition)
+                        && !string.IsNullOrEmpty(storage.ParentColumn)
+                        && storage.CustomConditions.Any(c => c.AttachedColumn == storage.ParentColumn))
+                    {
+                        // установка значения параметру для фильтрации набора данных критерия
+                        var customCondition = storage.CustomConditions.FirstOrDefault(c => c.AttachedColumn == storage.ParentColumn);
+                        customCondition.Param1.Value = parameters.First(p => p.Key == colFilter.CascadeFromCondition).Value1;
+                        //customCondition.Parameters.First(p => p.Name == storage.ParentColumn).Value = parameters.First(p => p.Key == colFilter.CascadeFromCondition).Value1;
+                    }
+
                     condition.ColumnFilter.SetStorage(storage);
                 }
                 else

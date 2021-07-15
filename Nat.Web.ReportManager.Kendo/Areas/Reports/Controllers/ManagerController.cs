@@ -786,7 +786,6 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                         // установка значения параметру для фильтрации набора данных критерия
                         var customCondition = storage.CustomConditions.FirstOrDefault(c => c.AttachedColumn == storage.ParentColumn);
                         customCondition.Param1.Value = parameters.First(p => p.Key == colFilter.CascadeFromCondition).Value1;
-                        //customCondition.Parameters.First(p => p.Name == storage.ParentColumn).Value = parameters.First(p => p.Key == colFilter.CascadeFromCondition).Value1;
                     }
 
                     condition.ColumnFilter.SetStorage(storage);

@@ -435,7 +435,7 @@ namespace Nat.Web.ReportManager
             pluginType = HttpUtility.UrlEncode(pluginType);
             if (export)
                 return $@"{reportUrl}?expword=1&idrec={idrec}&ClassName={pluginType}";
-            return $@"{reportUrl}?idrec={idrec}&ClassName={pluginType}&text={HttpUtility.UrlEncode(backText)}&backPath={HttpUtility.UrlEncode(backUrl)}";
+            return $@"{reportUrl}?idrec={idrec}&ClassName={pluginType}&text={HttpUtility.UrlEncode(backText)}&backPath={HttpUtility.UrlEncode(backUrl)}&open=true";
         }
 
         /// <summary>
@@ -455,7 +455,7 @@ namespace Nat.Web.ReportManager
             if (export)
                 return $@"{reportPageViewer}?expword=1&idrec={idrec}&ClassName={pluginType}&culture={culture}";
             return string.Format(
-                @"{0}?idrec={1}&ClassName={2}&text={3}&culture={5}&backPath={4}",
+                @"{0}?idrec={1}&ClassName={2}&text={3}&culture={5}&backPath={4}&open=true",
                 reportPageViewer,
                 idrec,
                 pluginType,

@@ -134,6 +134,11 @@ namespace Nat.Web.ReportManager.ReportGeneration
         public abstract string[] Roles();
 
         /// <summary>
+        /// Роли доступа экспорта
+        /// </summary>
+        public virtual string[] ExportRoles => new string[0];
+
+        /// <summary>
         /// Выбранное значение по умолчанию. 
         /// К примеру, отчет для персоны и переход на отчеты из персон, 
         /// то поумолчанию считается id персоны

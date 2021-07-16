@@ -406,6 +406,7 @@
         this.options.set('showButtonsExcel', false);
         this.options.set('showButtonsWord', false);
         this.options.set('showCRButtons', false);
+        this.options.set('showCRButtonsExcel', false);
         $('#reportParameters').hide();
     };
 
@@ -477,8 +478,10 @@
         }
 
         this.options.set('oneParameter', countParameters === 1);
-        if (this.options.PluginType === 'CrossReport')
+        if (this.options.PluginType === 'CrossReport') {
             this.options.set('showCRButtons', true);
+            this.options.set('showCRButtonsExcel', this.options.AllowExcelExport);
+        }
         else {
             this.options.set('showButtons', true);
             this.options.set('showButtonsPdf', this.options.AllowPdfExport);

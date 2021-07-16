@@ -109,12 +109,15 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                                            || Convert.ToBoolean(setDefaultParams));
             var plugin = WebReportManager.GetPlugin(className);
             var availableFormats = WebReportManager.GetAvailableFormat(plugin).ToList();
+            var isCrossReport = plugin is CrossJournalReportPlugin;
             var options = new
             {
                 PluginName = plugin?.GetType().FullName,
-                PluginType = plugin is CrossJournalReportPlugin ? "CrossReport" : "Simple",
+                PluginType = isCrossReport ? "CrossReport" : "Simple",
                 AllowWordExport = availableFormats.Contains(ExportFormat.Word),
-                AllowExcelExport = availableFormats.Contains(ExportFormat.Excel),
+                AllowExcelExport = isCrossReport 
+                    ? !(plugin as CrossJournalReportPlugin).ExportRoles.Any() || Tools.Security.UserRoles.IsInAnyRoles((plugin as CrossJournalReportPlugin).ExportRoles) 
+                    : availableFormats.Contains(ExportFormat.Excel),
                 AllowPdfExport = availableFormats.Contains(ExportFormat.Pdf),
                 Name = plugin?.Description ?? Resources.SPluginNotFound,
                 viewOne = true,
@@ -228,7 +231,9 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                         PluginName = r.Key,
                         PluginType = r.Value is CrossJournalReportPlugin ? "CrossReport" : "Simple",
                         AllowWordExport = availableFormats.Contains(ExportFormat.Word),
-                        AllowExcelExport = availableFormats.Contains(ExportFormat.Excel),
+                        AllowExcelExport = r.Value is CrossJournalReportPlugin 
+                            ? !(r.Value as CrossJournalReportPlugin).ExportRoles.Any() || Tools.Security.UserRoles.IsInAnyRoles((r.Value as CrossJournalReportPlugin).ExportRoles)
+                            : availableFormats.Contains(ExportFormat.Excel),
                         AllowPdfExport = availableFormats.Contains(ExportFormat.Pdf),
                     };
                 })

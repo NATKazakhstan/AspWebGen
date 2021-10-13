@@ -210,7 +210,7 @@ namespace Nat.Web.Tools
 
             cUpdate.CommandType = CommandType.Text;
             cUpdate.CommandText = @"update LOG_SidIdentification 
-                                    set name = @name, email = @email, isDisabled = @isDisabled, loginName = @loginName, SidInBase64 = @SidInBase64
+                                    set name = @name, email = @email, isDisabled = @isDisabled, loginName = @loginName, SidInBase64 = @SidInBase64, isDeleted = 0
                                     where id = @id";
             cUpdate.Connection = connectionUpdate;
 
@@ -379,6 +379,7 @@ namespace Nat.Web.Tools
             }
         }
 
+        //TODO Возможно лучше переименовать функцию в DeleteIdentification
         private static void DisableIdentification(DbConnection conn, Identification sid)
         {
             using (var command = conn.CreateCommand())
@@ -390,7 +391,7 @@ namespace Nat.Web.Tools
                 parameter.Value = sid.Sid;
              
                 command.CommandType = CommandType.Text;
-                command.CommandText = "update LOG_SidIdentification set isDisabled = 1 where Sid = @sid";
+                command.CommandText = "update LOG_SidIdentification set isDisabled = 1, isDeleted = 1 where Sid = @sid";
                 command.Parameters.Add(parameter);
                 command.ExecuteNonQuery();
             }

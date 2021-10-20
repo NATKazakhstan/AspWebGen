@@ -3,7 +3,7 @@
     Nat.Classes.SimpleGridController.call(this, 'Reports/Manager');
 
     this.options = kendo.observable(options);
-    this.options.showSubscription = true;
+    this.options.showSubscription = !this.options.onlyView;
     if (this.options.Name)
         this.options.DisplayName = ' / ' + this.options.Name;
 
@@ -469,7 +469,10 @@
             }
         }
 
-        if (countParameters === 0) {
+        if (this.options.onlyView) {
+            params.hide();
+        }
+        else if (countParameters === 0) {
             this.onCreateClick();
             params.hide();
         } else {
@@ -487,7 +490,7 @@
             this.options.set('showButtonsPdf', this.options.AllowPdfExport);
             this.options.set('showButtonsExcel', this.options.AllowExcelExport);
             this.options.set('showButtonsWord', this.options.AllowWordExport);
-            this.options.set('showSubscription', true);
+            this.options.set('showSubscription', !this.options.onlyView);
         }
 
         if (this.options.idSubscription) {
@@ -498,7 +501,7 @@
         this.options.set('openReportInWindow', countParameters >= 4);
         this.options.set('showAddParameters', showAddParameters);
 
-        if (this.options.viewOneOpen) {
+        if (this.options.viewOneOpen || this.options.onlyView) {
             this.onCreateClick();
         }
     };

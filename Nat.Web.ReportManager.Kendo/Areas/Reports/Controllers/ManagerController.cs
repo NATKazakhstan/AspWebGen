@@ -66,7 +66,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         // GET: Reports/Manager/V
         public ActionResult V(string className, string idrec, string expword, long? idSubscription,
             string idStorageValues, string open, string url, string culture, string format, 
-            string setDefaultParams, bool emptyLayout = false)
+            string setDefaultParams, bool emptyLayout = false, bool onlyView = false)
         {
             if (idSubscription != null)
                 return ChangeSubscription(className, idSubscription.Value, idStorageValues, url);
@@ -81,10 +81,11 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             }
 
             ViewBag.emptyLayout = emptyLayout;
-            return OpenReport(className, idrec, culture, setDefaultParams, string.IsNullOrEmpty(open) || "on".Equals(open) || "true".Equals(open));
+            ViewBag.onlyView = onlyView;
+            return OpenReport(className, idrec, culture, setDefaultParams, string.IsNullOrEmpty(open) || "on".Equals(open) || "true".Equals(open), onlyView);
         }
 
-        private ActionResult OpenReport(string className, string idrec, string culture, string setDefaultParams, bool allowOpen)
+        private ActionResult OpenReport(string className, string idrec, string culture, string setDefaultParams, bool allowOpen, bool onlyView)
         {
             ViewData["refChildMenu"] = 105;
             var isKz = LocalizationHelper.IsCultureKZ;
@@ -125,7 +126,8 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                              || setDefaultParameters,
                 idrec,
                 isKz,
-                setDefaultParams = setDefaultParameters
+                setDefaultParams = setDefaultParameters,
+                onlyView
             };
             ViewBag.Options = JsonConvert.SerializeObject(options);
             return View("Index");
@@ -156,7 +158,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         private ActionResult ExportReport(string className, string idrec, string culture, string format, string setDefaultParams)
         {
             var value = CreateReport(className, idrec, culture, null, null, format ?? "Auto", false);
-            return value is JsonResult ? OpenReport(className, idrec, culture, setDefaultParams, false) : value;
+            return value is JsonResult ? OpenReport(className, idrec, culture, setDefaultParams, false, false) : value;
         }
 
         [HttpPost]

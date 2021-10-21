@@ -54,6 +54,7 @@
 
         this.options.set('PluginName', !dataItem || !dataItem.PluginName ? null : dataItem.PluginName);
         this.options.set('PluginType', !dataItem || !dataItem.PluginType ? null : dataItem.PluginType);
+        this.options.set('AllowRtfCustomExport', !dataItem ? null : dataItem.AllowRtfCustomExport);
         this.options.set('AllowWordExport', !dataItem ? null : dataItem.AllowWordExport);
         this.options.set('AllowExcelExport', !dataItem ? null : dataItem.AllowExcelExport);
         this.options.set('AllowPdfExport', !dataItem ? null : dataItem.AllowPdfExport);
@@ -140,6 +141,10 @@
             false);
     };
 
+    this.onRtfCustomExportClick = function() {
+        this.ExportDocument('RtfNonTable', ".rtf");
+    };
+    
     this.onWordExportClick = function() {
         this.ExportDocument('Word', ".doc");
     };
@@ -291,6 +296,7 @@
     this.setOptions = function(options) {
         this.options.set('PluginName', options.PluginName);
         this.options.set('PluginType', options.PluginType);
+        this.options.set('AllowRtfCustomExport', options.AllowRtfCustomExport);
         this.options.set('AllowWordExport', options.AllowWordExport);
         this.options.set('AllowExcelExport', options.AllowExcelExport);
         this.options.set('AllowPdfExport', options.AllowPdfExport);
@@ -489,6 +495,7 @@
             this.options.set('showButtons', true);
             this.options.set('showButtonsPdf', this.options.AllowPdfExport);
             this.options.set('showButtonsExcel', this.options.AllowExcelExport);
+            this.options.set('showButtonsRtfCustom', this.options.AllowRtfCustomExport);
             this.options.set('showButtonsWord', this.options.AllowWordExport);
             this.options.set('showSubscription', !this.options.onlyView);
         }

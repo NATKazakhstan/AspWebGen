@@ -29,6 +29,7 @@ using Nat.Web.Controls;
 using Nat.Web.Controls.Filters;
 using Nat.Web.Controls.GenerationClasses;
 using Nat.Web.Core.System.EventLog;
+using Nat.Web.ReportManager.CustomExport;
 using Nat.Web.ReportManager.Data;
 using Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels;
 using Nat.Web.ReportManager.Kendo.Properties;
@@ -66,7 +67,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         // GET: Reports/Manager/V
         public ActionResult V(string className, string idrec, string expword, long? idSubscription,
             string idStorageValues, string open, string url, string culture, string format, 
-            string setDefaultParams, bool emptyLayout = false, bool onlyView = false)
+            string setDefaultParams, bool emptyLayout = false, bool onlyView = false, bool inFrame = false)
         {
             if (idSubscription != null)
                 return ChangeSubscription(className, idSubscription.Value, idStorageValues, url);
@@ -82,10 +83,10 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
 
             ViewBag.emptyLayout = emptyLayout;
             ViewBag.onlyView = onlyView;
-            return OpenReport(className, idrec, culture, setDefaultParams, string.IsNullOrEmpty(open) || "on".Equals(open) || "true".Equals(open), onlyView);
+            return OpenReport(className, idrec, culture, setDefaultParams, string.IsNullOrEmpty(open) || "on".Equals(open) || "true".Equals(open), onlyView, inFrame);
         }
 
-        private ActionResult OpenReport(string className, string idrec, string culture, string setDefaultParams, bool allowOpen, bool onlyView)
+        private ActionResult OpenReport(string className, string idrec, string culture, string setDefaultParams, bool allowOpen, bool onlyView, bool inFrame)
         {
             ViewData["refChildMenu"] = 105;
             var isKz = LocalizationHelper.IsCultureKZ;
@@ -115,6 +116,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             {
                 PluginName = plugin?.GetType().FullName,
                 PluginType = isCrossReport ? "CrossReport" : "Simple",
+                AllowRtfCustomExport = (plugin as IWebReportPlugin)?.CustomExportType == CustomExportType.RtfNonTable,
                 AllowWordExport = availableFormats.Contains(ExportFormat.Word),
                 AllowExcelExport = isCrossReport 
                     ? !(plugin as CrossJournalReportPlugin).ExportRoles.Any() || Tools.Security.UserRoles.IsInAnyRoles((plugin as CrossJournalReportPlugin).ExportRoles) 
@@ -130,6 +132,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 onlyView
             };
             ViewBag.Options = JsonConvert.SerializeObject(options);
+            ViewBag.inFrame = inFrame;
             return View("Index");
         }
 
@@ -158,7 +161,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         private ActionResult ExportReport(string className, string idrec, string culture, string format, string setDefaultParams)
         {
             var value = CreateReport(className, idrec, culture, null, null, format ?? "Auto", false);
-            return value is JsonResult ? OpenReport(className, idrec, culture, setDefaultParams, false, false) : value;
+            return value is JsonResult ? OpenReport(className, idrec, culture, setDefaultParams, false, false, false) : value;
         }
 
         [HttpPost]
@@ -232,6 +235,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                         Visible = r.Value.Visible,
                         PluginName = r.Key,
                         PluginType = r.Value is CrossJournalReportPlugin ? "CrossReport" : "Simple",
+                        AllowRtfCustomExport = (r.Value as IWebReportPlugin)?.CustomExportType == CustomExportType.RtfNonTable,
                         AllowWordExport = availableFormats.Contains(ExportFormat.Word),
                         AllowExcelExport = r.Value is CrossJournalReportPlugin 
                             ? !(r.Value as CrossJournalReportPlugin).ExportRoles.Any() || Tools.Security.UserRoles.IsInAnyRoles((r.Value as CrossJournalReportPlugin).ExportRoles)

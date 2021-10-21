@@ -12,6 +12,7 @@
 
     <div class="k-header k-grid-toolbar reportToolbar">
         <button class="k-button k-button-icontext" data-bind="visible: showButtons" onclick="VM.manager.onCreateClick()" style="display: none;"><span class="k-icon fas fa-file"></span> @Resources.SCreateReport</button>
+        <button class="k-button k-button-icontext" data-bind="visible: showButtonsRtfCustom" onclick="VM.manager.onRtfCustomExportClick()" style="display: none;"><span class="k-icon fas fa-file-word"></span> @Resources.SWordExport</button>
         <button class="k-button k-button-icontext" data-bind="visible: showButtonsWord" onclick="VM.manager.onWordExportClick()" style="display: none;"><span class="k-icon fas fa-file-word"></span> @Resources.SWordExport</button>
         <button class="k-button k-button-icontext" data-bind="visible: showButtonsExcel" onclick="VM.manager.onExcelExportClick()" style="display: none;"><span class="k-icon fas fa-file-excel"></span> @Resources.SExcelExport</button>
         <button class="k-button k-button-icontext" data-bind="visible: showButtonsPdf" onclick="VM.manager.onPDFExportClick()" style="display: none;"><span class="k-icon fas fa-file-pdf"></span> @Resources.SPDFExport</button>

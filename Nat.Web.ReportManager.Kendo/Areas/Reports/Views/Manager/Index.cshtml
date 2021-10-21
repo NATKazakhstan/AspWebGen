@@ -6,8 +6,12 @@
 
 @{
     var emptyLayout = ViewBag.emptyLayout is bool && (bool) ViewBag.emptyLayout;
-    
-    if (emptyLayout)
+    var inFrame = ViewBag.inFrame is bool && (bool) ViewBag.inFrame;
+    if (inFrame)
+    {
+        Layout = "~/Views/Shared/_SelectionLayout.cshtml";
+    }
+    else if (emptyLayout)
     {
         Layout = "~/Views/Shared/_DeferredNoLayout.cshtml";
     }

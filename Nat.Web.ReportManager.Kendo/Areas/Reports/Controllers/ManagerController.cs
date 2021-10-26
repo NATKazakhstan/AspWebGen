@@ -112,16 +112,17 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             var plugin = WebReportManager.GetPlugin(className);
             var availableFormats = WebReportManager.GetAvailableFormat(plugin).ToList();
             var isCrossReport = plugin is CrossJournalReportPlugin;
+            var allowRtfCustomExport = (plugin as IWebReportPlugin)?.CustomExportType == CustomExportType.RtfNonTable;
             var options = new
             {
                 PluginName = plugin?.GetType().FullName,
                 PluginType = isCrossReport ? "CrossReport" : "Simple",
-                AllowRtfCustomExport = (plugin as IWebReportPlugin)?.CustomExportType == CustomExportType.RtfNonTable,
-                AllowWordExport = availableFormats.Contains(ExportFormat.Word),
+                AllowRtfCustomExport = allowRtfCustomExport,
+                AllowWordExport = !allowRtfCustomExport && availableFormats.Contains(ExportFormat.Word),
                 AllowExcelExport = isCrossReport 
                     ? !(plugin as CrossJournalReportPlugin).ExportRoles.Any() || Tools.Security.UserRoles.IsInAnyRoles((plugin as CrossJournalReportPlugin).ExportRoles) 
-                    : availableFormats.Contains(ExportFormat.Excel),
-                AllowPdfExport = availableFormats.Contains(ExportFormat.Pdf),
+                    : !allowRtfCustomExport && availableFormats.Contains(ExportFormat.Excel),
+                AllowPdfExport = !allowRtfCustomExport && availableFormats.Contains(ExportFormat.Pdf),
                 Name = plugin?.Description ?? Resources.SPluginNotFound,
                 viewOne = true,
                 viewOneOpen = allowOpen && (!string.IsNullOrEmpty(idrec) || (plugin?.Conditions.Count == 0 && plugin.CreateModelFillConditions().Count == 0))

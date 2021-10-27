@@ -117,9 +117,9 @@
         @Html.Partial("_Remove")
         <div class="editor-field m-editor-value" style="margin-top: 4px;">
             <input type="radio" id="ValueTrue_#= ParameterIndex#" name="Value1_#= ParameterIndex#" class="k-radio" data-type="boolean" data-bind="checked: Value1, visible: VisibleValue1" value="true" />
-            <label class="k-radio-label" for="ValueTrue_#= ParameterIndex#">@SharedResources.SYes</label>
+            <label class="k-radio-label" for="ValueTrue_#= ParameterIndex#" data-bind="visible: VisibleValue1">@SharedResources.SYes</label>
             <input type="radio" id="ValueFalse_#= ParameterIndex#" name="Value1_#= ParameterIndex#" class="k-radio" data-type="boolean" data-bind="checked: Value1, visible: VisibleValue1" value="false" />
-            <label class="k-radio-label" for="ValueFalse_#= ParameterIndex#">@SharedResources.SNo</label>
+            <label class="k-radio-label" for="ValueFalse_#= ParameterIndex#" data-bind="visible: VisibleValue1">@SharedResources.SNo</label>
         </div>
     </div>
 </script>

@@ -140,11 +140,19 @@ namespace Nat.Web.ReportManager
                     this.Trace.WarnExt("ReportRendering", renderingMessage);
             }
         }
-        
+
         public static Stream GetReport(bool useReturnStream, string pluginName, string guid,
             StorageValues storageValues, string culture, Page page, string format, string command,
-            LogMonitor logMonitor, bool expToWord, Dictionary<string, object> constants, StiWebViewer report, out string fileNameExtention, bool RoleCheck, 
+            LogMonitor logMonitor, bool expToWord, Dictionary<string, object> constants, StiWebViewer report, out string fileNameExtention, bool RoleCheck,
             bool isPreview = false)
+        {
+            return GetReport(useReturnStream, pluginName, guid, storageValues, culture, page, format, command, logMonitor, expToWord, constants, report,
+                out _, out fileNameExtention, RoleCheck, isPreview);
+        }
+
+        public static Stream GetReport(bool useReturnStream, string pluginName, string guid,
+            StorageValues storageValues, string culture, Page page, string format, string command,
+            LogMonitor logMonitor, bool expToWord, Dictionary<string, object> constants, StiWebViewer report, out string fileName, out string fileNameExtension, bool RoleCheck, bool isPreview)
         {
             var originalUICulture = Thread.CurrentThread.CurrentUICulture;
             var originalCulture = Thread.CurrentThread.CurrentCulture;
@@ -155,7 +163,8 @@ namespace Nat.Web.ReportManager
                     Thread.CurrentThread.CurrentCulture =
                     new CultureInfo(culture == "ru" ? "ru-ru" : (culture == "kz" ? "kk-kz" : culture));
 
-                fileNameExtention = "";
+                fileNameExtension = "";
+                fileName = "";
                 WebInitializer.Initialize();
                 var webReportManager = new WebReportManager(new TreeView());
                 if (string.IsNullOrEmpty(pluginName))
@@ -293,11 +302,12 @@ namespace Nat.Web.ReportManager
                                 webReportManager.Report,
                                 stiCustomExportType.Value,
                                 true,
-                                out fileNameExtention);
+                                out fileNameExtension, 
+                                out fileName);
                         }
 
-                        fileNameExtention = WebReportManager.GetFileExtension(stiExportFormat.Value);
-                        return ExportWithoutShow(webReportManager.Report, stiExportFormat.Value, true);
+                        fileNameExtension = WebReportManager.GetFileExtension(stiExportFormat.Value);
+                        return ExportWithoutShow(webReportManager.Report, stiExportFormat.Value, true, out fileName);
                     }
 
                     //webReportManager.Report.EndRender += (sender, args) => LogMessages(webReportManager.Report, logMonitor);
@@ -322,15 +332,16 @@ namespace Nat.Web.ReportManager
                             webReportManager.Report,
                             webReportPlugin.CustomExportType,
                             false,
-                            out fileNameExtention);
+                            out fileNameExtension, 
+                            out fileName);
                     }
                     else if (stiPlugin.AutoExportTo != null)
                     {
-                        return ExportWithoutShow(webReportManager.Report, stiPlugin.AutoExportTo.Value, false);
+                        return ExportWithoutShow(webReportManager.Report, stiPlugin.AutoExportTo.Value, false, out fileName);
                     }
                     else
                     {
-                        return ExportWithoutShow(webReportManager.Report, availableFormat.First(), false);
+                        return ExportWithoutShow(webReportManager.Report, availableFormat.First(), false, out fileName);
                     }
                 }
             }
@@ -461,7 +472,7 @@ namespace Nat.Web.ReportManager
             Response.Redirect(Request.QueryString["backPath"]);
         }
 
-        private static Stream ExportWithoutShow(StiReport stiReport, StiExportFormat exportFormat, bool useReturnStream)
+        private static Stream ExportWithoutShow(StiReport stiReport, StiExportFormat exportFormat, bool useReturnStream, out string fileName)
         {
             stiReport.Render(false);
             if (exportFormat == StiExportFormat.Html)
@@ -471,13 +482,16 @@ namespace Nat.Web.ReportManager
                 LocalizeReport(stiReport, Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName);
 
             // ReSharper disable AccessToStaticMemberViaDerivedType
-            var exportingFileName = Path.ChangeExtension(GetReportFileName(stiReport), WebReportManager.GetFileExtension(exportFormat));
             // ReSharper restore AccessToStaticMemberViaDerivedType
             var stream = new MemoryStream();
             stiReport.ExportDocument(exportFormat, stream);
             stream.Position = 0;
+            fileName = GetReportFileName(stiReport);
             if (!useReturnStream)
+            {
+                var exportingFileName = Path.ChangeExtension(fileName, WebReportManager.GetFileExtension(exportFormat));
                 PageHelper.DownloadFile(stream, exportingFileName, HttpContext.Current.Response);
+            }
             else 
                 return stream;
             return null;
@@ -485,12 +499,14 @@ namespace Nat.Web.ReportManager
 
         private static string GetReportFileName(StiReport stiReport)
         {
+            if (!string.IsNullOrEmpty(stiReport.ReportDescription))
+                return stiReport.ReportDescription;
             if (stiReport.GetType().Name == stiReport.ReportName)
                 return stiReport.ReportName != stiReport.ReportAlias ? stiReport.ReportAlias : (stiReport.ReportDescription ?? stiReport.ReportName);
             return stiReport.ReportName;
         }
 
-        private static Stream ExportWithoutShow(StiReport stiReport, CustomExportType exportFormat, bool useReturnStream, out string fileNameExtention)
+        private static Stream ExportWithoutShow(StiReport stiReport, CustomExportType exportFormat, bool useReturnStream, out string fileNameExtension, out string fileName)
         {
             stiReport.Render(false);
 
@@ -501,7 +517,7 @@ namespace Nat.Web.ReportManager
             switch (exportFormat)
             {
                 case CustomExportType.RtfNonTable:
-                    fileNameExtention = "Rtf";
+                    fileNameExtension = "Rtf";
                     var rtfExporter = new StiRtfExportService();
                     rtfExporter.ExportRtf(stiReport, stream);
                     break;
@@ -509,12 +525,13 @@ namespace Nat.Web.ReportManager
                     throw new ArgumentOutOfRangeException("exportFormat");
             }
             stream.Position = 0;
+            fileName = GetReportFileName(stiReport);
             if (!useReturnStream)
             {
-                var exportingFileName = Path.ChangeExtension(GetReportFileName(stiReport), fileNameExtention);
-                PageHelper.DownloadFile(stream, exportingFileName, HttpContext.Current.Response);
+                var exportFileName = Path.ChangeExtension(fileName, fileNameExtension);
+                PageHelper.DownloadFile(stream, exportFileName, HttpContext.Current.Response);
             }
-            else 
+            else
                 return stream;
             return null;
         }

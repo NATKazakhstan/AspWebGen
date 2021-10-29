@@ -568,10 +568,11 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
 
             Stream stream;
             string fileNameExt;
+            string fileName = null;
             if (plugin is IStimulsoftReportPlugin)
                 stream = ReportResultPage.GetReport(true, pluginName, guid, storageValues, culture,
                     null, export ?? "Html",
-                    "export", logMonitor, false, null, null, out fileNameExt, true,
+                    "export", logMonitor, false, null, null, out fileName, out fileNameExt, true,
                     string.IsNullOrEmpty(export));
             else if (plugin is ISqlReportingServicesPlugin)
             {
@@ -651,7 +652,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 }
             }
 
-            return File(stream, "application/octet-stream", plugin.Description + "." + fileNameExt);
+            return File(stream, "application/octet-stream", (string.IsNullOrEmpty(fileName) ? plugin.Description : fileName) + "." + fileNameExt);
         }
 
         private string GetLogInformation(List<ConditionViewModel> parameters, IReportPlugin plugin, StorageValues storageValues)

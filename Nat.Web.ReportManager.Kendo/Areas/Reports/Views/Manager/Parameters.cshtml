@@ -235,6 +235,14 @@
              style="width:100%; height: 400px" />
     </div>
 </script>
+<script type="text/x-kendo-template" id="parametersGridToolbarTemplate">
+    <ul data-role="buttongroup"
+        data-index="1"
+        data-bind="events: { select: onSelectGridMode }">
+        <li data-icon="check-outline" value="0">@Resources.SSelectedInGrid &nbsp;<span data-role="badge" data-theme-color="info" data-shape="rounded">0</span></li>
+        <li data-icon="plus-outline" value="1">@Resources.SSearchToSelect</li>
+    </ul>
+</script>
 <script type="text/x-kendo-template" id="parametersTreeTemplate">
     @Html.Partial("_Label")
     <div class="editor-field m-editor-parameter" id="ParameterID_#= ParameterIndex #">

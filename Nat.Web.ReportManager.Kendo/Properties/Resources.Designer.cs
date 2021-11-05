@@ -19,7 +19,7 @@ namespace Nat.Web.ReportManager.Kendo.Properties {
     // с помощью такого средства, как ResGen или Visual Studio.
     // Чтобы добавить или удалить член, измените файл .ResX и снова запустите ResGen
     // с параметром /str или перестройте свой проект VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -174,6 +174,24 @@ namespace Nat.Web.ReportManager.Kendo.Properties {
         public static string SSaveSubscription {
             get {
                 return ResourceManager.GetString("SSaveSubscription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Найти и добавить.
+        /// </summary>
+        public static string SSearchToSelect {
+            get {
+                return ResourceManager.GetString("SSearchToSelect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Выбранные записи.
+        /// </summary>
+        public static string SSelectedInGrid {
+            get {
+                return ResourceManager.GetString("SSelectedInGrid", resourceCulture);
             }
         }
         

@@ -399,7 +399,7 @@
             }
         }
         else if (e.field === 'CheckedFilterConditionValue' && e.items && e.items[0]) {
-            this.ReloadItemDataOnChange(e.items[0]);
+            this.ReloadItemDataOnChange(e.items[0], e.field);
         }
     };
 
@@ -432,6 +432,7 @@
         this.templates.Undefined = kendo.template($('#parametersUndefinedTemplate').html());
         this.templates.MultiColumn = kendo.template($('#parametersMultiColumnTemplate').html());
         this.templates.Grid = kendo.template($('#parametersGridTemplate').html());
+        this.templates.GridToolbar = kendo.template($('#parametersGridToolbarTemplate').html());
         this.templates.Tree = kendo.template($('#parametersTreeTemplate').html());
         this.templates.Value1 = kendo.template($('#parametersValue1Template').html());
         this.templates.Value2 = kendo.template($('#parametersValue2Template').html());
@@ -527,7 +528,7 @@
 
     this.InitParameterItem = function(paramsDiv, item) {
         var html;
-        var func = null;
+        var funcAfterInit = null;
 
         if (item.TemplateValue1 && item.TemplateValue2) {
             html = $(this.templates.Value2(item));
@@ -567,7 +568,7 @@
                 }
 
                 html = $(this.templates.Tree(item));
-                func = this.TreeAfterInit;
+                funcAfterInit = this.TreeAfterInit;
             } else {
                 this.GridInit(item);
                 // дополнительная галочка
@@ -578,7 +579,7 @@
                 }
 
                 html = $(this.templates.Grid(item));
-                func = this.GridAfterInit;
+                funcAfterInit = this.GridAfterInit;
             }
         } else if (item.Columns) {
             this.MultiColumnInit(item);
@@ -635,7 +636,7 @@
             VM.bindModel = null;
 
             this.FilterTypesInit(item);
-            if (func) func(item);
+            if (funcAfterInit) funcAfterInit.call(this, item);
 
             return true;
         }
@@ -662,16 +663,18 @@
         }
     };
 
-    this.ReloadItemDataOnChange = function(item) {
+    this.ReloadItemDataOnChange = function(item, field) {
         var d = $('#Value1_' + item.ParameterIndex).data();
         if (d.kendoDropDownList)
             d.kendoDropDownList.dataSource.read();
         if (d.kendoMultiColumnComboBox)
             d.kendoMultiColumnComboBox.dataSource.read();
         if (d.kendoGrid) {
-            d.kendoGrid._selectedIds = {};
-            d.kendoGrid.clearSelection();
-            d.kendoGrid.dataSource.read();
+            if (field !== 'CheckedFilterConditionValue') {
+                d.kendoGrid._selectedIds = {};
+                d.kendoGrid.clearSelection();
+            }
+            d.kendoGrid.dataSource.page(1);
         }
         if (d.kendoTreeList)
             d.kendoTreeList.dataSource.read();
@@ -749,12 +752,15 @@
         item.set('Data', new kendo.data.DataSource({
             type: 'aspnetmvc-ajax',
             serverFiltering: true,
-            //serverPaging: true,
+            serverPaging: true,
             pageSize: 25,
             schema: {
                 model: {
                     id: item.ValueColumn
-                }
+                },
+                data: "Data",
+                errors: "Errors",
+                total: "Total"
             },
             transport: {
                 read: {
@@ -764,6 +770,7 @@
                         return {
                             PluginName: VM.manager.options.PluginName,
                             Key: item.Key,
+                            PageableGrid: true,
                             parameters: VM.manager.GetParameters()
                         };
                     }
@@ -772,24 +779,44 @@
         }));
         item.Columns.splice(0, 0, { selectable: true, width: "50px" });
     };
-
+    
     this.GridAfterInit = function(item) {
         var grid = $('#Value1_' + item.ParameterIndex).data('kendoGrid');
         if (!grid) return;
+
         grid.setOptions({ persistSelection: true });
+
+        item.onSelectGridMode = function(e) {
+            e.data.set('ShowOnlySelectedValues', e.indices[0] === 0);
+            grid.dataSource.page(1);
+        };
+        let toolbarHtml = $(this.templates.GridToolbar(item));
+        grid.element.find('.k-grid-toolbar').append(toolbarHtml);
+        kendo.bind(toolbarHtml, item);
+        var badge = toolbarHtml.find('.k-badge').data('kendoBadge');
+        grid.dataSource.bind('change',
+            function(e) {
+                if (!e.action && e.items && !e.items.length && item.Values && item.Values.length) {
+                    for (var j = 0; j < item.Values.length; j++) {
+                        grid._selectedIds[item.Values[j]] = true;
+                    }
+                }
+            });
         grid.bind('change',
-            function() {
+            function(e) {
                 item.set('Values', grid.selectedKeyNames());
+                badge.text(item.Values.length);
             });
         grid.bind('clear',
-            function() {
-                debugger;
+            function(e) {
                 item.set('Values', grid.selectedKeyNames());
+                badge.text(item.Values.length);
             });
 
         if (!grid._selectedIds)
             grid._selectedIds = {};
         if (item.Values) {
+            badge.text(item.Values.length);
             for (var i = 0; i < item.Values.length; i++) {
                 grid._selectedIds[item.Values[i]] = true;
             }

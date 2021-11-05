@@ -150,4 +150,13 @@
   <data name="SReportConditions" xml:space="preserve">
     <value>Есеп дайындау шарттары</value>
   </data>
+  <data name="NoAccess" xml:space="preserve">
+    <value>Рұқсат жоқ</value>
+  </data>
+  <data name="SSelectedInGrid" xml:space="preserve">
+    <value>Таңдап алынған жазбалар</value>
+  </data>
+  <data name="SSearchToSelect" xml:space="preserve">
+    <value>Табу және қосу</value>
+  </data>
 </root>

@@ -156,6 +156,12 @@
   <data name="SSaveSubscription" xml:space="preserve">
     <value>Сохранить параметры</value>
   </data>
+  <data name="SSearchToSelect" xml:space="preserve">
+    <value>Найти и добавить</value>
+  </data>
+  <data name="SSelectedInGrid" xml:space="preserve">
+    <value>Выбранные записи</value>
+  </data>
   <data name="SSubscription" xml:space="preserve">
     <value>Создать подписку</value>
   </data>

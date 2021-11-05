@@ -1,3 +1,13 @@
 ﻿{
-  "IgnoreValues": []
+  "IgnoreValues": [
+    {
+      "v": "Excel"
+    },
+    {
+      "v": "PDF"
+    },
+    {
+      "v": "Word"
+    }
+  ]
 }

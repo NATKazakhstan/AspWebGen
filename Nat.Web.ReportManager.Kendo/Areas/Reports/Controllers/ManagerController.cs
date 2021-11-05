@@ -328,7 +328,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetConditionData(string pluginName, string key, string text, List<ConditionViewModel> parameters, string cascadeFilterParam, [DataSourceRequest]DataSourceRequest request)
+        public ActionResult GetConditionData(string pluginName, string key, string text, bool? pageableGrid, List<ConditionViewModel> parameters, string cascadeFilterParam, [DataSourceRequest]DataSourceRequest request)
         {
             var plugin = WebReportManager.GetPlugin(pluginName);
             if (plugin == null || string.IsNullOrEmpty(key))
@@ -343,20 +343,20 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             {
                 var storage = condition.ColumnFilter.GetStorage();
                 if (key.Equals(storage.Name, StringComparison.OrdinalIgnoreCase))
-                    return GetConditionData(request, storage, cascadeFilterValue);
+                    return GetConditionData(request, storage, cascadeFilterValue, pageableGrid ?? false);
             }
 
             foreach (var condition in plugin.CreateModelFillConditions())
             {
                 var storage = condition.ColumnFilter.GetStorage();
                 if (key.Equals(storage.Name, StringComparison.OrdinalIgnoreCase))
-                    return GetConditionData(request, storage, cascadeFilterValue);
+                    return GetConditionData(request, storage, cascadeFilterValue, pageableGrid ?? false);
             }
 
             return Json(new { error = Resources.SPluginNotFound });
         }
 
-        private ActionResult GetConditionData(DataSourceRequest request, ColumnFilterStorage storage, object cascadeFilterValue)
+        private ActionResult GetConditionData(DataSourceRequest request, ColumnFilterStorage storage, object cascadeFilterValue, bool pageableGrid)
         {
             var tableDataSource = ConditionViewModel.GetTableDataSource(storage);
             if (tableDataSource == null)
@@ -435,7 +435,8 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 : new DataSourceSelectArguments();
             tableDataSource.EnablePaging = paging;
             var data = tableDataSource.View.Select(true, arguments);
-            return Json(ConditionViewModel.ParseDataView(data));
+            var enumerableResult = ConditionViewModel.ParseDataView(data);
+            return Json(pageableGrid ? (object) new DataSourceResult {Data = enumerableResult, Total = arguments.TotalRowCount} : enumerableResult);
         }
 
         private QueryCondition GetParentFilterCondition(ColumnFilterStorage storage, string filter)

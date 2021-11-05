@@ -12,6 +12,7 @@ using Nat.Tools;
 using Nat.Tools.Constants;
 using Nat.Tools.Data;
 using Nat.Tools.Filtering;
+using Nat.Tools.QueryGeneration;
 using Nat.Tools.ResourceTools;
 using Nat.Web.Controls;
 using Nat.Web.Controls.GenerationClasses;
@@ -215,6 +216,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
         public List<ColumnViewModel> Columns { get; set; }
         public string CheckedFilterCondition { get; set; }
         public bool CheckedFilterConditionValue { get; set; }
+        public bool ShowOnlySelectedValues { get; set; }
         public string CheckedFilterConditionTooltip { get; set; }
         public string CascadeFromCondition { get; set; }
         public string CascadeFromParentField { get; set; }
@@ -236,7 +238,13 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.ViewModels
             if (!string.IsNullOrEmpty(CheckedFilterCondition))
             {
                 var condition = storage.CustomConditions.FirstOrDefault(r => r.ColumnName == CheckedFilterCondition);
-                if (condition != null) condition.EmptyCondition = CheckedFilterConditionValue;
+                if (condition != null) condition.EmptyCondition = CheckedFilterConditionValue || ShowOnlySelectedValues;
+            }
+
+            if (ShowOnlySelectedValues)
+            {
+                var queryCondition = new QueryCondition("id", ColumnFilterType.In, storage.Values == null || storage.Values.Length == 0 ? new object[] {0L} : storage.Values);
+                storage.CustomConditions.Add(queryCondition);
             }
 
             if (storage.RefDataSource is ReportDataSource)

@@ -429,33 +429,29 @@ namespace Nat.Web.ReportManager
             else
             {
                 logType = reportManager.GetLogCode(reportManager.Plugin);
-                message = reportManager.GetLogInformation().Replace("\r\n", "<br/>");
-            }
-            if (logType != LogMessageType.None)
-            {
                 var logInfo = DependencyResolver.Current.GetService<ILogReportGenerateCode>();
                 logType = (LogMessageType) logInfo.GetCodeFor(
                     reportManager.Plugin.GetType().FullName,
                     reportManager.Plugin.Description,
                     (long) logType,
                     type);
-                var logId = logMonitor.WriteLog(new LogMessageEntry(logType, message));
-                if (logId != null && !string.IsNullOrEmpty(HttpContext.Current?.Request.UserHostAddress))
-                {
-                    try
-                    {
-                        logMonitor.WriteFieldChanged(logId.Value, string.Empty, "Имя ПК пользователя",
-                            System.Net.Dns.GetHostEntry(HttpContext.Current.Request.UserHostAddress).HostName, "");
-                    }
-                    catch (SocketException)
-                    {
-                    }
-                }
-
-                return logId;
+                message = reportManager.GetLogInformation().Replace("\r\n", "<br/>");
             }
 
-            return null;
+            var logId = logMonitor.WriteLog(new LogMessageEntry(logType, message));
+            if (logId != null && !string.IsNullOrEmpty(HttpContext.Current?.Request.UserHostAddress))
+            {
+                try
+                {
+                    logMonitor.WriteFieldChanged(logId.Value, string.Empty, "Имя ПК пользователя",
+                        System.Net.Dns.GetHostEntry(HttpContext.Current.Request.UserHostAddress).HostName, "");
+                }
+                catch (SocketException)
+                {
+                }
+            }
+
+            return logId;
         }
 
         private List<object> TestCache()

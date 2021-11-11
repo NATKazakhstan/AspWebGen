@@ -146,12 +146,14 @@
     <Compile Include="ControlIDConverter.cs" />
     <Compile Include="IClientElementProvider.cs" />
     <Compile Include="IFileManager2.cs" />
+    <Compile Include="ILogReportGenerateCode.cs" />
     <Compile Include="Initialization\DatasourcesElement.cs" />
     <Compile Include="Initialization\DatasourcesSectionCollection.cs" />
     <Compile Include="Initialization\ExternalSystemElement.cs" />
     <Compile Include="Initialization\ExternalSystemSectionCollection.cs" />
     <Compile Include="Initialization\IFilterNamesResources.cs" />
     <Compile Include="IStructInit.cs" />
+    <Compile Include="LogReportGenerateCodeType.cs" />
     <Compile Include="MailMessageContent\DB.designer.cs">
       <DependentUpon>DB.dbml</DependentUpon>
       <DesignTime>True</DesignTime>

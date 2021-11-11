@@ -11,6 +11,7 @@ using Nat.Web.Tools;
 using Nat.Web.Tools.Initialization;
 using System.IO;
 using System.Web;
+using System.Web.Mvc;
 using System.Web.UI;
 
 namespace Nat.Web.ReportManager
@@ -161,9 +162,9 @@ namespace Nat.Web.ReportManager
             report.ReportPath += ((ISqlReportingServicesPlugin)webReportManager.Plugin).ReportUrl;
             report.SetParameters(list);
 
-            Log(logMonitor, guid, webReportManager);
 
             var export = !string.IsNullOrEmpty(format) && "render".Equals(command, StringComparison.OrdinalIgnoreCase);
+            Log(logMonitor, guid, webReportManager, !isPreview && export ? LogReportGenerateCodeType.Export : LogReportGenerateCodeType.Preview);
 
             DBDataContext.AddViewReports(
                 Tools.Security.User.GetSID(),
@@ -196,24 +197,28 @@ namespace Nat.Web.ReportManager
             Response.Redirect(Request.QueryString["backPath"]);
         }
 
-        private static void Log(LogMonitor logMonitor, string guid, WebReportManager reportManager)
+        private static void Log(LogMonitor logMonitor, string guid, WebReportManager reportManager, LogReportGenerateCodeType type)
         {
             LogMessageType logType;
             string message;
             if (HttpContext.Current.Session["logcode" + guid] == null)
             {
                 logType = reportManager.GetLogCode(reportManager.Plugin);
+                var logInfo = DependencyResolver.Current.GetService<ILogReportGenerateCode>();
+                logType = (LogMessageType) logInfo.GetCodeFor(
+                    reportManager.Plugin.GetType().FullName,
+                    reportManager.Plugin.Description,
+                    (long) logType,
+                    type);
                 message = reportManager.GetLogInformation().Replace("\r\n", "<br/>");
             }
             else
             {
-                logType = (LogMessageType)HttpContext.Current.Session["logcode" + guid];
-                message = (string)HttpContext.Current.Session["logmsg" + guid];
+                logType = (LogMessageType) HttpContext.Current.Session["logcode" + guid];
+                message = (string) HttpContext.Current.Session["logmsg" + guid];
             }
-            if (logType != LogMessageType.None)
-            {
-                logMonitor.Log(new LogMessageEntry(((WindowsIdentity)HttpContext.Current.User.Identity).User.Value, logType, message));
-            }
+
+            logMonitor.Log(new LogMessageEntry(logType, message));
         }
 
         public override string ResourceName

@@ -7,6 +7,7 @@ using System.Threading;
 using System.Web;
 using System.Web.UI;
 using System.Data.Linq;
+using System.Web.Compilation;
 using System.Web.UI.WebControls;
 using Nat.Web.Controls.Data;
 using Nat.Web.Controls.GenerationClasses.Data;
@@ -218,7 +219,14 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
             if (!IsPostBack)
             {
                 EnsureChildControls();
-                LogMonitor.Log(new LogMessageEntry(ViewLog, HeaderRu, RvsSavedProperties.GetFromJournal(this)));
+                if (!string.IsNullOrEmpty(ReportPluginName))
+                {
+                    var logInfo = (ILogReportGenerateCode) Activator.CreateInstance(BuildManager.GetType("Event_LOG.LogReportGenerateCode", true, false));
+                    var logType = (LogMessageType) logInfo.GetCodeFor(ReportPluginName, HeaderRu, (long) ViewLog, LogReportGenerateCodeType.Preview);
+                    LogMonitor.Log(new LogMessageEntry(logType, HeaderRu, RvsSavedProperties.GetFromJournal(this)));
+                }
+                else
+                    LogMonitor.Log(new LogMessageEntry(ViewLog, HeaderRu, RvsSavedProperties.GetFromJournal(this)));
             }
 
             base.OnPreRender(e);

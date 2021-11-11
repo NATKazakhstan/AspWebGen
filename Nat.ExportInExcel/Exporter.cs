@@ -139,6 +139,7 @@
                 stream = exporterXslx.GetExcel(journalControl, properties);
             }
 
+            var plugin = BuildManager.GetType(properties.ReportPluginName, false, true) ?? GetTypeByReportManager(properties.ReportPluginName);
             DBDataContext.AddViewReports(
                 User.GetSID(),
                 HttpContext.Current.User.Identity.Name,
@@ -147,12 +148,19 @@
                 HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority),
                 Environment.MachineName,
                 true,
-                BuildManager.GetType(properties.ReportPluginName, false, true) ?? GetTypeByReportManager(properties.ReportPluginName));
+                plugin);
+
+            var logInfo = (ILogReportGenerateCode) Activator.CreateInstance(BuildManager.GetType("Event_LOG.LogReportGenerateCode", true, false));
+            var logType = (LogMessageType) logInfo.GetCodeFor(
+                plugin.FullName,
+                properties.NameRu,
+                (long) journalControl.ExportLog,
+                LogReportGenerateCodeType.Export);
 
             logMonitor.Log(
                 new LogMessageEntry(
                     User.GetSID(),
-                    journalControl.ExportLog,
+                    logType,
                     properties.NameRu,
                     journalControl.OnExportNewSavedProperties ? RvsSavedProperties.GetFromJournal(journalControl) : properties));
 
@@ -192,28 +200,28 @@
             
             var export = new ExporterXslxByArgs();
             var stream = export.GetExcel(args);
-            if (args.ExportLog != 0)
-            {
-                args.LogMonitor.Log(
-                    args.ExportLog,
-                    () =>
+            
+            var logInfo = (ILogReportGenerateCode) Activator.CreateInstance(BuildManager.GetType("Event_LOG.LogReportGenerateCode", true, false));
+            var logType = logInfo.GetCodeFor(pluginName, args.Header, args.ExportLog, LogReportGenerateCodeType.Export);
+            args.LogMonitor.Log(
+                logType,
+                () =>
+                {
+                    var message = new StringBuilder();
+                    message.Append(args.Header);
+                    if (args.FilterValues != null)
+                    {
+                        message.Append("; Фильтры: \r\n");
+                        foreach (var value in args.FilterValues)
                         {
-                            var message = new StringBuilder();
-                            message.Append(args.Header);
-                            if (args.FilterValues != null)
-                            {
-                                message.Append("; Фильтры: \r\n");
-                                foreach (var value in args.FilterValues)
-                                {
-                                    message.Append(value);
-                                    message.Append(";\r\n");
-                                }
-                            }
+                            message.Append(value);
+                            message.Append(";\r\n");
+                        }
+                    }
 
-                            message.AddHyperLink(docLocation, Resources.SViewJournal, string.Empty);
-                            return new LogMessageEntry(User.GetSID(), args.ExportLog, message.ToString());
-                        });
-            }
+                    message.AddHyperLink(docLocation, Resources.SViewJournal, string.Empty);
+                    return new LogMessageEntry(User.GetSID(), args.ExportLog, message.ToString());
+                });
 
             return stream;
         }

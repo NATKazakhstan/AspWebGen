@@ -524,8 +524,15 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
 
             var guid = Guid.NewGuid().ToString();
             Session[guid] = storageValues;
+            
+            var logInfo = DependencyResolver.Current.GetService<ILogReportGenerateCode>();
+            var logType = (LogMessageType) logInfo.GetCodeFor(
+                plugin.GetType().FullName,
+                plugin.Description,
+                (long) ReportInitializerSection.GetReportInitializerSection().ReprotPlugins.GetTypeReportLists()[plugin.GetType()].LogMessageType,
+                string.IsNullOrEmpty(export) ? LogReportGenerateCodeType.Preview : LogReportGenerateCodeType.Export);
             Session["logmsg" + guid] = GetLogInformation(parameters, plugin, storageValues);
-            Session["logcode" + guid] = ReportInitializerSection.GetReportInitializerSection().ReprotPlugins.GetTypeReportLists()[plugin.GetType()].LogMessageType;
+            Session["logcode" + guid] = logType;
             Session["constants" + guid] = (plugin as IWebReportPlugin)?.Constants ?? new Dictionary<string, object>();
 
             if (subscription ?? false)

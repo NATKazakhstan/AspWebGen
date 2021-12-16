@@ -749,6 +749,8 @@
     };
 
     this.GridInit = function(item) {
+        item.ShowOnlySelectedValues = true;
+
         item.set('Data', new kendo.data.DataSource({
             type: 'aspnetmvc-ajax',
             serverFiltering: true,

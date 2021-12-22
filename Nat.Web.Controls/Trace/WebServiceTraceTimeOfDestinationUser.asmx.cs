@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Web.Script.Services;
+
 namespace Nat.Web.Controls.Trace
 {
     using System;
@@ -22,7 +24,7 @@ namespace Nat.Web.Controls.Trace
     [WebService(Namespace = "http://tempuri.org/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
-     [System.Web.Script.Services.ScriptService]
+    [System.Web.Script.Services.ScriptService]
     public class WebServiceTraceTimeOfDestinationUser : WebService
     {
         [WebMethod(EnableSession = true)]
@@ -37,6 +39,17 @@ namespace Nat.Web.Controls.Trace
             using (var db = new DBTraceTimingRequestsDataContext(LogMonitor.CreateConnection()))
                 db.P_LOG_UpdateTraceTimingRequest(guid, (DateTime.Now.Ticks - dateTime.Ticks) / 10000);
             HttpContext.Current.Session.Remove(guid.ToString("N"));
+        }
+
+        [ScriptMethod]
+        [WebMethod(EnableSession = true)]
+        public void TraceDestinationTime(string key, DateTime? startTime)
+        {
+            if (string.IsNullOrEmpty(key) || startTime == null) return;
+            var guid = new Guid(key);
+            WebInitializer.Initialize();
+            using (var db = new DBTraceTimingRequestsDataContext(LogMonitor.CreateConnection()))
+                db.P_LOG_UpdateTraceTimingRequest(guid, (DateTime.Now.Ticks - startTime.Value.Ticks) / 10000);
         }
     }
 }

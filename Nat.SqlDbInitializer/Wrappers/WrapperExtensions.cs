@@ -4,11 +4,11 @@ namespace Nat.SqlDbInitializer.Wrappers
 {
     public static class WrapperExtensions
     {
-        public static void SetCommandTextAddToWrappedConn(this DbConnection conn, string commandTextAddStr)
+        public static void SetCommandParamToWrappedConn(this DbConnection conn, DbCommandParams commandParam)
         {
-            if (conn is DbConnectionWrapper)
+            if (conn is DbConnectionWrapper wrap)
             {
-                (conn as DbConnectionWrapper).CommandTextAddStr = commandTextAddStr;
+                wrap.DbCommandParam = commandParam;
             }
         }
     }

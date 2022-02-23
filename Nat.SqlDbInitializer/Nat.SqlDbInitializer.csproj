@@ -80,6 +80,7 @@
     <Compile Include="SqlDbConstants.cs" />
     <Compile Include="SqlDbSpecific.cs" />
     <Compile Include="SqlDbTypeConverter.cs" />
+    <Compile Include="Wrappers\DbCommandParams.cs" />
     <Compile Include="Wrappers\DbCommandWrapper.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -51,6 +51,7 @@ namespace Nat.Web.Controls.GenerationClasses
         public virtual Type RowType { get; private set; }
 
         protected string SelectQueryEndText { get; set; }
+        protected DbCommandParams DbCommandParam { get; set; }
 
         public virtual DbConnection InitConnection
         {
@@ -59,7 +60,14 @@ namespace Nat.Web.Controls.GenerationClasses
                 if (_initConnection != null)
                     return _initConnection;
 
-                _initConnection = !string.IsNullOrEmpty(SelectQueryEndText) ? new DbConnectionWrapper() : _initConnection;
+                if (!string.IsNullOrEmpty(SelectQueryEndText))
+                {
+                    if (DbCommandParam == null)
+                        DbCommandParam = new DbCommandParams();
+                    DbCommandParam.CommandTextAddStr = SelectQueryEndText;
+                }
+
+                _initConnection = DbCommandParam != null ? new DbConnectionWrapper() : _initConnection;
                 return _initConnection;
             }
             set
@@ -1193,9 +1201,9 @@ namespace Nat.Web.Controls.GenerationClasses
 
             if (arguments.RetrieveTotalRowCount)
             {
-                DB.Connection.SetCommandTextAddToWrappedConn(SelectQueryEndText);
+                DB.Connection.SetCommandParamToWrappedConn(DbCommandParam);
                 CountData = arguments.TotalRowCount = GetCount(tableExp, DB, qParams);
-                DB.Connection.SetCommandTextAddToWrappedConn("");
+                DB.Connection.SetCommandParamToWrappedConn(null);
 
                 if (owner.EmptyLoad && arguments.TotalRowCount > arguments.MaximumRows)
                 {
@@ -1235,9 +1243,9 @@ namespace Nat.Web.Controls.GenerationClasses
             List<TRow> returnValue;
             try
             {
-                DB.Connection.SetCommandTextAddToWrappedConn(SelectQueryEndText);
+                DB.Connection.SetCommandParamToWrappedConn(DbCommandParam);
                 returnValue = qParams.GetCompiled<TRow>(tableExp, SupportGlobalCache).ToList();
-                DB.Connection.SetCommandTextAddToWrappedConn("");
+                DB.Connection.SetCommandParamToWrappedConn(null);
             }
             catch (SqlException exception)
             {

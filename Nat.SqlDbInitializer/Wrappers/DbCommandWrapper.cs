@@ -14,10 +14,17 @@ namespace Nat.SqlDbInitializer.Wrappers
         private DbTransaction _transaction = null;
 
         private string _commandTextAddStr { get; set; }
+        private string _commandTextReplaceFrom { get; set; }
+        private string _commandTextReplaceTo { get; set; }
 
-        public DbCommandWrapper(DbConnection conn, string commandTextAddStr) : base()
+        public DbCommandWrapper(DbConnection conn, DbCommandParams dbCommandParam) : base()
         {
-            _commandTextAddStr = commandTextAddStr;
+            if (dbCommandParam != null)
+            {
+                _commandTextAddStr = dbCommandParam.CommandTextAddStr;
+                _commandTextReplaceFrom = dbCommandParam.CommandTextReplaceFrom;
+                _commandTextReplaceTo = dbCommandParam.CommandTextReplaceTo;
+            }
             _command = conn.CreateCommand();
             Connection = _command.Connection;
             _connection = _command.Connection;
@@ -102,8 +109,16 @@ namespace Nat.SqlDbInitializer.Wrappers
 
         protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
         {
-            if (!string.IsNullOrEmpty(_command.CommandText) && !string.IsNullOrEmpty(_commandTextAddStr))
-                _command.CommandText += Environment.NewLine + _commandTextAddStr;
+            if (!string.IsNullOrEmpty(_command.CommandText))
+            {
+                // замена текста в коде SQL запроса
+                if (!string.IsNullOrEmpty(_commandTextReplaceFrom) && !string.IsNullOrEmpty(_commandTextReplaceTo))
+                    _command.CommandText = _command.CommandText.Replace(_commandTextReplaceFrom, _commandTextReplaceTo);
+
+                // добавление строчки кода в конец SQL запроса
+                if (!string.IsNullOrEmpty(_commandTextAddStr))
+                    _command.CommandText += Environment.NewLine + _commandTextAddStr;
+            }
             return _command.ExecuteReader(behavior);
         }
     }

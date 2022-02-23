@@ -15,7 +15,7 @@ namespace Nat.SqlDbInitializer.Wrappers
             _dbConn = Nat.Tools.Specific.SpecificInstances.DbFactory.CreateConnection();
         }
 
-        public string CommandTextAddStr { get; set; }
+        public DbCommandParams DbCommandParam { get; set; }
 
         #region wrap overrides
 
@@ -78,7 +78,7 @@ namespace Nat.SqlDbInitializer.Wrappers
 
         protected override DbCommand CreateDbCommand()
         {
-            return string.IsNullOrEmpty(CommandTextAddStr) ? _dbConn.CreateCommand() : new DbCommandWrapper(_dbConn, CommandTextAddStr);
+            return DbCommandParam == null ? _dbConn.CreateCommand() : new DbCommandWrapper(_dbConn, DbCommandParam);
         }
     }
 }

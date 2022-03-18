@@ -240,7 +240,8 @@ namespace Nat.Web.Controls.Data
         {
             journal.BaseJournal.GroupColumns.Clear();
             journal.BaseJournal.GroupColumns.AddRange(Grouping);
-            journal.StorageValues = StorageValues;
+            if (StorageValues != null)
+                journal.StorageValues = StorageValues;
             journal.ValuesLoaded = true;
             if (!string.IsNullOrEmpty(PageUrl))
             {
@@ -290,7 +291,7 @@ namespace Nat.Web.Controls.Data
             journal.FixedColumnsCount = FixedColumnsCount;
             journal.FixedRowsCount = FixedRowsCount;
             journal.BaseJournal.BaseInnerHeader.ColumnHierarchy = ColumnHierarchy;
-            journal.StorageValues = StorageValues;
+            if (StorageValues != null) journal.StorageValues = StorageValues;
             journal.BaseJournal.BaseInnerHeader.RowsProperties = HeaderRowsProperties;
             journal.BaseJournal.RowsProperties = DataRowsProperties;
             journal.BaseJournal.CellsProperties = DataCellProperties;

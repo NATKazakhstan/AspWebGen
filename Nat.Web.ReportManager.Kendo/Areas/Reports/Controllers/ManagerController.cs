@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Web.Compilation;
 using System.Web.Configuration;
@@ -37,6 +38,7 @@ using Nat.Web.ReportManager.ReportGeneration;
 using Nat.Web.Tools;
 using Nat.Web.Tools.Initialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
 {
@@ -328,7 +330,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetConditionData(string pluginName, string key, string text, bool? pageableGrid, List<ConditionViewModel> parameters, string cascadeFilterParam, [DataSourceRequest]DataSourceRequest request)
+        public ActionResult GetConditionData(string pluginName, string key, string text, bool? pageableGrid, bool? getOnlyIds, List<ConditionViewModel> parameters, string cascadeFilterParam, [DataSourceRequest]DataSourceRequest request)
         {
             var plugin = WebReportManager.GetPlugin(pluginName);
             if (plugin == null || string.IsNullOrEmpty(key))
@@ -343,20 +345,51 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             {
                 var storage = condition.ColumnFilter.GetStorage();
                 if (key.Equals(storage.Name, StringComparison.OrdinalIgnoreCase))
-                    return GetConditionData(request, storage, cascadeFilterValue, pageableGrid ?? false);
+                    return GetConditionData(request, storage, cascadeFilterValue, pageableGrid ?? false, getOnlyIds ?? false);
             }
 
             foreach (var condition in plugin.CreateModelFillConditions())
             {
                 var storage = condition.ColumnFilter.GetStorage();
                 if (key.Equals(storage.Name, StringComparison.OrdinalIgnoreCase))
-                    return GetConditionData(request, storage, cascadeFilterValue, pageableGrid ?? false);
+                    return GetConditionData(request, storage, cascadeFilterValue, pageableGrid ?? false, getOnlyIds ?? false);
             }
 
             return Json(new { error = Resources.SPluginNotFound });
         }
 
-        private ActionResult GetConditionData(DataSourceRequest request, ColumnFilterStorage storage, object cascadeFilterValue, bool pageableGrid)
+        private IEnumerable ConvertToOnlyIds(IEnumerable data, bool getOnlyIds, string idField)
+        {
+            if (!getOnlyIds)
+                return data;
+
+            var result = new List<object>();
+            Func<object, object> getValue = null;
+            foreach (var item in data)
+            {
+                if (getValue == null)
+                {
+                    if (string.IsNullOrEmpty(idField))
+                        idField = "id";
+                    if (item is Dictionary<string, object>)
+                        getValue = r => ((Dictionary<string, object>) r).TryGetValue(idField, out var resValue) ? resValue : null;
+                    else
+                    {
+                        var property = item.GetType().GetProperty(idField);
+                        if (property == null)
+                            return data;
+
+                        getValue = r => property.GetValue(item);
+                    }
+                }
+
+                result.Add(getValue(item));
+            }
+
+            return result;
+        }
+
+        private ActionResult GetConditionData(DataSourceRequest request, ColumnFilterStorage storage, object cascadeFilterValue, bool pageableGrid, bool getOnlyIds)
         {
             var tableDataSource = ConditionViewModel.GetTableDataSource(storage);
             if (tableDataSource == null)
@@ -367,7 +400,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 var isDSV = dsView is IDataSourceView;
                 var selectArguments = isDSV ? new DataSourceSelectArguments() : new DataSourceSelectArguments(storage.DisplayColumn);
                 dsView?.Select(selectArguments, r => enumerable = r);
-                return Json(ConditionViewModel.ParseDataView(enumerable));
+                return Json(ConvertToOnlyIds(ConditionViewModel.ParseDataView(enumerable), getOnlyIds, storage.ValueColumn));
             }
 
             tableDataSource.EnablePaging = true;
@@ -435,7 +468,7 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 : new DataSourceSelectArguments();
             tableDataSource.EnablePaging = paging;
             var data = tableDataSource.View.Select(true, arguments);
-            var enumerableResult = ConditionViewModel.ParseDataView(data);
+            var enumerableResult = ConvertToOnlyIds(ConditionViewModel.ParseDataView(data), getOnlyIds, storage.ValueColumn);
             return Json(pageableGrid ? (object) new DataSourceResult {Data = enumerableResult, Total = arguments.TotalRowCount} : enumerableResult);
         }
 

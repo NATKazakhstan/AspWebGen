@@ -671,8 +671,31 @@
             d.kendoMultiColumnComboBox.dataSource.read();
         if (d.kendoGrid) {
             if (field !== 'CheckedFilterConditionValue') {
-                d.kendoGrid._selectedIds = {};
-                d.kendoGrid.clearSelection();
+                var params = d.kendoGrid.dataSource.transport.options.read.data();
+                params.sort = "";
+                params.group = "";
+                params.filter = "";
+                params.pageSize = 0;
+                params.PageableGrid = false;
+                params.GetOnlyIds = true;
+                for (var i = 0; i < params.parameters.length; i++) {
+                    if (params.parameters[i].Key === item.Key) {
+                        params.parameters[i].ShowOnlySelectedValues = true;
+                        break;
+                    }
+                }
+                this.asyncPost(d.kendoGrid.dataSource.transport.options.read.url,
+                    params,
+                    function(res) {
+                        d.kendoGrid._selectedIds = {};
+                        item.set('Values', res);
+                        for (var j = 0; j < res.length; j++) {
+                            d.kendoGrid._selectedIds[res[j]] = true;
+                        }
+                        d.kendoGrid.trigger('change');
+                    });
+                //d.kendoGrid._selectedIds = {};
+                //d.kendoGrid.clearSelection();
             }
             d.kendoGrid.dataSource.page(1);
         }

@@ -4,6 +4,7 @@
     {
         Word,
         Excel,
-        Pdf
+        Pdf,
+        Html,
     }
 }

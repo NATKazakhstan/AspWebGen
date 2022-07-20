@@ -65,16 +65,16 @@
       <HintPath>..\Libraries\Debug\Nat.Tools.dll</HintPath>
     </Reference>
     <Reference Include="Nat.Web.Core.Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc6873e23d24701a, processorArchitecture=MSIL">
-      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.84\lib\net46\Nat.Web.Core.Controls.dll</HintPath>
+      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.85\lib\net46\Nat.Web.Core.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Nat.Web.Core.Kendo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc6873e23d24701a, processorArchitecture=MSIL">
-      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.84\lib\net46\Nat.Web.Core.Kendo.dll</HintPath>
+      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.85\lib\net46\Nat.Web.Core.Kendo.dll</HintPath>
     </Reference>
     <Reference Include="Nat.Web.Core.Res, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc6873e23d24701a, processorArchitecture=MSIL">
-      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.84\lib\net46\Nat.Web.Core.Res.dll</HintPath>
+      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.85\lib\net46\Nat.Web.Core.Res.dll</HintPath>
     </Reference>
     <Reference Include="Nat.Web.Core.System, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc6873e23d24701a, processorArchitecture=MSIL">
-      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.84\lib\net46\Nat.Web.Core.System.dll</HintPath>
+      <HintPath>..\..\Sources\packages\Nat.Web.Core.Kendo.1.0.85\lib\net46\Nat.Web.Core.System.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\Sources\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>

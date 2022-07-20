@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.IO;
 
 namespace Nat.Web.ReportManager
 {
@@ -8,5 +9,8 @@ namespace Nat.Web.ReportManager
         string GetQrCodeData(long logId);
         Image GetHorizontalImage();
         Image GetVerticalImage();
+        Stream GetHorizontalImageStream();
+        Stream GetVerticalImageStream();
+        Stream GetQrCodeImageStream(long logId);
     }
 }

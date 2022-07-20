@@ -610,7 +610,11 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
             Stream stream;
             string fileNameExt;
             string fileName = null;
-            if (plugin is IStimulsoftReportPlugin)
+            if (plugin is ICustomStreamReport)
+                stream = ReportResultPage.GetCustomStreamReport(pluginName, guid, storageValues, culture,
+                    null, export ?? "Html", logMonitor, false, null, out fileName, out fileNameExt, true,
+                    string.IsNullOrEmpty(export));
+            else if (plugin is IStimulsoftReportPlugin)
                 stream = ReportResultPage.GetReport(true, pluginName, guid, storageValues, culture,
                     null, export ?? "Html",
                     "export", logMonitor, false, null, null, out fileName, out fileNameExt, true,

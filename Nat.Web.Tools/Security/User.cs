@@ -1,4 +1,7 @@
-﻿namespace Nat.Web.Tools.Security
+﻿using System.Collections;
+using System.ComponentModel;
+
+namespace Nat.Web.Tools.Security
 {
     using System;
     using System.Linq;
@@ -138,9 +141,31 @@
 
         private static string GetUserName(IIdentity identity)
         {
-            var userName = identity.AuthenticationType == "Forms" ? GetUserNameByFormIdentity(identity) : GetUserNameByWindowsIdentity(identity);
+            var userName = GetByClaimsIdentity(identity) ?? (identity.AuthenticationType == "Forms" ? GetUserNameByFormIdentity(identity) : GetUserNameByWindowsIdentity(identity));
 
             return !string.IsNullOrEmpty(userName) ? userName : string.Empty;
+        }
+
+        private static string GetByClaimsIdentity(IIdentity identity)
+        {
+            var type = identity.GetType();
+            if (!type.Name.Equals("ClaimsIdentity"))
+                return null;
+
+            var data = (IEnumerable) TypeDescriptor.GetProperties(type).Find("Claims", false).GetValue(identity);
+            if (data == null)
+                return null;
+
+            Func<object, object> getType = null;
+            foreach (var claim in data)
+            {
+                if (getType == null)
+                    getType = TypeDescriptor.GetProperties(claim).Find("Type", false).GetValue;
+                if ((string)getType.Invoke(claim) == "LoginName")
+                    return (string)TypeDescriptor.GetProperties(claim).Find("Value", false).GetValue(claim);
+            }
+
+            return null;
         }
 
         private static string GetUserNameByFormIdentity(IIdentity identity)

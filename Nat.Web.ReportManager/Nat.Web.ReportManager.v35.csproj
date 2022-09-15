@@ -237,6 +237,7 @@
     <Compile Include="ParamReportSubscriptions\ParamReportSubscriptionsP2.cs" />
     <Compile Include="CustomExport\CustomExportType.cs" />
     <Compile Include="ParamReportSubscriptions\ParamReportSubscriptionsP7.cs" />
+    <Compile Include="ReportGeneration\ICustomStreamReport.cs" />
     <Compile Include="ReportGeneration\IReportAutoExport.cs" />
     <Compile Include="ReportManagerInitializer.cs" />
     <Compile Include="ReportSubscriptionsHelper.cs" />

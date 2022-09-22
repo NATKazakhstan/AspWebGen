@@ -516,8 +516,15 @@ namespace Nat.Web.Tools
                     {
                         while (reader.Read())
                         {
+                            if (reader.IsDBNull(1))
+                                continue;
+
+                            var iin = reader.GetString(1);
+                            if (string.IsNullOrEmpty(iin))
+                                continue;
+
                             idParam.Value = reader.GetInt64(0);
-                            iinHashParam.Value = CreateStoreHashFromIIN(reader.GetString(1));
+                            iinHashParam.Value = CreateStoreHashFromIIN(iin);
                             updateCommand.ExecuteNonQuery();
                         }
                     }

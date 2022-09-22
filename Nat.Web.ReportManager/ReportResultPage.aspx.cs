@@ -212,6 +212,7 @@ namespace Nat.Web.ReportManager
                     var qrCodeTextFormat = DependencyResolver.Current.GetService<IQrCodeTextFormat>();
                     if (logId != null)
                     {
+                        stiPlugin.Report["IsHtml"] = format != null && format.ToLower().Equals("html"); 
                         stiPlugin.Report["BarCodeLogText"] = qrCodeTextFormat.GetUserText(logId.Value);
                         stiPlugin.Report["BarCodeLogData"] = qrCodeTextFormat.GetQrCodeData(logId.Value);
                         stiPlugin.Report["BarCodeLogImageH"] = qrCodeTextFormat.GetHorizontalImage();

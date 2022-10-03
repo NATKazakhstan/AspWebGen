@@ -1,4 +1,6 @@
-﻿namespace SubsystemReferencesConflictResolver
+﻿using Nat.Web.Controls;
+
+namespace SubsystemReferencesConflictResolver
 {
     using System;
     using System.Collections.Generic;
@@ -293,7 +295,7 @@
                 return ProjectCodesCache[tableName];
 
             string projectCode;
-            using (var db = new DBDataContext(SpecificInstances.DbFactory.CreateConnection()))
+            using (var db = new DBDataContext(LogMonitor.CreateConnection()))
             {
                 projectCode = CacheQueries.ExecuteFunction<MON_RequestTable, string, string>(
                     db,
@@ -328,7 +330,7 @@
 
             if (string.IsNullOrEmpty(header))
             {
-                using (var db = new DBDataContext(SpecificInstances.DbFactory.CreateConnection()))
+                using (var db = new DBDataContext(LogMonitor.CreateConnection()))
                 {
                     header = CacheQueries.GetNameCached<MON_RequestTable, string, string>(
                         db,

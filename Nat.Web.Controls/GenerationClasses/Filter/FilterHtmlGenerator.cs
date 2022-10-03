@@ -525,9 +525,9 @@ namespace Nat.Web.Controls.GenerationClasses
                                 new KeyValuePair<object, object>("Equals", filter.TrueBooleanText),
                                 new KeyValuePair<object, object>("NotEquals", filter.FalseBooleanText),
                             });
-                    if (!string.IsNullOrEmpty(filterItem.Value1) && filterItem.Value1.Equals("false", StringComparison.OrdinalIgnoreCase))
+                    if (!string.IsNullOrEmpty(filterItem.Value1) && filterItem.Value1.Equals("false", StringComparison.OrdinalIgnoreCase) && filterItem.FilterType == "Equals")
                     {
-                        filterItem.FilterType = filterItem.FilterType == "Equals" ? "NotEquals" : "Equals";
+                        filterItem.FilterType = "NotEquals";
                         filterItem.Value1 = "true";
                     }
                     break;

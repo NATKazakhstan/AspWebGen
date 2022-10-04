@@ -42,6 +42,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
 {
+    [Authorize]
     public class ManagerController : Controller
     {
         private readonly IEventLogManager _eventLogManager;

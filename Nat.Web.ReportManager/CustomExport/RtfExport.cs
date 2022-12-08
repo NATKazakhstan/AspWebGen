@@ -321,7 +321,7 @@
                 if (IsStoped)
                     return;
                 if (page3 == selectedPages[0])
-                    RenderPageHeader(page3);
+                    RenderPageHeader(page3, report.Pages[0]);
                 if (lastPageName != page3.Name
                     && !string.IsNullOrEmpty(lastPageName)
                     && !page3.PrintOnPreviousPage)
@@ -1497,9 +1497,10 @@
         private void RenderPageFooter()
         {
             // _sw.WriteLine(@"\sect");
+            
         }
 
-        private void RenderPageHeader(StiPage page)
+        private void RenderPageHeader(StiPage page, StiPage reportFirstPage)
         {
             _pageHeight =
                 (int)Math.Round(14.4 * page.Unit.ConvertToHInches((page.PageHeight * page.SegmentPerHeight)));
@@ -1519,11 +1520,24 @@
             if (page.Orientation == StiPageOrientation.Landscape)
                 _sw.Write(@"\lndscpsxn");
             _sw.Write(@"\paperw{0}\paperh{1}", _pageWidth, _pageHeight);
+            
+            // Другой колонтитул для первой страницы \titlepg для нумерации страниц без первой страницы
+            var otherColontitulForFirstPage = reportFirstPage.TagValue == "pagenumber-skipfirst" ? "\\titlepg" : "";
+            
             _sw.WriteLine(
-                @"\margl{0}\margr{1}\margt{2}\margb{3}\headery{2}\footery{3}", 
-                new object[] { num, num2, num3, num4 });
+                @"\margl{0}\margr{1}\margt{2}\margb{3}\headery{2}\footery{3}{4}", 
+                new object[] { num, num2, num3, num4, otherColontitulForFirstPage });
             _pageLeftMargins = num;
             _pageWidthWithMargins = _pageWidth - num - num2;
+            
+            if ((string) reportFirstPage.TagValue == "pagenumber-skipfirst" || (string) reportFirstPage.TagValue == "pagenumber")
+            {
+                _sw.WriteLine(
+                    @"{\headerr \ltrpar \pard\plain \ltrpar\s22\qc \li0\ri0\sa160\sl259\slmult1\widctlpar\tqc\tx4677\tqr\tx9355\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid5205865 \rtlch\fcs1 \af0\afs22\alang1025 \ltrch\fcs0 
+\f37\fs22\lang1049\langfe1049\cgrid\langnp1049\langfenp1049 {\field{\*\fldinst {\rtlch\fcs1 \af0 \ltrch\fcs0 \f0\fs28\insrsid5205865\charrsid4980740 PAGE   \\
+* MERGEFORMAT}}{\fldrslt {\rtlch\fcs1 \af0 \ltrch\fcs0 \f0\fs28\lang1024\langfe1024\noproof\insrsid14840001 2}}}\sectd \ltrsect\linex0\endnhere\sectdefaultcl\sftnbj {\rtlch\fcs1 \af0 \ltrch\fcs0 \f0\fs28\lang1033\langfe1049\langnp1033\insrsid5205865\charrsid15432033 
+\par }}");
+            }
         }
 
         private static Regex _emptyRTF = new Regex(

@@ -698,6 +698,9 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 }
             }
 
+            if (stream == null)
+                return HttpNotFound(Resources.NoAccess);
+
             return File(stream, "application/octet-stream", (string.IsNullOrEmpty(fileName) ? plugin.Description : fileName) + "." + fileNameExt);
         }
 

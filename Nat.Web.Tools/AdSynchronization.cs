@@ -178,7 +178,7 @@ namespace Nat.Web.Tools
             searcher.PropertiesToLoad.Add(IinKey);
             searcher.PageSize = 1000;
             SearchResultCollection collection = searcher.FindAll();
-
+ 
             #region initialize fields
 
             DbConnection connectionSelect = SpecificInstances.DbFactory.CreateConnection();
@@ -205,7 +205,7 @@ namespace Nat.Web.Tools
             DbParameter sidParameterSelect = SpecificInstances.DbFactory.CreateParameter();
             
             cSelect.CommandType = CommandType.Text;
-            cSelect.CommandText = "select top (1) id, name, loginName, email, isDisabled, SidInBase64 from LOG_SidIdentification where sid = @sid";
+            cSelect.CommandText = "select top (1) id, name, loginName, email, isDisabled, SidInBase64 from LOG_SidIdentification where (sid = @sid or loginName = @sid) and isDeleted = 0 and isDisabled = 0";
             cSelect.Connection = connectionSelect;
 
             sidParameterSelect.DbType = DbType.String;

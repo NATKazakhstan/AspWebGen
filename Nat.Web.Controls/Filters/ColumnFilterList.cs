@@ -372,20 +372,7 @@ namespace Nat.Web.Controls
 
         private byte[] GetSidBytes()
         {
-            var sid = new byte[] { };
-            switch (this.Page.User.Identity.AuthenticationType)
-            {
-                case "Windows":
-                    var windowsIdentity = (WindowsIdentity)this.Page.User.Identity;
-                    sid = new byte[windowsIdentity.User.BinaryLength];
-                    windowsIdentity.User.GetBinaryForm(sid, 0);
-                    break;
-                case "Forms": // note: Получение сида при идентификации по формам. 
-                    sid = Encoding.Default.GetBytes(User.GetSID());
-                    break;
-            }
-
-            return sid;
+            return Encoding.Default.GetBytes(User.GetSID());
         }
 
         #endregion

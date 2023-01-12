@@ -236,19 +236,8 @@ namespace Nat.Web.ReportManager.UserControls
             //StiWebViewer1.ResetCurrentPage();
             if (webReportManager.Plugin != null)
             {
-                StorageValues values = webReportManager.GetValues();
-                var sid = new byte[] { };
-                switch (this.Context.User.Identity.AuthenticationType)
-                {
-                    case "Windows":
-                        var windowsIdentity = (WindowsIdentity)this.Context.User.Identity;
-                        sid = new byte[windowsIdentity.User.BinaryLength];
-                        windowsIdentity.User.GetBinaryForm(sid, 0);
-                        break;
-                    case "Forms": // note: Получение сида при идентификации по формам. 
-                            sid = Encoding.Default.GetBytes(User.GetSID());
-                        break;
-                }
+                var values = webReportManager.GetValues();
+                var sid = Encoding.Default.GetBytes(User.GetSID());
 
                 if (((IWebReportPlugin) webReportManager.Plugin).AllowSaveValuesConditions)
                     StorageValues.SetStorageValues(webReportManager.Plugin.GetType().FullName, sid, values);
@@ -430,9 +419,7 @@ namespace Nat.Web.ReportManager.UserControls
                 IWebReportPlugin webReportPlugin = (IWebReportPlugin)webReportManager.Plugin;
                 if (webReportPlugin != null && webReportPlugin.AllowSaveValuesConditions)
                 {
-                    byte[] sid = new byte[((WindowsIdentity)Context.User.Identity).User.BinaryLength];
-                    ((WindowsIdentity)Context.User.Identity).User.GetBinaryForm(sid, 0);
-                    values = StorageValues.GetStorageValues(webReportManager.Plugin.GetType().FullName, sid);
+                    values = StorageValues.GetStorageValues(webReportManager.Plugin.GetType().FullName, Encoding.Default.GetBytes(User.GetSID()));
                     if (values != null && values.CountListValues > 0)
                         _countModelFillConditions = values.CountListValues;
                 }

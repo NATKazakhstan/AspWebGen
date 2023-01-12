@@ -161,7 +161,7 @@ namespace Nat.Web.Tools.Security
             {
                 if (getType == null)
                     getType = TypeDescriptor.GetProperties(claim).Find("Type", false).GetValue;
-                if ((string)getType.Invoke(claim) == "LoginName")
+                if ((string)getType.Invoke(claim) == "Sid")
                     return (string)TypeDescriptor.GetProperties(claim).Find("Value", false).GetValue(claim);
             }
 

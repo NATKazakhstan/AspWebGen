@@ -164,10 +164,10 @@ namespace Nat.Web.Tools
             return accountName;
         }
 
-        private void SyncSidAndNames(string actveDirectoryConnectionString, string filter, int progress)
+        private void SyncSidAndNames(string activeDirectoryConnectionString, string filter, int progress)
         {
             var count = 0;
-            var parent = new DirectoryEntry(actveDirectoryConnectionString);
+            var parent = new DirectoryEntry(activeDirectoryConnectionString);
 
             var searcher = new DirectorySearcher(parent, filter);
             searcher.PropertiesToLoad.Add(ObjectsId);
@@ -205,7 +205,7 @@ namespace Nat.Web.Tools
             DbParameter sidParameterSelect = SpecificInstances.DbFactory.CreateParameter();
             
             cSelect.CommandType = CommandType.Text;
-            cSelect.CommandText = "select top (1) id, name, loginName, email, isDisabled, SidInBase64 from LOG_SidIdentification where (sid = @sid or loginName = @sid) and isDeleted = 0 and isDisabled = 0";
+            cSelect.CommandText = "select top (1) id, name, loginName, email, isDisabled, SidInBase64 from LOG_SidIdentification where sid = @sid";
             cSelect.Connection = connectionSelect;
 
             sidParameterSelect.DbType = DbType.String;

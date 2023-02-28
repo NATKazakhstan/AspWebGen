@@ -588,6 +588,9 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                     case IRedirectReportPlugin _:
                         url.CustomQueryParameters.Add("isSqlReportingServices", "2");
                         break;
+                    case ICustomStreamReport _:
+                        url.CustomQueryParameters.Add("isSqlReportingServices", "3");
+                        break;
                     default:
                         url.CustomQueryParameters.Add("isSqlReportingServices", "0");
                         break;

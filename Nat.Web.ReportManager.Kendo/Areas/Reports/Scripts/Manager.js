@@ -607,10 +607,12 @@
                 dv.attr('data-bind', dataBind1.replace(/DynamicValue/gi, 'Value1'))
                     .attr('name', 'Value1_' + item.ParameterIndex)
                     .attr('id', 'Value1_' + item.ParameterIndex);
-                dataBind1 = dvLink.attr('data-bind');
-                dvLink.attr('data-bind', dataBind1.replace(/DynamicValue/gi, 'Value1'))
-                    .attr('id', 'Value1_' + item.ParameterIndex + '_link')
-                    .attr('clientId', 'Value1_' + item.ParameterIndex);
+                if (dvLink.length) {
+                    dataBind1 = dvLink.attr('data-bind');
+                    dvLink.attr('data-bind', dataBind1.replace(/DynamicValue/gi, 'Value1'))
+                        .attr('id', 'Value1_' + item.ParameterIndex + '_link')
+                        .attr('clientId', 'Value1_' + item.ParameterIndex);
+                }
             }
 
             dv = $('#DynamicValue2');
@@ -620,10 +622,12 @@
                 dv.attr('data-bind', dataBind2.replace(/DynamicValue/gi, 'Value2'))
                     .attr('name', 'Value2_' + item.ParameterIndex)
                     .attr('id', 'Value2_' + item.ParameterIndex);
-                dataBind2 = dvLink.attr('data-bind');
-                dvLink.attr('data-bind', dataBind2.replace(/DynamicValue/gi, 'Value1'))
-                    .attr('id', 'Value2_' + item.ParameterIndex + '_link')
-                    .attr('clientId', 'Value2_' + item.ParameterIndex);
+                if (dvLink.length) {
+                    dataBind2 = dvLink.attr('data-bind');
+                    dvLink.attr('data-bind', dataBind2.replace(/DynamicValue/gi, 'Value1'))
+                        .attr('id', 'Value2_' + item.ParameterIndex + '_link')
+                        .attr('clientId', 'Value2_' + item.ParameterIndex);
+                }
             }
 
             VM.bindModel = {

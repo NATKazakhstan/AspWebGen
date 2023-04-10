@@ -1,4 +1,4 @@
-/*
+п»ї/*
  * Created by : Daniil Kovalev
  * Created    : 20.03.2008
  */
@@ -369,7 +369,7 @@ namespace Nat.Web.Controls
                         WriteFieldChanged(
                             refLog,
                             "",
-                            "Включено делегирование прав доступа",
+                            "Р’РєР»СЋС‡РµРЅРѕ РґРµР»РµРіРёСЂРѕРІР°РЅРёРµ РїСЂР°РІ РґРѕСЃС‚СѓРїР°",
                             "",
                             userDelegation.id + ", " + userDelegation.Fio_Ru + ", " + userDelegation.PositionNameRu);
                     }
@@ -574,10 +574,10 @@ namespace Nat.Web.Controls
         }
 
         /// <summary>
-        /// Результат логирования ссылка на лог в журнале событий.
+        /// Р РµР·СѓР»СЊС‚Р°С‚ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ СЃСЃС‹Р»РєР° РЅР° Р»РѕРі РІ Р¶СѓСЂРЅР°Р»Рµ СЃРѕР±С‹С‚РёР№.
         /// </summary>
-        /// <param name="e">Произошедшее исключение, которое нужно поместить в журнал событий.</param>
-        /// <returns>Ссылка на запись журнала событий.</returns>
+        /// <param name="e">РџСЂРѕРёР·РѕС€РµРґС€РµРµ РёСЃРєР»СЋС‡РµРЅРёРµ, РєРѕС‚РѕСЂРѕРµ РЅСѓР¶РЅРѕ РїРѕРјРµСЃС‚РёС‚СЊ РІ Р¶СѓСЂРЅР°Р» СЃРѕР±С‹С‚РёР№.</param>
+        /// <returns>РЎСЃС‹Р»РєР° РЅР° Р·Р°РїРёСЃСЊ Р¶СѓСЂРЅР°Р»Р° СЃРѕР±С‹С‚РёР№.</returns>
         public string LogException(Exception e)
         {
             var logid = WriteLog(
@@ -592,11 +592,11 @@ namespace Nat.Web.Controls
         }
 
         /// <summary>
-        /// Результат логирования ссылка на лог в журнале событий.
+        /// Р РµР·СѓР»СЊС‚Р°С‚ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ СЃСЃС‹Р»РєР° РЅР° Р»РѕРі РІ Р¶СѓСЂРЅР°Р»Рµ СЃРѕР±С‹С‚РёР№.
         /// </summary>
-        /// <param name="e">Произошедшее исключение, которое нужно поместить в журнал событий.</param>
-        /// <returns>Ссылка на запись журнала событий.</returns>
-        /// <param name="sid">SID пользователя от имени которого нужно произвести логирование.</param>
+        /// <param name="e">РџСЂРѕРёР·РѕС€РµРґС€РµРµ РёСЃРєР»СЋС‡РµРЅРёРµ, РєРѕС‚РѕСЂРѕРµ РЅСѓР¶РЅРѕ РїРѕРјРµСЃС‚РёС‚СЊ РІ Р¶СѓСЂРЅР°Р» СЃРѕР±С‹С‚РёР№.</param>
+        /// <returns>РЎСЃС‹Р»РєР° РЅР° Р·Р°РїРёСЃСЊ Р¶СѓСЂРЅР°Р»Р° СЃРѕР±С‹С‚РёР№.</returns>
+        /// <param name="sid">SID РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РѕС‚ РёРјРµРЅРё РєРѕС‚РѕСЂРѕРіРѕ РЅСѓР¶РЅРѕ РїСЂРѕРёР·РІРµСЃС‚Рё Р»РѕРіРёСЂРѕРІР°РЅРёРµ.</param>
         public string LogException(Exception e, string sid)
         {
             var logid = WriteLog(
@@ -632,7 +632,7 @@ namespace Nat.Web.Controls
             set
             {
                 var connection = WebConfigurationManager.ConnectionStrings["LogConnection"]?.ConnectionString;
-                // не присваиваем транзакцию если разные соединения.
+                // РЅРµ РїСЂРёСЃРІР°РёРІР°РµРј С‚СЂР°РЅР·Р°РєС†РёСЋ РµСЃР»Рё СЂР°Р·РЅС‹Рµ СЃРѕРµРґРёРЅРµРЅРёСЏ.
                 if (value != null && !string.IsNullOrEmpty(connection) && value.Connection?.ConnectionString != connection)
                     return;
 
@@ -735,6 +735,17 @@ namespace Nat.Web.Controls
                         connection.Close();
                 }
             }
+
+            public static void NeedReloadIfCodeNotExists(long code)
+            {
+                if(!Table.Rows.Contains(code))
+                    NeedReload();
+            }
+        }
+
+        public static void EnabledChanged(long code)
+        {
+            EnabledLogTable.NeedReloadIfCodeNotExists(code);
         }
     }
 }

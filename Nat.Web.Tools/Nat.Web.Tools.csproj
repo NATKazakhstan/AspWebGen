@@ -168,6 +168,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Report\IReportWatermark.cs" />
+    <Compile Include="Report\IWatermark.cs" />
     <Compile Include="Security\AccessDeniedException.cs" />
     <Compile Include="Security\DB.cs">
       <DependentUpon>DB.dbml</DependentUpon>

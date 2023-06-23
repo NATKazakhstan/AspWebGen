@@ -67,6 +67,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.16.0\lib\net35\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.ReportViewer.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Microsoft.ReportViewer.Common.dll</HintPath>
@@ -201,6 +204,7 @@
     <Content Include="Localization\uk.xml" />
     <Content Include="Localization\zh-CHS.xml" />
     <Content Include="Localization\zh-CHT.xml" />
+    <EmbeddedResource Include="printerSettings1.bin" />
     <Content Include="ReportingServicesViewer.aspx" />
     <Content Include="UserControls\App_LocalResources\ReportManagerControl.ascx.kk-KZ.resx">
       <SubType>Designer</SubType>
@@ -240,6 +244,7 @@
     <Compile Include="ReportGeneration\ICustomStreamReport.cs" />
     <Compile Include="ReportGeneration\IReportAutoExport.cs" />
     <Compile Include="ReportManagerInitializer.cs" />
+    <Compile Include="ReportPartGeneration\ReportWatermark.cs" />
     <Compile Include="ReportSubscriptionsHelper.cs" />
     <Compile Include="Data\DB.designer.cs">
       <AutoGen>True</AutoGen>

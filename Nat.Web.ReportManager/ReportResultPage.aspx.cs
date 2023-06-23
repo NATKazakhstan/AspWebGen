@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net.Sockets;
-using System.Security.Principal;
 using System.Web;
 using System.Web.Caching;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using Nat.ReportManager.ReportGeneration.StimulSoft;
 using Nat.Web.Controls;
 using Nat.Web.ReportManager.CustomExport;
 using Nat.Web.Tools;
 using Nat.Web.Tools.Initialization;
+using Nat.Web.Tools.Report;
 using Stimulsoft.Report;
 using Stimulsoft.Report.Web;
 using Stimulsoft.Report.Components;
 using System.Threading;
 using System.Web.Mvc;
-using Nat.Web.ReportManager.Properties;
-using Stimulsoft.Report.Engine;
+using Stimulsoft.Base.Drawing;
+using Page = System.Web.UI.Page;
 
 namespace Nat.Web.ReportManager
 {
@@ -34,7 +33,6 @@ namespace Nat.Web.ReportManager
     using Nat.Web.Tools.Security;
 
     using Stimulsoft.Report.Dictionary;
-    using static Stimulsoft.Report.Web.StiWebViewer;
 
     public partial class ReportResultPage : BaseSPPage
     {
@@ -171,179 +169,181 @@ namespace Nat.Web.ReportManager
                     return null;
                 webReportManager.RoleCheck = RoleCheck;
                 webReportManager.Plugin = webReportManager.GetPlugins()[pluginName];
-                if (webReportManager.Plugin != null)
+                if (webReportManager.Plugin == null)
+                    return null;
+                
+                webReportManager.Plugin.InitializeReportCulture(culture);
+                var values = storageValues;
+                var webReportPlugin = (IWebReportPlugin) webReportManager.Plugin;
+                var stiPlugin = (IStimulsoftReportPlugin) webReportPlugin;
+                webReportPlugin.Page = page;
+
+                webReportManager.CreateView();
+                
+                if (!string.IsNullOrEmpty(webReportManager.Plugin.CultureParameter))
                 {
-                    webReportManager.Plugin.InitializeReportCulture(culture);
-                    var values = storageValues;
-                    var webReportPlugin = (IWebReportPlugin) webReportManager.Plugin;
-                    var stiPlugin = (IStimulsoftReportPlugin) webReportPlugin;
-                    webReportPlugin.Page = page;
+                    values.SetStorageValues(
+                        webReportManager.Plugin.CultureParameter, webReportManager.Plugin.InitializedKzCulture);
+                }
 
-                    webReportManager.CreateView();
-                    
-                    if (!string.IsNullOrEmpty(webReportManager.Plugin.CultureParameter))
+                webReportManager.InitValues(values, webReportPlugin.InitSavedValuesInvisibleConditions);
+                webReportPlugin.Constants = constants;
+                if (!string.IsNullOrEmpty(webReportManager.Plugin.CultureParameter)
+                    && stiPlugin.Report.Dictionary.Variables.Contains(webReportManager.Plugin.CultureParameter))
+                {
+                    if (webReportManager.Plugin.SupportRuKz)
                     {
-                        values.SetStorageValues(
-                            webReportManager.Plugin.CultureParameter, webReportManager.Plugin.InitializedKzCulture);
-                    }
-
-                    webReportManager.InitValues(values, webReportPlugin.InitSavedValuesInvisibleConditions);
-                    webReportPlugin.Constants = constants;
-                    if (!string.IsNullOrEmpty(webReportManager.Plugin.CultureParameter)
-                        && stiPlugin.Report.Dictionary.Variables.Contains(webReportManager.Plugin.CultureParameter))
-                    {
-                        if (webReportManager.Plugin.SupportRuKz)
-                        {
-                            stiPlugin.Report[webReportManager.Plugin.CultureParameter] =
-                                webReportManager.Plugin.InitializedKzCulture;
-                        }
-                        else
-                        {
-                            stiPlugin.Report[webReportManager.Plugin.CultureParameter] =
-                                webReportManager.Plugin.InitializedCulture;
-                        }
-                    }
-                    
-                    var autoExport = webReportPlugin as IReportAutoExport;
-                    var isExport = !isPreview && (useReturnStream || autoExport != null || expToWord || stiPlugin.AutoExportTo != null);
-
-                    var logId = Log(logMonitor, guid, webReportManager,
-                        isExport ? LogReportGenerateCodeType.Export : LogReportGenerateCodeType.Preview);
-                    var qrCodeTextFormat = DependencyResolver.Current.GetService<IQrCodeTextFormat>();
-                    if (logId != null)
-                    {
-                        stiPlugin.Report["IsHtml"] = format != null && format.ToLower().Equals("html"); 
-                        stiPlugin.Report["BarCodeLogText"] = qrCodeTextFormat.GetUserText(logId.Value);
-                        stiPlugin.Report["BarCodeLogData"] = qrCodeTextFormat.GetQrCodeData(logId.Value);
-                        stiPlugin.Report["BarCodeLogImageH"] = qrCodeTextFormat.GetHorizontalImage();
-                        stiPlugin.Report["BarCodeLogImageV"] = qrCodeTextFormat.GetVerticalImage();
-                    }
-
-                    try
-                    {
-                        webReportManager.ShowReport();
-                    }
-                    catch (ConstraintException e)
-                    {
-                        var allErrors = webReportManager.Plugin.Table.DataSet?.GetAllErrors();
-                        if (!string.IsNullOrEmpty(allErrors))
-                            throw new Exception(allErrors, e);
-                        var errors = webReportManager.Plugin.Table.GetErrors();
-                        if (errors.Length > 0)
-                            throw new Exception(errors.Select(r => r.RowError).Aggregate((v1, v2) => v1 + "; " + v2), e);
-                        throw;
-                    }
-
-                    var section = ReportInitializerSection.GetReportInitializerSection();
-                    if (section != null && !string.IsNullOrEmpty(section.PropSaveDataFile))
-                    {
-                        if (webReportManager.Plugin.Table.DataSet != null)
-                            webReportManager.Plugin.Table.DataSet.WriteXml(section.PropSaveDataFile);
-                        else
-                            webReportManager.Plugin.Table.WriteXml(section.PropSaveDataFile);
-                    }
-
-                    if (HttpContext.Current != null && HttpContext.Current.Request.QueryString["GetDataSet"] == "on" && UserRoles.IsInRole(UserRoles.ADMIN))
-                    {
-                        using (var stream = new MemoryStream())
-                        {
-                            if (webReportManager.Plugin.Table.DataSet != null)
-                                webReportManager.Plugin.Table.DataSet.WriteXml(stream);
-                            else
-                                webReportManager.Plugin.Table.WriteXml(stream);
-
-                            stream.Position = 0;
-                            PageHelper.DownloadFile(stream, "data.xml", HttpContext.Current.Response);
-                        }
-                    }
-
-                    DBDataContext.AddViewReports(
-                        Tools.Security.User.GetSID(),
-                        HttpContext.Current?.User.Identity.Name ?? "anonymous",
-                        HttpContext.Current?.User.Identity.Name ?? "anonymous",
-                        ReportInitializerSection.GetReportInitializerSection().ReportPageViewer + "?ClassName=" + pluginName,
-                        HttpContext.Current?.Request.Url.GetLeftPart(UriPartial.Authority) ?? "https://srvmax.vvmvd.kz",
-                        Environment.MachineName,
-                        isExport,
-                        webReportManager.Plugin.GetType());
-
-                    var availableFormat = WebReportManager.GetAvailableStiFormat(stiPlugin).ToList();
-                    if (useReturnStream)
-                    {
-                        StiExportFormat? stiExportFormat = null;
-                        CustomExportType? stiCustomExportType = null;
-                        try
-                        {
-                            if ("Auto".Equals(format, StringComparison.InvariantCulture))
-                            {
-                                stiExportFormat = stiPlugin.AutoExportTo == null 
-                                    ? availableFormat.First()
-                                    : (availableFormat.Contains(stiPlugin.AutoExportTo.Value)
-                                        ? stiPlugin.AutoExportTo.Value 
-                                        : availableFormat.First());
-                                stiCustomExportType = webReportPlugin.CustomExportType;
-                            }
-                            else if ("Word".Equals(format, StringComparison.InvariantCulture))
-                                stiExportFormat = availableFormat.Contains(StiExportFormat.Word2007)
-                                    ? StiExportFormat.Word2007
-                                    : availableFormat.First();
-                            else if ("Excel".Equals(format, StringComparison.InvariantCulture))
-                                stiExportFormat = availableFormat.Contains(StiExportFormat.Excel2007) ? StiExportFormat.Excel2007 : availableFormat.First();
-                            else
-                                stiExportFormat = (StiExportFormat) Enum.Parse(typeof(StiExportFormat), format);
-                        }
-                        catch (ArgumentException)
-                        {
-                            stiCustomExportType = (CustomExportType) Enum.Parse(typeof(CustomExportType), format);
-                        }
-
-                        if (stiCustomExportType != null && stiCustomExportType != CustomExportType.None)
-                        {
-                            return ExportWithoutShow(
-                                webReportManager.Report,
-                                stiCustomExportType.Value,
-                                true,
-                                out fileNameExtension, 
-                                out fileName);
-                        }
-
-                        fileNameExtension = WebReportManager.GetFileExtension(stiExportFormat.Value);
-                        return ExportWithoutShow(webReportManager.Report, stiExportFormat.Value, true, out fileName);
-                    }
-
-                    //webReportManager.Report.EndRender += (sender, args) => LogMessages(webReportManager.Report, logMonitor);
-                    if (autoExport != null)
-                        autoExport.Export();
-
-                    if (!expToWord && stiPlugin.AutoExportTo == null)
-                    {
-                        report.Report = webReportManager.Report;
-                        page.Cache.Insert(report.Report.ReportName,
-                                          report.Report,
-                                          null,
-                                          Cache.NoAbsoluteExpiration,
-                                          new TimeSpan(0, 10, 0),
-                                          CacheItemPriority.NotRemovable,
-                                          null);
-                        report.ResetCurrentPage();
-                    }
-                    else if (webReportPlugin.CustomExportType != CustomExportType.None)
-                    {
-                        return ExportWithoutShow(
-                            webReportManager.Report,
-                            webReportPlugin.CustomExportType,
-                            false,
-                            out fileNameExtension, 
-                            out fileName);
-                    }
-                    else if (stiPlugin.AutoExportTo != null)
-                    {
-                        return ExportWithoutShow(webReportManager.Report, stiPlugin.AutoExportTo.Value, false, out fileName);
+                        stiPlugin.Report[webReportManager.Plugin.CultureParameter] =
+                            webReportManager.Plugin.InitializedKzCulture;
                     }
                     else
                     {
-                        return ExportWithoutShow(webReportManager.Report, availableFormat.First(), false, out fileName);
+                        stiPlugin.Report[webReportManager.Plugin.CultureParameter] =
+                            webReportManager.Plugin.InitializedCulture;
                     }
+                }
+                
+                var autoExport = webReportPlugin as IReportAutoExport;
+                var isExport = !isPreview && (useReturnStream || autoExport != null || expToWord || stiPlugin.AutoExportTo != null);
+
+                var logId = Log(logMonitor, guid, webReportManager,
+                    isExport ? LogReportGenerateCodeType.Export : LogReportGenerateCodeType.Preview);
+                var qrCodeTextFormat = DependencyResolver.Current.GetService<IQrCodeTextFormat>();
+                if (logId != null)
+                {
+                    stiPlugin.Report["IsHtml"] = format != null && format.ToLower().Equals("html"); 
+                    stiPlugin.Report["BarCodeLogText"] = qrCodeTextFormat.GetUserText(logId.Value);
+                    stiPlugin.Report["BarCodeLogData"] = qrCodeTextFormat.GetQrCodeData(logId.Value);
+                    stiPlugin.Report["BarCodeLogImageH"] = qrCodeTextFormat.GetHorizontalImage();
+                    stiPlugin.Report["BarCodeLogImageV"] = qrCodeTextFormat.GetVerticalImage();
+                }
+
+                try
+                {
+                    webReportManager.ShowReport();
+                }
+                catch (ConstraintException e)
+                {
+                    var allErrors = webReportManager.Plugin.Table.DataSet?.GetAllErrors();
+                    if (!string.IsNullOrEmpty(allErrors))
+                        throw new Exception(allErrors, e);
+                    var errors = webReportManager.Plugin.Table.GetErrors();
+                    if (errors.Length > 0)
+                        throw new Exception(errors.Select(r => r.RowError).Aggregate((v1, v2) => v1 + "; " + v2), e);
+                    throw;
+                }
+
+                var section = ReportInitializerSection.GetReportInitializerSection();
+                if (section != null && !string.IsNullOrEmpty(section.PropSaveDataFile))
+                {
+                    if (webReportManager.Plugin.Table.DataSet != null)
+                        webReportManager.Plugin.Table.DataSet.WriteXml(section.PropSaveDataFile);
+                    else
+                        webReportManager.Plugin.Table.WriteXml(section.PropSaveDataFile);
+                }
+
+                if (HttpContext.Current != null && HttpContext.Current.Request.QueryString["GetDataSet"] == "on" && UserRoles.IsInRole(UserRoles.ADMIN))
+                {
+                    using (var stream = new MemoryStream())
+                    {
+                        if (webReportManager.Plugin.Table.DataSet != null)
+                            webReportManager.Plugin.Table.DataSet.WriteXml(stream);
+                        else
+                            webReportManager.Plugin.Table.WriteXml(stream);
+
+                        stream.Position = 0;
+                        PageHelper.DownloadFile(stream, "data.xml", HttpContext.Current.Response);
+                    }
+                }
+
+                DBDataContext.AddViewReports(
+                    Tools.Security.User.GetSID(),
+                    HttpContext.Current?.User.Identity.Name ?? "anonymous",
+                    HttpContext.Current?.User.Identity.Name ?? "anonymous",
+                    ReportInitializerSection.GetReportInitializerSection().ReportPageViewer + "?ClassName=" + pluginName,
+                    HttpContext.Current?.Request.Url.GetLeftPart(UriPartial.Authority) ?? "https://srvmax.vvmvd.kz",
+                    Environment.MachineName,
+                    isExport,
+                    webReportManager.Plugin.GetType());
+
+                var availableFormat = WebReportManager.GetAvailableStiFormat(stiPlugin).ToList();
+                if (useReturnStream)
+                {
+                    StiExportFormat? stiExportFormat = null;
+                    CustomExportType? stiCustomExportType = null;
+                    try
+                    {
+                        if ("Auto".Equals(format, StringComparison.InvariantCulture))
+                        {
+                            stiExportFormat = stiPlugin.AutoExportTo == null 
+                                ? availableFormat.First()
+                                : (availableFormat.Contains(stiPlugin.AutoExportTo.Value)
+                                    ? stiPlugin.AutoExportTo.Value 
+                                    : availableFormat.First());
+                            stiCustomExportType = webReportPlugin.CustomExportType;
+                        }
+                        else if ("Word".Equals(format, StringComparison.InvariantCulture))
+                            stiExportFormat = availableFormat.Contains(StiExportFormat.Word2007)
+                                ? StiExportFormat.Word2007
+                                : availableFormat.First();
+                        else if ("Excel".Equals(format, StringComparison.InvariantCulture))
+                            stiExportFormat = availableFormat.Contains(StiExportFormat.Excel2007) ? StiExportFormat.Excel2007 : availableFormat.First();
+                        else
+                            stiExportFormat = (StiExportFormat) Enum.Parse(typeof(StiExportFormat), format);
+                    }
+                    catch (ArgumentException)
+                    {
+                        stiCustomExportType = (CustomExportType) Enum.Parse(typeof(CustomExportType), format);
+                    }
+
+                    AddWatermark(webReportManager);
+
+                    if (stiCustomExportType != null && stiCustomExportType != CustomExportType.None)
+                    {
+                        return ExportWithoutShow(
+                            webReportManager.Report,
+                            stiCustomExportType.Value,
+                            true,
+                            out fileNameExtension, 
+                            out fileName);
+                    }
+
+                    fileNameExtension = WebReportManager.GetFileExtension(stiExportFormat.Value);
+                    return ExportWithoutShow(webReportManager, stiExportFormat.Value, true, out fileName);
+                }
+
+                //webReportManager.Report.EndRender += (sender, args) => LogMessages(webReportManager.Report, logMonitor);
+                if (autoExport != null)
+                    autoExport.Export();
+
+                if (!expToWord && stiPlugin.AutoExportTo == null)
+                {
+                    report.Report = webReportManager.Report;
+                    page.Cache.Insert(report.Report.ReportName,
+                                      report.Report,
+                                      null,
+                                      Cache.NoAbsoluteExpiration,
+                                      new TimeSpan(0, 10, 0),
+                                      CacheItemPriority.NotRemovable,
+                                      null);
+                    report.ResetCurrentPage();
+                }
+                else if (webReportPlugin.CustomExportType != CustomExportType.None)
+                {
+                    return ExportWithoutShow(
+                        webReportManager.Report,
+                        webReportPlugin.CustomExportType,
+                        false,
+                        out fileNameExtension, 
+                        out fileName);
+                }
+                else if (stiPlugin.AutoExportTo != null)
+                {
+                    return ExportWithoutShow(webReportManager, stiPlugin.AutoExportTo.Value, false, out fileName);
+                }
+                else
+                {
+                    return ExportWithoutShow(webReportManager, availableFormat.First(), false, out fileName);
                 }
             }
             finally
@@ -353,6 +353,23 @@ namespace Nat.Web.ReportManager
             }
 
             return null;
+        }
+
+        private static void AddWatermark(WebReportManager webReportManager)
+        {
+            var rWatermark = DependencyResolver.Current.GetService<IWatermark>();
+            var watermarkImage = rWatermark.GetImage(webReportManager.Plugin.GetType().FullName);
+            if (watermarkImage == null) return;
+            var watermark = new StiWatermark
+            {
+                AspectRatio = true,
+                Image = StiImageConverter.BytesToImage(watermarkImage),
+                ImageTiling = false
+            };
+            foreach (StiPage pg in webReportManager.Report.Pages)
+            {
+                pg.Watermark = watermark;
+            }
         }
 
         public static Stream GetCustomStreamReport(string pluginName, string guid, StorageValues storageValues, string culture, Page page, string format, LogMonitor logMonitor, bool expToWord, Dictionary<string, object> constants, out string fileName, out string fileNameExtension, bool RoleCheck, bool isPreview)
@@ -569,7 +586,7 @@ namespace Nat.Web.ReportManager
             {
                 try
                 {
-                    logMonitor.WriteFieldChanged(logId.Value, string.Empty, "»Ïˇ œ  ÔÓÎ¸ÁÓ‚‡ÚÂÎˇ",
+                    logMonitor.WriteFieldChanged(logId.Value, string.Empty, "–ò–º—è –ü–ö –ø–æ–ª—å–∑–æ–≤–∞—Ç–µ–ª—è",
                         System.Net.Dns.GetHostEntry(HttpContext.Current.Request.UserHostAddress).HostName, "");
                 }
                 catch (SocketException)
@@ -594,8 +611,9 @@ namespace Nat.Web.ReportManager
             Response.Redirect(Request.QueryString["backPath"]);
         }
 
-        private static Stream ExportWithoutShow(StiReport stiReport, StiExportFormat exportFormat, bool useReturnStream, out string fileName)
+        private static Stream ExportWithoutShow(WebReportManager webReportManager, StiExportFormat exportFormat, bool useReturnStream, out string fileName)
         {
+            StiReport stiReport = webReportManager.Report;
             stiReport.Render(false);
             if (exportFormat == StiExportFormat.Html)
                 stiReport.Bookmark?.Bookmarks.Clear();
@@ -608,6 +626,9 @@ namespace Nat.Web.ReportManager
             var stream = new MemoryStream();
             stiReport.ExportDocument(exportFormat, stream);
             stream.Position = 0;
+
+            AddWatermark(webReportManager, exportFormat, stream);
+            
             fileName = GetReportFileName(stiReport);
             if (!useReturnStream)
             {
@@ -617,6 +638,20 @@ namespace Nat.Web.ReportManager
             else 
                 return stream;
             return null;
+        }
+
+        private static void AddWatermark(WebReportManager webReportManager, StiExportFormat exportFormat, MemoryStream stream)
+        {
+            if (exportFormat == StiExportFormat.Excel2007)
+            {
+                var rw = DependencyResolver.Current.GetService<IReportWatermark>();
+                rw.AddToExcelStream(stream, webReportManager.Plugin.GetType().FullName);
+            }
+            else if (exportFormat == StiExportFormat.Word2007)
+            {
+                var rw = DependencyResolver.Current.GetService<IReportWatermark>();
+                rw.AddToWordStream(stream, webReportManager.Plugin.GetType().FullName);
+            }
         }
 
         private static string GetReportFileName(StiReport stiReport)
@@ -657,7 +692,7 @@ namespace Nat.Web.ReportManager
                 return stream;
             return null;
         }
-
+       
         private static void CustomExport(StiReport stiReport)
         {
             var pageRange = new StiPagesRange();

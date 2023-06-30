@@ -21,12 +21,14 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
 {
     public class ReportWatermark:IReportWatermark
     {
+        private static string _pluginFullName = string.Empty;
         public void AddToExcelStream(Stream stream, string pluginFullName)
         {
             var rWatermark = DependencyResolver.Current.GetService<IWatermark>();
             var watermarkImage = rWatermark.GetImage(pluginFullName);
             if (watermarkImage == null) return;
             
+            _pluginFullName = pluginFullName;
             var doc = SpreadsheetDocument.Open( stream, true, new OpenSettings());
             var sheetPart = doc.WorkbookPart.WorksheetParts.First();
 
@@ -71,7 +73,11 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
             var headerFooter = sheetPart.Worksheet.Elements<HeaderFooter>().FirstOrDefault();
             if (headerFooter == null)
             {
-                headerFooter = new HeaderFooter();
+                bool isCrossTable = _pluginFullName.Contains( "CrossTableViews" );
+                headerFooter = new HeaderFooter()
+                {
+                    ScaleWithDoc = !isCrossTable
+                };
             }
 
             var oddH = new OddHeader("&C&G");
@@ -82,26 +88,57 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
         private static void AddSheetView(WorksheetPart sheetPart)
         {
             var shViews = sheetPart.Worksheet.Elements<SheetViews>().FirstOrDefault();
-            var shView = shViews.Elements<SheetView>().FirstOrDefault();
-
-            shView.SetAttribute(new OpenXmlAttribute("view", null, "pageLayout"));
-            shView.SetAttribute(new OpenXmlAttribute("zoomScaleNormal", null, "100"));
+            var shView = shViews?.Elements<SheetView>().FirstOrDefault();
+            if(shView == null)return;
+            shView.View = new EnumValue<SheetViewValues>(SheetViewValues.PageLayout);
+            shView.ZoomScaleNormal = 100;
+            shView.ZoomScale = 50;
+            shView.ZoomScalePageLayoutView = 50;
+            shView.WorkbookViewId = 0;
+            if(_pluginFullName.Contains( "CrossTableViews" ))
+            {
+                if (shView.Pane?.State != null)
+                    shView.Pane.State.Value = PaneStateValues.Split;
+            }            
         }
 
         private static void AddPrinterSettings(WorksheetPart sheetPart)
         {
             var printerStngsPart = sheetPart.AddNewPart<SpreadsheetPrinterSettingsPart>();
+            FeedPrinterSettings(printerStngsPart);
+
+            var pageSetup = sheetPart.Worksheet.Elements<PageSetup>().FirstOrDefault();
+            if (pageSetup == null) return;
+            pageSetup.Id = sheetPart.GetIdOfPart(printerStngsPart);
+            SetPageScale(pageSetup);
+            try
+            {
+                var paperAttr = pageSetup.GetAttribute("paperSize", null);
+                paperAttr.Value = "9";
+                pageSetup.SetAttribute(paperAttr);
+            }
+            catch (Exception e)
+            {
+            }
+        }
+
+        private static void SetPageScale(PageSetup pageSetup)
+        {
+            if (_pluginFullName.Contains("CrossTableViews.ReportPlugins.PositionAppointmentCommanders")
+                || _pluginFullName.Contains("CrossTableViews.ReportPlugins.PositionAppointment"))
+            {
+                pageSetup.Scale = 36;
+            }
+        }
+
+        private static void FeedPrinterSettings(SpreadsheetPrinterSettingsPart printerStngsPart)
+        {
+            string manifestRes = "Nat.Web.ReportManager.printerSettings1.bin";
             using (var prntrStream = Assembly.GetAssembly(typeof(ReportResultPage))
-                       .GetManifestResourceStream("Nat.Web.ReportManager.printerSettings1.bin"))
+                       .GetManifestResourceStream(manifestRes))
             {
                 printerStngsPart.FeedData(prntrStream);
             }
-
-            var pageSetup = sheetPart.Worksheet.Elements<PageSetup>().FirstOrDefault();
-            pageSetup.Id = sheetPart.GetIdOfPart(printerStngsPart);
-            var paperAttr = pageSetup.GetAttribute("paperSize", null);
-            paperAttr.Value = "9";
-            pageSetup.SetAttribute(paperAttr);
         }
 
         private static void FillVmlDrwPart(VmlDrawingPart vmlDrwPart, string imgPartId)

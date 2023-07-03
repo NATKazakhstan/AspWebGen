@@ -1,4 +1,7 @@
-﻿namespace Nat.ExportInExcel
+﻿using System.Web.Mvc;
+using Nat.Web.Tools.Report;
+
+namespace Nat.ExportInExcel
 {
     using System;
     using System.Collections.Generic;
@@ -126,7 +129,8 @@
             journalControl.LogMonitor = logMonitor;
             journalControl.Url = MainPageUrlBuilder.Current.Clone();
             if (checkPermit) journalControl.CheckExportPermit();
-            if ("xml".Equals(properties.Format, StringComparison.OrdinalIgnoreCase))
+            bool isXml = "xml".Equals(properties.Format, StringComparison.OrdinalIgnoreCase);
+            if (isXml)
             {
                 var exporterXml = new ExporterXml<TDataContext, TFilterControl, TKey, TTable, TDataSource, TRow, TJournal,
                     TNavigatorControl, TNavigatorValues, TFilter> { LogMonitor = logMonitor };
@@ -137,6 +141,8 @@
                 var exporterXslx = new ExporterXslx<TDataContext, TFilterControl, TKey, TTable, TDataSource, TRow, TJournal,
                     TNavigatorControl, TNavigatorValues, TFilter> { LogMonitor = logMonitor };
                 stream = exporterXslx.GetExcel(journalControl, properties);
+                var watermark = DependencyResolver.Current.GetService<IReportWatermark>();
+                watermark.AddToExcelStream(stream, journalControl.ReportPluginName);
             }
 
             var plugin = BuildManager.GetType(properties.ReportPluginName, false, true) ?? GetTypeByReportManager(properties.ReportPluginName);
@@ -157,14 +163,26 @@
                 (long) journalControl.ExportLog,
                 LogReportGenerateCodeType.Export);
 
-            logMonitor.Log(
+            var logId = logMonitor.WriteLog(
                 new LogMessageEntry(
                     User.GetSID(),
                     logType,
                     properties.NameRu,
                     journalControl.OnExportNewSavedProperties ? RvsSavedProperties.GetFromJournal(journalControl) : properties));
 
+            if (!isXml)
+            {
+                AddQrCode(stream, logId);
+            }
+            
             return stream;
+        }
+
+        private static void AddQrCode(Stream stream, long? logId)
+        {
+            if(logId == null)return;
+            var qrCodeTool = DependencyResolver.Current.GetService<IReportQr>();
+            qrCodeTool.AddToExcel(stream, logId.Value);
         }
 
         private static Type GetTypeByReportManager(string pluginName)

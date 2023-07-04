@@ -172,17 +172,19 @@ namespace Nat.ExportInExcel
 
             if (!isXml)
             {
-                AddQrCode(stream, logId);
+                AddSigns(stream, logId);
             }
             
             return stream;
         }
 
-        private static void AddQrCode(Stream stream, long? logId)
+        private static void AddSigns(Stream stream, long? logId)
         {
             if(logId == null)return;
             var qrCodeTool = DependencyResolver.Current.GetService<IReportQr>();
             qrCodeTool.AddToExcel(stream, logId.Value);
+            var sideInfoTool = DependencyResolver.Current.GetService<IReportSideInfo>();
+            sideInfoTool.AddToExcel(stream, logId.Value);
         }
 
         private static Type GetTypeByReportManager(string pluginName)

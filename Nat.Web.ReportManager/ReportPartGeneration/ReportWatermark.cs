@@ -29,22 +29,22 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
             if (watermarkImage == null) return;
             
             _pluginFullName = pluginFullName;
-            var doc = SpreadsheetDocument.Open( stream, true, new OpenSettings());
-            var sheetPart = doc.WorkbookPart.WorksheetParts.First();
-
-            AddSheetView(sheetPart);
-            AddPrinterSettings(sheetPart);
-
-            var dwg = sheetPart.Worksheet.Elements<XDrawing>().FirstOrDefault();
-            if (dwg != null)
+            using (var doc = SpreadsheetDocument.Open( stream, true, new OpenSettings()))
             {
-                sheetPart.Worksheet.RemoveChild(dwg);
-            }
-            AddHeader(sheetPart);
-            AddWatermarkDrawing(sheetPart, watermarkImage, dwg);
+                var sheetPart = doc.WorkbookPart.WorksheetParts.First();
 
-            doc.Close();
-            doc.Dispose();
+                AddSheetView(sheetPart);
+                AddPrinterSettings(sheetPart);
+
+                var dwg = sheetPart.Worksheet.Elements<XDrawing>().FirstOrDefault();
+                if (dwg != null)
+                {
+                    sheetPart.Worksheet.RemoveChild(dwg);
+                }
+                AddHeader(sheetPart);
+                AddWatermarkDrawing(sheetPart, watermarkImage, dwg);
+            }
+
             stream.Position = 0;
         }
 
@@ -111,15 +111,7 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
             if (pageSetup == null) return;
             pageSetup.Id = sheetPart.GetIdOfPart(printerStngsPart);
             SetPageScale(pageSetup);
-            try
-            {
-                var paperAttr = pageSetup.GetAttribute("paperSize", null);
-                paperAttr.Value = "9";
-                pageSetup.SetAttribute(paperAttr);
-            }
-            catch (Exception e)
-            {
-            }
+            pageSetup.PaperSize = 9;
         }
 
         private static void SetPageScale(PageSetup pageSetup)
@@ -231,27 +223,28 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
             var watermarkImage = rWatermark.GetImage(pluginFullName);
             if (watermarkImage == null) return;
 
-            var doc = WordprocessingDocument.Open(stream, true, new OpenSettings());
-            if (doc.MainDocumentPart == null) return;
-            doc.MainDocumentPart.DeleteParts(doc.MainDocumentPart.HeaderParts);
-            var headerPart = doc.MainDocumentPart.AddNewPart<HeaderPart>();
-            var imgPart = headerPart.AddImagePart(ImagePartType.Png);
-            using (var imgStream = new MemoryStream(watermarkImage))
+            using (var doc = WordprocessingDocument.Open(stream, true, new OpenSettings()))
             {
-                imgPart.FeedData(imgStream);
-            }
-            AddHeaderPartContent(headerPart, headerPart.GetIdOfPart(imgPart));
-            var secProps = doc.MainDocumentPart.Document.Body.Elements<SectionProperties>();
-            foreach (var secProp in secProps)
-            {
-                secProp.RemoveAllChildren<HeaderReference>();
-                secProp.PrependChild<HeaderReference>(new HeaderReference()
+                if (doc.MainDocumentPart == null) return;
+                doc.MainDocumentPart.DeleteParts(doc.MainDocumentPart.HeaderParts);
+                var headerPart = doc.MainDocumentPart.AddNewPart<HeaderPart>();
+                var imgPart = headerPart.AddImagePart(ImagePartType.Png);
+                using (var imgStream = new MemoryStream(watermarkImage))
                 {
-                    Id = doc.MainDocumentPart.GetIdOfPart(headerPart)
-                });
+                    imgPart.FeedData(imgStream);
+                }
+                AddHeaderPartContent(headerPart, headerPart.GetIdOfPart(imgPart));
+                var secProps = doc.MainDocumentPart.Document.Body.Elements<SectionProperties>();
+                foreach (var secProp in secProps)
+                {
+                    secProp.RemoveAllChildren<HeaderReference>();
+                    secProp.PrependChild<HeaderReference>(new HeaderReference()
+                    {
+                        Id = doc.MainDocumentPart.GetIdOfPart(headerPart)
+                    });
+                }
             }
-            doc.Close();
-            doc.Dispose();
+
             stream.Position = 0;
         }
 

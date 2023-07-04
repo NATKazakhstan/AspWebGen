@@ -364,7 +364,8 @@ namespace Nat.Web.ReportManager
             {
                 AspectRatio = true,
                 Image = StiImageConverter.BytesToImage(watermarkImage),
-                ImageTiling = false
+                ImageTiling = false,
+                ImageMultipleFactor = 0.36
             };
             foreach (StiPage pg in webReportManager.Report.Pages)
             {

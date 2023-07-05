@@ -346,7 +346,7 @@ namespace Nat.Web.ReportManager
 
         public void InitValues(StorageValues storageValues, bool initInvisible)
         {
-            if (Plugin == null) throw new Exception("Свойство Plugin не может быть равен null");
+            if (Plugin == null) throw new Exception("РЎРІРѕР№СЃС‚РІРѕ Plugin РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ СЂР°РІРµРЅ null");
 
             foreach (var filter in Plugin.Conditions)
             {
@@ -370,7 +370,7 @@ namespace Nat.Web.ReportManager
 
         public StorageValues GetValues()
         {
-            if (Plugin == null) throw new Exception("Свойство Plugin не может быть равен null");
+            if (Plugin == null) throw new Exception("РЎРІРѕР№СЃС‚РІРѕ Plugin РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ СЂР°РІРµРЅ null");
 
             var storageValues = new StorageValues(new Hashtable(), new List<Hashtable>());
 
@@ -406,28 +406,28 @@ namespace Nat.Web.ReportManager
         }
 
         /// <summary>
-        /// Сформировать ссылку на отчет
+        /// РЎС„РѕСЂРјРёСЂРѕРІР°С‚СЊ СЃСЃС‹Р»РєСѓ РЅР° РѕС‚С‡РµС‚
         /// </summary>
-        /// <param name="idrec">Передача параметров атчету</param>
-        /// <param name="pluginType">Тип плагина отчета</param>
-        /// <param name="backText">Текст для кнопки вернуться</param>
-        /// <param name="backUrl">Адрес кнопки "вернуться"</param>
-        /// <param name="export">Сразу выполнить экспорт</param>
-        /// <returns>Адрес отчета</returns>
+        /// <param name="idrec">РџРµСЂРµРґР°С‡Р° РїР°СЂР°РјРµС‚СЂРѕРІ Р°С‚С‡РµС‚Сѓ</param>
+        /// <param name="pluginType">РўРёРї РїР»Р°РіРёРЅР° РѕС‚С‡РµС‚Р°</param>
+        /// <param name="backText">РўРµРєСЃС‚ РґР»СЏ РєРЅРѕРїРєРё РІРµСЂРЅСѓС‚СЊСЃСЏ</param>
+        /// <param name="backUrl">РђРґСЂРµСЃ РєРЅРѕРїРєРё "РІРµСЂРЅСѓС‚СЊСЃСЏ"</param>
+        /// <param name="export">РЎСЂР°Р·Сѓ РІС‹РїРѕР»РЅРёС‚СЊ СЌРєСЃРїРѕСЂС‚</param>
+        /// <returns>РђРґСЂРµСЃ РѕС‚С‡РµС‚Р°</returns>
         public static string GetReportUrl(string idrec, Type pluginType, string backText, string backUrl, bool export)
         {
             return GetReportUrl(idrec, pluginType.FullName, backText, backUrl, export);
         }
 
         /// <summary>
-        /// Сформировать ссылку на отчет
+        /// РЎС„РѕСЂРјРёСЂРѕРІР°С‚СЊ СЃСЃС‹Р»РєСѓ РЅР° РѕС‚С‡РµС‚
         /// </summary>
-        /// <param name="idrec">Передача параметров атчету</param>
-        /// <param name="pluginType">Тип плагина отчета</param>
-        /// <param name="backText">Текст для кнопки вернуться</param>
-        /// <param name="backUrl">Адрес кнопки "вернуться"</param>
-        /// <param name="export">Сразу выполнить экспорт</param>
-        /// <returns>Адрес отчета</returns>
+        /// <param name="idrec">РџРµСЂРµРґР°С‡Р° РїР°СЂР°РјРµС‚СЂРѕРІ Р°С‚С‡РµС‚Сѓ</param>
+        /// <param name="pluginType">РўРёРї РїР»Р°РіРёРЅР° РѕС‚С‡РµС‚Р°</param>
+        /// <param name="backText">РўРµРєСЃС‚ РґР»СЏ РєРЅРѕРїРєРё РІРµСЂРЅСѓС‚СЊСЃСЏ</param>
+        /// <param name="backUrl">РђРґСЂРµСЃ РєРЅРѕРїРєРё "РІРµСЂРЅСѓС‚СЊСЃСЏ"</param>
+        /// <param name="export">РЎСЂР°Р·Сѓ РІС‹РїРѕР»РЅРёС‚СЊ СЌРєСЃРїРѕСЂС‚</param>
+        /// <returns>РђРґСЂРµСЃ РѕС‚С‡РµС‚Р°</returns>
         public static string GetReportUrl(string idrec, string pluginType, string backText, string backUrl, bool export)
         {
             var reportUrl = ReportInitializerSection.GetReportInitializerSection().ReportPageViewer;
@@ -439,14 +439,14 @@ namespace Nat.Web.ReportManager
         }
 
         /// <summary>
-        /// Сформировать ссылку на отчет
+        /// РЎС„РѕСЂРјРёСЂРѕРІР°С‚СЊ СЃСЃС‹Р»РєСѓ РЅР° РѕС‚С‡РµС‚
         /// </summary>
-        /// <param name="idrec">Передача параметров атчету</param>
-        /// <param name="pluginType">Тип плагина отчета</param>
-        /// <param name="backText">Текст для кнопки вернуться</param>
-        /// <param name="backUrl">Адрес кнопки "вернуться"</param>
-        /// <param name="export">Сразу выполнить экспорт</param>
-        /// <returns>Адрес отчета</returns>
+        /// <param name="idrec">РџРµСЂРµРґР°С‡Р° РїР°СЂР°РјРµС‚СЂРѕРІ Р°С‚С‡РµС‚Сѓ</param>
+        /// <param name="pluginType">РўРёРї РїР»Р°РіРёРЅР° РѕС‚С‡РµС‚Р°</param>
+        /// <param name="backText">РўРµРєСЃС‚ РґР»СЏ РєРЅРѕРїРєРё РІРµСЂРЅСѓС‚СЊСЃСЏ</param>
+        /// <param name="backUrl">РђРґСЂРµСЃ РєРЅРѕРїРєРё "РІРµСЂРЅСѓС‚СЊСЃСЏ"</param>
+        /// <param name="export">РЎСЂР°Р·Сѓ РІС‹РїРѕР»РЅРёС‚СЊ СЌРєСЃРїРѕСЂС‚</param>
+        /// <returns>РђРґСЂРµСЃ РѕС‚С‡РµС‚Р°</returns>
         public static string GetReportUrl(string idrec, string pluginType, string backText, string backUrl, string culture, bool export)
         {
             var reportPageViewer = ReportInitializerSection.GetReportInitializerSection().ReportPageViewer;
@@ -625,12 +625,21 @@ namespace Nat.Web.ReportManager
         public static IEnumerable<ExportFormat> GetAvailableFormat(object plugin)
         {
             var exportPermissions = plugin as IExportPermission;
+            var roles = GetExportWithWatermarkRole();
             if (exportPermissions == null)
-                return new[] {ExportFormat.Pdf, ExportFormat.Word, ExportFormat.Excel};
-
+            {
+                if (UserRoles.IsInAnyRoles(roles))
+                {
+                    return new[] { ExportFormat.Pdf, ExportFormat.Excel, ExportFormat.Word };
+                }
+                return new[] {ExportFormat.Pdf};
+            }
+            
             var list = new List<ExportFormat>(3);
 
-            var roles = exportPermissions.GetWordRoles();
+            var w = exportPermissions.GetWordRoles()?.ToList();
+            w?.Add(GetExportWithWatermarkRole()[0]);
+            roles = w?.ToArray();
             if (roles == null || roles.Length == 0 || UserRoles.IsInAnyRoles(roles))
                 list.Add(ExportFormat.Word);
 
@@ -638,11 +647,18 @@ namespace Nat.Web.ReportManager
             if (roles == null || roles.Length == 0 || UserRoles.IsInAnyRoles(roles))
                 list.Add(ExportFormat.Pdf);
 
-            roles = exportPermissions.GetExcelRoles();
+            var x = exportPermissions.GetExcelRoles()?.ToList();
+            x?.Add(GetExportWithWatermarkRole()[0]);
+            roles = x?.ToArray();
             if (roles == null || roles.Length == 0 || UserRoles.IsInAnyRoles(roles))
                 list.Add(ExportFormat.Excel);
 
             return list;
+        }
+
+        private static string[] GetExportWithWatermarkRole()
+        {
+            return new []{ "kvv Export_WordExcel_WithWatermark" };
         }
     }
 }

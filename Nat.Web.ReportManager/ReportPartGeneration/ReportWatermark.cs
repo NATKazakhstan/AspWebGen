@@ -10,6 +10,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Nat.ExportInExcel;
 using Nat.Web.Tools.Report;
+using Table = DocumentFormat.OpenXml.Wordprocessing.Table;
 using XDrawing = DocumentFormat.OpenXml.Spreadsheet.Drawing;
 using WHeader = DocumentFormat.OpenXml.Wordprocessing.Header;
 using WParagraph = DocumentFormat.OpenXml.Wordprocessing.Paragraph;
@@ -226,7 +227,9 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
             using (var doc = WordprocessingDocument.Open(stream, true, new OpenSettings()))
             {
                 if (doc.MainDocumentPart == null) return;
+                ConfigTable(doc);
                 doc.MainDocumentPart.DeleteParts(doc.MainDocumentPart.HeaderParts);
+                
                 var headerPart = doc.MainDocumentPart.AddNewPart<HeaderPart>();
                 var imgPart = headerPart.AddImagePart(ImagePartType.Png);
                 using (var imgStream = new MemoryStream(watermarkImage))
@@ -246,6 +249,28 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
             }
 
             stream.Position = 0;
+        }
+
+        private static void ConfigTable(WordprocessingDocument doc)
+        {
+            var tbls = doc.MainDocumentPart.Document.Body.Elements<Table>();
+            foreach (var tbl in tbls)
+            {
+                var trs = tbl.Elements<TableRow>();
+                foreach (var tr in trs)
+                {
+                    var tcs = tr.Elements<TableCell>();
+                    foreach (var tc in tcs)
+                    {
+                        var tcPrs = tc.Elements<TableCellProperties>();
+                        foreach (var tcPr in tcPrs)
+                        {
+                            if(tcPr.Shading == null)continue;
+                            tcPr.Shading.Fill = "auto";
+                        }
+                    }
+                }   
+            }
         }
 
         private void AddHeaderPartContent(HeaderPart headerPart, string imgPartId)

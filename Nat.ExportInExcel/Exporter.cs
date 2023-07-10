@@ -170,7 +170,10 @@ namespace Nat.ExportInExcel
                     properties.NameRu,
                     journalControl.OnExportNewSavedProperties ? RvsSavedProperties.GetFromJournal(journalControl) : properties));
 
-            if (!isXml)
+            if (!isXml
+                && (plugin.FullName.Contains("CrossTableViews.ReportPlugins.PositionAppointmentCommanders")
+                || plugin.FullName.Contains("CrossTableViews.ReportPlugins.PositionAppointment")
+                || plugin.FullName.Contains("CrossTableViews.ReportPlugins.ULS_CTV_Journal_CombatantNote")))
             {
                 AddSigns(stream, logId);
             }

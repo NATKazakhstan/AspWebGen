@@ -624,36 +624,11 @@ namespace Nat.Web.ReportManager
 
         public static IEnumerable<ExportFormat> GetAvailableFormat(object plugin)
         {
-            var exportPermissions = plugin as IExportPermission;
             var roles = GetExportWithWatermarkRole();
-            if (exportPermissions == null)
-            {
-                if (UserRoles.IsInAnyRoles(roles))
-                {
-                    return new[] { ExportFormat.Pdf, ExportFormat.Excel, ExportFormat.Word };
-                }
-                return new[] {ExportFormat.Pdf};
-            }
             
-            var list = new List<ExportFormat>(3);
-
-            var w = exportPermissions.GetWordRoles()?.ToList();
-            w?.Add(GetExportWithWatermarkRole()[0]);
-            roles = w?.ToArray();
-            if (roles == null || roles.Length == 0 || UserRoles.IsInAnyRoles(roles))
-                list.Add(ExportFormat.Word);
-
-            roles = exportPermissions.GetPdfRoles();
-            if (roles == null || roles.Length == 0 || UserRoles.IsInAnyRoles(roles))
-                list.Add(ExportFormat.Pdf);
-
-            var x = exportPermissions.GetExcelRoles()?.ToList();
-            x?.Add(GetExportWithWatermarkRole()[0]);
-            roles = x?.ToArray();
-            if (roles == null || roles.Length == 0 || UserRoles.IsInAnyRoles(roles))
-                list.Add(ExportFormat.Excel);
-
-            return list;
+            return UserRoles.IsInAnyRoles(roles)
+                ? new[] { ExportFormat.Pdf, ExportFormat.Excel, ExportFormat.Word }
+                : new[] {ExportFormat.Pdf};
         }
 
         private static string[] GetExportWithWatermarkRole()

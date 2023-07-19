@@ -1,9 +1,0 @@
-﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Nat.ExportInExcel.Properties" GeneratedClassName="Settings">
-  <Profiles />
-  <Settings>
-    <Setting Name="reportsForQr" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">CrossTableViews.ReportPlugins.PositionAppointmentCommanders;CrossTableViews.ReportPlugins.PositionAppointment;CrossTableViews.ReportPlugins.ULS_CTV_Journal_CombatantNote</Value>
-    </Setting>
-  </Settings>
-</SettingsFile>

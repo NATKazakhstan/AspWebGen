@@ -14,7 +14,7 @@ namespace Nat.ExportInExcel
     using System.Threading;
     using System.Web;
     using System.Web.Compilation;
-
+    using System.Web.Configuration;
     using Nat.Web.Controls;
     using Nat.Web.Controls.Data;
     using Nat.Web.Controls.GenerationClasses;
@@ -181,7 +181,7 @@ namespace Nat.ExportInExcel
 
         private static bool NeedQr( string fullName )
         {
-            var sv = Properties.Settings.Default.reportsForQr.Split( ';' ).FirstOrDefault( s => fullName.Contains( s ) );
+            var sv = WebConfigurationManager.AppSettings["reportsForQr"].Split( ';' ).FirstOrDefault( s => fullName.Contains( s ) );
             return !string.IsNullOrEmpty(sv);
         }
 

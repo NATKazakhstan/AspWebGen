@@ -8,6 +8,7 @@ namespace Nat.ExportInExcel
     using System.Data.Linq;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using System.Text;
     using System.Threading;
@@ -170,15 +171,18 @@ namespace Nat.ExportInExcel
                     properties.NameRu,
                     journalControl.OnExportNewSavedProperties ? RvsSavedProperties.GetFromJournal(journalControl) : properties));
 
-            if (!isXml
-                && (plugin.FullName.Contains("CrossTableViews.ReportPlugins.PositionAppointmentCommanders")
-                || plugin.FullName.Contains("CrossTableViews.ReportPlugins.PositionAppointment")
-                || plugin.FullName.Contains("CrossTableViews.ReportPlugins.ULS_CTV_Journal_CombatantNote")))
+            if (!isXml && NeedQr( plugin.FullName ))
             {
                 AddSigns(stream, logId);
             }
             
             return stream;
+        }
+
+        private static bool NeedQr( string fullName )
+        {
+            var sv = Properties.Settings.Default.reportsForQr.Split( ';' ).FirstOrDefault( s => fullName.Contains( s ) );
+            return !string.IsNullOrEmpty(sv);
         }
 
         private static void AddSigns(Stream stream, long? logId)

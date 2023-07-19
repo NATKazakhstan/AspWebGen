@@ -27,7 +27,6 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
         {
             var rWatermark = DependencyResolver.Current.GetService<IWatermark>();
             var watermarkImage = rWatermark.GetImage(pluginFullName);
-            if (watermarkImage == null) return;
             
             _pluginFullName = pluginFullName;
             using (var doc = SpreadsheetDocument.Open( stream, true, new OpenSettings()))
@@ -42,7 +41,7 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
                 {
                     sheetPart.Worksheet.RemoveChild(dwg);
                 }
-                AddHeader(sheetPart);
+                AddHeader(sheetPart, watermarkImage != null);
                 AddWatermarkDrawing(sheetPart, watermarkImage, dwg);
             }
 
@@ -54,22 +53,31 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
         private static void AddWatermarkDrawing(WorksheetPart sheetPart, byte[] watermarkImage, XDrawing dwg)
         {
             var vmlDrwPart = sheetPart.AddNewPart<VmlDrawingPart>();
-            var imagePart = vmlDrwPart.AddImagePart(ImagePartType.Png);
-            using (var imgStream = new MemoryStream(watermarkImage))
+            ImagePart imagePart = null;
+            if (watermarkImage != null)
             {
-                imagePart.FeedData(imgStream);
+                imagePart = vmlDrwPart.AddImagePart(ImagePartType.Png);
+                using (var imgStream = new MemoryStream(watermarkImage))
+                {
+                    imagePart.FeedData(imgStream);
+                }    
             }
 
-            FillVmlDrwPart(vmlDrwPart, vmlDrwPart.GetIdOfPart(imagePart));
+            string imgPrtId = imagePart == null ? string.Empty : vmlDrwPart.GetIdOfPart(imagePart);
+            FillVmlDrwPart(vmlDrwPart,imgPrtId);
             var ldhf = new LegacyDrawingHeaderFooter()
             {
                 Id = sheetPart.GetIdOfPart(vmlDrwPart)
             };
-            sheetPart.Worksheet.Append(dwg);
+            if(dwg != null)
+            {
+                sheetPart.Worksheet.Append(dwg);
+            }
+
             sheetPart.Worksheet.Append(ldhf);
         }
 
-        private static void AddHeader(WorksheetPart sheetPart)
+        private static void AddHeader(WorksheetPart sheetPart, bool addOdd)
         {
             var headerFooter = sheetPart.Worksheet.Elements<HeaderFooter>().FirstOrDefault();
             if (headerFooter == null)
@@ -81,8 +89,11 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
                 };
             }
 
-            var oddH = new OddHeader("&C&G");
-            headerFooter.Append(oddH);
+            if (addOdd)
+            {
+                var oddH = new OddHeader("&C&G");
+                headerFooter.Append(oddH);    
+            }
             sheetPart.Worksheet.Append(headerFooter);
         }
 
@@ -191,21 +202,24 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
             
             writer.WriteEndElement();//v:shapetype
             
-            writer.WriteStartElement("v:shape");
-            writer.WriteAttributeString("id", null, "CH");
-            writer.WriteAttributeString("o:spid", null, "_x0000_s1025");
-            writer.WriteAttributeString("type", null, "#_x0000_t75");
-            writer.WriteAttributeString("style", null, "position:absolute;margin-left:0;margin-top:0;width:1038pt;height:1038pt;z-index:1");
-            
-            writer.WriteStartElementExt("v:imagedata","o:relid", imgPartId,
-                "o:title", $"img_{DateTime.Now.Ticks}");
-            writer.WriteEndElement();//v:imagedata
-            
-            writer.WriteStartElementExt("o:lock",  "v:ext", "edit",
-                "rotation", "t");
-            writer.WriteEndElement();//o:lock
-            
-            writer.WriteEndElement();//v:shape
+            if (!string.IsNullOrEmpty(imgPartId))
+            { 
+                writer.WriteStartElement("v:shape");
+                writer.WriteAttributeString("id", null, "CH");
+                writer.WriteAttributeString("o:spid", null, "_x0000_s1025");
+                writer.WriteAttributeString("type", null, "#_x0000_t75");
+                writer.WriteAttributeString("style", null, "position:absolute;margin-left:0;margin-top:0;width:1038pt;height:1038pt;z-index:1");
+                
+                writer.WriteStartElementExt("v:imagedata","o:relid", imgPartId,
+                    "o:title", $"img_{DateTime.Now.Ticks}");
+                writer.WriteEndElement();//v:imagedata    
+                
+                writer.WriteStartElementExt("o:lock",  "v:ext", "edit",
+                    "rotation", "t");
+                writer.WriteEndElement();//o:lock
+                
+                writer.WriteEndElement();//v:shape
+            }
             writer.WriteEndElement();//xml
             
             writer.Flush();

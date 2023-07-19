@@ -15,19 +15,21 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
         public void AddToExcel(Stream stream, long logId)
         {
             var qrCodeTextFormat = DependencyResolver.Current.GetService<IQrCodeTextFormat>();
-            var qrImgStream = qrCodeTextFormat.GetQrCodeImageStream(logId);
-            if (qrImgStream == null) return;
-            using (var doc = SpreadsheetDocument.Open( stream, true, new OpenSettings()))
+            using (var qrImgStream = qrCodeTextFormat.GetQrCodeImageStream(logId))
             {
-                var sheetPart = doc.WorkbookPart.WorksheetParts.First();
+                if (qrImgStream == null) return;
+                using (var doc = SpreadsheetDocument.Open( stream, true, new OpenSettings()))
+                {
+                    var sheetPart = doc.WorkbookPart.WorksheetParts.First();
 
-                SetPageMargins(sheetPart);
-                SetHeaderFooter(sheetPart);
-                var drawingPart = sheetPart.VmlDrawingParts.FirstOrDefault();
-                if (drawingPart == null) return;
-                var imagePart = drawingPart.AddImagePart(ImagePartType.Png);
-                imagePart.FeedData(qrImgStream);
-                FIllVmlDwgPart(drawingPart, drawingPart.GetIdOfPart(imagePart));            
+                    SetPageMargins(sheetPart);
+                    SetHeaderFooter(sheetPart);
+                    var drawingPart = sheetPart.VmlDrawingParts.FirstOrDefault();
+                    if (drawingPart == null) return;
+                    var imagePart = drawingPart.AddImagePart(ImagePartType.Png);
+                    imagePart.FeedData(qrImgStream);
+                    FIllVmlDwgPart(drawingPart, drawingPart.GetIdOfPart(imagePart));
+                }
             }
 
             stream.Position = 0;
@@ -48,7 +50,7 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
             pgMargins.Top = 0.55118;
             pgMargins.Bottom = 1.25985;
             pgMargins.Header = 0;
-            pgMargins.Footer = 0;
+            pgMargins.Footer = 0.19685;
         }
 
         private void FIllVmlDwgPart(VmlDrawingPart drawingPart, string imgPartId)

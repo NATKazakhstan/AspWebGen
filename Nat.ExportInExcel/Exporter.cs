@@ -181,8 +181,10 @@ namespace Nat.ExportInExcel
 
         private static bool NeedQr( string fullName )
         {
-            var sv = WebConfigurationManager.AppSettings["reportsForQr"].Split( ';' ).FirstOrDefault( s => fullName.Contains( s ) );
-            return !string.IsNullOrEmpty(sv);
+            string v = WebConfigurationManager.AppSettings[ "reportsForQr" ];
+            if( string.IsNullOrEmpty( v ) )
+                return false;
+            return v.Split( ';' ).Any( s => !string.IsNullOrEmpty( s ) && fullName == s );            
         }
 
         private static void AddSigns(Stream stream, long? logId)

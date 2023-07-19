@@ -1,16 +1,20 @@
-﻿namespace Nat.ExportInExcel
+﻿using System.Web.Mvc;
+using Nat.Web.Tools.Report;
+
+namespace Nat.ExportInExcel
 {
     using System;
     using System.Collections.Generic;
     using System.Data.Linq;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using System.Text;
     using System.Threading;
     using System.Web;
     using System.Web.Compilation;
-
+    using System.Web.Configuration;
     using Nat.Web.Controls;
     using Nat.Web.Controls.Data;
     using Nat.Web.Controls.GenerationClasses;
@@ -126,7 +130,8 @@
             journalControl.LogMonitor = logMonitor;
             journalControl.Url = MainPageUrlBuilder.Current.Clone();
             if (checkPermit) journalControl.CheckExportPermit();
-            if ("xml".Equals(properties.Format, StringComparison.OrdinalIgnoreCase))
+            bool isXml = "xml".Equals(properties.Format, StringComparison.OrdinalIgnoreCase);
+            if (isXml)
             {
                 var exporterXml = new ExporterXml<TDataContext, TFilterControl, TKey, TTable, TDataSource, TRow, TJournal,
                     TNavigatorControl, TNavigatorValues, TFilter> { LogMonitor = logMonitor };
@@ -137,6 +142,8 @@
                 var exporterXslx = new ExporterXslx<TDataContext, TFilterControl, TKey, TTable, TDataSource, TRow, TJournal,
                     TNavigatorControl, TNavigatorValues, TFilter> { LogMonitor = logMonitor };
                 stream = exporterXslx.GetExcel(journalControl, properties);
+                var watermark = DependencyResolver.Current.GetService<IReportWatermark>();
+                watermark.AddToExcelStream(stream, journalControl.ReportPluginName);
             }
 
             var plugin = BuildManager.GetType(properties.ReportPluginName, false, true) ?? GetTypeByReportManager(properties.ReportPluginName);
@@ -157,14 +164,36 @@
                 (long) journalControl.ExportLog,
                 LogReportGenerateCodeType.Export);
 
-            logMonitor.Log(
+            var logId = logMonitor.WriteLog(
                 new LogMessageEntry(
                     User.GetSID(),
                     logType,
                     properties.NameRu,
                     journalControl.OnExportNewSavedProperties ? RvsSavedProperties.GetFromJournal(journalControl) : properties));
 
+            if (!isXml && NeedQr( plugin.FullName ))
+            {
+                AddSigns(stream, logId);
+            }
+            
             return stream;
+        }
+
+        private static bool NeedQr( string fullName )
+        {
+            string v = WebConfigurationManager.AppSettings[ "reportsForQr" ];
+            if( string.IsNullOrEmpty( v ) )
+                return false;
+            return v.Split( ';' ).Any( s => !string.IsNullOrEmpty( s ) && fullName == s );            
+        }
+
+        private static void AddSigns(Stream stream, long? logId)
+        {
+            if(logId == null)return;
+            var qrCodeTool = DependencyResolver.Current.GetService<IReportQr>();
+            qrCodeTool.AddToExcel(stream, logId.Value);
+            var sideInfoTool = DependencyResolver.Current.GetService<IReportSideInfo>();
+            sideInfoTool.AddToExcel(stream, logId.Value);
         }
 
         private static Type GetTypeByReportManager(string pluginName)

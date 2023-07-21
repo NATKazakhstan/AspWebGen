@@ -357,6 +357,9 @@ namespace Nat.Web.ReportManager
 
         private static void AddWatermark(WebReportManager webReportManager)
         {
+            if( IsSubscription() )
+                return;
+            
             var rWatermark = DependencyResolver.Current.GetService<IWatermark>();
             var watermarkImage = rWatermark.GetImage(webReportManager.Plugin.GetType().FullName);
             if (watermarkImage == null) return;
@@ -371,6 +374,12 @@ namespace Nat.Web.ReportManager
             {
                 pg.Watermark = watermark;
             }
+        }
+
+        private static bool IsSubscription()
+        {
+            var isSubscription = (bool)(HttpContext.Current.Items["ReportSubscriptionInitialize"] ?? false);
+            return isSubscription;
         }
 
         public static Stream GetCustomStreamReport(string pluginName, string guid, StorageValues storageValues, string culture, Page page, string format, LogMonitor logMonitor, bool expToWord, Dictionary<string, object> constants, out string fileName, out string fileNameExtension, bool RoleCheck, bool isPreview)
@@ -643,6 +652,9 @@ namespace Nat.Web.ReportManager
 
         private static void AddWatermark(WebReportManager webReportManager, StiExportFormat exportFormat, MemoryStream stream)
         {
+            if( IsSubscription() )
+                return;
+            
             if (exportFormat == StiExportFormat.Excel2007)
             {
                 var rw = DependencyResolver.Current.GetService<IReportWatermark>();

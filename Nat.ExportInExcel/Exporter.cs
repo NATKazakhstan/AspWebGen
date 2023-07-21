@@ -142,8 +142,11 @@ namespace Nat.ExportInExcel
                 var exporterXslx = new ExporterXslx<TDataContext, TFilterControl, TKey, TTable, TDataSource, TRow, TJournal,
                     TNavigatorControl, TNavigatorValues, TFilter> { LogMonitor = logMonitor };
                 stream = exporterXslx.GetExcel(journalControl, properties);
-                var watermark = DependencyResolver.Current.GetService<IReportWatermark>();
-                watermark.AddToExcelStream(stream, journalControl.ReportPluginName);
+                if ( !IsSubscription())
+                {
+                    var watermark = DependencyResolver.Current.GetService<IReportWatermark>();
+                    watermark.AddToExcelStream(stream, journalControl.ReportPluginName);    
+                }
             }
 
             var plugin = BuildManager.GetType(properties.ReportPluginName, false, true) ?? GetTypeByReportManager(properties.ReportPluginName);
@@ -179,6 +182,12 @@ namespace Nat.ExportInExcel
             return stream;
         }
 
+        private static bool IsSubscription()
+        {
+            var isSubscription = (bool)(HttpContext.Current.Items["ReportSubscriptionInitialize"] ?? false);
+            return isSubscription;
+        }
+        
         private static bool NeedQr( string fullName )
         {
             string v = WebConfigurationManager.AppSettings[ "reportsForQr" ];

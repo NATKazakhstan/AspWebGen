@@ -176,7 +176,7 @@ namespace Nat.ExportInExcel
 
             if (!isXml && NeedQr( plugin.FullName ))
             {
-                AddSigns(stream, logId);
+                AddSigns(stream, logId, journalControl.ReportPluginName);
             }
             
             return stream;
@@ -196,11 +196,11 @@ namespace Nat.ExportInExcel
             return v.Split( ';' ).Any( s => !string.IsNullOrEmpty( s ) && fullName == s );            
         }
 
-        private static void AddSigns(Stream stream, long? logId)
+        private static void AddSigns(Stream stream, long? logId, string pluginFullName)
         {
             if(logId == null)return;
             var qrCodeTool = DependencyResolver.Current.GetService<IReportQr>();
-            qrCodeTool.AddToExcel(stream, logId.Value);
+            qrCodeTool.AddToExcel(stream, logId.Value, pluginFullName);
             var sideInfoTool = DependencyResolver.Current.GetService<IReportSideInfo>();
             sideInfoTool.AddToExcel(stream, logId.Value);
         }

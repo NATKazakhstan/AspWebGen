@@ -25,27 +25,33 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
         private static string _pluginFullName = string.Empty;
         public void AddToExcelStream(Stream stream, string pluginFullName)
         {
-            var rWatermark = DependencyResolver.Current.GetService<IWatermark>();
-            var watermarkImage = rWatermark.GetImage(pluginFullName);
-            
-            _pluginFullName = pluginFullName;
-            using (var doc = SpreadsheetDocument.Open( stream, true, new OpenSettings()))
+            try
             {
-                var sheetPart = doc.WorkbookPart.WorksheetParts.First();
+                var rWatermark = DependencyResolver.Current.GetService<IWatermark>();
+                var watermarkImage = rWatermark.GetImage(pluginFullName);
 
-                AddSheetView(sheetPart);
-                AddPrinterSettings(sheetPart);
-
-                var dwg = sheetPart.Worksheet.Elements<XDrawing>().FirstOrDefault();
-                if (dwg != null)
+                _pluginFullName = pluginFullName;
+                using (var doc = SpreadsheetDocument.Open(stream, true, new OpenSettings()))
                 {
-                    sheetPart.Worksheet.RemoveChild(dwg);
-                }
-                AddHeader(sheetPart, watermarkImage != null);
-                AddWatermarkDrawing(sheetPart, watermarkImage, dwg);
-            }
+                    var sheetPart = doc.WorkbookPart.WorksheetParts.First();
 
-            stream.Position = 0;
+                    AddSheetView(sheetPart);
+                    AddPrinterSettings(sheetPart);
+
+                    var dwg = sheetPart.Worksheet.Elements<XDrawing>().FirstOrDefault();
+                    if (dwg != null)
+                    {
+                        sheetPart.Worksheet.RemoveChild(dwg);
+                    }
+
+                    AddHeader(sheetPart, watermarkImage != null);
+                    AddWatermarkDrawing(sheetPart, watermarkImage, dwg);
+                }
+            }
+            finally
+            {
+                stream.Position = 0;
+            }
         }
 
         #region excel
@@ -234,35 +240,41 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
         
         public void AddToWordStream(Stream stream, string pluginFullName)
         {
-            var rWatermark = DependencyResolver.Current.GetService<IWatermark>();
-            var watermarkImage = rWatermark.GetImage(pluginFullName);
-            if (watermarkImage == null) return;
-
-            using (var doc = WordprocessingDocument.Open(stream, true, new OpenSettings()))
+            try
             {
-                if (doc.MainDocumentPart == null) return;
-                ConfigTable(doc);
-                doc.MainDocumentPart.DeleteParts(doc.MainDocumentPart.HeaderParts);
-                
-                var headerPart = doc.MainDocumentPart.AddNewPart<HeaderPart>();
-                var imgPart = headerPart.AddImagePart(ImagePartType.Png);
-                using (var imgStream = new MemoryStream(watermarkImage))
+                var rWatermark = DependencyResolver.Current.GetService<IWatermark>();
+                var watermarkImage = rWatermark.GetImage(pluginFullName);
+                if (watermarkImage == null) return;
+
+                using (var doc = WordprocessingDocument.Open(stream, true, new OpenSettings()))
                 {
-                    imgPart.FeedData(imgStream);
-                }
-                AddHeaderPartContent(headerPart, headerPart.GetIdOfPart(imgPart));
-                var secProps = doc.MainDocumentPart.Document.Body.Elements<SectionProperties>();
-                foreach (var secProp in secProps)
-                {
-                    secProp.RemoveAllChildren<HeaderReference>();
-                    secProp.PrependChild<HeaderReference>(new HeaderReference()
+                    if (doc.MainDocumentPart == null) return;
+                    ConfigTable(doc);
+                    doc.MainDocumentPart.DeleteParts(doc.MainDocumentPart.HeaderParts);
+
+                    var headerPart = doc.MainDocumentPart.AddNewPart<HeaderPart>();
+                    var imgPart = headerPart.AddImagePart(ImagePartType.Png);
+                    using (var imgStream = new MemoryStream(watermarkImage))
                     {
-                        Id = doc.MainDocumentPart.GetIdOfPart(headerPart)
-                    });
+                        imgPart.FeedData(imgStream);
+                    }
+
+                    AddHeaderPartContent(headerPart, headerPart.GetIdOfPart(imgPart));
+                    var secProps = doc.MainDocumentPart.Document.Body.Elements<SectionProperties>();
+                    foreach (var secProp in secProps)
+                    {
+                        secProp.RemoveAllChildren<HeaderReference>();
+                        secProp.PrependChild<HeaderReference>(new HeaderReference()
+                        {
+                            Id = doc.MainDocumentPart.GetIdOfPart(headerPart)
+                        });
+                    }
                 }
             }
-
-            stream.Position = 0;
+            finally
+            {
+                stream.Position = 0;
+            }
         }
 
         private static void ConfigTable(WordprocessingDocument doc)

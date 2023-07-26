@@ -14,25 +14,31 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
     {
         public void AddToExcel(Stream stream, long logId)
         {
-            var qrCodeTextFormat = DependencyResolver.Current.GetService<IQrCodeTextFormat>();
-            using (var qrImgStream = qrCodeTextFormat.GetQrCodeImageStream(logId))
+            try
             {
-                if (qrImgStream == null) return;
-                using (var doc = SpreadsheetDocument.Open( stream, true, new OpenSettings()))
+                var qrCodeTextFormat = DependencyResolver.Current.GetService<IQrCodeTextFormat>();
+                using (var qrImgStream = qrCodeTextFormat.GetQrCodeImageStream(logId))
                 {
-                    var sheetPart = doc.WorkbookPart.WorksheetParts.First();
+                    if (qrImgStream == null) return;
+                    using (var doc = SpreadsheetDocument.Open(stream, true, new OpenSettings()))
+                    {
+                        var sheetPart = doc.WorkbookPart.WorksheetParts.First();
 
-                    SetPageMargins(sheetPart);
-                    SetHeaderFooter(sheetPart);
-                    var drawingPart = sheetPart.VmlDrawingParts.FirstOrDefault();
-                    if (drawingPart == null) return;
-                    var imagePart = drawingPart.AddImagePart(ImagePartType.Png);
-                    imagePart.FeedData(qrImgStream);
-                    FIllVmlDwgPart(drawingPart, drawingPart.GetIdOfPart(imagePart));
+                        SetPageMargins(sheetPart);
+                        SetHeaderFooter(sheetPart);
+                        var drawingPart = sheetPart.VmlDrawingParts.FirstOrDefault();
+                        if (drawingPart == null)
+                            return;
+                        var imagePart = drawingPart.AddImagePart(ImagePartType.Png);
+                        imagePart.FeedData(qrImgStream);
+                        FIllVmlDwgPart(drawingPart, drawingPart.GetIdOfPart(imagePart));
+                    }
                 }
             }
-
-            stream.Position = 0;
+            finally
+            {
+                stream.Position = 0;
+            }
         }
 
         private static void SetHeaderFooter(WorksheetPart sheetPart)

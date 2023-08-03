@@ -18,6 +18,11 @@ using WRun = DocumentFormat.OpenXml.Wordprocessing.Run;
 using WPicture = DocumentFormat.OpenXml.Wordprocessing.Picture;
 using Vml = DocumentFormat.OpenXml.Vml;
 using System.Xml.Linq;
+using Telerik.Windows.Documents.Fixed.Model;
+using Telerik.Windows.Documents.Fixed.FormatProviders.Pdf;
+using DocumentFormat.OpenXml.Office2010.Word;
+using Telerik.Windows.Documents.Fixed.Model.Editing;
+using Telerik.Windows.Documents.Fixed.Model.Objects;
 
 namespace Nat.Web.ReportManager.ReportPartGeneration
 {
@@ -374,6 +379,7 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
             }
         }
 
+        #region word
         private static void ConfigTable( WordprocessingDocument doc )
         {
             var tbls = doc.MainDocumentPart.Document.Body.Elements<Table>();
@@ -422,6 +428,82 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
             paragraph.Append( run );
             header.Append( paragraph );
             headerPart.Header = header;
+        }
+        #endregion
+
+        public void AddToPdfStream(Stream stream, string pluginFullName )
+        {
+            try
+            {
+                var rWatermark = DependencyResolver.Current.GetService<IWatermark>();
+                var watermarkImage = rWatermark.GetImage( pluginFullName );
+                if (watermarkImage == null)
+                    return;
+                AddWatermark( stream, watermarkImage );
+            }
+            finally
+            {
+                stream.Position = 0;
+            }
+        }
+
+        private void AddWatermark( Stream stream, byte[] watermarkImage )
+        {
+            RadFixedDocument doc = ImportDocument( stream );
+            for (int i = 0; i < doc.Pages.Count; i++)
+            {
+                RadFixedPage page = doc.Pages[ i ];
+                InsertWatermark( watermarkImage, page );
+            }
+            PdfFormatProvider provider = new PdfFormatProvider();
+            stream.Position += 4;
+            provider.Export( doc, stream );
+        }
+
+        private void InsertWatermark( byte[] watermarkImage, RadFixedPage page )
+        {
+            FixedContentEditor editor = new FixedContentEditor( page );
+            using (var stream = new MemoryStream(watermarkImage))
+            {
+                Image image = new Image();
+                image.ImageSource = new Telerik.Windows.Documents.Fixed.Model.Resources.ImageSource( stream );
+                double scale = GetScale( page, image );
+                image.Position.Scale( scale, scale );
+                int pInx = GetIndexAfterImgs( page );
+
+                page.Content.Insert( pInx, image );
+            }
+        }
+
+        private RadFixedDocument ImportDocument( Stream stream )
+        {
+            PdfFormatProvider provider = new PdfFormatProvider();
+            RadFixedDocument document = provider.Import( stream );
+
+            return document;
+        }
+
+        private static double GetScale( RadFixedPage page, Image image )
+        {
+            var pMaxSize = Math.Max( page.Size.Width, page.Size.Height );
+            var imgMaxSize = Math.Max( image.Width, image.Height );
+            double scale = pMaxSize / imgMaxSize;
+            return scale;
+        }
+
+        private static int GetIndexAfterImgs( RadFixedPage page )
+        {
+            int pInx = 1;
+
+            foreach (var c in page.Content)
+            {
+                if (c is Image)
+                {
+                    pInx++;
+                }
+            }
+
+            return pInx;
         }
     }
 }

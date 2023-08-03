@@ -17,35 +17,38 @@ using WParagraph = DocumentFormat.OpenXml.Wordprocessing.Paragraph;
 using WRun = DocumentFormat.OpenXml.Wordprocessing.Run;
 using WPicture = DocumentFormat.OpenXml.Wordprocessing.Picture;
 using Vml = DocumentFormat.OpenXml.Vml;
+using System.Xml.Linq;
 
 namespace Nat.Web.ReportManager.ReportPartGeneration
 {
-    public class ReportWatermark:IReportWatermark
+    public class ReportWatermark : IReportWatermark
     {
         private static string _pluginFullName = string.Empty;
-        public void AddToExcelStream(Stream stream, string pluginFullName)
+        public void AddToExcelStream( Stream stream, string pluginFullName )
         {
             try
             {
                 var rWatermark = DependencyResolver.Current.GetService<IWatermark>();
-                var watermarkImage = rWatermark.GetImage(pluginFullName);
+                var watermarkImage = rWatermark.GetImage( pluginFullName );
+                if (watermarkImage == null)
+                    return;
 
                 _pluginFullName = pluginFullName;
-                using (var doc = SpreadsheetDocument.Open(stream, true, new OpenSettings()))
+                using (var doc = SpreadsheetDocument.Open( stream, true, new OpenSettings() ))
                 {
                     var sheetPart = doc.WorkbookPart.WorksheetParts.First();
 
-                    AddSheetView(sheetPart);
-                    AddPrinterSettings(sheetPart);
+                    AddSheetView( sheetPart );
+                    AddPrinterSettings( sheetPart );
 
                     var dwg = sheetPart.Worksheet.Elements<XDrawing>().FirstOrDefault();
                     if (dwg != null)
                     {
-                        sheetPart.Worksheet.RemoveChild(dwg);
+                        sheetPart.Worksheet.RemoveChild( dwg );
                     }
 
-                    AddHeader(sheetPart, watermarkImage != null);
-                    AddWatermarkDrawing(sheetPart, watermarkImage, dwg);
+                    AddHeader( sheetPart );
+                    AddWatermarkDrawing( sheetPart, watermarkImage, dwg );
                 }
             }
             finally
@@ -55,179 +58,271 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
         }
 
         #region excel
-        
-        private static void AddWatermarkDrawing(WorksheetPart sheetPart, byte[] watermarkImage, XDrawing dwg)
+
+        private void AddWatermarkDrawing( WorksheetPart sheetPart, byte[] watermarkImage, XDrawing dwg )
         {
-            var vmlDrwPart = sheetPart.AddNewPart<VmlDrawingPart>();
-            ImagePart imagePart = null;
-            if (watermarkImage != null)
+            var vmlDwgPart = sheetPart.VmlDrawingParts.FirstOrDefault();
+            if (vmlDwgPart == null)
             {
-                imagePart = vmlDrwPart.AddImagePart(ImagePartType.Png);
-                using (var imgStream = new MemoryStream(watermarkImage))
-                {
-                    imagePart.FeedData(imgStream);
-                }    
+                vmlDwgPart = sheetPart.AddNewPart<VmlDrawingPart>();
+                WriteVmlDrwPart( vmlDwgPart );
             }
 
-            string imgPrtId = imagePart == null ? string.Empty : vmlDrwPart.GetIdOfPart(imagePart);
-            FillVmlDrwPart(vmlDrwPart,imgPrtId);
-            var ldhf = new LegacyDrawingHeaderFooter()
+            ImagePart imagePart = vmlDwgPart.AddImagePart( ImagePartType.Png );
+            using (var imgStream = new MemoryStream( watermarkImage ))
             {
-                Id = sheetPart.GetIdOfPart(vmlDrwPart)
-            };
-            if(dwg != null)
-            {
-                sheetPart.Worksheet.Append(dwg);
+                imagePart.FeedData( imgStream );
             }
 
-            sheetPart.Worksheet.Append(ldhf);
+            string imgPrtId = imagePart == null ? string.Empty : vmlDwgPart.GetIdOfPart( imagePart );
+            FIllVmlDwgPart( vmlDwgPart, imgPrtId );
+
+            SetPostElements( sheetPart, dwg, vmlDwgPart );
         }
 
-        private static void AddHeader(WorksheetPart sheetPart, bool addOdd)
+        private static void SetPostElements( WorksheetPart sheetPart, XDrawing dwg, VmlDrawingPart vmlDwgPart )
+        {
+            var ldhf = sheetPart.Worksheet.Elements<LegacyDrawingHeaderFooter>().FirstOrDefault();
+
+            if (ldhf == null)
+            {
+                ldhf = new LegacyDrawingHeaderFooter();
+            }
+            else
+            {
+                sheetPart.Worksheet.RemoveChild( ldhf );
+            }
+
+            ldhf.Id = sheetPart.GetIdOfPart( vmlDwgPart );
+            if (dwg != null)
+            {
+                sheetPart.Worksheet.Append( dwg );
+            }
+
+            sheetPart.Worksheet.Append( ldhf );
+        }
+
+        private void FIllVmlDwgPart( VmlDrawingPart drawingPart, string imgPartId )
+        {
+            using (var tempStream = drawingPart.GetStream( FileMode.Open, FileAccess.ReadWrite ))
+            {
+                XDocument xd = XDocument.Load( tempStream );
+
+                var root = xd.Root;
+                var nsV = root.GetNamespaceOfPrefix( "v" );
+                var nsO = root.GetNamespaceOfPrefix( "o" );
+                AddShapeIntoRoot( imgPartId, root, nsV, nsO );
+                tempStream.Position = 0;
+
+                using (var xw = XmlWriter.Create( tempStream, GetXmlWriterSettings() ))
+                {
+                    xd.Save( xw );
+                    xw.Flush();
+                }
+            }
+        }
+
+        private static void AddShapeIntoRoot( string imgPartId, XElement root, XNamespace nsV, XNamespace nsO )
+        {
+            root.Add(
+                new XElement( nsV + "shape",
+                    new XAttribute( "id", "CH" ),
+                    new XAttribute( nsO + "spid", "_x0000_s1025" ),
+                    new XAttribute( "type", "#_x0000_t75" ),
+                    new XAttribute( "style",
+                        "position:absolute;margin-left:0;margin-top:0;width:1038pt;height:1038pt;z-index:1" ),
+                    new XElement( nsV + "imagedata",
+                        new XAttribute( nsO + "relid", imgPartId ),
+                        new XAttribute( nsO + "title", $"img_{DateTime.Now.Ticks}" )
+                    ),
+                    new XElement( nsO + "lock",
+                        new XAttribute( nsV + "ext", "edit" ),
+                        new XAttribute( "rotation", "t" )
+                    )
+                )
+            );
+        }
+
+        private static XmlWriterSettings GetXmlWriterSettings()
+        {
+            return new XmlWriterSettings()
+            {
+                OmitXmlDeclaration = true,
+                Indent = true,
+            };
+        }
+
+        private static void AddHeader( WorksheetPart sheetPart )
         {
             var headerFooter = sheetPart.Worksheet.Elements<HeaderFooter>().FirstOrDefault();
+            bool isNewHf = false;
             if (headerFooter == null)
             {
-                bool isCrossTable = _pluginFullName.Contains( "CrossTableViews" );
-                headerFooter = new HeaderFooter()
-                {
-                    ScaleWithDoc = !isCrossTable
-                };
+                headerFooter = new HeaderFooter();
+                isNewHf = true;
             }
 
-            if (addOdd)
-            {
-                var oddH = new OddHeader("&C&G");
-                headerFooter.Append(oddH);    
-            }
-            sheetPart.Worksheet.Append(headerFooter);
+            bool isCrossTable = _pluginFullName.Contains( "CrossTableViews" );
+            headerFooter.ScaleWithDoc = !isCrossTable;
+            AddOddHeader( headerFooter, isNewHf );
+            MoveOddFooter( headerFooter, isNewHf );
+
+            if (isNewHf)
+                sheetPart.Worksheet.Append( headerFooter );
         }
 
-        private static void AddSheetView(WorksheetPart sheetPart)
+        private static void MoveOddFooter( HeaderFooter headerFooter, bool isNewHf )
+        {
+            if (isNewHf)
+                return;
+            var oddF = headerFooter.Elements<OddFooter>().FirstOrDefault();
+            if (oddF != null)
+            {
+                headerFooter.RemoveChild( oddF );
+                headerFooter.Append( oddF );
+            }
+        }
+
+        private static void AddOddHeader( HeaderFooter headerFooter, bool isNewHf )
+        {
+            OddHeader oddH = null;
+            if (!isNewHf)
+            {
+                oddH = headerFooter.Elements<OddHeader>().FirstOrDefault();
+                if (oddH != null)
+                    headerFooter.RemoveChild( oddH );
+            }
+            oddH = new OddHeader();
+            oddH.Text = "&C&G";
+            headerFooter.Append( oddH );
+        }
+
+        private static void AddSheetView( WorksheetPart sheetPart )
         {
             var shViews = sheetPart.Worksheet.Elements<SheetViews>().FirstOrDefault();
             var shView = shViews?.Elements<SheetView>().FirstOrDefault();
-            if(shView == null)return;
-            shView.View = new EnumValue<SheetViewValues>(SheetViewValues.PageLayout);
+            if (shView == null)
+                return;
+            shView.View = new EnumValue<SheetViewValues>( SheetViewValues.PageLayout );
             shView.ZoomScaleNormal = 100;
             shView.ZoomScale = 50;
             shView.ZoomScalePageLayoutView = 50;
             shView.WorkbookViewId = 0;
-            if(_pluginFullName.Contains( "CrossTableViews" ))
+            if (_pluginFullName.Contains( "CrossTableViews" ))
             {
                 if (shView.Pane?.State != null)
                     shView.Pane.State.Value = PaneStateValues.Split;
-            }            
+            }
         }
 
-        private static void AddPrinterSettings(WorksheetPart sheetPart)
+        private static void AddPrinterSettings( WorksheetPart sheetPart )
         {
-            var printerStngsPart = sheetPart.AddNewPart<SpreadsheetPrinterSettingsPart>();
-            FeedPrinterSettings(printerStngsPart);
+            var printerStngsPart = sheetPart.SpreadsheetPrinterSettingsParts.FirstOrDefault();
+            if (printerStngsPart == null)
+            {
+                printerStngsPart = sheetPart.AddNewPart<SpreadsheetPrinterSettingsPart>();
+                FeedPrinterSettings( printerStngsPart );
+            }
 
             var pageSetup = sheetPart.Worksheet.Elements<PageSetup>().FirstOrDefault();
-            if (pageSetup == null) return;
-            pageSetup.Id = sheetPart.GetIdOfPart(printerStngsPart);
-            SetPageScale(pageSetup);
+            if (pageSetup == null)
+                return;
+            pageSetup.Id = sheetPart.GetIdOfPart( printerStngsPart );
+            SetPageScale( pageSetup );
             pageSetup.PaperSize = 9;
         }
 
-        private static void SetPageScale(PageSetup pageSetup)
+        private static void SetPageScale( PageSetup pageSetup )
         {
-            if (_pluginFullName.Contains("CrossTableViews.ReportPlugins.PositionAppointmentCommanders")
-                || _pluginFullName.Contains("CrossTableViews.ReportPlugins.PositionAppointment"))
+            if (_pluginFullName.Contains( "CrossTableViews.ReportPlugins.PositionAppointmentCommanders" )
+                || _pluginFullName.Contains( "CrossTableViews.ReportPlugins.PositionAppointment" ))
             {
                 pageSetup.Scale = 36;
             }
         }
 
-        private static void FeedPrinterSettings(SpreadsheetPrinterSettingsPart printerStngsPart)
+        private static void FeedPrinterSettings( SpreadsheetPrinterSettingsPart printerStngsPart )
         {
             string manifestRes = "Nat.Web.ReportManager.printerSettings1.bin";
-            using (var prntrStream = Assembly.GetAssembly(typeof(ReportResultPage))
-                       .GetManifestResourceStream(manifestRes))
+            using (var prntrStream = Assembly.GetAssembly( typeof( ReportResultPage ) )
+                       .GetManifestResourceStream( manifestRes ))
             {
-                printerStngsPart.FeedData(prntrStream);
+                printerStngsPart.FeedData( prntrStream );
             }
         }
 
-        private static void FillVmlDrwPart(VmlDrawingPart vmlDrwPart, string imgPartId)
+        private static void WriteVmlDrwPart( VmlDrawingPart vmlDrwPart )
         {
-            var tempStream = vmlDrwPart.GetStream(FileMode.Create, FileAccess.Write);
-            var streamWriter = new StreamWriter(tempStream);
-            var writer = new XmlTextWriter(streamWriter) { Formatting = Formatting.Indented };
+            var tempStream = vmlDrwPart.GetStream( FileMode.Create, FileAccess.Write );
+            var streamWriter = new StreamWriter( tempStream );
+            var writer = new XmlTextWriter( streamWriter ) { Formatting = Formatting.Indented };
             writer.Indentation = 0;
             writer.Formatting = Formatting.None;
-            
-            writer.WriteStartElementExt("xml",
-                "xmlns:v","urn:schemas-microsoft-com:vml",
-                "xmlns:o","urn:schemas-microsoft-com:office:office",
-                "xmlns:x","urn:schemas-microsoft-com:office:excel");
-            writer.WriteStartElementExt("o:shapelayout",
-                "v:ext", "edit");
-            writer.WriteStartElementExt("o:idmap",
+
+            writer.WriteStartElementExt( "xml",
+                "xmlns:v", "urn:schemas-microsoft-com:vml",
+                "xmlns:o", "urn:schemas-microsoft-com:office:office",
+                "xmlns:x", "urn:schemas-microsoft-com:office:excel" );
+            writer.WriteStartElementExt( "o:shapelayout",
+                "v:ext", "edit" );
+            writer.WriteStartElementExt( "o:idmap",
                 "v:ext", "edit",
-                "data","1");
+                "data", "1" );
             writer.WriteEndElement();//o:idmap
             writer.WriteEndElement();//o:shapelayout
 
-            writer.WriteStartElementExt("v:shapetype",
+            writer.WriteStartElementExt( "v:shapetype",
                 "id", "_x0000_t75",
-                "coordsize", "21600,21600");
-            writer.WriteAttributeString("o:spt", null, "75");
-            writer.WriteAttributeString("o:preferrelative", null, "t");
-            writer.WriteAttributeString("path", null, "m@4@5l@4@11@9@11@9@5xe");
-            writer.WriteAttributeString("filled", null, "f");
-            writer.WriteAttributeString("stroked", null, "f");
-            
-            writer.WriteStartElementExt("v:stroke", "joinstyle", "miter"); writer.WriteEndElement();//v:stroke
-            
-            writer.WriteStartElement("v:formulas");
-            writer.WriteStartElementExt("v:f", "eqn", "if lineDrawn pixelLineWidth 0"); writer.WriteEndElement();//v:f
-            writer.WriteStartElementExt("v:f", "eqn", "sum @0 1 0"); writer.WriteEndElement();//v:f
-            writer.WriteStartElementExt("v:f", "eqn", "sum 0 0 @1"); writer.WriteEndElement();//v:f
-            writer.WriteStartElementExt("v:f", "eqn", "prod @2 1 2"); writer.WriteEndElement();//v:f
-            writer.WriteStartElementExt("v:f", "eqn", "prod @3 21600 pixelWidth"); writer.WriteEndElement();//v:f
-            writer.WriteStartElementExt("v:f", "eqn", "prod @3 21600 pixelHeight"); writer.WriteEndElement();//v:f
-            writer.WriteStartElementExt("v:f", "eqn", "sum @0 0 1"); writer.WriteEndElement();//v:f
-            writer.WriteStartElementExt("v:f", "eqn", "prod @6 1 2"); writer.WriteEndElement();//v:f
-            writer.WriteStartElementExt("v:f", "eqn", "prod @7 21600 pixelWidth"); writer.WriteEndElement();//v:f
-            writer.WriteStartElementExt("v:f", "eqn", "sum @8 21600 0"); writer.WriteEndElement();//v:f
-            writer.WriteStartElementExt("v:f", "eqn", "prod @7 21600 pixelHeight"); writer.WriteEndElement();//v:f
-            writer.WriteStartElementExt("v:f", "eqn", "sum @10 21600 0"); writer.WriteEndElement();//v:f
+                "coordsize", "21600,21600" );
+            writer.WriteAttributeString( "o:spt", null, "75" );
+            writer.WriteAttributeString( "o:preferrelative", null, "t" );
+            writer.WriteAttributeString( "path", null, "m@4@5l@4@11@9@11@9@5xe" );
+            writer.WriteAttributeString( "filled", null, "f" );
+            writer.WriteAttributeString( "stroked", null, "f" );
+
+            writer.WriteStartElementExt( "v:stroke", "joinstyle", "miter" );
+            writer.WriteEndElement();//v:stroke
+
+            writer.WriteStartElement( "v:formulas" );
+            writer.WriteStartElementExt( "v:f", "eqn", "if lineDrawn pixelLineWidth 0" );
+            writer.WriteEndElement();//v:f
+            writer.WriteStartElementExt( "v:f", "eqn", "sum @0 1 0" );
+            writer.WriteEndElement();//v:f
+            writer.WriteStartElementExt( "v:f", "eqn", "sum 0 0 @1" );
+            writer.WriteEndElement();//v:f
+            writer.WriteStartElementExt( "v:f", "eqn", "prod @2 1 2" );
+            writer.WriteEndElement();//v:f
+            writer.WriteStartElementExt( "v:f", "eqn", "prod @3 21600 pixelWidth" );
+            writer.WriteEndElement();//v:f
+            writer.WriteStartElementExt( "v:f", "eqn", "prod @3 21600 pixelHeight" );
+            writer.WriteEndElement();//v:f
+            writer.WriteStartElementExt( "v:f", "eqn", "sum @0 0 1" );
+            writer.WriteEndElement();//v:f
+            writer.WriteStartElementExt( "v:f", "eqn", "prod @6 1 2" );
+            writer.WriteEndElement();//v:f
+            writer.WriteStartElementExt( "v:f", "eqn", "prod @7 21600 pixelWidth" );
+            writer.WriteEndElement();//v:f
+            writer.WriteStartElementExt( "v:f", "eqn", "sum @8 21600 0" );
+            writer.WriteEndElement();//v:f
+            writer.WriteStartElementExt( "v:f", "eqn", "prod @7 21600 pixelHeight" );
+            writer.WriteEndElement();//v:f
+            writer.WriteStartElementExt( "v:f", "eqn", "sum @10 21600 0" );
+            writer.WriteEndElement();//v:f
             writer.WriteEndElement();//v:formulas
-            
-            writer.WriteStartElementExt("v:path", "o:extrusionok", "f",
+
+            writer.WriteStartElementExt( "v:path", "o:extrusionok", "f",
                 "gradientshapeok", "t",
-                "o:connecttype", "rect");
+                "o:connecttype", "rect" );
             writer.WriteEndElement();//v:path
-            
-            writer.WriteStartElementExt("o:lock", "v:ext", "edit",
-                "aspectratio", "t");
+
+            writer.WriteStartElementExt( "o:lock", "v:ext", "edit",
+                "aspectratio", "t" );
             writer.WriteEndElement();//o:lock
-            
+
             writer.WriteEndElement();//v:shapetype
-            
-            if (!string.IsNullOrEmpty(imgPartId))
-            { 
-                writer.WriteStartElement("v:shape");
-                writer.WriteAttributeString("id", null, "CH");
-                writer.WriteAttributeString("o:spid", null, "_x0000_s1025");
-                writer.WriteAttributeString("type", null, "#_x0000_t75");
-                writer.WriteAttributeString("style", null, "position:absolute;margin-left:0;margin-top:0;width:1038pt;height:1038pt;z-index:1");
-                
-                writer.WriteStartElementExt("v:imagedata","o:relid", imgPartId,
-                    "o:title", $"img_{DateTime.Now.Ticks}");
-                writer.WriteEndElement();//v:imagedata    
-                
-                writer.WriteStartElementExt("o:lock",  "v:ext", "edit",
-                    "rotation", "t");
-                writer.WriteEndElement();//o:lock
-                
-                writer.WriteEndElement();//v:shape
-            }
+
             writer.WriteEndElement();//xml
-            
+
             writer.Flush();
             streamWriter.Flush();
             streamWriter.Close();
@@ -237,37 +332,39 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
         }
 
         #endregion
-        
-        public void AddToWordStream(Stream stream, string pluginFullName)
+
+        public void AddToWordStream( Stream stream, string pluginFullName )
         {
             try
             {
                 var rWatermark = DependencyResolver.Current.GetService<IWatermark>();
-                var watermarkImage = rWatermark.GetImage(pluginFullName);
-                if (watermarkImage == null) return;
+                var watermarkImage = rWatermark.GetImage( pluginFullName );
+                if (watermarkImage == null)
+                    return;
 
-                using (var doc = WordprocessingDocument.Open(stream, true, new OpenSettings()))
+                using (var doc = WordprocessingDocument.Open( stream, true, new OpenSettings() ))
                 {
-                    if (doc.MainDocumentPart == null) return;
-                    ConfigTable(doc);
-                    doc.MainDocumentPart.DeleteParts(doc.MainDocumentPart.HeaderParts);
+                    if (doc.MainDocumentPart == null)
+                        return;
+                    ConfigTable( doc );
+                    doc.MainDocumentPart.DeleteParts( doc.MainDocumentPart.HeaderParts );
 
                     var headerPart = doc.MainDocumentPart.AddNewPart<HeaderPart>();
-                    var imgPart = headerPart.AddImagePart(ImagePartType.Png);
-                    using (var imgStream = new MemoryStream(watermarkImage))
+                    var imgPart = headerPart.AddImagePart( ImagePartType.Png );
+                    using (var imgStream = new MemoryStream( watermarkImage ))
                     {
-                        imgPart.FeedData(imgStream);
+                        imgPart.FeedData( imgStream );
                     }
 
-                    AddHeaderPartContent(headerPart, headerPart.GetIdOfPart(imgPart));
+                    AddHeaderPartContent( headerPart, headerPart.GetIdOfPart( imgPart ) );
                     var secProps = doc.MainDocumentPart.Document.Body.Elements<SectionProperties>();
                     foreach (var secProp in secProps)
                     {
                         secProp.RemoveAllChildren<HeaderReference>();
-                        secProp.PrependChild<HeaderReference>(new HeaderReference()
+                        secProp.PrependChild<HeaderReference>( new HeaderReference()
                         {
-                            Id = doc.MainDocumentPart.GetIdOfPart(headerPart)
-                        });
+                            Id = doc.MainDocumentPart.GetIdOfPart( headerPart )
+                        } );
                     }
                 }
             }
@@ -277,7 +374,7 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
             }
         }
 
-        private static void ConfigTable(WordprocessingDocument doc)
+        private static void ConfigTable( WordprocessingDocument doc )
         {
             var tbls = doc.MainDocumentPart.Document.Body.Elements<Table>();
             foreach (var tbl in tbls)
@@ -291,15 +388,16 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
                         var tcPrs = tc.Elements<TableCellProperties>();
                         foreach (var tcPr in tcPrs)
                         {
-                            if(tcPr.Shading == null)continue;
+                            if (tcPr.Shading == null)
+                                continue;
                             tcPr.Shading.Fill = "auto";
                         }
                     }
-                }   
+                }
             }
         }
 
-        private void AddHeaderPartContent(HeaderPart headerPart, string imgPartId)
+        private void AddHeaderPartContent( HeaderPart headerPart, string imgPartId )
         {
             var header = new WHeader();
             var paragraph = new WParagraph();
@@ -318,11 +416,11 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
                 RelationshipId = imgPartId,
                 Title = $"img_{DateTime.Now.Ticks}"
             };
-            shape.Append(imgData);
-            picture.Append(shape);
-            run.Append(picture);
-            paragraph.Append(run);
-            header.Append(paragraph);
+            shape.Append( imgData );
+            picture.Append( shape );
+            run.Append( picture );
+            paragraph.Append( run );
+            header.Append( paragraph );
             headerPart.Header = header;
         }
     }

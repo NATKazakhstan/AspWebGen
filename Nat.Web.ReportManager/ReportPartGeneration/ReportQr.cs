@@ -184,16 +184,16 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
                 FeedPrinterSettings(printerStngsPart);
             }
             var pageSetup = sheetPart.Worksheet.Elements<PageSetup>().FirstOrDefault();
-            bool hasNewPgSetup = false;
+            bool isNewPgSetup = false;
             if (pageSetup == null)
             {
                 pageSetup = new PageSetup();
-                hasNewPgSetup = true;
+                isNewPgSetup = true;
             }
             pageSetup.Id = sheetPart.GetIdOfPart(printerStngsPart);
             SetPageScale(pageSetup);
             pageSetup.PaperSize = 9;
-            if(hasNewPgSetup)
+            if(isNewPgSetup)
                 sheetPart.Worksheet.Append(pageSetup);
         }
 
@@ -219,19 +219,17 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
         private void SetHeaderFooter(WorksheetPart sheetPart)
         {
             var hf = sheetPart.Worksheet.Elements<HeaderFooter>().FirstOrDefault();
-            bool hasNewHF = false;
+            bool isNewHF = false;
             if (hf == null)
             {
-                bool isCrossTable = _pluginFullName.Contains( "CrossTableViews" );
-                hf = new HeaderFooter()
-                {
-                    ScaleWithDoc = !isCrossTable
-                };
-                hasNewHF = true;
+                hf = new HeaderFooter();
+                isNewHF = true;
             }
+            bool isCrossTable = _pluginFullName.Contains( "CrossTableViews" );
+            hf.ScaleWithDoc = !isCrossTable;
             hf.AlignWithMargins = false;
             hf.Append(new OddFooter("&R&G"));
-            if(hasNewHF)
+            if(isNewHF)
                 sheetPart.Worksheet.Append(hf);
         }
 

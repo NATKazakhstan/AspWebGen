@@ -456,7 +456,7 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
                 InsertWatermark( watermarkImage, page );
             }
             PdfFormatProvider provider = new PdfFormatProvider();
-            stream.Position += 4;
+            stream.Position = 0;
             provider.Export( doc, stream );
         }
 

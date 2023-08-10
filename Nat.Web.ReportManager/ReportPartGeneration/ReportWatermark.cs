@@ -23,6 +23,8 @@ using Telerik.Windows.Documents.Fixed.FormatProviders.Pdf;
 using DocumentFormat.OpenXml.Office2010.Word;
 using Telerik.Windows.Documents.Fixed.Model.Editing;
 using Telerik.Windows.Documents.Fixed.Model.Objects;
+using TelerikRgbColor = Telerik.Windows.Documents.Fixed.Model.ColorSpaces.RgbColor;
+using System.Windows;
 
 namespace Nat.Web.ReportManager.ReportPartGeneration
 {
@@ -435,11 +437,10 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
         {
             try
             {
-                var rWatermark = DependencyResolver.Current.GetService<IWatermark>();
-                var watermarkImage = rWatermark.GetImage( pluginFullName );
-                if (watermarkImage == null)
+                var watermark = DependencyResolver.Current.GetService<IWatermark>();
+                if (watermark == null)
                     return;
-                AddWatermark( stream, watermarkImage );
+                AddWatermark( stream, watermark );
             }
             finally
             {
@@ -447,32 +448,101 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
             }
         }
 
-        private void AddWatermark( Stream stream, byte[] watermarkImage )
+        #region pdf
+        private void AddWatermark( Stream stream, IWatermark watermark )
         {
             RadFixedDocument doc = ImportDocument( stream );
             for (int i = 0; i < doc.Pages.Count; i++)
             {
                 RadFixedPage page = doc.Pages[ i ];
-                InsertWatermark( watermarkImage, page );
+                InsertWatermark( watermark, page );
             }
             PdfFormatProvider provider = new PdfFormatProvider();
             stream.Position = 0;
+            provider.ExportSettings = new Telerik.Windows.Documents.Fixed.FormatProviders.Pdf.Export.PdfExportSettings()
+            {                
+                ImageQuality = Telerik.Windows.Documents.Fixed.FormatProviders.Pdf.Export.ImageQuality.High,
+                ShouldEmbedFonts = false,
+                IsEncrypted = false
+            };
             provider.Export( doc, stream );
         }
 
-        private void InsertWatermark( byte[] watermarkImage, RadFixedPage page )
+        private void InsertWatermark( IWatermark watermark, RadFixedPage page )
+        {            
+            Block block = GetBlock( watermark );
+
+            var splitted = watermark.GetText().Split( '\n' );
+            var txt = splitted[ 0 ].Length > splitted[ 1 ].Length ? splitted[ 0 ] : splitted[ 1 ];
+            block.InsertText( txt );
+            var blockSize = block.Measure();
+            block.Clear();
+
+            DrawWatermarkOnPage( page, block, splitted, blockSize );
+        }
+
+        private void DrawWatermarkOnPage( RadFixedPage page, Block block, string[] splitted, Size bsize )
         {
             FixedContentEditor editor = new FixedContentEditor( page );
-            using (var stream = new MemoryStream(watermarkImage))
-            {
-                Image image = new Image();
-                image.ImageSource = new Telerik.Windows.Documents.Fixed.Model.Resources.ImageSource( stream );
-                double scale = GetScale( page, image );
-                image.Position.Scale( scale, scale );
-                int pInx = GetIndexAfterImgs( page );
 
-                page.Content.Insert( pInx, image );
+            const double angle = -45;
+            const double rad = Math.PI / 4;
+            const int padding = 40;
+            editor.Position.Rotate( angle );
+            double blockWidth = bsize.Width * Math.Abs( Math.Sin( rad ) ) + padding;
+
+            int x = GetCounter( page.Size.Width / blockWidth );
+            int y = GetCounter( page.Size.Height / blockWidth );
+            var offset = bsize.Height * Math.Abs( Math.Cos( rad ) );
+
+            for (int i = 0; i <= x; i++)
+            {
+                for (int j = 1; j <= y; j++)
+                {
+                    double pageTopOffset = -padding * 1.3;
+                    
+                    editor.Position.Translate( blockWidth * i, blockWidth * j + pageTopOffset );
+                    block.InsertText( splitted[ 0 ] );
+                    editor.DrawBlock( block );
+
+                    editor.Position.Translate( blockWidth * i + offset, blockWidth * j + offset + pageTopOffset );
+                    block = block.Split();
+                    block.InsertText( splitted[ 1 ] );
+                    editor.DrawBlock( block );
+
+                    block = block.Split();
+                }
             }
+        }
+
+        private int GetCounter( double value )
+        {
+            if (value == 0)
+                return 0;
+            int valueBase = (int)value;
+            double valueRest = value - valueBase;
+            if (valueRest > 0.1)
+            {
+                valueBase++;
+            }
+            return valueBase;
+        }
+
+        private static Block GetBlock( IWatermark watermark )
+        {
+            var block = new Block();
+            block.TextProperties.FontSize = watermark.FontSize;
+            block.TextProperties.TrySetFont( new System.Windows.Media.FontFamily( watermark.Font )
+                , FontStyles.Normal, FontWeights.Normal );
+
+            block.HorizontalAlignment = Telerik.Windows.Documents.Fixed.Model.Editing.Flow.HorizontalAlignment.Center;
+            block.VerticalAlignment = Telerik.Windows.Documents.Fixed.Model.Editing.Flow.VerticalAlignment.Center;
+            block.GraphicProperties.FillColor = new TelerikRgbColor(
+                watermark.TextColor.A,
+                watermark.TextColor.R,
+                watermark.TextColor.G,
+                watermark.TextColor.B );
+            return block;
         }
 
         private RadFixedDocument ImportDocument( Stream stream )
@@ -483,27 +553,6 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
             return document;
         }
 
-        private static double GetScale( RadFixedPage page, Image image )
-        {
-            var pMaxSize = Math.Max( page.Size.Width, page.Size.Height );
-            var imgMaxSize = Math.Max( image.Width, image.Height );
-            double scale = pMaxSize / imgMaxSize;
-            return scale;
-        }
-
-        private static int GetIndexAfterImgs( RadFixedPage page )
-        {
-            int pInx = 1;
-
-            foreach (var c in page.Content)
-            {
-                if (c is Image)
-                {
-                    pInx++;
-                }
-            }
-
-            return pInx;
-        }
+        #endregion
     }
 }

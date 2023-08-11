@@ -149,8 +149,12 @@ namespace Nat.Web.Tools
                 Response.AppendHeader("Connection", "keep-alive");
                 Response.AppendHeader("Content-Length", stream.Length.ToString());
                 var buffer = new byte[4096];
-                while (stream.Read(buffer, 0, 4096) > 0)
-                    Response.OutputStream.Write(buffer, 0, buffer.Length);
+                var readLength = stream.Read(buffer, 0, 4096);
+                while (readLength > 0)
+                {
+                    Response.OutputStream.Write(buffer, 0, readLength);
+                    readLength = stream.Read(buffer, 0, 4096);
+                }
                 Response.Flush();
             }
             finally

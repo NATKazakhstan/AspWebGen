@@ -17,11 +17,10 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
     public class ReportQr: IReportQr
     {
         private string _pluginFullName = string.Empty;
-        public void AddToExcel(Stream stream, long logId, string pluginFullName)
+        public void AddToExcel(Stream stream, long logId)
         {
             try
             {
-                _pluginFullName = pluginFullName;
                 var qrCodeTextFormat = DependencyResolver.Current.GetService<IQrCodeTextFormat>();
                 using (var qrImgStream = qrCodeTextFormat.GetQrCodeImageStream(logId))
                 {
@@ -50,6 +49,12 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
             {
                 stream.Position = 0;
             }
+        }
+
+        public void AddToExcel(Stream stream, long logId, string pluginFullName)
+        {
+            _pluginFullName = pluginFullName;
+            AddToExcel(stream, logId);
         }
 
         private static void SetPostElements(WorksheetPart sheetPart, VmlDrawingPart drawingPart, Drawing dwg)

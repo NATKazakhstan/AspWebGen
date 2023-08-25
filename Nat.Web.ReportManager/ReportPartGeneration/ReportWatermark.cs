@@ -458,13 +458,17 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
                 InsertWatermark( watermark, page );
             }
             PdfFormatProvider provider = new PdfFormatProvider();
+            
             stream.Position = 0;
+            stream.SetLength(0);
+            
             provider.ExportSettings = new Telerik.Windows.Documents.Fixed.FormatProviders.Pdf.Export.PdfExportSettings()
             {                
                 ImageQuality = Telerik.Windows.Documents.Fixed.FormatProviders.Pdf.Export.ImageQuality.High,
                 ShouldEmbedFonts = false,
                 IsEncrypted = false
             };
+            
             provider.Export( doc, stream );
         }
 

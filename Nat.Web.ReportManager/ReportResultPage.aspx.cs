@@ -299,7 +299,7 @@ namespace Nat.Web.ReportManager
                         stiCustomExportType = (CustomExportType) Enum.Parse(typeof(CustomExportType), format);
                     }
 
-                    if(format == "Html")
+                    if("Html".Equals(format, StringComparison.InvariantCulture))
                         AddWatermark(webReportManager);
 
                     if (stiCustomExportType != null && stiCustomExportType != CustomExportType.None)
@@ -529,7 +529,6 @@ namespace Nat.Web.ReportManager
         {
             switch (exportFormat)
             {
-                case ExportFormat.Word:
                 case ExportFormat.Excel:
                 return StiExportFormat.Excel2007;
                 case ExportFormat.Pdf:

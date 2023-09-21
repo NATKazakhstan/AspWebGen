@@ -624,14 +624,31 @@ namespace Nat.Web.ReportManager
 
         public static IEnumerable<ExportFormat> GetAvailableFormat(object plugin)
         {
-            var roles = GetExportWithWatermarkRole();
+            var exportPermissions = plugin as IExportPermission;
+            var wordExcelWithWatermark = GetExportWordExcelWithWatermarkRole();
+            if (exportPermissions == null)
+            {
+                return UserRoles.IsInAnyRoles( wordExcelWithWatermark )
+                    ? new[] { ExportFormat.Pdf, ExportFormat.Excel, ExportFormat.Word }
+                    : new[] { ExportFormat.Pdf };
+            }
+                
+            var list = new List<ExportFormat>(3);
+
+            var roles = exportPermissions.GetWordRoles();
+            if ((roles == null || roles.Length == 0 || UserRoles.IsInAnyRoles( roles )) && UserRoles.IsInAnyRoles( wordExcelWithWatermark ))
+                list.Add( ExportFormat.Word );
+
+            roles = exportPermissions.GetExcelRoles();
+            if ((roles == null || roles.Length == 0 || UserRoles.IsInAnyRoles( roles )) && UserRoles.IsInAnyRoles( wordExcelWithWatermark ))
+                list.Add( ExportFormat.Excel );
+
+            list.Add( ExportFormat.Pdf );
             
-            return UserRoles.IsInAnyRoles(roles)
-                ? new[] { ExportFormat.Pdf, ExportFormat.Excel, ExportFormat.Word }
-                : new[] {ExportFormat.Pdf};
+            return list;
         }
 
-        private static string[] GetExportWithWatermarkRole()
+        private static string[] GetExportWordExcelWithWatermarkRole()
         {
             return new []{ "kvv Export_WordExcel_WithWatermark" };
         }

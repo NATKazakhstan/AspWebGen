@@ -24,6 +24,7 @@ namespace Nat.Web.ReportManager
 {
     using System.Collections;
     using System.Data;
+    using System.Drawing;
     using System.Linq;
     using System.Web.Compilation;
 
@@ -33,6 +34,8 @@ namespace Nat.Web.ReportManager
     using Nat.Web.Tools.Security;
 
     using Stimulsoft.Report.Dictionary;
+    using Telerik.Windows.Documents.Fixed.FormatProviders.Pdf;
+    using Telerik.Windows.Documents.Fixed.Model.Editing;
 
     public partial class ReportResultPage : BaseSPPage
     {
@@ -296,7 +299,8 @@ namespace Nat.Web.ReportManager
                         stiCustomExportType = (CustomExportType) Enum.Parse(typeof(CustomExportType), format);
                     }
 
-                    AddWatermark(webReportManager);
+                    if(format == "Html")
+                        AddWatermark(webReportManager);
 
                     if (stiCustomExportType != null && stiCustomExportType != CustomExportType.None)
                     {
@@ -468,8 +472,8 @@ namespace Nat.Web.ReportManager
                     using (var vImage = qrCodeTextFormat.GetVerticalImageStream())
                     using (var qrCodeStream = qrCodeTextFormat.GetQrCodeImageStream(logId))
                     {
-                        stiPlugin.BarCodeLogText = qrCodeTextFormat.GetUserText(logId);
-                        stiPlugin.BarCodeLogData = qrCodeTextFormat.GetQrCodeData(logId);
+                        stiPlugin.BarCodeLogText = qrCodeTextFormat.GetUserText( logId );
+                        stiPlugin.BarCodeLogData = qrCodeTextFormat.GetQrCodeData( logId );
                         stiPlugin.BarCodeLogDataStream = qrCodeStream;
                         stiPlugin.BarCodeLogImageH = hImage;
                         stiPlugin.BarCodeLogImageV = vImage;
@@ -479,28 +483,36 @@ namespace Nat.Web.ReportManager
                             HttpContext.Current?.User.Identity.Name ?? "anonymous",
                             HttpContext.Current?.User.Identity.Name ?? "anonymous",
                             ReportInitializerSection.GetReportInitializerSection().ReportPageViewer + "?ClassName=" + pluginName,
-                            HttpContext.Current?.Request.Url.GetLeftPart(UriPartial.Authority) ?? "https://srvmax.vvmvd.kz",
+                            HttpContext.Current?.Request.Url.GetLeftPart( UriPartial.Authority ) ?? "https://srvmax.vvmvd.kz",
                             Environment.MachineName,
                             isExport,
-                            webReportManager.Plugin.GetType());
+                            webReportManager.Plugin.GetType() );
 
-                        var availableFormat = WebReportManager.GetAvailableFormat(stiPlugin).ToList();
+                        var availableFormat = WebReportManager.GetAvailableFormat( stiPlugin ).ToList();
                         ExportFormat stiExportFormat;
 
-                        if ("Auto".Equals(format, StringComparison.InvariantCulture))
+                        if ("Auto".Equals( format, StringComparison.InvariantCulture ))
                         {
                             stiExportFormat = availableFormat.First();
                         }
-                        else if ("Word".Equals(format, StringComparison.InvariantCulture))
-                            stiExportFormat = availableFormat.Contains(ExportFormat.Word)
+                        else if ("Word".Equals( format, StringComparison.InvariantCulture ))
+                            stiExportFormat = availableFormat.Contains( ExportFormat.Word )
                                 ? ExportFormat.Word
                                 : availableFormat.First();
-                        else if ("Excel".Equals(format, StringComparison.InvariantCulture))
-                            stiExportFormat = availableFormat.Contains(ExportFormat.Excel) ? ExportFormat.Excel : availableFormat.First();
+                        else if ("Excel".Equals( format, StringComparison.InvariantCulture ))
+                            stiExportFormat = availableFormat.Contains( ExportFormat.Excel ) ? ExportFormat.Excel : availableFormat.First();
                         else
-                            stiExportFormat = (ExportFormat) Enum.Parse(typeof(ExportFormat), format);
+                            stiExportFormat = (ExportFormat)Enum.Parse( typeof( ExportFormat ), format );
 
-                        return stiPlugin.Export(stiExportFormat, out fileName, out fileNameExtension);
+                        var mStream = new MemoryStream();
+                        using (var stream = stiPlugin.Export( stiExportFormat, out fileName, out fileNameExtension ))
+                        {
+                            stream.CopyTo( mStream );
+                        }
+
+                        InsertLogoAandQrToPdf( fileNameExtension, mStream, qrCodeStream, hImage );
+                        AddWatermark( webReportManager, GetStiExportFormat( stiExportFormat ), mStream );
+                        return mStream;
                     }
                 }
             }
@@ -512,7 +524,69 @@ namespace Nat.Web.ReportManager
 
             return null;
         }
-        
+
+        private static StiExportFormat GetStiExportFormat( ExportFormat exportFormat )
+        {
+            switch (exportFormat)
+            {
+                case ExportFormat.Word:
+                case ExportFormat.Excel:
+                return StiExportFormat.Excel2007;
+                case ExportFormat.Pdf:
+                return StiExportFormat.Pdf;
+                default:
+                return StiExportFormat.None;
+            }
+        }
+
+        private static void InsertLogoAandQrToPdf( string fileNameExtension, Stream stream, Stream qr, Stream logo )
+        {
+            if (fileNameExtension == ".pdf")
+            {
+                try
+                {
+                    PdfFormatProvider pdfFormatProvider = new PdfFormatProvider();
+                    var doc = pdfFormatProvider.Import( stream );
+                    for (int i = 0; i < doc.Pages.Count; i++)
+                    {
+                        var page = doc.Pages[ i ];
+                        FixedContentEditor editor = new FixedContentEditor( page );
+                        Block logoBlock = new Block();
+                        logoBlock.InsertImage( logo );
+                        double paddingLeftRight = 20;
+                        double paddingBottom = 15;
+                        using (var logoBmp = new Bitmap( logo ))
+                        {
+                            editor.Position.Translate( paddingLeftRight, page.Size.Height - logoBmp.Height - paddingBottom );
+                            editor.DrawBlock( logoBlock );
+                            // reset position
+                            editor.Position.Translate( 0, 0 );
+                            int qrSize = Math.Min( logoBmp.Height, logoBmp.Width );
+                            Block qrBlock = new Block();
+                            qrBlock.InsertImage( qr, qrSize, qrSize );
+                            using (var qrBmp = new Bitmap( qr ))
+                            {
+                                editor.Position.Translate( page.Size.Width - qrSize - paddingLeftRight, page.Size.Height - qrSize - paddingBottom );
+                                editor.DrawBlock( qrBlock );
+                            }
+                        }
+                    }
+                    stream.Position = 0;
+                    stream.SetLength( 0 );
+                    pdfFormatProvider.ExportSettings = new Telerik.Windows.Documents.Fixed.FormatProviders.Pdf.Export.PdfExportSettings()
+                    {
+                        ImageQuality = Telerik.Windows.Documents.Fixed.FormatProviders.Pdf.Export.ImageQuality.High,
+                        IsEncrypted = false
+                    };
+                    pdfFormatProvider.Export( doc, stream );
+                }
+                finally
+                {
+                    stream.Position = 0;
+                }
+            }
+        }
+
         private static void LocalizeReport(StiReport report, string cultureName)
         {
             var container = report.GlobalizationStrings[cultureName];
@@ -664,6 +738,10 @@ namespace Nat.Web.ReportManager
             {
                 var rw = DependencyResolver.Current.GetService<IReportWatermark>();
                 rw.AddToWordStream(stream, webReportManager.Plugin.GetType().FullName);
+            }else if(exportFormat == StiExportFormat.Pdf)
+            {
+                var rw = DependencyResolver.Current.GetService<IReportWatermark>();
+                rw.AddToPdfStream( stream, webReportManager.Plugin.GetType().FullName );
             }
         }
 

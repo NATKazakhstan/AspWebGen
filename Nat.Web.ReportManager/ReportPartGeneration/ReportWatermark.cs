@@ -440,6 +440,9 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
                 var watermark = DependencyResolver.Current.GetService<IWatermark>();
                 if (watermark == null)
                     return;
+                var watermarkImage = watermark.GetImage( pluginFullName );
+                if (watermarkImage == null)
+                    return;
                 AddWatermark( stream, watermark );
             }
             finally
@@ -465,7 +468,6 @@ namespace Nat.Web.ReportManager.ReportPartGeneration
             provider.ExportSettings = new Telerik.Windows.Documents.Fixed.FormatProviders.Pdf.Export.PdfExportSettings()
             {                
                 ImageQuality = Telerik.Windows.Documents.Fixed.FormatProviders.Pdf.Export.ImageQuality.High,
-                ShouldEmbedFonts = false,
                 IsEncrypted = false
             };
             

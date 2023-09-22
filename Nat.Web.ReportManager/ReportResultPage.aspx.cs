@@ -276,7 +276,7 @@ namespace Nat.Web.ReportManager
                     CustomExportType? stiCustomExportType = null;
                     try
                     {
-                        if ("Auto".Equals(format, StringComparison.InvariantCulture))
+                        if ("Auto".Equals(format, StringComparison.InvariantCultureIgnoreCase))
                         {
                             stiExportFormat = stiPlugin.AutoExportTo == null 
                                 ? availableFormat.First()
@@ -285,11 +285,11 @@ namespace Nat.Web.ReportManager
                                     : availableFormat.First());
                             stiCustomExportType = webReportPlugin.CustomExportType;
                         }
-                        else if ("Word".Equals(format, StringComparison.InvariantCulture))
+                        else if ("Word".Equals(format, StringComparison.InvariantCultureIgnoreCase))
                             stiExportFormat = availableFormat.Contains(StiExportFormat.Word2007)
                                 ? StiExportFormat.Word2007
                                 : availableFormat.First();
-                        else if ("Excel".Equals(format, StringComparison.InvariantCulture))
+                        else if ("Excel".Equals(format, StringComparison.InvariantCultureIgnoreCase ))
                             stiExportFormat = availableFormat.Contains(StiExportFormat.Excel2007) ? StiExportFormat.Excel2007 : availableFormat.First();
                         else
                             stiExportFormat = (StiExportFormat) Enum.Parse(typeof(StiExportFormat), format);
@@ -299,7 +299,7 @@ namespace Nat.Web.ReportManager
                         stiCustomExportType = (CustomExportType) Enum.Parse(typeof(CustomExportType), format);
                     }
 
-                    if("Html".Equals(format, StringComparison.InvariantCulture))
+                    if("Html".Equals(format, StringComparison.InvariantCultureIgnoreCase ))
                         AddWatermark(webReportManager);
 
                     if (stiCustomExportType != null && stiCustomExportType != CustomExportType.None)
@@ -491,15 +491,15 @@ namespace Nat.Web.ReportManager
                         var availableFormat = WebReportManager.GetAvailableFormat( stiPlugin ).ToList();
                         ExportFormat stiExportFormat;
 
-                        if ("Auto".Equals( format, StringComparison.InvariantCulture ))
+                        if ("Auto".Equals( format, StringComparison.InvariantCultureIgnoreCase ))
                         {
                             stiExportFormat = availableFormat.First();
                         }
-                        else if ("Word".Equals( format, StringComparison.InvariantCulture ))
+                        else if ("Word".Equals( format, StringComparison.InvariantCultureIgnoreCase ))
                             stiExportFormat = availableFormat.Contains( ExportFormat.Word )
                                 ? ExportFormat.Word
                                 : availableFormat.First();
-                        else if ("Excel".Equals( format, StringComparison.InvariantCulture ))
+                        else if ("Excel".Equals( format, StringComparison.InvariantCultureIgnoreCase ))
                             stiExportFormat = availableFormat.Contains( ExportFormat.Excel ) ? ExportFormat.Excel : availableFormat.First();
                         else
                             stiExportFormat = (ExportFormat)Enum.Parse( typeof( ExportFormat ), format );

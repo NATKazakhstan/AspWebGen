@@ -34,24 +34,22 @@ namespace Nat.Web.Tools
         {
             string physicalPath = fname;
             physicalPath = request.MapPath(physicalPath);
-            inputImage = GetImage(fname, request);
+            using (inputImage = GetImage(fname, request))
             // размен тамбнейла - 108*81
-//            Bitmap b = new Bitmap(width, heigth);
-            Bitmap b = new Bitmap(width, heigth);
-            Graphics gTemp = Graphics.FromImage(b);
-            gTemp.InterpolationMode = InterpolationMode.Bicubic;
-            gTemp.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            gTemp.DrawImage(inputImage, 0, 0, width, heigth);
+            using (Bitmap b = new Bitmap(width, heigth))
+            using (Graphics gTemp = Graphics.FromImage(b))
+            using (EncoderParameters ep = new EncoderParameters(1))
+            {
+                gTemp.InterpolationMode = InterpolationMode.Bicubic;
+                gTemp.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                gTemp.DrawImage(inputImage, 0, 0, width, heigth);
 
-            EncoderParameters ep = new EncoderParameters(1);
-            ImageCodecInfo icJPG = getCodecInfo("image/jpeg");
-            // качество jpeg
-            ep.Param[0] = new EncoderParameter(Encoder.Quality, (long) 80);
+                ImageCodecInfo icJPG = getCodecInfo("image/jpeg");
+                // качество jpeg
+                ep.Param[0] = new EncoderParameter(Encoder.Quality, (long) 80);
 
-            b.Save(GetThumbnailPath(physicalPath, heigth, width), icJPG, ep);
-            gTemp.Dispose();
-            b.Dispose();
-            inputImage.Dispose();
+                b.Save(GetThumbnailPath(physicalPath, heigth, width), icJPG, ep);
+            }
         }
 
         private static Image GetImage(string fName, HttpRequest request)
@@ -82,8 +80,8 @@ namespace Nat.Web.Tools
         /// <returns></returns>
         public static Unit SaveProportion(string fName, int newHeigth, HttpRequest request)
         {
-            inputImage = GetImage(fName, request);
-            return inputImage.Width * newHeigth / inputImage.Height;
+            using (var inputImage = GetImage(fName, request))
+                return inputImage.Width * newHeigth / inputImage.Height;
         }
 
         private static string GetThumbnailPath(string fname, int heigth, int width)
@@ -149,7 +147,7 @@ namespace Nat.Web.Tools
 
         public static byte[] ResizingGraphicsFile(byte[] buffer, double dwidth, double dheight, bool withCorner)
         {
-            var bmp = ResizingGraphicsImage(buffer, dwidth, dheight, withCorner);
+            using (var bmp = ResizingGraphicsImage(buffer, dwidth, dheight, withCorner))
             using (var stream = new MemoryStream())
             {
                 bmp.Save(stream, ImageFormat.Jpeg);
@@ -161,13 +159,9 @@ namespace Nat.Web.Tools
 
         public static Bitmap ResizingGraphicsImage(byte[] buffer, double dwidth, double dheight, bool withCorner)
         {
-            Image img;
             using (var memoryStream = new MemoryStream(buffer))
-            {
-                img = Image.FromStream(memoryStream);
-            }
-
-            return ResizubgGraphicsImage(dwidth, dheight, withCorner, img);
+            using (var img = Image.FromStream(memoryStream))
+                return ResizubgGraphicsImage(dwidth, dheight, withCorner, img);
         }
 
         public static Bitmap ResizubgGraphicsImage(double dwidth, double dheight, bool withCorner, Image img)

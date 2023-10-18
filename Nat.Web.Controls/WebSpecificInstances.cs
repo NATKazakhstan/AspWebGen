@@ -21,5 +21,10 @@ namespace Nat.Web.Controls
         {
             return InitializerSection.GetSection().GetExcelExporter();
         }
+
+        public static IExporter GetPdfExporter()
+        {
+            return InitializerSection.GetSection().GetPdfExporter();
+        }
     }
 }

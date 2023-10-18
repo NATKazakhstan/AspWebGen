@@ -350,6 +350,7 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
         protected abstract void SaveJournalValuesClick(string rowKey);
 
         protected abstract void ExportToExcel();
+        protected abstract void ExportToPdf();
 
         protected virtual bool InitializeRowsProperties()
         {
@@ -683,6 +684,14 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                     .Where(r => !string.IsNullOrEmpty(r.ColumnKey))
                     .ForEach(r => r.Width = 200);
                 ExportToExcel();
+            }else if(ParentUserControl.Url.CustomQueryParameters.ContainsKey( "ExportPdf" ))
+            {
+                BaseInnerHeader.ColumnHierarchy
+                    .SelectMany( r => r.SelectAll() )
+                    .Where( r => r.Width == 0 )
+                    .Where( r => !string.IsNullOrEmpty( r.ColumnKey ) )
+                    .ForEach( r => r.Width = 200 );
+                ExportToPdf();
             }
 
             base.OnPreRender(e);
@@ -1367,6 +1376,19 @@ namespace Nat.Web.Controls.GenerationClasses.BaseJournal
                 true,
                 out extention);
             PageHelper.DownloadFile(stream, ParentUserControl.TableHeader.Replace("\r\n", " ") + "." + extention, Page.Response);
+        }
+
+        protected override void ExportToPdf()
+        {
+            HttpContext.Current.Items[ ((BaseFilter<TKey, TTable, TDataContext>)Filter).FilterControl.GetTableName() + ".FiltersCache" ] = null;
+            string extention;
+            var stream = WebSpecificInstances.GetPdfExporter().GetPdfByType(
+                ParentUserControl.GetType(),
+                RvsSavedProperties.GetFromJournal( ParentUserControl ),
+                ParentUserControl.LogMonitor,
+                true,
+                out extention );
+            PageHelper.DownloadFile( stream, ParentUserControl.TableHeader.Replace( "\r\n", " " ) + "." + extention, Page.Response );
         }
 
         #region Groups, Totals

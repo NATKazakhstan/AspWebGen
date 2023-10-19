@@ -159,17 +159,19 @@ namespace Nat.ExportInPdf
                         var page = doc.Pages[ i ];
                         var editor = new FixedContentEditor( page );
                         double paddingLeftRight = 20;
-                        double paddingBottom = 12;
+                        double paddingBottom = 10;
+                        int scalePadding = 20;
                         int qrSize = 0;
                         // reset position
-                        editor.Position.Translate( 0, 0 );
-                        var logoBlock = new Block();
-                        logoBlock.InsertImage( logo );
+                        editor.Position.Translate( 0, 0 );                        
                         using (var logoBmp = new System.Drawing.Bitmap( logo ))
                         {
-                            editor.Position.Translate( paddingLeftRight, page.Size.Height - logoBmp.Height - paddingBottom );
+                            Size logoSize = new Size( logoBmp.Width - scalePadding, logoBmp.Height - scalePadding );
+                            var logoBlock = new Block();
+                            logoBlock.InsertImage( logo, logoSize );
+                            editor.Position.Translate( paddingLeftRight, page.Size.Height - logoSize.Height - paddingBottom );
                             editor.DrawBlock( logoBlock );
-                            qrSize = Math.Min( logoBmp.Height, logoBmp.Width );
+                            qrSize = Math.Min( (int)logoSize.Height, (int)logoSize.Width );
                         }
                         // reset position
                         editor.Position.Translate( 0, 0 );
@@ -180,7 +182,7 @@ namespace Nat.ExportInPdf
                         // reset position
                         editor.Position.Translate( 0, 0 );
                         Block txtBlock = GetTxtBlock();
-                        var txtBlockSize = new Size( qrSize * 5.5, txtBlock.TextProperties.FontSize + 3 );
+                        var txtBlockSize = new Size( page.Size.Width*0.8, txtBlock.TextProperties.FontSize + 3 );
                         var txtLines = txt.Split( '\n' );
                         for (int k = 0; k < txtLines.Count(); k++)
                         {

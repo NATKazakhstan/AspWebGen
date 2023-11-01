@@ -412,7 +412,6 @@
         this.options.set('showButtonsExcel', false);
         this.options.set('showButtonsWord', false);
         this.options.set('showCRButtons', false);
-        this.options.set('showCRButtonsExcel', false);
         $('#reportParameters').hide();
     };
 
@@ -490,16 +489,15 @@
         this.options.set('oneParameter', countParameters === 1);
         if (this.options.PluginType === 'CrossReport') {
             this.options.set('showCRButtons', true);
-            this.options.set('showCRButtonsExcel', this.options.AllowExcelExport);
         }
         else {
             this.options.set('showButtons', true);
-            this.options.set('showButtonsPdf', this.options.AllowPdfExport);
-            this.options.set('showButtonsExcel', this.options.AllowExcelExport);
-            this.options.set('showButtonsRtfCustom', this.options.AllowRtfCustomExport);
             this.options.set('showButtonsWord', this.options.AllowWordExport);
+            this.options.set('showButtonsRtfCustom', this.options.AllowRtfCustomExport);
             this.options.set('showSubscription', !this.options.onlyView);
         }
+        this.options.set('showButtonsExcel', this.options.AllowExcelExport);
+        this.options.set('showButtonsPdf', this.options.AllowPdfExport);            
 
         if (this.options.idSubscription) {
             this.options.set('showSubscription', false);

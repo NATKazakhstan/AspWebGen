@@ -305,5 +305,15 @@ namespace Nat.ExportInExcel
                     };
             }
         }
+
+        public Stream GetPdfByType( Type journalType, object properties, ILogMonitor logMonitor, bool checkPermit, out string fileNameExtention )
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream GetPdfByTypeName( string journalType, string format, long idProperties, StorageValues storageValues, string culture, ILogMonitor logMonitor, bool checkPermit, out string fileNameExtention )
+        {
+            throw new NotImplementedException();
+        }
     }
 }

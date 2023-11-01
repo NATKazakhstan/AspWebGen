@@ -25,6 +25,7 @@ namespace Nat.Web.Tools.Initialization
         private static readonly ConfigurationProperty _propFilterNamesResourcesType;
         private static readonly ConfigurationProperty _propLogMonitorType;
         private static readonly ConfigurationProperty _propExporterType;
+        private static readonly ConfigurationProperty _propPdfExporter;
         private static readonly ConfigurationProperty _propSiteUrl;
         private static readonly ConfigurationProperty _propSecurityRoles;
         private static readonly ConfigurationProperty _propUseMainPageExtension;
@@ -55,6 +56,7 @@ namespace Nat.Web.Tools.Initialization
             _propFilterNamesResourcesType = new ConfigurationProperty("filterNamesResourcesType", typeof(string), "Nat.Web.Controls.DefaultFilterNamesResources, Nat.Web.Controls, Version=1.4.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", ConfigurationPropertyOptions.None);
             _propLogMonitorType = new ConfigurationProperty("logMonitorType", typeof(string), "Nat.Web.Controls.LogMonitor, Nat.Web.Controls, Version=1.4.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", ConfigurationPropertyOptions.None);
             _propExporterType = new ConfigurationProperty("excelExporterType", typeof(string), "Nat.ExportInExcel.Exporter, Nat.ExportInExcel, Version=1.4.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", ConfigurationPropertyOptions.None);
+            _propPdfExporter = new ConfigurationProperty( "pdfExporter", typeof( string ), "Nat.ExportInPdf.Exporter, Nat.ExportInPdf, Version=1.4.0.0, Culture=neutral, PublicKeyToken=11c252a207597415", ConfigurationPropertyOptions.None );
             _propSiteUrl = new ConfigurationProperty("siteUrl", typeof(string), "", ConfigurationPropertyOptions.None);
             _propSecurityRoles = new ConfigurationProperty("securityRoles", typeof(string), "", ConfigurationPropertyOptions.None);
             _propUseMainPageExtension = new ConfigurationProperty("useMainPageExtension", typeof(bool), false, ConfigurationPropertyOptions.None);
@@ -150,6 +152,9 @@ namespace Nat.Web.Tools.Initialization
             get { return (string)base[_propExporterType]; }
         }
 
+        [ConfigurationProperty( "pdfExporter", DefaultValue = @"Nat.ExportInPdf.Exporter, Nat.ExportInPdf, Version=1.4.0.0, Culture=neutral, PublicKeyToken=11c252a207597415" )]
+        public string PdfExporterType => (string)base[ _propPdfExporter ];
+
         [ConfigurationProperty("siteUrl", DefaultValue = @"")]
         public string SiteUrl
         {
@@ -223,6 +228,12 @@ namespace Nat.Web.Tools.Initialization
         {
             var type = Type.GetType(ExcelExporterType) ?? BuildManager.GetType(ExcelExporterType, false, true);
             return (IExporter) Activator.CreateInstance(type);
+        }
+
+        public IExporter GetPdfExporter()
+        {
+            var type = Type.GetType( PdfExporterType ) ?? BuildManager.GetType( PdfExporterType, false, true );
+            return (IExporter)Activator.CreateInstance( type );
         }
 
         public ILogMonitor LogMonitor

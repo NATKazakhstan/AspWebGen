@@ -529,20 +529,20 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         [HttpPost]
         public ActionResult CreateReport(string pluginName, string idrec, string culture, List<ConditionViewModel> parameters, string parametersStr, string export, bool? subscription)
         {
+            var plugin = WebReportManager.GetPlugin(pluginName);
+            if (plugin == null)
+                return Json(new { error = Resources.SPluginNotFound });
+            var webReportPlugin = (IWebReportPlugin) plugin;
+
+            if (!plugin.SupportCulture.Contains( culture ))
+                culture = null;
+            webReportPlugin.DefaultValue = idrec;
+
             if (!string.IsNullOrEmpty(parametersStr))
                 parameters = JsonConvert.DeserializeObject<List<ConditionViewModel>>(parametersStr);
             if (parameters == null)
                 parameters = new List<ConditionViewModel>();
-
-            var plugin = WebReportManager.GetPlugin(pluginName);
-            var webReportPlugin = (IWebReportPlugin) plugin;
-            if (plugin == null)
-                return Json(new { error = Resources.SPluginNotFound });
-
-            if (!plugin.SupportCulture.Contains(culture))
-                culture = null;
-
-            webReportPlugin.DefaultValue = idrec;
+                        
             var storageValues = GetStorageValues(parameters, plugin);
 
             var errors = Validate(plugin);
@@ -660,6 +660,8 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 if (string.IsNullOrEmpty(export))
                     return Json(new {Url = url + "&__p__InIFrame=true"});
 
+                if(export == "Pdf")
+                    return Redirect( url + "&__p__ExportPdf=true" );
                 return Redirect(url + "&__p__ExportExcel=true");
             }
             else

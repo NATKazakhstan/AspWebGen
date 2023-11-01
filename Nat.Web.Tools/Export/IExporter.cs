@@ -22,5 +22,9 @@ namespace Nat.Web.Tools
         Stream GetExcelByTypeName(string journalType, string format, long idProperties, StorageValues storageValues, string culture, ILogMonitor logMonitor, bool checkPermit, out string fileNameExtention);
 
         Stream GetExcelStream(JournalExportEventArgs args);
+
+        Stream GetPdfByType( Type journalType, object properties, ILogMonitor logMonitor, bool checkPermit, out string fileNameExtention );
+
+        Stream GetPdfByTypeName( string journalType, string format, long idProperties, StorageValues storageValues, string culture, ILogMonitor logMonitor, bool checkPermit, out string fileNameExtention );
     }
 }

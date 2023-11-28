@@ -201,7 +201,16 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
         [HttpPost]
         public ActionResult GetReports(string searchValue, DataSourceRequest request)
         {
+            var reportSettings = GetReportSettings();
             var plugins = WebReportManager.GetPlugins(out _)
+                .Where( r =>
+                {
+                    if (reportSettings.ContainsKey( r.Key ))
+                    {
+                        return reportSettings[ r.Key ];
+                    }
+                    return true;
+                } )
                 .Where(r => r.Value.Visible)
                 .Where(r =>
                 {
@@ -250,6 +259,14 @@ namespace Nat.Web.ReportManager.Kendo.Areas.Reports.Controllers
                 .OrderBy(r => r.Name)
                 .ToList();
             return Json(groupData.Union(data).ToDataSourceResult(request));
+        }
+
+        private Dictionary<string, bool> GetReportSettings()
+        {
+            using (var connection = SpecificInstances.DbFactory.CreateConnection())
+            using (var db = new DBDataContext( connection ))
+                //по умолчанию isVisible = true
+                return db.ReportSettings.Select(r=> new { key = r.pluginFullName, isVisible = r.isVisible ?? true}).ToDictionary( r => r.key, r => r.isVisible );
         }
 
         public ActionResult Plugins()

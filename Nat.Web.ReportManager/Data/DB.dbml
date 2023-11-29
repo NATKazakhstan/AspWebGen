@@ -49,4 +49,14 @@
       <Association Name="DIC_ReportTimePeriodsParameters_ReportSubscriptions_Params_refReportTimePeriodsParameters" ThisKey="id" OtherKey="refReportTimePeriodsParameters" Type="ReportSubscriptions_Param" Member="ReportSubscriptions_Params_refReportTimePeriodsParameters" />
     </Type>
   </Table>
+  <Table Name="dbo.ReportSettings" Member="ReportSettings">
+    <Type Name="ReportSetting">
+      <Column Name="id" Type="System.Int64" DbType="bigint" CanBeNull="false" IsDbGenerated="true" IsPrimaryKey="true" />
+      <Column Name="pluginFullName" Type="System.String" DbType="nvarchar(255)" CanBeNull="false" />
+      <Column Name="reportName" Type="System.String" DbType="nvarchar(255)" CanBeNull="false" />
+      <Column Name="hasWatermark" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+      <Column Name="groupName" Type="System.String" DbType="nvarchar(255)" CanBeNull="true" />
+      <Column Name="isVisible" Type="System.Boolean" DbType="bit" CanBeNull="true" />
+    </Type>
+  </Table>
 </Database>

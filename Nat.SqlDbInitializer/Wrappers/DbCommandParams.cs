@@ -11,5 +11,6 @@ namespace Nat.SqlDbInitializer.Wrappers
         public string CommandTextAddStr { get; set; }
         public string CommandTextReplaceFrom { get; set; }
         public string CommandTextReplaceTo { get; set; }
+        public Dictionary<string, string> CommandReplaceValuesDic { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 using System;
 using System.Data.Common;
 using System.Data;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Nat.SqlDbInitializer.Wrappers
 {
@@ -16,6 +18,7 @@ namespace Nat.SqlDbInitializer.Wrappers
         private string _commandTextAddStr { get; set; }
         private string _commandTextReplaceFrom { get; set; }
         private string _commandTextReplaceTo { get; set; }
+        private Dictionary<string, string> _commandReplaceValuesDic { get; set; }
 
         public DbCommandWrapper(DbConnection conn, DbCommandParams dbCommandParam) : base()
         {
@@ -24,6 +27,7 @@ namespace Nat.SqlDbInitializer.Wrappers
                 _commandTextAddStr = dbCommandParam.CommandTextAddStr;
                 _commandTextReplaceFrom = dbCommandParam.CommandTextReplaceFrom;
                 _commandTextReplaceTo = dbCommandParam.CommandTextReplaceTo;
+                _commandReplaceValuesDic = dbCommandParam.CommandReplaceValuesDic;
             }
             _command = conn.CreateCommand();
             Connection = _command.Connection;
@@ -118,6 +122,14 @@ namespace Nat.SqlDbInitializer.Wrappers
                 // добавление строчки кода в конец SQL запроса
                 if (!string.IsNullOrEmpty(_commandTextAddStr))
                     _command.CommandText += Environment.NewLine + _commandTextAddStr;
+
+                if (_commandReplaceValuesDic != null && _commandReplaceValuesDic.Any())
+                {
+                    foreach (var replacePair in _commandReplaceValuesDic)
+                    {
+                        _command.CommandText = _command.CommandText.Replace(replacePair.Key, replacePair.Value);
+                    }
+                }
             }
             return _command.ExecuteReader(behavior);
         }
